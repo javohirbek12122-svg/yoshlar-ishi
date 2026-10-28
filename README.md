@@ -7,6 +7,10 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Separate Supabase Postgres project with Row Level Security
 - Vercel static deployment
 - Secure owner dashboard in `admin.html`
+- Illustrated searchable service portal at `davlat-xizmatlari.html`
+- Email magic-link personal cabinet at `kabinet.html`
+- Server-side AI review and Telegram webhook/notification Edge Functions
+- Moderated team matching and admin-curated initiative showcase
 
 ## Public MVP
 - Submit an initiative and receive a high-entropy tracking code
@@ -19,13 +23,16 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Accessible font-size and high-contrast controls, installable web app manifests, and a privacy notice
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
 
+## New user-facing modules
+See [`INTEGRATIONS_SETUP.md`](./INTEGRATIONS_SETUP.md) for safe setup of Groq AI, Telegram bot secrets, the personal cabinet and user-generated community pages. The AI Edge Function validates inputs and applies a per-IP-hash quota; it returns a local-rule fallback when the provider key is not set. Telegram bot tokens and the Groq API key belong only in Supabase Edge Function Secrets, never in browser configuration.
+
 ## Official public portal directory
 The portal catalogue links to official destinations such as my.gov.uz, gov.uz, LEX.UZ, the presidential virtual reception / Murojaat portals, Open Budget, and the open-data portal, alongside youth, grant, startup, and volunteering resources. The searchable catalogue pulls government portal records from `official_portal_integrations` and other opportunities from `opportunity_sources`, merging duplicate URLs. Users can use a guided service finder and a six-criterion readiness calculator.
 
 These are **external links**, not an authenticated government system integration. No OneID / SSO, government API, or automated submission to a state service is claimed or performed. Such integrations require the responsible institution's published API / technical documentation, authorization, and credentials. The admin-only integration registry records the current link-only state and can store documentation URLs; it deliberately blocks marking a plain external link as “connected API/SSO”.
 
 ## Owner monitoring dashboard
-Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
+Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. The `/kabinet.html` user dashboard uses a separate session key and only calls owner-scoped RPCs for listing/editing its own unreviewed initiatives. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
 
 Dashboard can be added to a phone home screen as a separate “YI Admin” shortcut after the site is deployed; it uses its own manifest and starts directly at `/admin.html`.
 
