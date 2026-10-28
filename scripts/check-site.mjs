@@ -119,6 +119,11 @@ assert.match(deployWorkflow, /VERCEL_PROJECT_ID:\s*\$\{\{ vars\.VERCEL_PROJECT_I
 assert.match(deployWorkflow, /vercel build --prod/);
 assert.match(deployWorkflow, /vercel deploy --prebuilt --prod/);
 assert.match(deployWorkflow, /smoke-test/i);
+assert.match(deployWorkflow, /Vercel deployment skipped/i);
+const launchChecklist = read("DEPLOYMENT_CHECKLIST.md");
+assert.match(launchChecklist, /https:\/\/vercel\.com\/new/);
+assert.match(launchChecklist, /Framework preset to \\*\\*Other\\*\\*/);
+assert.match(launchChecklist, /copy the project ID from the newly created project/i);
 console.log("✓ optional Vercel CLI deployment uses protected GitHub secret/vars and runs smoke tests");
 
 for (const file of ["manifest.webmanifest", "admin-manifest.webmanifest"]) {
