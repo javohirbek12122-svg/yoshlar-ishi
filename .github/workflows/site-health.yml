@@ -13,14 +13,13 @@ jobs:
     name: Check public site endpoints
     runs-on: ubuntu-latest
     env:
-      SITE_URL: ${{ vars.SITE_URL }}
+      SITE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
     steps:
       - name: Explain missing live URL
         if: ${{ vars.SITE_URL == '' }}
         run: |
-          echo "::notice::Live check is not configured yet. Add the GitHub Actions repository variable SITE_URL with the final HTTPS Vercel domain."
+          echo "::notice::SITE_URL is unset; checking the known production alias https://yoshlar-ishi-site.vercel.app. Set SITE_URL only if the canonical domain changes."
       - name: Check website and admin page
-        if: ${{ vars.SITE_URL != '' }}
         run: |
           set -euo pipefail
           case "$SITE_URL" in
