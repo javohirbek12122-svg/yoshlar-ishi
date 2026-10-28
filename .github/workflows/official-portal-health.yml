@@ -1,0 +1,46 @@
+name: Official Portal Availability Monitor
+
+on:
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portal-health:
+    name: Check official public portal availability
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check official portals
+        shell: bash
+        run: |
+          set +e
+          printf "| Portal | URL | HTTP status | Result |\n|---|---|---:|---|\n" >> "$GITHUB_STEP_SUMMARY"
+          failed=0
+          while IFS='|' read -r name url; do
+            [[ -z "$name" ]] && continue
+            code="$(curl --location --silent --show-error --output /dev/null --max-time 18 --write-out '%{http_code}' "$url" 2>/dev/null)"
+            rc=$?
+            if [[ "$rc" -eq 0 && "$code" =~ ^[23][0-9][0-9]$ ]]; then
+              printf "| %s | %s | %s | reachable |\n" "$name" "$url" "$code" >> "$GITHUB_STEP_SUMMARY"
+              echo "OK $name $code $url"
+            else
+              failed=$((failed+1))
+              printf "| %s | %s | %s | check manually |\n" "$name" "$url" "${code:-no response}" >> "$GITHUB_STEP_SUMMARY"
+              echo "::warning::Portal may be unavailable or blocking automated probes: $name ($url) status=${code:-none}, curl=$rc"
+            fi
+          done <<'PORTALS'
+          my.gov.uz|https://my.gov.uz/uz
+          gov.uz|https://gov.uz/oz
+          LEX.UZ|https://lex.uz/uz/
+          data.egov.uz|https://data.egov.uz/
+          Yoshlar Agentligi|https://gov.uz/oz/yoshlar
+          Murojaat.gov.uz|https://murojaat.gov.uz/
+          Prezident qabulxonasi|https://pm.gov.uz/oz
+          Ochiq budjet|https://openbudget.uz/
+          PORTALS
+          echo "Portallar javob bermasa, bu tekshiruvning o‘zi ularning rasmiy holatini to‘liq isbotlamaydi. Manual verification may be needed." >> "$GITHUB_STEP_SUMMARY"
+          echo "Portal checks complete; $failed endpoint(s) need manual attention."
