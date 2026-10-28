@@ -270,7 +270,7 @@ $("teamPostForm").addEventListener("submit",async ev=>{
  const share=$("teamShareContact").checked,contact=httpsOnly(trim("teamContact"));
  if(share&&!contact){tell("teamPostNotice","Ommaviy kontakt uchun https:// bilan boshlanuvchi havola kiriting.",true);return}
  const btn=$("teamPostSubmit");btn.disabled=true;
- const payload={owner_id:sessionStorage.getItem("yi_user_id")||null,title:trim("teamTitle"),description:trim("teamDescription"),category:$("teamCategory").value,roles:splitTags(trim("teamRoles")),skills:splitTags(trim("teamSkills")),district:trim("teamDistrict"),commitment:$("teamCommitment").value,public_contact_url:share?contact:"",contact_shared:share,status:"pending"};
+ const payload={owner_id:sessionStorage.getItem("yi_user_id")||null,title:trim("teamTitle"),description:trim("teamDescription"),category:$("teamCategory").value,roles:splitTags(trim("teamRoles")),skills:splitTags(trim("teamSkills")),district:trim("teamDistrict"),commitment:$("teamCommitment").value,public_contact_url:share?contact:"",contact_shared:share};
  try{await api("team_posts",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});sessionStorage.setItem("yi_team_post_sent","1");ev.currentTarget.reset();tell("teamPostNotice","E’lon moderatsiya navbatiga yuborildi. Admin tasdiqlagach doskada ko‘rinadi.")}
  catch(e){tell("teamPostNotice","E’lonni saqlab bo‘lmadi: "+e.message,true)}
  finally{btn.disabled=false}
@@ -286,7 +286,7 @@ $("teamInterestModal").addEventListener("click",e=>{if(e.target===$("teamInteres
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeInterestModal()});
 $("teamInterestForm").addEventListener("submit",async ev=>{
  ev.preventDefault();const postId=$("interestPostId").value;if(!postId)return;const btn=$("interestSubmit");btn.disabled=true;
- try{await api("team_interest_requests",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({team_post_id:postId,name:trim("interestName"),contact:trim("interestContact"),role_interest:trim("interestRole"),message:trim("interestMessage"),status:"new"})});ev.currentTarget.reset();tell("interestNotice","Qiziqishingiz yuborildi. Kontakt ma’lumotingiz ommaviy doskada ko‘rinmaydi.")}
+ try{await api("team_interest_requests",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({team_post_id:postId,name:trim("interestName"),contact:trim("interestContact"),role_interest:trim("interestRole"),message:trim("interestMessage")})});ev.currentTarget.reset();tell("interestNotice","Qiziqishingiz yuborildi. Kontakt ma’lumotingiz ommaviy doskada ko‘rinmaydi.")}
  catch(e){tell("interestNotice","Yuborib bo‘lmadi: "+e.message,true)}
  finally{btn.disabled=false}
 });
