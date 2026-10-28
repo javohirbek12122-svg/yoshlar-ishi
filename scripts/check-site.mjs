@@ -19,6 +19,7 @@ const required = [
   "manifest.webmanifest",
   "admin-manifest.webmanifest",
   "README.md",
+  "DEPLOYMENT_CHECKLIST.md",
   "supabase/migrations/20261028145226_initial_yoshlar_ishi_schema.sql",
   "supabase/migrations/20261028145259_enable_reference_code_tracking.sql",
   "supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql",
@@ -27,6 +28,7 @@ const required = [
   "supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql",
   "supabase/migrations/20261028154603_official_portal_registry.sql",
   "supabase/migrations/20261028154926_admin_read_inactive_sources.sql",
+  "supabase/migrations/20261028160000_update_official_open_data_portal_url.sql",
 ];
 for (const file of required) {
   assert.ok(exists(file), `Missing required file: ${file}`);
