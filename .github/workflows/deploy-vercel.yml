@@ -31,7 +31,14 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Vercel deployment is not configured yet. Add the VERCEL_TOKEN secret and VERCEL_ORG_ID / VERCEL_PROJECT_ID repository variables."
+            echo "::notice::Vercel deployment was NOT performed. Create/import the yoshlar-ishi project and add the VERCEL_TOKEN secret plus fresh VERCEL_ORG_ID / VERCEL_PROJECT_ID repository variables."
+            {
+              echo "## Vercel deployment skipped"
+              echo ""
+              echo "Quality checks passed, but this workflow did not build or deploy the site."
+              echo "Reason: Vercel deployment credentials/project identifiers are missing or incomplete."
+              echo "Create or import the project from https://vercel.com/new, then configure GitHub Actions secrets/variables; do not reuse a project ID from another or deleted project."
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Checkout the tested commit
