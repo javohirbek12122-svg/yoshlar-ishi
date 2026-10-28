@@ -169,13 +169,20 @@ for (const feature of [
   "https://gov.uz/oz/all_ministry/5",
   "https://gov.uz/oz/all_ministry/14",
   "https://gov.uz/oz/all_ministry/15",
-  "https://gov.uz/oz/adliya/sections/view/2827",
+  "https://gov.uz/oz/iiv/pages/davlat-xizmatlari-reestri",
+  "https://gov.uz/oz",
+  "https://murojaat.gov.uz/",
 ]) {
   assert.ok(serviceGuide.includes(feature), `Service guide feature or official directory missing: ${feature}`);
 }
 assert.match(serviceGuide, /function openDialog\(/);
 assert.match(serviceGuide, /function renderRecommender\(/);
-console.log("✓ illustrated public-services guide, official directory categories, filters and service-flow visualization are present");
+const imageCards = [...serviceGuide.matchAll(/<article class="media-card">/g)];
+assert.ok(imageCards.length >= 5, "Service guide should contain at least five attributed portal media cards");
+assert.match(serviceGuide, /alt="[^"]+"[^>]*><div class="caption">/);
+assert.match(serviceGuide, /UZINFOCOM/);
+assert.match(serviceGuide, /Murojaat.gov.uz/);
+console.log(`✓ illustrated public-services guide, ${imageCards.length} attributed portal media cards, official directory categories, filters and service-flow visualization are present`);
 
 const cabinet = read("kabinet.html");
 for (const feature of [
