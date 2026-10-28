@@ -44,6 +44,8 @@ Remove access by setting `active = false`. Do not add self-service admin claimin
 Repository: https://github.com/javohirbek12122-svg/yoshlar-ishi
 Production branch: `main`
 
+Automated quality checks run on pushes to `main`, pull requests, and manual workflow dispatch. The no-dependency check command is `npm run check`; workflow runs are visible in [GitHub Actions](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions).
+
 ## Supabase
 Project: `yoshlar-ishi`
 URL: https://nnodsqnqsqrmzcycrmpr.supabase.co
