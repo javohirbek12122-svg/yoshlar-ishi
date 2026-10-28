@@ -122,7 +122,7 @@ assert.match(deployWorkflow, /smoke-test/i);
 assert.match(deployWorkflow, /Vercel deployment skipped/i);
 const launchChecklist = read("DEPLOYMENT_CHECKLIST.md");
 assert.match(launchChecklist, /https:\/\/vercel\.com\/new/);
-assert.match(launchChecklist, /Framework preset to \\*\\*Other\\*\\*/);
+assert.ok(launchChecklist.toLowerCase().includes("framework preset to **other**"));
 assert.match(launchChecklist, /copy the project ID from the newly created project/i);
 console.log("✓ optional Vercel CLI deployment uses protected GitHub secret/vars and runs smoke tests");
 
