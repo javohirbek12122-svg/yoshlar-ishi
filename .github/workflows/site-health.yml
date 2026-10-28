@@ -44,6 +44,9 @@ jobs:
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin.html" -o /tmp/yoshlar-admin.html
           grep -qi "Boshqaruv markazi" /tmp/yoshlar-admin.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html
+          grep -qi "Idorani toifasiga qarab toping" /tmp/yoshlar-services.html
+          grep -qi "media-card" /tmp/yoshlar-services.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json
           node -e "JSON.parse(require('fs').readFileSync('/tmp/yoshlar-manifest.json','utf8'))"
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
