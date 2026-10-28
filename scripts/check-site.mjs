@@ -36,6 +36,7 @@ const required = [
   "supabase/migrations/20261028163033_secure_account_owned_initiatives.sql",
   "supabase/migrations/20261028163747_add_core_public_authority_portals.sql",
   "supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql",
+  "supabase/migrations/20261028180000_harden_public_access_and_admin_review.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -225,5 +226,25 @@ const educationMigration = read("supabase/migrations/20261028172620_retire_legac
 assert.match(educationMigration, /set active = false/i);
 assert.match(educationMigration, /ministry-education-science/);
 assert.match(educationMigration, /official_portal_admin_notes/);
+
+
+const hardeningMigration = read("supabase/migrations/20261028180000_harden_public_access_and_admin_review.sql");
+for (const feature of [
+  "admin_list_initiatives",
+  "admin_review_initiative",
+  "security invoker",
+  "revoke all privileges on all tables in schema public",
+  "grant insert (team_post_id, name, contact, role_interest, message)",
+  "grant select (id, reference_code, owner_id",
+]) {
+  assert.ok(hardeningMigration.toLowerCase().includes(feature.toLowerCase()), `Database hardening requirement missing: ${feature}`);
+}
+assert.match(admin, /rpc\/admin_list_initiatives/);
+assert.match(admin, /rpc\/admin_review_initiative/);
+assert.doesNotMatch(admin, /api\("initiatives\?select=id,reference_code,submitter_name/);
+assert.doesNotMatch(admin, /api\("initiatives\?id=eq\.[^\n]*method:"PATCH"/);
+assert.doesNotMatch(publicHtml, /contact_shared:share,status:"pending"/);
+assert.doesNotMatch(publicHtml, /message:trim\("interestMessage"\),status:"new"/);
+console.log("✓ least-privilege REST grants and allowlist-protected admin review RPCs are present");
 
 console.log("\nYoshlar-Ishi checks passed.");
