@@ -45,7 +45,7 @@ const sourceFallback=[
 ["Prezident virtual qabulxonasi","Rasmiy murojaat va qabulxona imkoniyatlari haqida ma’lumot.","Murojaat","https://pm.gov.uz/oz","appeals","pm.gov.uz","2026-10-28"],
 ["Murojaat.gov.uz","Tegishli tashkilotni tanlab, murojaat yuborish platformasi.","Murojaat","https://murojaat.gov.uz/","appeals","murojaat.gov.uz","2026-10-28"],
 ["Ochiq budjet","Fuqarolar tashabbuslari va budjet jarayonlari portali.","Ochiq budjet","https://openbudget.uz/","open_budget","openbudget.uz","2026-10-28"],
-["Ochiq ma’lumotlar portali","Davlat ma’lumotlari va statistik resurslar katalogi.","Ochiq ma’lumot","https://olddata.gov.uz/","open_data","Ochiq ma’lumotlar","2026-10-28"],
+["Ochiq ma’lumotlar portali","Davlat ma’lumotlari va statistik resurslar katalogi.","Ochiq ma’lumot","https://data.egov.uz/","open_data","Ochiq ma’lumotlar","2026-10-28"],
 ["Yoshlar ishlari agentligi","Yoshlar uchun rasmiy dasturlar va yangiliklar.","Rasmiy manba","https://yoshlar.gov.uz/","official","Yoshlar ishlari agentligi","2026-10-28"],
 ["Yoshlar daftari bo‘yicha yo‘riqnoma","Yoshlar daftari va yordamlar haqidagi yo‘riqnoma.","Yordam","https://advice.adliya.uz/oz/document/2631","support","Adliya vazirligi","2026-10-28"],
 ["Yoshlar uchun imkoniyatlar navigatori","Yoshlar uchun imkoniyat va resurslar katalogi.","Navigator","https://navigator.yito.uz/","navigator","YITO","2026-10-28"],
@@ -91,7 +91,7 @@ const portalGuideData={
  appeals:{title:"Murojaat yoki shikoyat",text:"Rasmiy murojaatni tegishli portalning o‘zida yuboring. Yoshlar-Ishi murojaatni davlat organiga avtomatik uzatmaydi.",links:[["Murojaat.gov.uz","https://murojaat.gov.uz/"],["Prezident virtual qabulxonasi","https://pm.gov.uz/oz"]]},
  startup:{title:"Startap, grant va biznes",text:"Imkoniyatlar katalogidan inkubatsiya va grant resurslarini ko‘ring. Har bir dastur shartlari va tanlov sanalarini tashkilotdan tekshiring.",links:[["Innoyouth inkubatsiyasi","https://www.innoyouth.uz/uz/incubation"],["Grantlar.uz","https://grantlar.uz/"]]},
  volunteer:{title:"Ko‘ngillilik va jamoa",text:"Ko‘ngillilar loyihalari va e’lonlari uchun platformalarga o‘ting, faoliyat talablari bilan tanishing.",links:[["Volontyor.uz","https://volontyor.uz/"],["Volontyorlar platformasi","https://volontyorlar.uz/uz"]]},
- data:{title:"Ochiq ma’lumot va budjet",text:"Ochiq ma’lumotlar va fuqarolar budjeti bo‘yicha alohida rasmiy manbalardan foydalaning.",links:[["Ochiq ma’lumotlar portali","https://olddata.gov.uz/"],["Ochiq budjet","https://openbudget.uz/"]]}
+ data:{title:"Ochiq ma’lumot va budjet",text:"Ochiq ma’lumotlar va fuqarolar budjeti bo‘yicha alohida rasmiy manbalardan foydalaning.",links:[["Ochiq ma’lumotlar portali","https://data.egov.uz/"],["Ochiq budjet","https://openbudget.uz/"]]}
 };
 function updatePortalGuide(){const item=portalGuideData[$("portalNeed").value]||portalGuideData.services;const result=$("portalGuide");result.innerHTML="<strong>"+escapeHtml(item.title)+"</strong><div style='margin-bottom:9px'>"+escapeHtml(item.text)+"</div>"+item.links.map(link=>'<a style="display:inline-block;margin:0 11px 3px 0" href="'+escapeHtml(link[1])+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(link[0])+' ↗</a>').join("");}
 $("portalNeed").addEventListener("change",updatePortalGuide);updatePortalGuide();
