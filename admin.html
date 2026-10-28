@@ -155,22 +155,22 @@ function fmt(d){if(!d)return "—";try{return new Date(d).toLocaleString("uz-UZ"
 function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("uz-UZ",{day:"2-digit",month:"short",year:"numeric"})}
 function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
 async function loadData(){try{
-  const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
-    api("initiatives?select=id,reference_code,submitter_name,age_band,district,category,title,problem,expected_result,support_needed,contact,status,admin_notes,created_at,updated_at,reviewed_at,reviewed_by&order=created_at.desc&limit=300"),
-    api("connection_requests?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes,created_at,reviewed_at&order=created_at.desc&limit=300"),
-    api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
-    api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
-    api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),
-    api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),
-    api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),
-    api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),
-    api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300")
-  ]);
-  initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];
-  renderAll();
-  setDbHealth(true,"Ulandi");
-  $("lastRefresh").textContent="Yangilandi";
-  $("lastUpdated").textContent=fmt(new Date().toISOString());
+ const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
+  api("initiatives?select=id,reference_code,submitter_name,age_band,district,category,title,problem,expected_result,support_needed,contact,status,admin_notes,created_at,updated_at,reviewed_at,reviewed_by&order=created_at.desc&limit=300"),
+  api("connection_requests?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes,created_at,reviewed_at&order=created_at.desc&limit=300"),
+  api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
+  api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
+  api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),
+  api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),
+  api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),
+  api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),
+  api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300")
+ ]);
+ initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];
+ const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));
+ integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));
+ teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];
+ renderAll();setDbHealth(true,"Ulandi");$("lastRefresh").textContent="Yangilandi";$("lastUpdated").textContent=fmt(new Date().toISOString());
  }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e)}}
 async function loadStats(){try{
  const [all,n,rev,progress,done,partnerNew,sourceActive,portalActive]=await Promise.all([
@@ -192,17 +192,16 @@ function renderIntegrations(){
  $("integrationsBody").innerHTML=rows.length?rows.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.name)+'</strong><span class="sub">'+esc(x.agency)+' · '+esc(x.purpose)+'</span><span class="sub"><a href="'+esc(x.portal_url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.portal_url)+'</a></span></td><td><select class="statusselect js-imode">'+Object.entries(modeNames).map(([k,v])=>'<option value="'+k+'" '+(x.connection_mode===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><select class="statusselect js-istatus">'+Object.entries(statusNamesLocal).map(([k,v])=>'<option value="'+k+'" '+(x.connection_status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select><label class="check" style="margin-top:7px"><input type="checkbox" class="js-iactive" '+(x.active?'checked':'')+'> Reyestrda faol</label></td><td><input class="noteinput js-idocs" type="url" value="'+esc(x.docs_url||"")+'" placeholder="https://hujjatlar…"></td><td>'+(x.auth_required?'<span class="statuspill warn">Kirish talab qilinishi mumkin</span>':'<span class="statuspill">Ochiq sahifa</span>')+'</td><td>'+esc(dateShort(x.verified_on))+'<span class="sub">Yangilangan: '+esc(dateShort(x.updated_at))+'</span></td><td><input class="noteinput js-inote" maxlength="2000" value="'+esc(x.admin_notes||"")+'" placeholder="Texnik holat / keyingi qadam"></td><td><button class="savebtn js-isave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="8" class="empty">Mos portal topilmadi.</td></tr>';
 }
 async function saveIntegration(btn){
- const tr=btn.closest("tr"),id=tr.dataset.id,row=integrations.find(x=>x.id===id);if(!row)return;
- btn.disabled=true;
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=integrations.find(x=>x.id===id);if(!row)return;btn.disabled=true;
  try{
-   const nextStatus=tr.querySelector(".js-istatus").value,nextMode=tr.querySelector(".js-imode").value,docsUrl=tr.querySelector(".js-idocs").value.trim();
-   if(nextStatus==="connected"&&nextMode==="external_link"){notify("Tashqi havola yolg‘iz o‘zi API/SSO ulanishi emas. Avval haqiqiy integratsiyani sozlang.");btn.disabled=false;return}
-   if(docsUrl&&!/^https:\/\/\S+/i.test(docsUrl)){notify("Texnik hujjat havolasi HTTPS bilan boshlansin.");btn.disabled=false;return}
-   const adminNote=tr.querySelector(".js-inote").value;
-   const patch={connection_mode:nextMode,connection_status:nextStatus,docs_url:docsUrl,active:tr.querySelector(".js-iactive").checked,verified_on:new Date().toISOString().slice(0,10)};
-   await api("official_portal_integrations?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});
-   await api("official_portal_admin_notes?on_conflict=integration_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({integration_id:id,admin_notes:adminNote,updated_at:new Date().toISOString()})});
-   await loadData();notify("Portal reyestri yangilandi.");
+  const nextStatus=tr.querySelector(".js-istatus").value,nextMode=tr.querySelector(".js-imode").value,docsUrl=tr.querySelector(".js-idocs").value.trim();
+  if(nextStatus==="connected"&&nextMode==="external_link"){notify("Tashqi havola yolg‘iz o‘zi API/SSO ulanishi emas. Avval haqiqiy integratsiyani sozlang.");btn.disabled=false;return}
+  if(docsUrl&&!/^https:\/\/\S+/i.test(docsUrl)){notify("Texnik hujjat havolasi HTTPS bilan boshlansin.");btn.disabled=false;return}
+  const adminNote=tr.querySelector(".js-inote").value;
+  const patch={connection_mode:nextMode,connection_status:nextStatus,docs_url:docsUrl,active:tr.querySelector(".js-iactive").checked,verified_on:new Date().toISOString().slice(0,10)};
+  await api("official_portal_integrations?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});
+  await api("official_portal_admin_notes?on_conflict=integration_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({integration_id:id,admin_notes:adminNote,updated_at:new Date().toISOString()})});
+  await loadData();notify("Portal reyestri yangilandi.");
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
 function renderTeamPosts(){
