@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
@@ -119,7 +120,7 @@ assert.match(portalHealthWorkflow, /murojaat\.gov\.uz/);
 assert.ok(portalHealthWorkflow.includes("node scripts/check-official-portals.mjs"));
 assert.ok(portalHealthWorkflow.includes("https://gov.uz/oz/iiv/pages/davlat-xizmatlari-reestri"));
 const portalAudit = read("scripts/check-official-portals.mjs");
-new vm.Script(portalAudit, { filename: "scripts/check-official-portals.mjs" });
+execFileSync(process.execPath, ["--check", "scripts/check-official-portals.mjs"], { stdio: "pipe" });
 for (const feature of [
   "official_portal_integrations",
   "hero_image_url",
