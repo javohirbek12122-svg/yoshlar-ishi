@@ -56,7 +56,7 @@ Production branch: `main`
 
 Automated quality checks run on pushes to `main`, pull requests, and manual workflow dispatch. The no-dependency check command is `npm run check`; workflow runs are visible in [GitHub Actions](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions).
 
-A separate [live health check](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/site-health.yml) is scheduled every six hours and can also be started manually. After Vercel deployment, add the repository Actions **variable** `SITE_URL` with the final HTTPS site root (for example, `https://your-site.vercel.app`). It then verifies the homepage, admin page, manifest, and icon. Until that variable is set, the health workflow reports a setup notice instead of a false failure.
+A separate [live-site check](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/site-health.yml) is scheduled every six hours and can also be started manually. After Vercel deployment, set repository Actions **variable** `SITE_URL` to the actual HTTPS site root; it verifies the homepage, admin page, manifest, and icon. A separate [official-portal monitor](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/official-portal-health.yml) checks eight public government portal endpoints daily and writes HTTP-status results to the GitHub Actions summary. A failed probe can mean a portal is blocking automated requests, so it flags manual verification rather than asserting the portal is definitively down.
 
 ## Supabase
 Project: `yoshlar-ishi`
