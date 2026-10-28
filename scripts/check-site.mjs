@@ -9,6 +9,9 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
   "admin.html",
+  "privacy.html",
+  "robots.txt",
+  ".github/workflows/site-health.yml",
   "config.js",
   "icon.svg",
   "manifest.webmanifest",
@@ -19,6 +22,7 @@ const required = [
   "supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql",
   "supabase/migrations/20261028152553_harden_internal_trigger_functions.sql",
   "supabase/migrations/20261028152748_restrict_authenticated_tracking_rpc.sql",
+  "supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql",
 ];
 for (const file of required) {
   assert.ok(exists(file), `Missing required file: ${file}`);
