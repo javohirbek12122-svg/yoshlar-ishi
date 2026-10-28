@@ -125,10 +125,12 @@ assert.match(deployWorkflow, /vercel deploy --prebuilt --prod/);
 assert.match(deployWorkflow, /smoke-test/i);
 assert.match(deployWorkflow, /Vercel deployment skipped/i);
 const launchChecklist = read("DEPLOYMENT_CHECKLIST.md");
-assert.match(launchChecklist, /https:\/\/vercel\.com\/new/);
-assert.ok(launchChecklist.toLowerCase().includes("framework preset to **other**"));
-assert.match(launchChecklist, /copy the project ID from the newly created project/i);
-console.log("✓ optional Vercel CLI deployment uses protected GitHub secret/vars and runs smoke tests");
+assert.match(launchChecklist, /yoshlar-ishi-site/);
+assert.match(launchChecklist, /403/);
+assert.match(launchChecklist, /VERCEL_TOKEN/);
+assert.match(launchChecklist, /GitHub Actions CLI deployment/i);
+assert.match(launchChecklist, /do not treat successful static tests alone as production success/i);
+console.log("✓ Vercel checklist matches the discovered project IDs, current deploy permissions, and safe CLI fallback");
 
 for (const file of ["manifest.webmanifest", "admin-manifest.webmanifest"]) {
   const data = JSON.parse(read(file));
