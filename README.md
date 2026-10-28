@@ -12,8 +12,16 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Submit an initiative and receive a high-entropy tracking code
 - Check only the safe status summary through `rpc/track_initiative`
 - Submit mentor / organization / event / resource / feedback requests
-- Browse opportunity links from Supabase with fallback links
-- Mobile-friendly design and independent-platform disclaimer
+- Browse official and independent opportunities from Supabase with search and category filters
+- Guided portal recommender for government services, youth programs, legal resources, appeals, entrepreneurship, volunteering, and open data
+- Readiness-scoring checklist that calculates a planning score and suggests next steps (not an eligibility or grant decision)
+- Accessible font-size and high-contrast controls, installable web app manifests, and a privacy notice
+- Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
+
+## Official public portal directory
+The portal catalogue links to current official destinations such as my.gov.uz, gov.uz, LEX.UZ, the presidential virtual reception / Murojaat portals, Open Budget, and the open-data portal, alongside youth, grant, startup, and volunteering resources. Users can search and filter the catalogue and use a guided service finder.
+
+These are **external links**, not an authenticated government system integration. No OneID / SSO, government API, or automated submission to a state service is claimed or performed. Such integrations require the responsible institution's published API / technical documentation, authorization, and credentials.
 
 ## Owner monitoring dashboard
 Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
@@ -24,7 +32,7 @@ Dashboard capabilities:
 - KPIs for overall, new, in-progress, completed initiatives and new partnership requests
 - Search/filter, review, update status, and add internal notes on initiatives
 - Review partnership requests and mark their handling status
-- Add or hide opportunity sources from the public catalog
+- Add or hide opportunity and official-portal links from the public catalog
 - Automatic audit log when initiative status changes
 - CSV export of the latest 300 initiatives
 - Automatic dashboard refresh every 60 seconds while the panel remains open
@@ -78,10 +86,14 @@ After the first deployment:
 3. Add the exact admin redirect URL, e.g. `https://YOUR-VERCEL-DOMAIN/admin.html`, to the Redirect URLs list.
 4. Test the public initiative submission, tracking code lookup, and admin magic-link sign-in.
 
+## Privacy and launch checklist
+- The public privacy notice is `privacy.html`; it explains which fields are stored, why they are needed, and the current MVP limitations.
+- Before broad public use, fill in the platform operator's real contact channel and confirm a data-retention / deletion procedure.
+
 ## Security, limitations, and launch checklist
 - RLS is enabled on public tables. Anonymous initiative and partnership submissions are intentionally allowed for this MVP.
 - Tracking lookup uses a high-entropy reference code and only returns title, status, date, district, and reference code.
 - Admin email checks are applied by database RLS policies, not only by frontend UI.
 - Before a broad public launch, add server-side rate limiting / bot protection, a privacy notice tailored to the operator, and a tested support contact.
-- No admin-side user management, automatic email notifications, native certificate issuance, grant guarantee, or official government integration is included.
+- No admin-side user management, automatic email notifications, native certificate issuance, grant guarantee, or authenticated official government API/SSO integration is included. The public portal catalogue provides outbound links only.
 - Yoshlar-Ishi is not an official government platform. Verify eligibility and deadlines at the source website.
