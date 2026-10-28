@@ -19,9 +19,9 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
 
 ## Official public portal directory
-The portal catalogue links to current official destinations such as my.gov.uz, gov.uz, LEX.UZ, the presidential virtual reception / Murojaat portals, Open Budget, and the open-data portal, alongside youth, grant, startup, and volunteering resources. Users can search and filter the catalogue and use a guided service finder.
+The portal catalogue links to official destinations such as my.gov.uz, gov.uz, LEX.UZ, the presidential virtual reception / Murojaat portals, Open Budget, and the open-data portal, alongside youth, grant, startup, and volunteering resources. The searchable catalogue pulls government portal records from `official_portal_integrations` and other opportunities from `opportunity_sources`, merging duplicate URLs. Users can use a guided service finder and a six-criterion readiness calculator.
 
-These are **external links**, not an authenticated government system integration. No OneID / SSO, government API, or automated submission to a state service is claimed or performed. Such integrations require the responsible institution's published API / technical documentation, authorization, and credentials.
+These are **external links**, not an authenticated government system integration. No OneID / SSO, government API, or automated submission to a state service is claimed or performed. Such integrations require the responsible institution's published API / technical documentation, authorization, and credentials. The admin-only integration registry records the current link-only state and can store documentation URLs; it deliberately blocks marking a plain external link as “connected API/SSO”.
 
 ## Owner monitoring dashboard
 Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
@@ -32,7 +32,9 @@ Dashboard capabilities:
 - KPIs for overall, new, in-progress, completed initiatives and new partnership requests
 - Search/filter, review, update status, and add internal notes on initiatives
 - Review partnership requests and mark their handling status
-- Add or hide opportunity and official-portal links from the public catalog
+- Add or hide opportunity links from the public catalog
+- Maintain a separate official-portal integration registry (link-only / docs-needed / approval-needed / connected / disabled), including technical-doc URLs and internal notes
+- Prevent an external link alone from being marked as a connected API/SSO integration
 - Automatic audit log when initiative status changes
 - CSV export of the latest 300 initiatives
 - Automatic dashboard refresh every 60 seconds while the panel remains open
@@ -68,6 +70,7 @@ Tables:
 - `connection_requests`
 - `admin_allowlist`
 - `admin_activity_log`
+- `official_portal_integrations`
 
 Migration SQL is stored in `supabase/migrations/`. These migrations have already been applied to the current database; do not rerun the same migrations against it. The tracking RPC intentionally uses a tightly validated tracking code and returns only limited fields. Internal trigger functions have direct execute grants revoked.
 
