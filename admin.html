@@ -157,7 +157,7 @@ function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.te
 async function loadData(){try{
  const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
   api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),
-  api("connection_requests?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes,created_at,reviewed_at&order=created_at.desc&limit=300"),
+  api("rpc/admin_list_connection_requests",{method:"POST",body:JSON.stringify({})}),
   api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
   api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
   api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),
@@ -269,7 +269,17 @@ async function saveInitiative(btn){
   await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi."+telegramMessage);
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
-async function savePartner(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{const patch={review_status:tr.querySelector(".js-pstatus").value,admin_notes:tr.querySelector(".js-pnote").value,reviewed_at:new Date().toISOString()};await api("connection_requests?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi.")}catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}}
+async function savePartner(btn){
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;
+ try{
+  const result=await api("rpc/admin_review_connection_request",{method:"POST",body:JSON.stringify({
+   p_id:id,p_expected_status:row.review_status,p_status:tr.querySelector(".js-pstatus").value,
+   p_admin_notes:tr.querySelector(".js-pnote").value
+  })});
+  if(!Array.isArray(result)||!result.length)throw Error("Admin review RPC returned no result.");
+  await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi.");
+ }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
+}
 async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{await api("opportunity_sources?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!row.active})});await loadData();await loadStats();notify("Manba holati yangilandi.")}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
 function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);notify("CSV fayl tayyorlandi. Oxirgi 300 ta ariza eksport qilindi.")}
 async function addSource(ev){ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("sourceNotice","Manba saqlanmoqda…");const payload={title:$("sourceTitle").value.trim(),description:$("sourceDesc").value.trim(),category:$("sourceCategory").value,url:$("sourceUrl").value.trim(),provider:$("sourceProvider").value.trim(),active:$("sourceActive").checked,verified_on:new Date().toISOString().slice(0,10)};try{await api("opportunity_sources",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});ev.currentTarget.reset();$("sourceActive").checked=true;tell("sourceNotice","Manba qo‘shildi.");await loadData();await loadStats()}catch(e){tell("sourceNotice","Xatolik: "+e.message,true)}finally{btn.disabled=false}}
