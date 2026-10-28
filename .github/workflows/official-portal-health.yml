@@ -4,6 +4,14 @@ on:
   schedule:
     - cron: "23 4 * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/official-portal-health.yml"
+      - "scripts/check-official-portals.mjs"
+      - "scripts/check-site.mjs"
+      - "davlat-xizmatlari.html"
+      - "supabase/migrations/**"
 
 permissions:
   contents: read
