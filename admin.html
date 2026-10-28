@@ -249,7 +249,26 @@ async function addShowcase(ev){
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
 function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
 function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar",integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
-async function saveInitiative(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value;try{const patch={status,admin_notes:notes,reviewed_by:user.id,reviewed_at:new Date().toISOString()};await api("initiatives?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});row.status=status;row.admin_notes=notes;row.reviewed_by=user.id;row.reviewed_at=patch.reviewed_at;await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi.")}catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}}
+async function saveInitiative(btn){
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;
+ btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value,oldStatus=row.status;
+ try{
+  const patch={status,admin_notes:notes,reviewed_by:user.id,reviewed_at:new Date().toISOString()};
+  await api("initiatives?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});
+  row.status=status;row.admin_notes=notes;row.reviewed_by=user.id;row.reviewed_at=patch.reviewed_at;
+  let telegramMessage="";
+  if(oldStatus!==status){
+   try{
+    const nr=await fetch(url+"/functions/v1/telegram-notify",{method:"POST",headers:{apikey:key,Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify({initiative_id:id,reference_code:row.reference_code,old_status:oldStatus,new_status:status})});
+    const nd=await nr.json().catch(()=>({}));
+    if(nd.configured&&nd.sent>0)telegramMessage=" Telegram xabarnomasi "+nd.sent+" obunachiga yuborildi.";
+    else if(nd.configured&&nd.failed>0)telegramMessage=" Ayrim Telegram xabarlari yuborilmadi.";
+    else if(nd.configured===false)telegramMessage=" Telegram bot tokeni hali sozlanmagan.";
+   }catch{telegramMessage=" Telegram xabarnomasi yuborilmadi; holat saqlandi."}
+  }
+  await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi."+telegramMessage);
+ }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
+}
 async function savePartner(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{const patch={review_status:tr.querySelector(".js-pstatus").value,admin_notes:tr.querySelector(".js-pnote").value,reviewed_at:new Date().toISOString()};await api("connection_requests?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi.")}catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}}
 async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{await api("opportunity_sources?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!row.active})});await loadData();await loadStats();notify("Manba holati yangilandi.")}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
 function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);notify("CSV fayl tayyorlandi. Oxirgi 300 ta ariza eksport qilindi.")}
