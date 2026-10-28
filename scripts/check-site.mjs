@@ -69,11 +69,14 @@ assert.match(publicHtml, /id="sourceSearch"/);
 assert.match(publicHtml, /id="sourceFilter"/);
 assert.match(publicHtml, /id="portalNeed"/);
 assert.match(publicHtml, /class="readiness-item"/);
+assert.match(publicHtml, /id="recommendationList"/);
+assert.match(publicHtml, /function updateRecommendations\(\)/);
+assert.match(publicHtml, /recommendationCategories/);
 assert.match(publicHtml, /privacy\.html/);
 for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbudget.uz", "data.egov.uz"]) {
   assert.ok(publicHtml.includes(host), `Official portal missing from public directory: ${host}`);
 }
-console.log("✓ public forms, official portal directory, guided service finder, readiness scoring, and privacy notice are present");
+console.log("✓ public forms, official portal directory, guided service finder, category-scored recommendations, readiness scoring, and privacy notice are present");
 
 const admin = read("admin.html");
 for (const feature of [
