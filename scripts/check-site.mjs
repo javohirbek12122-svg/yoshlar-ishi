@@ -40,6 +40,7 @@ const required = [
   "supabase/migrations/20261028174007_harden_public_access_and_admin_review.sql",
   "supabase/migrations/20261028174334_admin_only_partner_review_rpc.sql",
   "supabase/migrations/20261028175222_complete_youth_ledger_service_entry.sql",
+  "supabase/migrations/20261028181147_index_foreign_key_columns.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -317,5 +318,26 @@ for (const feature of [
   assert.ok(youthLedgerMigration.includes(feature), `Youth ledger service guide field missing: ${feature}`);
 }
 console.log("✓ youth-ledger record has an explanatory source link, eligibility caveats, steps and document guidance");
+
+
+const indexMigration = read("supabase/migrations/20261028181147_index_foreign_key_columns.sql");
+for (const feature of [
+  "admin_activity_log_actor_id_idx",
+  "admin_activity_log_initiative_id_idx",
+  "initiative_showcase_created_by_idx",
+  "initiative_showcase_initiative_id_idx",
+  "initiative_showcase_votes_voter_id_idx",
+  "initiative_updates_author_id_idx",
+  "initiative_updates_initiative_id_idx",
+  "initiatives_owner_id_idx",
+  "initiatives_reviewed_by_idx",
+  "team_interest_requests_team_post_id_idx",
+  "team_posts_owner_id_idx",
+  "telegram_subscriptions_reference_code_idx",
+]) {
+  assert.ok(indexMigration.includes(feature), `Foreign-key index migration missing: ${feature}`);
+}
+console.log("✓ foreign-key index migration includes all 12 performance indexes");
+
 
 console.log("\nYoshlar-Ishi checks passed.");
