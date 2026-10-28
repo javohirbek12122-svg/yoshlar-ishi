@@ -14,6 +14,7 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Submit mentor / organization / event / resource / feedback requests
 - Browse official and independent opportunities from Supabase with search and category filters
 - Guided portal recommender for government services, youth programs, legal resources, appeals, entrepreneurship, volunteering, and open data
+- Category-scored ranking that returns the three highest-matching catalogue links for the selected need, with an explicit notice that this is guidance—not an official eligibility decision
 - Readiness-scoring checklist that calculates a planning score and suggests next steps (not an eligibility or grant decision)
 - Accessible font-size and high-contrast controls, installable web app manifests, and a privacy notice
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
