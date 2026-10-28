@@ -136,6 +136,14 @@ for (const feature of [
 }
 console.log("✓ daily official endpoint monitor plus dynamic registry and image URL audit are wired into CI");
 
+const liveHealthWorkflow = read(".github/workflows/site-health.yml");
+assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site\.vercel\.app' \}\}/);
+assert.match(liveHealthWorkflow, /Check website and admin page/);
+assert.match(liveHealthWorkflow, /paths:/);
+assert.match(liveHealthWorkflow, /davlat-xizmatlari\\.html/);
+console.log("✓ live-site health check defaults to the known production alias and runs when public pages change");
+
+
 console.log("✓ daily official portal availability monitor is present");
 assert.match(deployWorkflow, /VERCEL_TOKEN:\s*\$\{\{ secrets\.VERCEL_TOKEN \}\}/);
 assert.match(deployWorkflow, /VERCEL_ORG_ID:\s*\$\{\{ vars\.VERCEL_ORG_ID \}\}/);
