@@ -63,6 +63,10 @@ The REST API now uses explicit per-table/column grants in migration `20261028174
 
 The personal-account `get_my_initiatives()` and `update_my_initiative(...)` functions use invoker permissions and the owner's RLS policies. This keeps the account RPC limited to the signed-in user's own initiatives. The AI rate-limit and Telegram-subscription tables remain inaccessible to anon/authenticated roles; their Edge Functions use server-side credentials.
 
+## 3B. Hamkorlik murojaatlarining maxfiy maydonlari
+
+Hamkorlik murojaatlarining emaili, telefoni, xabari va ichki admin izohi `admin_list_connection_requests()` orqali faqat faol admin ro‘yxatidagi hisobga qaytariladi. Holat/izoh o‘zgartirish `admin_review_connection_request(...)` orqali bajariladi; funksiya admin ruxsatini va avvalgi holatni tekshiradi. Oddiy brauzer sessiyasi bu maydonlarni REST jadvalidan to‘g‘ridan-to‘g‘ri o‘qiy yoki yangilay olmaydi.
+
 ## 4. Shaxsiy kabinet
 
 - Email magic-link orqali kirish; foydalanuvchi paroli saytga saqlanmaydi.
