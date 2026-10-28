@@ -205,6 +205,47 @@ async function saveIntegration(btn){
    await loadData();notify("Portal reyestri yangilandi.");
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
+function renderTeamPosts(){
+ const cat={technology:"Texnologiya",design:"Dizayn",marketing:"Marketing",content:"Kontent",business:"Biznes",research:"Tadqiqot",volunteer:"Ko‘ngillilik",other:"Boshqa"};
+ const statusNames={pending:"Moderatsiyada",published:"E’lonni chop etish",closed:"Yopilgan",rejected:"Rad etilgan"};
+ $("teamPostCount").textContent=teamPosts.length+" ta";
+ $("teamPostsBody").innerHTML=teamPosts.length?teamPosts.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(x.description)+'</span><span class="sub">'+esc(dateShort(x.created_at))+'</span></td><td>'+esc(cat[x.category]||x.category)+'<span class="sub">'+esc(x.district||"Hudud ko‘rsatilmagan")+'</span></td><td>'+esc([...(x.roles||[]),...(x.skills||[])].join(", ")||"Ko‘rsatilmagan")+'</td><td><select class="statusselect js-tpstatus">'+Object.entries(statusNames).map(([k,v])=>'<option value="'+k+'" '+(x.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td>'+(x.contact_shared&&x.public_contact_url?'<span class="statuspill">Rozilik bor</span><span class="sub">'+esc(x.public_contact_url)+'</span>':'<span class="statuspill warn">Ommaviy kontakt yo‘q</span>')+'</td><td><button class="savebtn js-tpsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">Jamoa e’lonlari yo‘q.</td></tr>';
+}
+function renderTeamInterests(){
+ const labels={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",forwarded:"Yo‘naltirildi",closed:"Yopilgan"};
+ const titles=new Map(teamPosts.map(x=>[x.id,x.title]));
+ $("teamInterestCount").textContent=teamInterests.filter(x=>x.status==="new").length+" ta yangi / "+teamInterests.length+" jami";
+ $("teamInterestsBody").innerHTML=teamInterests.length?teamInterests.map(x=>'<tr data-id="'+esc(x.id)+'"><td>'+esc(titles.get(x.team_post_id)||"E’lon")+'</td><td><strong>'+esc(x.name)+'</strong><span class="sub">'+esc(x.contact)+'</span></td><td>'+esc(x.role_interest||"—")+'</td><td>'+esc(x.message)+'</td><td><select class="statusselect js-tistatus">'+Object.entries(labels).map(([k,v])=>'<option value="'+k+'" '+(x.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><button class="savebtn js-tisave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">Qiziqish bildirishlar yo‘q.</td></tr>';
+}
+async function saveTeamPost(btn){
+ const tr=btn.closest("tr"),row=teamPosts.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ try{await api("team_posts?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({status:tr.querySelector(".js-tpstatus").value})});await loadData();notify("Jamoa e’loni yangilandi.")}
+ catch(e){notify("E’lon holati saqlanmadi: "+e.message)}finally{btn.disabled=false}
+}
+async function saveTeamInterest(btn){
+ const tr=btn.closest("tr"),row=teamInterests.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ try{await api("team_interest_requests?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({status:tr.querySelector(".js-tistatus").value})});await loadData();notify("Qiziqish murojaati yangilandi.")}
+ catch(e){notify("Murojaatni yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
+}
+function renderShowcaseAdmin(){
+ const cat={technology:"Texnologiya",education:"Ta’lim",community:"Jamoa / mahalla",startup:"Startap",volunteer:"Ko‘ngillilik",culture:"Madaniyat",other:"Boshqa"};
+ $("showcaseCountAdmin").textContent=showcase.length+" ta";
+ $("showcaseAdminBody").innerHTML=showcase.length?showcase.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(cat[x.category]||x.category)+' · '+esc(x.slug)+'</span><span class="sub">'+esc(x.summary.slice(0,130))+'</span></td><td>'+Number(x.votes_count||0)+'</td><td><label class="check"><input type="checkbox" class="js-showfeatured" '+(x.featured?'checked':'')+'> Tanlangan</label></td><td><label class="check"><input type="checkbox" class="js-showpublished" '+(x.published?'checked':'')+'> Public</label></td><td><button class="savebtn js-showsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha showcase yozuvlari yo‘q. Tekshirilgan, ommaviy ko‘rsatishga rozilik olingan loyiha qo‘shing.</td></tr>';
+}
+async function saveShowcase(btn){
+ const tr=btn.closest("tr"),row=showcase.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ try{await api("initiative_showcase?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({featured:tr.querySelector(".js-showfeatured").checked,published:tr.querySelector(".js-showpublished").checked})});await loadData();notify("Top tashabbus holati yangilandi.")}
+ catch(e){notify("Showcase saqlanmadi: "+e.message)}finally{btn.disabled=false}
+}
+async function addShowcase(ev){
+ ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("showcaseNotice","Loyiha saqlanmoqda…");
+ const img=$("showImage").value.trim(),url=$("showUrl").value.trim();
+ if((img&&!/^https:\/\/\S+/i.test(img))||(url&&!/^https:\/\/\S+/i.test(url))){tell("showcaseNotice","Rasm va loyiha havolalari HTTPS bilan boshlanishi kerak.",true);btn.disabled=false;return}
+ const payload={slug:$("showSlug").value.trim().toLowerCase(),title:$("showTitle").value.trim(),summary:$("showSummary").value.trim(),category:$("showCategory").value,district:$("showDistrict").value.trim(),display_name:$("showDisplayName").value.trim()||"Yoshlar-Ishi tashabbuskori",stage:$("showStage").value,image_url:img,public_url:url,featured:$("showFeatured").checked,published:$("showPublish").checked,created_by:user?.id||null};
+ try{await api("initiative_showcase",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});ev.currentTarget.reset();$("showDisplayName").value="Yoshlar-Ishi tashabbuskori";tell("showcaseNotice","Tashabbus saqlandi. Public holat tanlangan bo‘lsa, saytning Top tashabbuslar qismida ko‘rinadi.");await loadData()}
+ catch(e){tell("showcaseNotice","Saqlab bo‘lmadi: "+e.message,true)}
+ finally{btn.disabled=false}
+}
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
 function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
 function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar",integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
@@ -220,6 +261,11 @@ $("logoutBtn").addEventListener("click",async()=>{try{if(token)await authFetch("
 $("refreshBtn").addEventListener("click",()=>Promise.all([loadData(),loadStats()]).then(()=>notify("Panel yangilandi.")));
 $("activityRefresh").addEventListener("click",()=>loadData());
 document.querySelectorAll(".navitem").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.page)));
+$("teamRefreshAdmin").addEventListener("click",()=>loadData());$("showcaseRefresh").addEventListener("click",()=>loadData());
+$("teamPostsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-tpsave");if(b)saveTeamPost(b)});
+$("teamInterestsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-tisave");if(b)saveTeamInterest(b)});
+$("showcaseAdminBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-showsave");if(b)saveShowcase(b)});
+$("showcaseForm").addEventListener("submit",addShowcase);
 $("integrationSearch").addEventListener("input",renderIntegrations);$("integrationFilter").addEventListener("change",renderIntegrations);
 $("integrationsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-isave");if(b)saveIntegration(b)});
 $("integrationRefresh").addEventListener("click",()=>loadData());
