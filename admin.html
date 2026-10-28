@@ -156,7 +156,7 @@ function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("
 function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
 async function loadData(){try{
  const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
-  api("initiatives?select=id,reference_code,submitter_name,age_band,district,category,title,problem,expected_result,support_needed,contact,status,admin_notes,created_at,updated_at,reviewed_at,reviewed_by&order=created_at.desc&limit=300"),
+  api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),
   api("connection_requests?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes,created_at,reviewed_at&order=created_at.desc&limit=300"),
   api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
   api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
@@ -252,9 +252,10 @@ async function saveInitiative(btn){
  const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;
  btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value,oldStatus=row.status;
  try{
-  const patch={status,admin_notes:notes,reviewed_by:user.id,reviewed_at:new Date().toISOString()};
-  await api("initiatives?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});
-  row.status=status;row.admin_notes=notes;row.reviewed_by=user.id;row.reviewed_at=patch.reviewed_at;
+  const reviewRows=await api("rpc/admin_review_initiative",{method:"POST",body:JSON.stringify({p_id:id,p_expected_status:oldStatus,p_status:status,p_admin_notes:notes})});
+  const reviewed=Array.isArray(reviewRows)?reviewRows[0]:null;
+  if(!reviewed)throw Error("Admin review RPC returned no result.");
+  row.status=reviewed.new_status;row.admin_notes=reviewed.admin_notes;row.reviewed_by=user.id;row.reviewed_at=reviewed.reviewed_at;
   let telegramMessage="";
   if(oldStatus!==status){
    try{
