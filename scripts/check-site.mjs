@@ -13,6 +13,7 @@ const required = [
   "robots.txt",
   ".github/workflows/site-health.yml",
   ".github/workflows/deploy-vercel.yml",
+  ".github/workflows/official-portal-health.yml",
   "config.js",
   "icon.svg",
   "manifest.webmanifest",
@@ -67,7 +68,7 @@ assert.match(publicHtml, /id="sourceFilter"/);
 assert.match(publicHtml, /id="portalNeed"/);
 assert.match(publicHtml, /class="readiness-item"/);
 assert.match(publicHtml, /privacy\.html/);
-for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbudget.uz", "olddata.gov.uz"]) {
+for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbudget.uz", "data.egov.uz"]) {
   assert.ok(publicHtml.includes(host), `Official portal missing from public directory: ${host}`);
 }
 console.log("✓ public forms, official portal directory, guided service finder, readiness scoring, and privacy notice are present");
@@ -93,6 +94,11 @@ assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"')
 console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
 
 const deployWorkflow = read(".github/workflows/deploy-vercel.yml");
+const portalHealthWorkflow = read(".github/workflows/official-portal-health.yml");
+assert.match(portalHealthWorkflow, /schedule:/);
+assert.match(portalHealthWorkflow, /data\.egov\.uz/);
+assert.match(portalHealthWorkflow, /murojaat\.gov\.uz/);
+console.log("✓ daily official portal availability monitor is present");
 assert.match(deployWorkflow, /VERCEL_TOKEN:\s*\$\{\{ secrets\.VERCEL_TOKEN \}\}/);
 assert.match(deployWorkflow, /VERCEL_ORG_ID:\s*\$\{\{ vars\.VERCEL_ORG_ID \}\}/);
 assert.match(deployWorkflow, /VERCEL_PROJECT_ID:\s*\$\{\{ vars\.VERCEL_PROJECT_ID \}\}/);
