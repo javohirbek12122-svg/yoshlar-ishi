@@ -127,6 +127,7 @@ for (const feature of [
   "source_url",
   "HEAD",
   "GET",
+  "HEAD failed",
   "possible-broken-link",
   "GITHUB_STEP_SUMMARY",
   "MAX_CONCURRENCY",
