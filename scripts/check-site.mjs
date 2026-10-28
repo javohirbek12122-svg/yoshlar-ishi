@@ -141,7 +141,7 @@ assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:
 assert.match(liveHealthWorkflow, /Check website and admin page/);
 assert.match(liveHealthWorkflow, /paths:/);
 assert.ok(liveHealthWorkflow.includes('"davlat-xizmatlari.html"'));
-assert.match(liveHealthWorkflow, /curl --fail[^\\n]*\\$BASE_URL\\/davlat-xizmatlari\\.html/);
+assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html'));
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 console.log("✓ live-site health check defaults to the known production alias and runs when public pages change");
