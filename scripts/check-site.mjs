@@ -116,6 +116,24 @@ const portalHealthWorkflow = read(".github/workflows/official-portal-health.yml"
 assert.match(portalHealthWorkflow, /schedule:/);
 assert.match(portalHealthWorkflow, /data\.egov\.uz/);
 assert.match(portalHealthWorkflow, /murojaat\.gov\.uz/);
+assert.match(portalHealthWorkflow, /node scripts\\/check-official-portals\\.mjs/);
+assert.match(portalHealthWorkflow, /https:\\/\\/gov\\.uz\\/oz\\/iiv\\/pages\\/davlat-xizmatlari-reestri/);
+const portalAudit = read("scripts/check-official-portals.mjs");
+new vm.Script(portalAudit, { filename: "scripts/check-official-portals.mjs" });
+for (const feature of [
+  "official_portal_integrations",
+  "hero_image_url",
+  "source_url",
+  "HEAD",
+  "GET",
+  "possible-broken-link",
+  "GITHUB_STEP_SUMMARY",
+  "MAX_CONCURRENCY",
+]) {
+  assert.ok(portalAudit.includes(feature), `Portal URL monitor requirement missing: ${feature}`);
+}
+console.log("✓ daily official endpoint monitor plus dynamic registry and image URL audit are wired into CI");
+
 console.log("✓ daily official portal availability monitor is present");
 assert.match(deployWorkflow, /VERCEL_TOKEN:\s*\$\{\{ secrets\.VERCEL_TOKEN \}\}/);
 assert.match(deployWorkflow, /VERCEL_ORG_ID:\s*\$\{\{ vars\.VERCEL_ORG_ID \}\}/);
