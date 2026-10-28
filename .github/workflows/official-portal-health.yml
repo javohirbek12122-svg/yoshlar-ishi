@@ -34,6 +34,15 @@ jobs:
             fi
           done <<'PORTALS'
           my.gov.uz|https://my.gov.uz/uz
+          Vazirliklar katalogi|https://gov.uz/oz/all_ministry/1
+          Agentliklar katalogi|https://gov.uz/oz/all_ministry/4
+          Qo‘mitalar katalogi|https://gov.uz/oz/all_ministry/5
+          Inspeksiyalar katalogi|https://gov.uz/oz/all_ministry/15
+          Hokimliklar katalogi|https://gov.uz/oz/all_ministry/14
+          DXM xizmatlari ro‘yxati|https://gov.uz/oz/adliya/sections/view/2827
+          my.uzbmb.uz|https://my.uzbmb.uz/
+          Davlat vakansiyalari|https://vacancy.argos.uz/
+          Raqamli hukumat|https://digital.gov.uz/
           gov.uz|https://gov.uz/oz
           LEX.UZ|https://lex.uz/uz/
           data.egov.uz|https://data.egov.uz/
