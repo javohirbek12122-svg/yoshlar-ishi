@@ -1,0 +1,39 @@
+name: Yoshlar-Ishi Live Site Health
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health:
+    name: Check public site endpoints
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - name: Explain missing live URL
+        if: ${{ vars.SITE_URL == '' }}
+        run: |
+          echo "::notice::Live check is not configured yet. Add the GitHub Actions repository variable SITE_URL with the final HTTPS Vercel domain."
+      - name: Check website and admin page
+        if: ${{ vars.SITE_URL != '' }}
+        run: |
+          set -euo pipefail
+          case "$SITE_URL" in
+            https://*) ;;
+            *) echo "SITE_URL must start with https://"; exit 1 ;;
+          esac
+          BASE_URL="${SITE_URL%/}"
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
+          grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin.html" -o /tmp/yoshlar-admin.html
+          grep -qi "Boshqaruv markazi" /tmp/yoshlar-admin.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json
+          node -e "JSON.parse(require('fs').readFileSync('/tmp/yoshlar-manifest.json','utf8'))"
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
+          grep -q "<svg" /tmp/yoshlar-icon.svg
+          echo "Health check passed for $BASE_URL"
