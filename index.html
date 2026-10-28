@@ -148,7 +148,7 @@ async function loadSources(){try{
    api("opportunity_sources?select=title,description,category,url,provider,verified_on&active=eq.true&order=created_at.asc",{headers:baseHeaders}),
    api("official_portal_integrations?select=slug,name,agency,purpose,portal_url,active,verified_on&active=eq.true&order=name.asc",{headers:baseHeaders})
  ]);
- const catMap={"my-gov":"public_services","government-portal":"government","lexuz":"legal","youth-agency":"official","youth-ledger":"support","murojaat":"appeals","president-reception":"appeals","open-budget":"open_budget","open-data":"open_data"};
+ const catMap={"my-gov":"public_services","government-portal":"government","ministries-directory":"government","president-portal":"government","parliament":"government","senate":"government","foreign-affairs":"government","digital-government":"government","lexuz":"legal","advice-legal":"legal","justice-ministry":"legal","youth-agency":"youth","youth-ledger":"support","youth-contact":"youth","youth-appeals":"youth","murojaat":"appeals","president-reception":"appeals","open-budget":"open_budget","open-data":"open_data","statistics-agency":"open_data","open-data-reference":"open_data","education-ministry":"education","scholarship-apply":"education","student-stipend-info":"education","uzbmb-services":"education","uzbmb-personal":"education","application-status":"public_services","argos-vacancy":"employment","tax-committee":"business","license":"business","business-registration":"business"};
  const labels=categoryLabels;
  const portalItems=(portals||[]).map(p=>[p.name,p.purpose,labels[catMap[p.slug]]||"Rasmiy portal",p.portal_url,catMap[p.slug]||"official",p.agency,p.verified_on]);
  const normalizeUrl=v=>String(v||"").replace(/\/+$/,"").toLowerCase();
