@@ -38,6 +38,7 @@ const required = [
   "supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql",
   "supabase/migrations/20261028174007_harden_public_access_and_admin_review.sql",
   "supabase/migrations/20261028174334_admin_only_partner_review_rpc.sql",
+  "supabase/migrations/20261028175222_complete_youth_ledger_service_entry.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -271,5 +272,17 @@ assert.match(admin, /rpc\/admin_review_connection_request/);
 assert.doesNotMatch(admin, /api\("connection_requests\?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes/);
 assert.doesNotMatch(admin, /api\("connection_requests\?id=eq\.[^\n]*method:"PATCH"/);
 console.log("✓ partner request private fields are returned and edited only through allowlist-checked admin RPCs");
+
+const youthLedgerMigration = read("supabase/migrations/20261028175222_complete_youth_ledger_service_entry.sql");
+for (const feature of [
+  "youth-ledger",
+  "Yoshlar daftari: huquqiy yo‘riqnoma",
+  "jsonb",
+  "https://advice.adliya.uz/oz/document/2631",
+  "Yoshlar-Ishi yordam ajratmaydi",
+]) {
+  assert.ok(youthLedgerMigration.includes(feature), `Youth ledger service guide field missing: ${feature}`);
+}
+console.log("✓ youth-ledger record has an explanatory source link, eligibility caveats, steps and document guidance");
 
 console.log("\nYoshlar-Ishi checks passed.");
