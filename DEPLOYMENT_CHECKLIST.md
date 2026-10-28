@@ -46,7 +46,7 @@ After Vercel shows a real production domain:
 ## 3. Enable automatic website and portal monitoring
 
 The live-site health check defaults to `https://yoshlar-ishi-site.vercel.app`, so it runs without an extra variable. Set repository variable `SITE_URL` only if you later change the canonical domain. The check covers:
-- [Site health check](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/site-health.yml) every six hours (homepage, admin route, privacy notice, manifest and icon).
+- [Site health check](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/site-health.yml) every six hours and automatically after public-page/config changes (homepage, admin route, privacy notice, manifest and icon).
 - [Official portal availability monitor](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/official-portal-health.yml) daily. In addition to central government indexes, it reads every active `official_portal_integrations` record from public Supabase and checks distinct portal URLs, source/guide URLs, catalogue card images and the gallery-image URLs. The run summary includes status, response time, reachable count, suspected broken links, server errors, bot/rate-limit responses and timeouts.
 - A 403/429, timeout or 5xx response is not proof the site is permanently unavailable. The monitor flags uncertain results for manual review instead of treating them as a confirmed outage.
 
