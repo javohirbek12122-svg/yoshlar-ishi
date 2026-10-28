@@ -9,6 +9,9 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
   "admin.html",
+  "davlat-xizmatlari.html",
+  "kabinet.html",
+  "INTEGRATIONS_SETUP.md",
   "privacy.html",
   "robots.txt",
   ".github/workflows/site-health.yml",
@@ -28,7 +31,13 @@ const required = [
   "supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql",
   "supabase/migrations/20261028154603_official_portal_registry.sql",
   "supabase/migrations/20261028154926_admin_read_inactive_sources.sql",
-  "supabase/migrations/20261028160000_update_official_open_data_portal_url.sql",
+  "supabase/migrations/20261028155537_update_official_open_data_portal_url.sql",
+  "supabase/migrations/20261028161434_expanded_service_guide_and_community.sql",
+  "supabase/migrations/20261028163033_secure_account_owned_initiatives.sql",
+  "supabase/migrations/20261028163747_add_core_public_authority_portals.sql",
+  "supabase/functions/idea-review/index.ts",
+  "supabase/functions/telegram-webhook/index.ts",
+  "supabase/functions/telegram-notify/index.ts",
 ];
 for (const file of required) {
   assert.ok(exists(file), `Missing required file: ${file}`);
@@ -40,7 +49,7 @@ function inlineScripts(html) {
     .map((match) => match[1])
     .filter((source) => source.trim().length > 0);
 }
-for (const file of ["index.html", "admin.html"]) {
+for (const file of ["index.html", "admin.html", "davlat-xizmatlari.html", "kabinet.html"]) {
   const html = read(file);
   const scripts = inlineScripts(html);
   assert.ok(scripts.length > 0, `${file} has no inline JavaScript`);
@@ -138,5 +147,72 @@ assert.match(portalRegistryMigration, /link_only/);
 assert.match(portalRegistryMigration, /create policy "public can read active official portal records"/i);
 assert.match(inactiveAdminMigration, /admin can read all official portal records/i);
 console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RLS, audit trail, invoker-secured tracking and official portal registry checked`);
+
+
+const serviceGuide = read("davlat-xizmatlari.html");
+for (const feature of [
+  'id="tashkilotlar"',
+  'id="serviceCatalogue"',
+  'id="dialogContent"',
+  'class="media-grid"',
+  'class="directory-flow"',
+  "https://gov.uz/oz/all_ministry/1",
+  "https://gov.uz/oz/all_ministry/4",
+  "https://gov.uz/oz/all_ministry/5",
+  "https://gov.uz/oz/all_ministry/14",
+  "https://gov.uz/oz/all_ministry/15",
+  "https://gov.uz/oz/adliya/sections/view/2827",
+]) {
+  assert.ok(serviceGuide.includes(feature), `Service guide feature or official directory missing: ${feature}`);
+}
+assert.match(serviceGuide, /function openDialog\(/);
+assert.match(serviceGuide, /function renderRecommender\(/);
+console.log("✓ illustrated public-services guide, official directory categories, filters and service-flow visualization are present");
+
+const cabinet = read("kabinet.html");
+for (const feature of [
+  "yi_user_token",
+  "/auth/v1/otp",
+  "rpc/get_my_initiatives",
+  "rpc/update_my_initiative",
+  "owner_id=user.id",
+]) {
+  assert.ok(cabinet.includes(feature), `Personal cabinet control missing: ${feature}`);
+}
+console.log("✓ email magic-link cabinet and owner-scoped initiative RPCs are present");
+
+for (const feature of [
+  'id="page-team"',
+  'id="page-showcase"',
+  "team_posts?select",
+  "team_interest_requests?select",
+  "initiative_showcase?select",
+  "function renderTeamPosts",
+  "function renderShowcaseAdmin",
+]) {
+  assert.ok(admin.includes(feature), `Admin community moderation feature missing: ${feature}`);
+}
+console.log("✓ team-board and showcase moderation controls are present");
+
+const ideaReview = read("supabase/functions/idea-review/index.ts");
+for (const feature of ["GROQ_API_KEY", "containsSensitivePattern", "consume_idea_review_quota", "AI_PROVIDER_NOT_CONFIGURED"]) {
+  assert.ok(ideaReview.includes(feature), `AI review safeguard missing: ${feature}`);
+}
+const telegramWebhook = read("supabase/functions/telegram-webhook/index.ts");
+const telegramNotify = read("supabase/functions/telegram-notify/index.ts");
+assert.match(telegramWebhook, /TELEGRAM_WEBHOOK_SECRET/);
+assert.match(telegramWebhook, /telegram_subscriptions/);
+assert.match(telegramWebhook, /\/link/);
+assert.match(telegramNotify, /TELEGRAM_BOT_TOKEN/);
+assert.match(telegramNotify, /admin_allowlist/);
+console.log("✓ server-side AI safeguards and protected Telegram webhook/notification handlers are present");
+
+const accountMigration = read("supabase/migrations/20261028163033_secure_account_owned_initiatives.sql");
+const authorityMigration = read("supabase/migrations/20261028163747_add_core_public_authority_portals.sql");
+assert.match(accountMigration, /get_my_initiatives/);
+assert.match(accountMigration, /update_my_initiative/);
+assert.match(authorityMigration, /insert into public\.official_portal_integrations/i);
+assert.match(authorityMigration, /on conflict \(slug\) do update/i);
+console.log("✓ migration history includes owner-scoped account RPCs and reproducible official portal seeds");
 
 console.log("\nYoshlar-Ishi checks passed.");
