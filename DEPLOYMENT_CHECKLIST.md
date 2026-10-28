@@ -2,21 +2,22 @@
 
 This checklist separates code readiness from account credentials and production validation.
 
-## 1. Create or link the Vercel project
+## 1. Resolve the Vercel project and deploy permissions
 
-The repository is ready for a static Vercel deployment, but the current Vercel team does not expose an existing `yoshlar-ishi` project. Create/import the real project before configuring CLI deployment IDs.
+The Vercel account currently lists two similarly named projects:
+- **`yoshlar-ishi`** — empty project with no deployment or assigned domain.
+- **`yoshlar-ishi-site`** — has an existing READY production deployment and the domain `https://yoshlar-ishi-site.vercel.app`, but the available Vercel connection could not read the deployment page or create a fresh production deployment (403 permission errors). The older deployment’s source commit is `364c0d7a69df70bbdcab5c9d5922f136d493eb45`, not the current `main` commit.
 
-1. Open [Vercel New Project](https://vercel.com/new) and choose the Vercel team that should own Yoshlar-Ishi.
-2. Import the GitHub repository `javohirbek12122-svg/yoshlar-ishi`.
-3. Set project name to `yoshlar-ishi`, root directory to the repository root (`./`), and framework preset to **Other**.
-4. Leave Build Command, Install Command, and Output Directory blank; this project serves static HTML/CSS/JavaScript and has no build output folder.
-5. Deploy and copy the actual production domain. Confirm that a push to `main` triggers a new deployment.
+**Recommended:** keep `yoshlar-ishi-site` as the canonical site so you do not create another empty project/domain by accident.
 
-**Recommended:** use Vercel's built-in Git integration for automatic deployments on pushes to `main`. If you use that method, do not also activate the GitHub Actions CLI deploy route for every commit, or you may create duplicate production deploys.
+1. Open [Vercel Git settings for `yoshlar-ishi-site`](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings/git) and confirm that the repository is `javohirbek12122-svg/yoshlar-ishi` and the production branch is `main`.
+2. Open [Vercel project settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings). Confirm the project ID is `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA` before using it in automation.
+3. Restore Git-based production deployment, or authorize the Vercel connection to access this project and create production deployments. Do not create a third project unless you intentionally want to migrate to a new canonical domain.
+4. After a new deployment, check that its Git SHA matches the latest successful GitHub Quality Checks run. A Vercel project with an old READY deployment does **not** prove the current `main` commit is live.
 
 ### Alternative: GitHub Actions CLI deployment
 
-Only use this route after the Vercel project has been created and its settings page shows the current project ID.
+The repository has an optional GitHub Actions deploy workflow, but it currently skips all deploy/build/smoke-test steps until credentials are configured. Its “success” state without those credentials means **deployment skipped**, not deployed.
 
 Open:
 - [GitHub Actions secrets](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/secrets/actions)
@@ -24,16 +25,15 @@ Open:
 - [Deploy Yoshlar-Ishi to Vercel](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/deploy-vercel.yml)
 
 Add:
-
 | GitHub entry | Type | Value |
 |---|---|---|
-| `VERCEL_TOKEN` | Repository **secret** | Create a Vercel access token in your own Vercel account; paste it directly into GitHub, not into ChatGPT or a repository file. |
-| `VERCEL_ORG_ID` | Repository variable | `team_PiDVgH5WveQEWukqlgkctSEW` if the new project belongs to that team; otherwise use the actual owning team ID. |
-| `VERCEL_PROJECT_ID` | Repository variable | Copy the project ID from the newly created project's **Settings → General**. Do not reuse a project ID from a different or deleted project. |
+| `VERCEL_TOKEN` | Repository **secret** | Create a Vercel access token in your own Vercel account and paste it directly into GitHub, not into ChatGPT or a repository file. |
+| `VERCEL_ORG_ID` | Repository variable | `team_PiDVgH5WveQEWukqlgkctSEW` if the selected project belongs to this team; otherwise use the actual owning team ID. |
+| `VERCEL_PROJECT_ID` | Repository variable | `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA` if deploying to `yoshlar-ishi-site`; verify it in the project’s Settings → General first. |
 
-Then choose **Run workflow**. The workflow re-checks source, builds production output, deploys, and smoke-tests the public pages. If credentials are absent, the Actions summary explicitly says deployment was skipped; a successful quality check alone does not mean the site is live.
+Then choose **Run workflow**. The workflow re-checks source, builds production output, deploys, and smoke-tests public pages. If credentials are absent or invalid, inspect the workflow summary; never treat successful static tests alone as production success.
 
-Do not paste the Vercel token in a chat, issue, code file, workflow variable, or commit.
+Do not paste the Vercel token into a chat, issue, code file, workflow variable, or commit.
 
 ## 2. Set up Supabase Auth redirects
 
