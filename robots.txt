@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-manifest.webmanifest
+
+# Admin routes require Supabase Auth and database allowlist; robots.txt is not access control.
