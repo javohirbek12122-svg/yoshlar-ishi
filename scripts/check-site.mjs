@@ -23,6 +23,8 @@ const required = [
   "supabase/migrations/20261028152553_harden_internal_trigger_functions.sql",
   "supabase/migrations/20261028152748_restrict_authenticated_tracking_rpc.sql",
   "supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql",
+  "supabase/migrations/20261028154603_official_portal_registry.sql",
+  "supabase/migrations/20261028154926_admin_read_inactive_sources.sql",
 ];
 for (const file of required) {
   assert.ok(exists(file), `Missing required file: ${file}`);
@@ -57,6 +59,7 @@ assert.match(publicHtml, /id="initiativeForm"/);
 assert.match(publicHtml, /id="trackForm"/);
 assert.match(publicHtml, /id="partnerForm"/);
 assert.match(publicHtml, /rpc\/track_initiative/);
+assert.match(publicHtml, /official_portal_integrations\?select=slug/);
 assert.match(publicHtml, /id="rasmiy-xizmatlar"/);
 assert.match(publicHtml, /id="sourceSearch"/);
 assert.match(publicHtml, /id="sourceFilter"/);
@@ -75,6 +78,9 @@ for (const feature of [
   'id="page-initiatives"',
   'id="page-partners"',
   'id="page-sources"',
+  'id="page-integrations"',
+  "official_portal_integrations?select=id",
+  'nextStatus==="connected"&&nextMode==="external_link"',
   'id="page-activity"',
   'setInterval(()=>{if(token)Promise.all([loadData(),loadStats()])},60000)',
   'id="exportBtn"',
@@ -97,11 +103,17 @@ const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));
 assert.ok(migrationFiles.length >= 6, "Migration history files are incomplete");
 const dashboardMigration = read("supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql");
 const trackingMigration = read("supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql");
+const portalRegistryMigration = read("supabase/migrations/20261028154603_official_portal_registry.sql");
+const inactiveAdminMigration = read("supabase/migrations/20261028154926_admin_read_inactive_sources.sql");
 assert.match(dashboardMigration, /alter table public\.admin_allowlist enable row level security/i);
 assert.match(dashboardMigration, /admin_activity_log/);
 assert.match(trackingMigration, /security invoker/i);
 assert.match(trackingMigration, /x-initiative-code/i);
 assert.match(trackingMigration, /grant select \(reference_code, title, status, created_at, district\)/i);
-console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RLS, audit trail and invoker-secured tracking checked`);
+assert.match(portalRegistryMigration, /official_portal_integrations/);
+assert.match(portalRegistryMigration, /link_only/);
+assert.match(portalRegistryMigration, /create policy "public can read active official portal records"/i);
+assert.match(inactiveAdminMigration, /admin can read all official portal records/i);
+console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RLS, audit trail, invoker-secured tracking and official portal registry checked`);
 
 console.log("\nYoshlar-Ishi checks passed.");
