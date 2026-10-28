@@ -12,6 +12,7 @@ const required = [
   "privacy.html",
   "robots.txt",
   ".github/workflows/site-health.yml",
+  ".github/workflows/deploy-vercel.yml",
   "config.js",
   "icon.svg",
   "manifest.webmanifest",
@@ -87,7 +88,18 @@ for (const feature of [
 ]) {
   assert.ok(admin.includes(feature), `Admin feature missing: ${feature}`);
 }
-console.log("✓ admin login, allowlist checks, review pages, auto-refresh and CSV export are present");
+assert.ok(admin.includes('official_portal_integrations?select=id'), "Admin integration registry query missing");
+assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"'), "Admin must prevent false connected status for plain external links");
+console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
+
+const deployWorkflow = read(".github/workflows/deploy-vercel.yml");
+assert.match(deployWorkflow, /VERCEL_TOKEN:\s*\$\{\{ secrets\.VERCEL_TOKEN \}\}/);
+assert.match(deployWorkflow, /VERCEL_ORG_ID:\s*\$\{\{ vars\.VERCEL_ORG_ID \}\}/);
+assert.match(deployWorkflow, /VERCEL_PROJECT_ID:\s*\$\{\{ vars\.VERCEL_PROJECT_ID \}\}/);
+assert.match(deployWorkflow, /vercel build --prod/);
+assert.match(deployWorkflow, /vercel deploy --prebuilt --prod/);
+assert.match(deployWorkflow, /smoke-test/i);
+console.log("✓ optional Vercel CLI deployment uses protected GitHub secret/vars and runs smoke tests");
 
 for (const file of ["manifest.webmanifest", "admin-manifest.webmanifest"]) {
   const data = JSON.parse(read(file));
