@@ -140,7 +140,7 @@ const liveHealthWorkflow = read(".github/workflows/site-health.yml");
 assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site\.vercel\.app' \}\}/);
 assert.match(liveHealthWorkflow, /Check website and admin page/);
 assert.match(liveHealthWorkflow, /paths:/);
-assert.ok(liveHealthWorkflow.includes(""davlat-xizmatlari.html""));
+assert.ok(liveHealthWorkflow.includes('"davlat-xizmatlari.html"'));
 console.log("✓ live-site health check defaults to the known production alias and runs when public pages change");
 
 
