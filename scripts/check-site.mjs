@@ -129,7 +129,7 @@ assert.match(launchChecklist, /yoshlar-ishi-site/);
 assert.match(launchChecklist, /403/);
 assert.match(launchChecklist, /VERCEL_TOKEN/);
 assert.match(launchChecklist, /GitHub Actions CLI deployment/i);
-assert.match(launchChecklist, /do not treat successful static tests alone as production success/i);
+assert.ok(launchChecklist.includes("does **not** prove the current `main` commit is live"));
 console.log("✓ Vercel checklist matches the discovered project IDs, current deploy permissions, and safe CLI fallback");
 
 for (const file of ["manifest.webmanifest", "admin-manifest.webmanifest"]) {
