@@ -57,7 +57,16 @@ assert.match(publicHtml, /id="initiativeForm"/);
 assert.match(publicHtml, /id="trackForm"/);
 assert.match(publicHtml, /id="partnerForm"/);
 assert.match(publicHtml, /rpc\/track_initiative/);
-console.log("✓ public forms + constrained tracking RPC are present");
+assert.match(publicHtml, /id="rasmiy-xizmatlar"/);
+assert.match(publicHtml, /id="sourceSearch"/);
+assert.match(publicHtml, /id="sourceFilter"/);
+assert.match(publicHtml, /id="portalNeed"/);
+assert.match(publicHtml, /class="readiness-item"/);
+assert.match(publicHtml, /privacy\.html/);
+for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbudget.uz", "olddata.gov.uz"]) {
+  assert.ok(publicHtml.includes(host), `Official portal missing from public directory: ${host}`);
+}
+console.log("✓ public forms, official portal directory, guided service finder, readiness scoring, and privacy notice are present");
 
 const admin = read("admin.html");
 for (const feature of [
@@ -85,11 +94,14 @@ assert.match(icon, /<svg[\s\S]*viewBox="0 0 512 512"/);
 console.log("✓ app icon is an SVG with a square viewBox");
 
 const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));
-assert.ok(migrationFiles.length >= 5, "Migration history files are incomplete");
+assert.ok(migrationFiles.length >= 6, "Migration history files are incomplete");
 const dashboardMigration = read("supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql");
+const trackingMigration = read("supabase/migrations/20261028154054_harden_tracking_rpc_with_rls.sql");
 assert.match(dashboardMigration, /alter table public\.admin_allowlist enable row level security/i);
-assert.match(dashboardMigration, /security definer[\s\S]*track_initiative|track_initiative[\s\S]*security definer/i);
 assert.match(dashboardMigration, /admin_activity_log/);
-console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RLS and audit trail checked`);
+assert.match(trackingMigration, /security invoker/i);
+assert.match(trackingMigration, /x-initiative-code/i);
+assert.match(trackingMigration, /grant select \(reference_code, title, status, created_at, district\)/i);
+console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RLS, audit trail and invoker-secured tracking checked`);
 
 console.log("\nYoshlar-Ishi checks passed.");
