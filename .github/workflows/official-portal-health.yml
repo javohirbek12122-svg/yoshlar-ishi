@@ -12,8 +12,14 @@ jobs:
   portal-health:
     name: Check official public portal availability
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
+      - name: Check out monitoring script
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
       - name: Check official portals
         shell: bash
         run: |
@@ -39,7 +45,7 @@ jobs:
           Qo‘mitalar katalogi|https://gov.uz/oz/all_ministry/5
           Inspeksiyalar katalogi|https://gov.uz/oz/all_ministry/15
           Hokimliklar katalogi|https://gov.uz/oz/all_ministry/14
-          DXM xizmatlari ro‘yxati|https://gov.uz/oz/adliya/sections/view/2827
+          IIV davlat xizmatlari reestri|https://gov.uz/oz/iiv/pages/davlat-xizmatlari-reestri
           my.uzbmb.uz|https://my.uzbmb.uz/
           Davlat vakansiyalari|https://vacancy.argos.uz/
           Raqamli hukumat|https://digital.gov.uz/
@@ -53,3 +59,6 @@ jobs:
           PORTALS
           echo "Portallar javob bermasa, bu tekshiruvning o‘zi ularning rasmiy holatini to‘liq isbotlamaydi. Manual verification may be needed." >> "$GITHUB_STEP_SUMMARY"
           echo "Portal checks complete; $failed endpoint(s) need manual attention."
+      - name: Audit every active catalogue URL and media source
+        shell: bash
+        run: node scripts/check-official-portals.mjs
