@@ -4,6 +4,19 @@ on:
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/site-health.yml"
+      - "index.html"
+      - "admin.html"
+      - "privacy.html"
+      - "robots.txt"
+      - "manifest.webmanifest"
+      - "icon.svg"
+      - "davlat-xizmatlari.html"
+      - "kabinet.html"
+      - "config.js"
 
 permissions:
   contents: read
