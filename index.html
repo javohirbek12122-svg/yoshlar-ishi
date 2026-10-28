@@ -67,7 +67,7 @@ async function loadSources(){try{
  const catMap={"my-gov":"public_services","government-portal":"government","lexuz":"legal","youth-agency":"official","youth-ledger":"support","murojaat":"appeals","president-reception":"appeals","open-budget":"open_budget","open-data":"open_data"};
  const labels=categoryLabels;
  const portalItems=(portals||[]).map(p=>[p.name,p.purpose,labels[catMap[p.slug]]||"Rasmiy portal",p.portal_url,catMap[p.slug]||"official",p.agency,p.verified_on]);
- const normalizeUrl=v=>String(v||"").replace(/\\/$/,"").toLowerCase();
+ const normalizeUrl=v=>String(v||"").replace(/\/+$/,"").toLowerCase();
  const portalUrls=new Set(portalItems.map(p=>normalizeUrl(p[3])));
  const opportunityItems=(rows||[]).filter(r=>!portalUrls.has(normalizeUrl(r.url))).map(r=>[r.title,r.description,labels[r.category]||"Imkoniyat",r.url,r.category,r.provider,r.verified_on]);
  draw([...portalItems,...opportunityItems]);
