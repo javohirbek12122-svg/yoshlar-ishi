@@ -18,6 +18,8 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 ## Owner monitoring dashboard
 Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
 
+Dashboard can be added to a phone home screen as a separate “YI Admin” shortcut after the site is deployed; it uses its own manifest and starts directly at `/admin.html`.
+
 Dashboard capabilities:
 - KPIs for overall, new, in-progress, completed initiatives and new partnership requests
 - Search/filter, review, update status, and add internal notes on initiatives
