@@ -37,6 +37,8 @@
       <button class="navitem" data-page="partners"><span class="ico">◎</span> Hamkorlik murojaatlari</button>
       <button class="navitem" data-page="sources"><span class="ico">↗</span> Manbalar va portallar</button>
       <button class="navitem" data-page="integrations"><span class="ico">⌘</span> Tashqi integratsiyalar</button>
+      <button class="navitem" data-page="team"><span class="ico">◎</span> Jamoa doskasi</button>
+      <button class="navitem" data-page="showcase"><span class="ico">★</span> Top tashabbuslar</button>
       <button class="navitem" data-page="activity"><span class="ico">◷</span> Faoliyat tarixi</button>
     </nav></div>
     <div class="sidebarfoot"><span>ADMIN MODE</span>Ma’lumotlar bevosita alohida Supabase bazasidan o‘qiladi. Panel ochiq bo‘lsa, 60 soniyada yangilanadi.</div>
@@ -95,7 +97,32 @@
         <div class="filters" style="margin-bottom:13px"><input id="integrationSearch" class="control" placeholder="Portal yoki tashkilotni qidirish…"><select id="integrationFilter" class="control"><option value="">Barcha holatlar</option><option value="link_only">Faqat havola</option><option value="docs_needed">Hujjat kerak</option><option value="approval_needed">Ruxsat kerak</option><option value="connected">API / SSO ulangan</option><option value="disabled">O‘chirilgan</option></select><span class="exporthint" id="integrationCount"></span></div>
         <div class="panel"><div class="tablewrap"><table style="min-width:1400px"><thead><tr><th>Portal / vazifa</th><th>Ulanish turi</th><th>Holat</th><th>Texnik hujjat URL</th><th>Kirish talabi</th><th>Tekshirilgan</th><th>Ichki izoh</th><th>Saqlash</th></tr></thead><tbody id="integrationsBody"><tr><td colspan="8" class="empty">Reyestr yuklanmoqda…</td></tr></tbody></table></div></div>
       </section>
-      <section class="page" id="page-activity">
+      <section class="page" id="page-team">
+ <div class="sectiontitle"><div><div class="eyebrow">Jamoa va sherik izlash</div><h2>Jamoa doskasi moderatsiyasi</h2><p>Ommaga chiqishidan oldin e’lonlarni tekshiring. Faqat “E’lonni chop etish” holatidagi yozuvlar public sahifada ko‘rinadi.</p></div><button class="button" id="teamRefreshAdmin">↻ Yangilash</button></div>
+ <div class="panel"><div class="panelhead"><div><h3>Jamoa e’lonlari</h3><p>Shaxsiy kontakt ommaga faqat muallif alohida rozilik berganida chiqadi.</p></div><span class="statuspill" id="teamPostCount">—</span></div><div class="tablewrap"><table style="min-width:1050px"><thead><tr><th>E’lon</th><th>Yo‘nalish / hudud</th><th>Rol / ko‘nikmalar</th><th>Holat</th><th>Kontakt ulashilgan</th><th>Saqlash</th></tr></thead><tbody id="teamPostsBody"><tr><td colspan="6" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+ <div class="panel" style="margin-top:15px"><div class="panelhead"><div><h3>Sheriklikka qiziqishlar</h3><p>Ism, aloqa va xabarlar faqat admin panelida ko‘rinadi.</p></div><span class="statuspill" id="teamInterestCount">—</span></div><div class="tablewrap"><table style="min-width:1050px"><thead><tr><th>E’lon</th><th>Ism / kontakt</th><th>Rol</th><th>Xabar</th><th>Holat</th><th>Saqlash</th></tr></thead><tbody id="teamInterestsBody"><tr><td colspan="6" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+</section>
+<section class="page" id="page-showcase">
+ <div class="sectiontitle"><div><div class="eyebrow">Tavsiya etilgan tashabbuslar</div><h2>Top tashabbuslarni boshqarish</h2><p>Faqat tekshirilgan va muallif ommaga ko‘rsatishga rozilik bergan loyihani e’lon qiling. Bu grant yoki davlat mukofoti degani emas.</p></div><button class="button" id="showcaseRefresh">↻ Yangilash</button></div>
+ <div class="formsgrid">
+  <div class="panel"><div class="panelhead"><div><h3>Showcase’ga tashabbus qo‘shish</h3><p>Public title, qisqa tavsif va loyiha materiallari.</p></div></div>
+   <form class="form" id="showcaseForm">
+    <div class="field"><label for="showSlug">URL identifikatori *</label><input id="showSlug" required maxlength="100" placeholder="parkent-ekologik-loyiha" pattern="[a-z0-9-]{3,100}"></div>
+    <div class="field"><label for="showTitle">Loyiha nomi *</label><input id="showTitle" required minlength="5" maxlength="140"></div>
+    <div class="field"><label for="showSummary">Ommaviy qisqacha tavsif *</label><textarea id="showSummary" required minlength="20" maxlength="1800"></textarea></div>
+    <div class="inlineform"><div class="field"><label for="showCategory">Yo‘nalish</label><select id="showCategory"><option value="technology">Texnologiya</option><option value="education">Ta’lim</option><option value="community">Jamoa / mahalla</option><option value="startup">Startap</option><option value="volunteer">Ko‘ngillilik</option><option value="culture">Madaniyat</option><option value="other">Boshqa</option></select></div><div class="field"><label for="showDistrict">Hudud</label><input id="showDistrict" maxlength="100"></div></div>
+    <div class="field"><label for="showDisplayName">Ommaviy ko‘rinadigan muallif / jamoa nomi</label><input id="showDisplayName" maxlength="120" value="Yoshlar-Ishi tashabbuskori"></div>
+    <div class="inlineform"><div class="field"><label for="showStage">Bosqich</label><select id="showStage"><option>G‘oya</option><option>Prototip</option><option>Sinov</option><option>Amalda</option><option>Natija ko‘rsatgan</option></select></div><div class="field"><label for="showImage">Rasm URL (ixtiyoriy, HTTPS)</label><input id="showImage" type="url" placeholder="https://..."></div></div>
+    <div class="field"><label for="showUrl">Loyiha havolasi (ixtiyoriy, HTTPS)</label><input id="showUrl" type="url" placeholder="https://..."></div>
+    <label class="check"><input id="showFeatured" type="checkbox"> Asosiy tanlangan loyihalar qatorida ko‘rsatish</label>
+    <label class="check"><input id="showPublish" type="checkbox"> Ommaga e’lon qilish</label>
+    <button class="button primary" type="submit">Tashabbusni saqlash +</button><div id="showcaseNotice" class="notice" role="status" aria-live="polite"></div>
+   </form>
+  </div>
+  <div class="panel"><div class="panelhead"><div><h3>Mavjud tashabbuslar</h3><p>Ommaviy ko‘rsatish, tanlash va reytingni boshqarish.</p></div><span class="statuspill" id="showcaseCountAdmin">—</span></div><div class="tablewrap"><table style="min-width:900px"><thead><tr><th>Loyiha</th><th>Ovoz</th><th>Tanlangan</th><th>Public</th><th>Amal</th></tr></thead><tbody id="showcaseAdminBody"><tr><td colspan="5" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+ </div>
+</section>
+<section class="page" id="page-activity">
         <div class="sectiontitle"><div><div class="eyebrow">Kuzatuv va shaffoflik</div><h2>Faoliyat tarixi</h2><p>Tashabbus holati o‘zgarganda avtomatik qayd yaratiladi.</p></div><button class="button" id="activityRefresh">↻ Yangilash</button></div>
         <div class="panel"><div class="panelhead"><div><h3>Oxirgi amallar</h3><p>Ma’lumotlar bazasidagi audit jurnali</p></div><span class="statuspill" id="activityCount">— qayd</span></div><div class="panelbody"><div id="activityList" class="activity"><div class="subtle">Jurnal yuklanmoqda…</div></div></div></div>
       </section>
@@ -109,7 +136,7 @@
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{},url=(cfg.supabaseUrl||"").replace(/\/$/,""),key=cfg.supabaseAnonKey||cfg.supabaseKey;
 const $=id=>document.getElementById(id),statusNames={submitted:"Yangi",reviewing:"Ko‘rib chiqilmoqda",needs_details:"Qo‘shimcha ma’lumot kerak",approved:"Ma’qullangan",in_progress:"Jarayonda",completed:"Yakunlangan",declined:"Rad etilgan"},requestNames={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",handled:"Ko‘rib chiqildi",archived:"Arxiv"},typeNames={mentor:"Mentorlik",organization:"Tashkilot",event:"Tadbir",resource:"Resurs",feedback:"Fikr-mulohaza"},categoryNames={official:"Rasmiy manba",support:"Yordam",navigator:"Navigator",startup:"Startap",volunteer:"Ko‘ngillilik",grants:"Grantlar",education:"Ta’lim",opportunity:"Imkoniyat",community:"Jamiyat",technology:"Texnologiya",culture:"Madaniyat",other:"Boshqa"};
-let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],integrations=[],audit=[],timer=null;
+let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],audit=[],timer=null;
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function notify(text){const t=$("toast");t.textContent=text;t.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.style.display="none",4000)}
 function tell(id,text,error=false){const e=$(id);e.textContent=text;e.classList.toggle("error",!!error)}
@@ -128,15 +155,18 @@ function fmt(d){if(!d)return "—";try{return new Date(d).toLocaleString("uz-UZ"
 function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("uz-UZ",{day:"2-digit",month:"short",year:"numeric"})}
 function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
 async function loadData(){try{
-  const [i,p,s,a,g,gn]=await Promise.all([
+  const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
     api("initiatives?select=id,reference_code,submitter_name,age_band,district,category,title,problem,expected_result,support_needed,contact,status,admin_notes,created_at,updated_at,reviewed_at,reviewed_by&order=created_at.desc&limit=300"),
     api("connection_requests?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes,created_at,reviewed_at&order=created_at.desc&limit=300"),
     api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
     api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
     api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),
-    api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at")
+    api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),
+    api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),
+    api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),
+    api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300")
   ]);
-  initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));
+  initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];
   renderAll();
   setDbHealth(true,"Ulandi");
   $("lastRefresh").textContent="Yangilandi";
@@ -176,8 +206,8 @@ async function saveIntegration(btn){
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
-function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderIntegrations();renderAudit()}
-function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar",integrations:"Tashqi integratsiyalar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
+function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
+function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar",integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
 async function saveInitiative(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value;try{const patch={status,admin_notes:notes,reviewed_by:user.id,reviewed_at:new Date().toISOString()};await api("initiatives?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});row.status=status;row.admin_notes=notes;row.reviewed_by=user.id;row.reviewed_at=patch.reviewed_at;await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi.")}catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}}
 async function savePartner(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{const patch={review_status:tr.querySelector(".js-pstatus").value,admin_notes:tr.querySelector(".js-pnote").value,reviewed_at:new Date().toISOString()};await api("connection_requests?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi.")}catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}}
 async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{await api("opportunity_sources?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!row.active})});await loadData();await loadStats();notify("Manba holati yangilandi.")}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
