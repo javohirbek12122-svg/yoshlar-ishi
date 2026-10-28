@@ -219,6 +219,94 @@ $("sourceSearch").addEventListener("input",applySourceFilters);$("sourceFilter")
 // Readiness score is a planning aid only. It is not a grant eligibility classifier.
 function updateReadiness(){const items=Array.from(document.querySelectorAll(".readiness-item"));const selected=items.filter(item=>item.checked);const score=Math.round(selected.length/items.length*100);$("readinessScore").textContent=score;$("readinessFill").style.width=score+"%";let headline="",tips=[];if(score<40)headline="Boshlang‘ich bosqich — avval muammoni va kimga foyda berishini aniqlang.";else if(score<80)headline="Reja shakllanmoqda — qolgan mezonlarni to‘ldirib, kichik sinov boshlang.";else headline="Yaxshi tayyorgarlik — tashabbus formasi orqali g‘oyani taqdim etishingiz mumkin.";items.filter(item=>!item.checked).forEach(item=>tips.push(item.dataset.advice));$("readinessOutput").innerHTML="<strong>"+escapeHtml(headline)+"</strong>"+(tips.length?"<ul style='padding-left:17px;margin:8px 0 0'>"+tips.slice(0,3).map(tip=>"<li>"+escapeHtml(tip)+"</li>").join("")+"</ul>":"<div style='margin-top:6px'>Barcha 6 mezon belgilandi. Bu grant yoki rasmiy tanlov natijasini kafolatlamaydi.</div>")}
 document.querySelectorAll(".readiness-item").forEach(item=>item.addEventListener("change",updateReadiness));updateReadiness();
+
+// AI idea review via server-side Edge Function. No provider key is exposed to the browser.
+function aiList(x){return Array.isArray(x)?x.map(v=>'<li>'+escapeHtml(v)+'</li>').join(""):""}
+function showAiResult(review,source,disclaimer){
+ $("aiResult").innerHTML='<div class="status-mini">'+escapeHtml(source)+'</div><h4 style="margin-top:8px">'+escapeHtml(review.summary||"G‘oya tahlili")+'</h4><div class="analysis-grid"><div class="analysis-box"><strong>Kuchli tomonlari</strong><ul>'+aiList(review.strengths)+'</ul></div><div class="analysis-box"><strong>Takomillashtirish kerak</strong><ul>'+aiList(review.gaps)+'</ul></div><div class="analysis-box"><strong>Keyingi qadamlar</strong><ul>'+aiList(review.next_steps)+'</ul></div><div class="analysis-box"><strong>E’tibor beriladigan xavflar</strong><ul>'+aiList(review.risks)+'</ul></div></div><p><strong>O‘lchanadigan natija:</strong> '+escapeHtml(review.suggested_metric||"Natijani raqam bilan ifodalashni rejalashtiring.")+'</p><div class="disclaimer">'+escapeHtml(disclaimer||"Bu maslahat rasmiy tanlov yoki grant bahosi emas.")+'</div>';
+}
+function localAiReview(){
+ const title=trim("aiTitle"),problem=trim("aiProblem"),expected=trim("aiExpected"),resources=trim("aiResources");
+ const strengths=["G‘oya aniq sarlavha bilan boshlanadi."],gaps=[],steps=["Maqsadli guruhdan 10 nafar odam bilan qisqa suhbat o‘tkazing.","2 haftalik eng kichik sinov va uning natijasini belgilang.","Bitta hamkor yoki mentor topib, vazifalarni bo‘lishing."],risks=["Foydalanuvchi ehtiyoji tekshirilmasa, loyiha haqiqiy muammoni hal qilmasligi mumkin.","Budjet, muddat va huquqiy talablarni tegishli rasmiy manbadan tekshiring."];
+ if(problem.length>160)strengths.push("Muammo tavsifi batafsil; undan 2–3 asosiy fakt ajratish mumkin.");
+ else gaps.push("Muammo tavsifini kimga ta’sir qilishi va hozirgi yechim nima uchun yetarli emasligi bilan to‘ldiring.");
+ if(/\d/.test(expected))strengths.push("Kutilayotgan natijada o‘lchov yoki raqam mavjud.");
+ else gaps.push("Natijaga aniq o‘lchov qo‘shing: foydalanuvchilar soni, vaqt, foiz yoki xarajat.");
+ if(resources.length<4)gaps.push("Vaqt, jamoa, joy yoki jihoz kabi resurslarni yozing.");
+ else strengths.push("Boshlang‘ich resurslar ko‘rsatilgan; qaysi biri birinchi sinovda ishlatilishini belgilang.");
+ showAiResult({summary:"Dastlabki qoidaviy tahlil: "+title,strengths,gaps,next_steps:steps,risks,suggested_metric:"2 hafta ichida 10 foydalanuvchi bilan sinov; kamida 7 nafari yechim foydali ekanini tasdiqlashi."},"Qoidaviy tahlil — AI kaliti sozlanmagan","Hozircha Groq kaliti sozlanmaganligi sababli lokal qoidaviy baholash ko‘rsatildi. Bu rasmiy tanlov yoki grant natijasi emas.");
+}
+$("aiIdeaForm").addEventListener("submit",async ev=>{
+ ev.preventDefault();const btn=$("aiReviewButton");btn.disabled=true;btn.textContent="Tahlil qilinmoqda…";
+ $("aiResult").innerHTML="<h4>Tahlil tayyorlanmoqda</h4><p>Telefon, email, pasport yoki boshqa maxfiy ma’lumotni yubormang.</p>";
+ const payload={title:trim("aiTitle"),category:$("aiCategory").value,problem:trim("aiProblem"),expected_result:trim("aiExpected"),resources:trim("aiResources")};
+ try{
+  const response=await fetch(cfg.supabaseUrl.replace(/\/$/,"")+"/functions/v1/idea-review",{method:"POST",headers:{"apikey":anon,"Authorization":"Bearer "+anon,"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  const data=await response.json().catch(()=>({}));
+  if(response.ok&&data.review)showAiResult(data.review,"AI tahlili · "+(data.model||"server modeli"),data.disclaimer);
+  else if(data.code==="AI_PROVIDER_NOT_CONFIGURED")localAiReview();
+  else if(response.status===429)throw Error(data.error||"Tahlil limiti tugadi. Biroz kuting.");
+  else if(response.status===400)throw Error(data.error||"Matnni tekshirib, shaxsiy ma’lumotlarni olib tashlang.");
+  else {localAiReview();$("aiResult").insertAdjacentHTML("afterbegin",'<p class="smallmuted">Server AI hozircha javob bermadi; lokal tahlil ko‘rsatildi.</p>')}
+ }catch(e){$("aiResult").innerHTML='<h4>Tahlil vaqtincha bajarilmadi</h4><p>'+escapeHtml(e.message||"Aloqa xatosi")+'</p><button class="btn alt" type="button" id="aiLocalFallback">Qoidaviy tahlilni ko‘rsatish</button>';if($("aiLocalFallback"))$("aiLocalFallback").addEventListener("click",localAiReview)}
+ finally{btn.disabled=false;btn.textContent="G‘oyani tahlil qilish ↗"}
+});
+
+// Moderated team board: contact details from interest forms stay out of the public API.
+let currentTeamPost=null;
+function splitTags(value){return String(value||"").split(/[;,]/).map(s=>s.trim()).filter(Boolean).slice(0,10)}
+function httpsOnly(value){try{const u=new URL(value);return u.protocol==="https:"?u.href:""}catch{return""}}
+function renderTeamBoard(rows){
+ const cat={technology:"Texnologiya",design:"Dizayn",marketing:"Marketing",content:"Kontent",business:"Biznes",research:"Tadqiqot",volunteer:"Ko‘ngillilik",other:"Boshqa"};
+ $("teamBoard").innerHTML=rows.length?rows.map(x=>'<article class="team-card"><div class="team-meta"><span class="tag">'+escapeHtml(cat[x.category]||"Jamoa")+'</span><span>'+escapeHtml(x.district||"Hudud ko‘rsatilmagan")+'</span></div><h3>'+escapeHtml(x.title)+'</h3><p>'+escapeHtml(x.description)+'</p><div class="role-tags">'+[...(Array.isArray(x.roles)?x.roles:[]),...(Array.isArray(x.skills)?x.skills:[])].slice(0,8).map(t=>'<span>'+escapeHtml(t)+'</span>').join("")+'</div><div class="bottom"><span>'+escapeHtml(x.commitment||"Kelishiladi")+'</span>'+(x.contact_shared&&httpsOnly(x.public_contact_url)?'<a class="official-link" href="'+escapeHtml(httpsOnly(x.public_contact_url))+'" target="_blank" rel="noopener noreferrer">Ochiq kontakt ↗</a>':'<button type="button" class="detail-btn" data-interest="'+escapeHtml(x.id)+'" data-title="'+escapeHtml(x.title)+'">Qiziqaman ↗</button>')+'</div></article>').join(""):'<div class="community-empty">Hozircha tasdiqlangan e’lon yo‘q. E’lon yuborishingiz mumkin; moderatsiyadan keyin doskada ko‘rinadi.</div>';
+}
+async function loadTeamBoard(){
+ try{const rows=await api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at&status=eq.published&order=created_at.desc&limit=60");renderTeamBoard(rows||[])}
+ catch(e){$("teamBoard").innerHTML='<div class="community-empty">Jamoa doskasi vaqtincha yuklanmadi. Keyinroq yangilang.</div>'}
+}
+$("teamPostForm").addEventListener("submit",async ev=>{
+ ev.preventDefault();
+ if(sessionStorage.getItem("yi_team_post_sent")==="1"){tell("teamPostNotice","Bu brauzer sessiyasida bitta e’lon yuborildi. Takroriy e’lonni keyinroq yuboring.",true);return}
+ const share=$("teamShareContact").checked,contact=httpsOnly(trim("teamContact"));
+ if(share&&!contact){tell("teamPostNotice","Ommaviy kontakt uchun https:// bilan boshlanuvchi havola kiriting.",true);return}
+ const btn=$("teamPostSubmit");btn.disabled=true;
+ const payload={owner_id:sessionStorage.getItem("yi_user_id")||null,title:trim("teamTitle"),description:trim("teamDescription"),category:$("teamCategory").value,roles:splitTags(trim("teamRoles")),skills:splitTags(trim("teamSkills")),district:trim("teamDistrict"),commitment:$("teamCommitment").value,public_contact_url:share?contact:"",contact_shared:share,status:"pending"};
+ try{await api("team_posts",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});sessionStorage.setItem("yi_team_post_sent","1");ev.currentTarget.reset();tell("teamPostNotice","E’lon moderatsiya navbatiga yuborildi. Admin tasdiqlagach doskada ko‘rinadi.")}
+ catch(e){tell("teamPostNotice","E’lonni saqlab bo‘lmadi: "+e.message,true)}
+ finally{btn.disabled=false}
+});
+$("teamRefresh").addEventListener("click",loadTeamBoard);
+$("teamBoard").addEventListener("click",e=>{
+ const btn=e.target.closest("[data-interest]");if(!btn)return;
+ currentTeamPost=btn.dataset.interest;$("interestPostId").value=currentTeamPost;$("teamInterestTitle").textContent="Qiziqish: "+btn.dataset.title;$("interestNotice").textContent="";$("teamInterestModal").classList.add("open");$("interestName").focus();
+});
+function closeInterestModal(){$("teamInterestModal").classList.remove("open");currentTeamPost=null}
+$("teamInterestClose").addEventListener("click",closeInterestModal);
+$("teamInterestModal").addEventListener("click",e=>{if(e.target===$("teamInterestModal"))closeInterestModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeInterestModal()});
+$("teamInterestForm").addEventListener("submit",async ev=>{
+ ev.preventDefault();const postId=$("interestPostId").value;if(!postId)return;const btn=$("interestSubmit");btn.disabled=true;
+ try{await api("team_interest_requests",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({team_post_id:postId,name:trim("interestName"),contact:trim("interestContact"),role_interest:trim("interestRole"),message:trim("interestMessage"),status:"new"})});ev.currentTarget.reset();tell("interestNotice","Qiziqishingiz yuborildi. Kontakt ma’lumotingiz ommaviy doskada ko‘rinmaydi.")}
+ catch(e){tell("interestNotice","Yuborib bo‘lmadi: "+e.message,true)}
+ finally{btn.disabled=false}
+});
+
+// Only admin-curated showcase entries are shown publicly; one signed-in account can vote once.
+async function loadShowcase(){
+ try{
+  const rows=await api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&published=eq.true&order=featured.desc,votes_count.desc,created_at.desc&limit=30");
+  $("showcaseBoard").innerHTML=rows.length?rows.map((x,i)=>'<article class="showcase-card"><div class="show-image">'+(httpsOnly(x.image_url)?'<img loading="lazy" src="'+escapeHtml(httpsOnly(x.image_url))+'" alt="'+escapeHtml(x.title)+'" onerror="this.style.display=\'none\'">':'<span style="font-size:36px;color:#225d8a">✳</span>')+'</div><div class="show-body"><div class="team-meta"><span class="tag">'+(x.featured?"Tanlangan tashabbus":"Ochiq tashabbus")+'</span><span>#'+(i+1)+'</span></div><h3>'+escapeHtml(x.title)+'</h3><p>'+escapeHtml(x.summary)+'</p><div class="team-meta">'+escapeHtml(x.district||"")+' · '+escapeHtml(x.stage||"G‘oya")+'</div><div class="show-bottom"><span style="font-size:10px;font-weight:800">♥ '+Number(x.votes_count||0)+' ovoz</span><button class="vote-button" data-vote="'+escapeHtml(x.id)+'">Ovoz berish ♥</button></div>'+(httpsOnly(x.public_url)?'<a style="font-size:10px;margin-top:8px" href="'+escapeHtml(httpsOnly(x.public_url))+'" target="_blank" rel="noopener noreferrer">Loyiha havolasi ↗</a>':'')+'</div></article>').join(""):'<div class="community-empty">Hozircha ommaga e’lon qilingan tashabbuslar yo‘q. Admin tasdiqlagan loyiha shu yerda ko‘rinadi.</div>';
+ }catch(e){$("showcaseBoard").innerHTML='<div class="community-empty">Ochiq tashabbuslar vaqtincha yuklanmadi.</div>'}
+}
+$("showcaseBoard").addEventListener("click",async e=>{
+ const btn=e.target.closest("[data-vote]");if(!btn)return;
+ const token=sessionStorage.getItem("yi_user_token"),userId=sessionStorage.getItem("yi_user_id");
+ if(!token||!userId){window.location.href="./kabinet.html?from=vote";return}
+ btn.disabled=true;
+ try{await api("initiative_showcase_votes",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({showcase_id:btn.dataset.vote,voter_id:userId})});await loadShowcase()}
+ catch(e){btn.textContent=e.message.includes("(409)")?"Ovoz berilgan":"Ovoz berish shartini tekshiring";btn.disabled=true}
+});
+loadTeamBoard();loadShowcase();
 loadSources();
 })();
 </script></body></html>
