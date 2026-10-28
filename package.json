@@ -1,0 +1,9 @@
+{
+  "name": "yoshlar-ishi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Yoshlar tashabbuslari va imkoniyatlar platformasi",
+  "scripts": {
+    "check": "node scripts/check-site.mjs"
+  }
+}
