@@ -124,12 +124,15 @@ async function fetchStatus(url, method) {
 
 async function probe(target) {
   const started = Date.now();
-  let head;
+  let status = null;
+  let finalUrl = target.url;
+  let method = "HEAD";
+  let failure = "";
+
   try {
-    head = await fetchStatus(target.url, "HEAD");
-    let status = head.status;
-    let finalUrl = head.finalUrl;
-    let method = "HEAD";
+    const head = await fetchStatus(target.url, "HEAD");
+    status = head.status;
+    finalUrl = head.finalUrl || finalUrl;
 
     // Some legitimate portals or CDNs reject HEAD; retry with a one-byte GET.
     if ([403, 404, 405, 410, 501].includes(status)) {
@@ -138,37 +141,49 @@ async function probe(target) {
         status = get.status;
         finalUrl = get.finalUrl || finalUrl;
         method = "GET";
-      } catch {
-        // Keep the HEAD response if GET is blocked or times out.
+      } catch (error) {
+        failure = error?.name === "TimeoutError" ? "GET timeout" : "GET network error";
       }
     }
-
-    let state = "review";
-    if (status >= 200 && status < 400) state = "reachable";
-    else if ([401, 403, 429].includes(status)) state = "blocked-or-rate-limited";
-    else if ([404, 410].includes(status)) state = "possible-broken-link";
-    else if (status >= 500 && status <= 599) state = "server-error";
-    else if (status === 0) state = "no-response";
-
-    return {
-      ...target,
-      status,
-      finalUrl,
-      method,
-      state,
-      latencyMs: Date.now() - started,
-    };
-  } catch (error) {
-    return {
-      ...target,
-      status: null,
-      finalUrl: target.url,
-      method: "HEAD",
-      state: "no-response",
-      latencyMs: Date.now() - started,
-      error: error?.name === "TimeoutError" ? "timeout" : "network error",
-    };
+  } catch (headError) {
+    // A HEAD timeout can be method-specific; a GET is a useful second test before flagging no-response.
+    try {
+      const get = await fetchStatus(target.url, "GET");
+      status = get.status;
+      finalUrl = get.finalUrl || finalUrl;
+      method = "GET (HEAD failed)";
+    } catch (getError) {
+      const cause = getError?.name === "TimeoutError" || headError?.name === "TimeoutError"
+        ? "timeout"
+        : "network error";
+      return {
+        ...target,
+        status: null,
+        finalUrl: target.url,
+        method: "HEAD + GET",
+        state: "no-response",
+        latencyMs: Date.now() - started,
+        error: cause,
+      };
+    }
   }
+
+  let state = "review";
+  if (status !== null && status >= 200 && status < 400) state = "reachable";
+  else if ([401, 403, 429].includes(status)) state = "blocked-or-rate-limited";
+  else if ([404, 410].includes(status)) state = "possible-broken-link";
+  else if (status !== null && status >= 500 && status <= 599) state = "server-error";
+  else if (status === null) state = "no-response";
+
+  return {
+    ...target,
+    status,
+    finalUrl,
+    method,
+    state,
+    latencyMs: Date.now() - started,
+    ...(failure ? { error: failure } : {}),
+  };
 }
 
 async function mapLimit(items, limit, fn) {
@@ -224,8 +239,8 @@ if (summaryPath) {
     "",
     "A 403, 429, timeout, or 5xx response is not proof the source is permanently unavailable. The monitor uses a small HEAD request and a one-byte GET fallback, then flags uncertain outcomes for manual review.",
     "",
-    "| Target | Type | Catalogue entries | HTTP | Result | Method | Time |",
-    "|---|---|---|---:|---|---|---:|",
+    "| Target | Type | Catalogue entries | HTTP | Result | Method | Time | Note |",
+    "|---|---|---|---:|---|---|---:|---|",
     ...results.map((x) =>
       "| " + tableCell(x.url) +
       " | " + tableCell(x.types.join(", ")) +
@@ -233,7 +248,8 @@ if (summaryPath) {
       " | " + tableCell(x.status ?? "—") +
       " | " + tableCell(x.state) +
       " | " + tableCell(x.method) +
-      " | " + tableCell(x.latencyMs + " ms") + " |"
+      " | " + tableCell(x.latencyMs + " ms") +
+      " | " + tableCell(x.error || "") + " |"
     ),
   ].join("\n") + "\n";
   fs.appendFileSync(summaryPath, summary, "utf8");
