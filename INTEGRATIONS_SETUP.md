@@ -59,7 +59,7 @@ Bot tokeni va webhook siri kiritilmaguncha Telegram xabarlari amalda yuborilmayd
 
 ## 3A. Database permissions and admin review
 
-The REST API now uses explicit per-table/column grants in migration `20261028180000_harden_public_access_and_admin_review.sql`. Public forms can insert only user-submitted fields; status and admin-only columns are not writable from the browser. Internal initiative notes and review metadata are returned by `admin_list_initiatives()` only after the database checks the active `admin_allowlist`. Status/notes changes go through `admin_review_initiative(...)`, which checks the admin allowlist and expected previous status.
+The REST API now uses explicit per-table/column grants in migration `20261028174007_harden_public_access_and_admin_review.sql`. Public forms can insert only user-submitted fields; status and admin-only columns are not writable from the browser. Internal initiative notes and review metadata are returned by `admin_list_initiatives()` only after the database checks the active `admin_allowlist`. Status/notes changes go through `admin_review_initiative(...)`, which checks the admin allowlist and expected previous status.
 
 The personal-account `get_my_initiatives()` and `update_my_initiative(...)` functions use invoker permissions and the owner's RLS policies. This keeps the account RPC limited to the signed-in user's own initiatives. The AI rate-limit and Telegram-subscription tables remain inaccessible to anon/authenticated roles; their Edge Functions use server-side credentials.
 
