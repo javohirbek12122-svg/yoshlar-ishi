@@ -78,6 +78,8 @@ The browser configuration in `config.js` contains only public Supabase client ke
 
 ## Vercel deployment — final account configuration
 
+The step-by-step owner checklist is in [`DEPLOYMENT_CHECKLIST.md`](./DEPLOYMENT_CHECKLIST.md).
+
 A separate Vercel project named `yoshlar-ishi` exists. Direct deployment from the connected agent returned HTTP 403, so the repository includes a protected GitHub Actions CLI fallback at `.github/workflows/deploy-vercel.yml`. This is prepared but it deliberately skips the deployment until you configure your own Vercel credentials in GitHub; no token should be pasted into ChatGPT or committed to the repository.
 
 ### One-time setup
