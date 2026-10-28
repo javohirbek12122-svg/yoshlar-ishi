@@ -35,6 +35,7 @@ const required = [
   "supabase/migrations/20261028161434_expanded_service_guide_and_community.sql",
   "supabase/migrations/20261028163033_secure_account_owned_initiatives.sql",
   "supabase/migrations/20261028163747_add_core_public_authority_portals.sql",
+  "supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -219,5 +220,10 @@ assert.match(accountMigration, /update_my_initiative/);
 assert.match(authorityMigration, /insert into public\.official_portal_integrations/i);
 assert.match(authorityMigration, /on conflict \(slug\) do update/i);
 console.log("✓ migration history includes owner-scoped account RPCs and reproducible official portal seeds");
+
+const educationMigration = read("supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql");
+assert.match(educationMigration, /set active = false/i);
+assert.match(educationMigration, /ministry-education-science/);
+assert.match(educationMigration, /official_portal_admin_notes/);
 
 console.log("\nYoshlar-Ishi checks passed.");
