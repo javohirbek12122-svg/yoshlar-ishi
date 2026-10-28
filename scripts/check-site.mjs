@@ -37,6 +37,7 @@ const required = [
   "supabase/migrations/20261028163747_add_core_public_authority_portals.sql",
   "supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql",
   "supabase/migrations/20261028174007_harden_public_access_and_admin_review.sql",
+  "supabase/migrations/20261028174334_admin_only_partner_review_rpc.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -246,5 +247,22 @@ assert.doesNotMatch(admin, /api\("initiatives\?id=eq\.[^\n]*method:"PATCH"/);
 assert.doesNotMatch(publicHtml, /contact_shared:share,status:"pending"/);
 assert.doesNotMatch(publicHtml, /message:trim\("interestMessage"\),status:"new"/);
 console.log("✓ least-privilege REST grants and allowlist-protected admin review RPCs are present");
+
+
+const partnerReviewMigration = read("supabase/migrations/20261028174334_admin_only_partner_review_rpc.sql");
+for (const feature of [
+  "admin_list_connection_requests",
+  "admin_review_connection_request",
+  "revoke all privileges on table public.connection_requests",
+  "security definer",
+  "p_expected_status",
+]) {
+  assert.ok(partnerReviewMigration.toLowerCase().includes(feature.toLowerCase()), `Partner review hardening requirement missing: ${feature}`);
+}
+assert.match(admin, /rpc\/admin_list_connection_requests/);
+assert.match(admin, /rpc\/admin_review_connection_request/);
+assert.doesNotMatch(admin, /api\("connection_requests\?select=id,name,email,phone,organization,request_type,message,review_status,admin_notes/);
+assert.doesNotMatch(admin, /api\("connection_requests\?id=eq\.[^\n]*method:"PATCH"/);
+console.log("✓ partner request private fields are returned and edited only through allowlist-checked admin RPCs");
 
 console.log("\nYoshlar-Ishi checks passed.");
