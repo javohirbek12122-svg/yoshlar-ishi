@@ -36,7 +36,7 @@ const required = [
   "supabase/migrations/20261028163033_secure_account_owned_initiatives.sql",
   "supabase/migrations/20261028163747_add_core_public_authority_portals.sql",
   "supabase/migrations/20261028172620_retire_legacy_education_portal_records.sql",
-  "supabase/migrations/20261028180000_harden_public_access_and_admin_review.sql",
+  "supabase/migrations/20261028174007_harden_public_access_and_admin_review.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -228,7 +228,7 @@ assert.match(educationMigration, /ministry-education-science/);
 assert.match(educationMigration, /official_portal_admin_notes/);
 
 
-const hardeningMigration = read("supabase/migrations/20261028180000_harden_public_access_and_admin_review.sql");
+const hardeningMigration = read("supabase/migrations/20261028174007_harden_public_access_and_admin_review.sql");
 for (const feature of [
   "admin_list_initiatives",
   "admin_review_initiative",
