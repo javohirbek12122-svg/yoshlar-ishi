@@ -1,7 +1,9 @@
 name: Deploy Yoshlar-Ishi to Vercel
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Yoshlar-Ishi Quality Checks"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -10,7 +12,8 @@ permissions:
 
 jobs:
   deploy:
-    name: Build and deploy
+    name: Build and deploy after quality checks
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -28,13 +31,14 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Vercel deploy is not configured yet. Add the VERCEL_TOKEN secret and VERCEL_ORG_ID / VERCEL_PROJECT_ID repository variables."
+            echo "::notice::Vercel deployment is not configured yet. Add the VERCEL_TOKEN secret and VERCEL_ORG_ID / VERCEL_PROJECT_ID repository variables."
           fi
 
-      - name: Checkout reviewed source
+      - name: Checkout the tested commit
         if: steps.credentials.outputs.configured == 'true'
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
       - name: Set up Node.js
@@ -43,11 +47,22 @@ jobs:
         with:
           node-version: 24
 
+      - name: Re-validate tested commit
+        if: steps.credentials.outputs.configured == 'true'
+        run: npm run check
+
       - name: Install pinned Vercel CLI
         if: steps.credentials.outputs.configured == 'true'
         run: npm install --global "vercel@${VERCEL_CLI_VERSION}"
 
-      - name: Link CLI environment to the designated Vercel project
+      - name: Prepare project link metadata
+        if: steps.credentials.outputs.configured == 'true'
+        shell: bash
+        run: |
+          mkdir -p .vercel
+          printf '{"orgId":"%s","projectId":"%s"}\n' "$VERCEL_ORG_ID" "$VERCEL_PROJECT_ID" > .vercel/project.json
+
+      - name: Pull production settings
         if: steps.credentials.outputs.configured == 'true'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -70,7 +85,7 @@ jobs:
           vercel deploy --prebuilt --prod --yes 2>&1 | tee /tmp/vercel-deploy.log
           DEPLOYMENT_URL="$(grep -Eo 'https://[^[:space:]]+\.vercel\.app' /tmp/vercel-deploy.log | tail -n 1 || true)"
           if [[ -z "$DEPLOYMENT_URL" ]]; then
-            echo "::warning::The Vercel CLI did not print a default vercel.app URL in its log. Check the deployment in Vercel."
+            echo "::warning::Vercel did not print a default vercel.app URL. Check the deployment in Vercel."
             exit 0
           fi
           echo "deployment_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
