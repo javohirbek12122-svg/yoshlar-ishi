@@ -486,6 +486,12 @@ const adminDesign = read("admin.html");
 assert.match(serviceDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(serviceDesign, /id="tashkilotlar"/);
 assert.match(serviceDesign, /class="media-grid"/);
+
+const mediaSection = serviceDesign.match(/<section class="section" id="media"[\\s\\S]*?<\\/section>/)?.[0] ?? "";
+assert.equal((mediaSection.match(/class="media-fallback"/g) || []).length, 5, "Each official screenshot needs an accessible fallback");
+assert.equal((mediaSection.match(/onerror="this\\.style\\.display='none';this\\.nextElementSibling\\.style\\.display='grid'"/g) || []).length, 5, "Each media image must show its fallback if it fails to load");
+assert.match(serviceDesign, /Xizmat tafsilotlari 2026-yil 28-oktabr[\\s\\S]*markaziy idoralar katalogi 2026-yil 29-oktabr/);
+
 assert.match(accountDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(accountDesign, /rpc\/get_my_initiatives/);
 assert.match(adminDesign, /Yoshlar-Ishi shared startup palette/);
