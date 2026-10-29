@@ -43,6 +43,10 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
+          grep -Fqi "G‘oyang bor." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: founder-first hero redesign is missing."; exit 1; }
+          grep -Fqi 'id="afzalliklar"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: benefits section is missing."; exit 1; }
+          grep -Fqi 'class="platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: feature proof strip is missing."; exit 1; }
+          grep -Fqi 'class="showcase-empty"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: portfolio-first showcase state is missing."; exit 1; }
           grep -Fqi 'action:"initiative_submit"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: server-side initiative submission marker is missing."; exit 1; }
           grep -Fqi '/functions/v1/community-submit' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: secure community endpoint is missing."; exit 1; }
           grep -Fqi 'id="teamBoardSearch"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: team matching filters are missing."; exit 1; }
