@@ -9,8 +9,13 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Secure owner dashboard in `admin.html`
 - Illustrated searchable service portal at `davlat-xizmatlari.html`
 - Email magic-link personal cabinet at `kabinet.html`
+- Stage-based startup navigator at `startap-yoli.html`, with adaptive readiness checks and Supabase-powered opportunity scoring
 - Server-side AI review and Telegram webhook/notification Edge Functions
 - Moderated team matching and admin-curated initiative showcase
+
+## Startup and founder journey
+
+The dedicated startap-yoli.html page converts startup-program discovery into a practical flow: select one of five stages, work through a stage-specific self-check, and rank active opportunities by stage, need, sector, source type, and search query. It uses the public opportunity catalog with reviewed fallback links for UzCombinator, IT Park Uzbekistan, Startup Uzbekistan, IT Park Ventures, Innoyouth, and other sources. Match scores are explainable ranking hints, not probabilities or an eligibility decision. The page is independent and is not an official IT Park or UzCombinator application portal.
 
 ## Compact interactive experience
 
@@ -23,6 +28,8 @@ The homepage keeps the complete workflow while collapsing long supporting inform
 - Browse official and independent opportunities from Supabase with search and category filters
 - Guided portal recommender for government services, youth programs, legal resources, appeals, entrepreneurship, volunteering, and open data
 - Category-scored ranking that returns the three highest-matching catalogue links for the selected need, with an explicit notice that this is guidance—not an official eligibility decision
+- Five-stage founder journey (idea → validation → MVP → market → growth), stage-specific checklists, and weighted matching for UzCombinator, IT Park, grants, and investment sources
+- Live startup opportunities loaded from the public Supabase catalog with curated fallback sources and a clear independent-platform disclaimer
 - Readiness-scoring checklist that calculates a planning score and suggests next steps (not an eligibility or grant decision)
 - Accessible font-size and high-contrast controls, installable web app manifests, and a privacy notice
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
