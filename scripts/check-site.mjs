@@ -183,7 +183,9 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "G‘oyang bor.",
+  "G‘oya bilan to‘xtama.",
+  'class="hero-expanded-copy"',
+  "Full-bleed, borderless startup hero",
   'id="afzalliklar"',
   'class="platform-proof"',
   'class="showcase-empty"',
