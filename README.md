@@ -24,7 +24,7 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
 
 ## New user-facing modules
-See [`INTEGRATIONS_SETUP.md`](./INTEGRATIONS_SETUP.md) for safe setup of Groq AI, Telegram bot secrets, the personal cabinet and user-generated community pages. The AI Edge Function validates inputs and applies a per-IP-hash quota; it returns a local-rule fallback when the provider key is not set. Public team-board and interest-form writes go through the `community-submit` Edge Function, which validates consent, keeps new posts pending for admin moderation, validates public HTTPS contact links, and rate-limits submissions using a SHA-256 hash rather than storing raw IP addresses. Telegram bot tokens and the Groq API key belong only in Supabase Edge Function Secrets, never in browser configuration.
+See [`INTEGRATIONS_SETUP.md`](./INTEGRATIONS_SETUP.md) for safe setup of Groq AI, Telegram bot secrets, the personal cabinet and user-generated community pages. The AI Edge Function validates inputs and applies a per-IP-hash quota; it returns a local-rule fallback when the provider key is not set. Public team-board and interest-form writes go through the `community-submit` Edge Function, which validates consent, keeps new posts pending for admin moderation, validates public HTTPS contact links, and rate-limits submissions using a server-secret-salted SHA-256 hash rather than storing raw IP addresses. Telegram bot tokens and the Groq API key belong only in Supabase Edge Function Secrets, never in browser configuration.
 
 ## Official public portal directory
 
