@@ -507,6 +507,10 @@ console.log("✓ service directory, personal cabinet and admin panel share the v
 const compactHome = read("index.html");
 for (const feature of [
   'id="ambientCanvas"',
+  'class="hero-storyline"',
+  'class="hero-story-step"',
+  "G‘OYA · NATIJA",
+  "G‘OYA · JAMOA · MAHSULOT · NATIJA",
   'id="readingProgress"',
   'id="draftReadiness"',
   'id="draftReadinessScore"',
@@ -528,6 +532,12 @@ assert.match(compactHome, /requestAnimationFrame/);
 assert.match(compactHome, /scrollIntoView\(/);
 assert.match(compactHome, /IntersectionObserver/);
 assert.match(compactHome, /new ResizeObserver/);
+assert.match(compactHome, /function traceFlow\(route\)/);
+assert.match(compactHome, /ctx\.ellipse\(/);
+assert.match(compactHome, /lineDashOffset/);
+assert.match(compactHome, /position:sticky/);
+assert.match(compactHome, /overflow-x:auto/);
+assert.match(compactHome, /if\(reduced\)\{render\(0\);return;\}/);
 assert.match(compactHome, /Tashabbus formasi tayyorgarligi/);
 assert.match(compactHome, /grant yoki davlat tanlovi bahosi emas/);
 assert.match(compactHome, /Yangi tashabbusni to‘ldirish/);
