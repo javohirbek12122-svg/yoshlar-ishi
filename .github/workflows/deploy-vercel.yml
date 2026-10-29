@@ -21,7 +21,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
       VERCEL_CLI_VERSION: 59.19.1
     steps:
-      - name: Check optional deployment credentials
+      - name: Require credentials for the canonical Vercel project
         id: credentials
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -29,16 +29,17 @@ jobs:
         run: |
           if [[ -n "$VERCEL_TOKEN" && -n "$VERCEL_ORG_ID" && -n "$VERCEL_PROJECT_ID" ]]; then
             echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "Vercel deployment credentials are present."
           else
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Vercel deployment was NOT performed. Configure VERCEL_TOKEN plus verified VERCEL_ORG_ID / VERCEL_PROJECT_ID values for the canonical yoshlar-ishi-site project. Do not target the empty yoshlar-ishi project."
             {
-              echo "## Vercel deployment skipped"
+              echo "## Vercel deployment blocked"
               echo ""
-              echo "Quality checks passed, but this workflow did not build or deploy the site."
-              echo "Reason: Vercel deployment credentials/project identifiers are missing or incomplete."
-              echo "Use the existing canonical project yoshlar-ishi-site and verify its project ID in Vercel Settings → General. Do not deploy to the empty project named yoshlar-ishi."
+              echo "Quality checks passed, but no build/deploy was performed."
+              echo "Missing one or more required GitHub Actions values: secret VERCEL_TOKEN, variable VERCEL_ORG_ID, or variable VERCEL_PROJECT_ID."
+              echo "Use the verified canonical project yoshlar-ishi-site; do not deploy to the empty project named yoshlar-ishi."
             } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Deployment blocked: configure VERCEL_TOKEN and the canonical VERCEL_ORG_ID / VERCEL_PROJECT_ID in GitHub Actions."
+            exit 1
           fi
 
       - name: Checkout the tested commit
