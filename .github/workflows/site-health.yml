@@ -59,6 +59,8 @@ jobs:
           grep -qi "Idorani toifasiga qarab toping" /tmp/yoshlar-services.html
           grep -qi "media-card" /tmp/yoshlar-services.html
           grep -Fqi 'https://gov.uz/oz/all_ministry/15' /tmp/yoshlar-services.html
+          grep -Fqi 'class="media-fallback"' /tmp/yoshlar-services.html || { echo "::error::The live service gallery is missing its image-failure fallback."; exit 1; }
+          grep -Fqi "URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan" /tmp/yoshlar-services.html || { echo "::error::The live service guide does not include the current verification caveat."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/kabinet.html" -o /tmp/yoshlar-cabinet.html
           grep -qi "Shaxsiy kabinet" /tmp/yoshlar-cabinet.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/privacy.html" -o /tmp/yoshlar-privacy.html
