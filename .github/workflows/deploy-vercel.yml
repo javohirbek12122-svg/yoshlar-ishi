@@ -93,8 +93,8 @@ jobs:
           vercel deploy --prebuilt --prod --yes 2>&1 | tee /tmp/vercel-deploy.log
           DEPLOYMENT_URL="$(grep -Eo 'https://[^[:space:]]+\.vercel\.app' /tmp/vercel-deploy.log | tail -n 1 || true)"
           if [[ -z "$DEPLOYMENT_URL" ]]; then
-            echo "::warning::Vercel did not print a default vercel.app URL. Check the deployment in Vercel."
-            exit 0
+            echo "::error::Vercel did not return a usable deployment URL; the deployment cannot be marked successful until it is verified."
+            exit 1
           fi
           echo "deployment_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
           echo "Deployment: $DEPLOYMENT_URL"
