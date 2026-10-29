@@ -112,7 +112,7 @@
 <script>
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{};
-const base=String(cfg.supabaseUrl||"").replace(/\\/$/,"")+"/rest/v1/";
+const base=String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/rest/v1/";
 const key=cfg.supabaseAnonKey||cfg.supabaseKey||"";
 const $=id=>document.getElementById(id);
 const state={
@@ -138,12 +138,12 @@ const fallback=[
  {title:"Davlat startup funnel — bosqichlar bo‘yicha qo‘llab-quvvatlash",provider:"Awards.gov.uz",category:"startup",url:"https://awards.gov.uz/en/startup-stages/4",description:"Startap bosqichi bo‘yicha mavjud qo‘llab-quvvatlash yo‘nalishlari haqida rasmiy ma’lumot.",verified_on:"2026-10-29",kind:"official",tags:["idea","mvp","grant","investment","growth"]},
  {title:"Ochiq ma’lumotlar portali",provider:"data.egov.uz",category:"open_data",url:"https://data.egov.uz/",description:"Tadqiqot, muammo tahlili va bozorni tushunish uchun davlat ochiq ma’lumotlarini izlash.",verified_on:"2026-10-28",kind:"official",tags:["research","market","data","business"]}
 ];
-const normalize=s=>String(s||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase();
+const normalize=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeUrl=value=>{try{const u=new URL(String(value||""));return u.protocol==="https:"?u.href:""}catch{return ""}};
-const categoryKind=s=>{const v=normalize([s.title,s.provider,s.category,s.description,s.url,(s.tags||[]).join(" ")].join(" "));if(/grant|invest|fund|venture|startup|startap|acceler|incubat|combinator|innovation|mvp|mentor|venture/.test(v))return /grantlar|navigator|volontyor/.test(v)?"community":(/gov\\.uz|it-park\\.uz|startupuzbekistan|awards\\.gov|itparkventures|innoyouth|uzcombinator/.test(v)?"program":"program");if(/gov\\.uz|my\\.gov|lex\\.uz|adliya|data\\.egov|stat\\.uz/.test(v))return "official";if(/jamoa|volontyor|hamkor/.test(v))return "community";return "community"};
+const categoryKind=s=>{const v=normalize([s.title,s.provider,s.category,s.description,s.url,(s.tags||[]).join(" ")].join(" "));if(/grant|invest|fund|venture|startup|startap|acceler|incubat|combinator|innovation|mvp|mentor|venture/.test(v))return /grantlar|navigator|volontyor/.test(v)?"community":(/gov\.uz|it-park\.uz|startupuzbekistan|awards\.gov|itparkventures|innoyouth|uzcombinator/.test(v)?"program":"program");if(/gov\.uz|my\.gov|lex\.uz|adliya|data\.egov|stat\.uz/.test(v))return "official";if(/jamoa|volontyor|hamkor/.test(v))return "community";return "community"};
 function mapOpportunity(row,origin){return {title:row.title||row.name||"Manba",provider:row.provider||row.agency||row.name||"",category:row.category||"opportunity",url:safeUrl(row.url||row.portal_url),description:row.description||row.purpose||row.detail_text||"",verified_on:row.verified_on||"",kind:row.kind||categoryKind(row),tags:Array.isArray(row.tags)?row.tags:[],origin:origin}}
-function uniqueSources(rows){const seen=new Set();return rows.filter(s=>{s.url=safeUrl(s.url);if(!s.url||!s.title)return false;const k=s.url.replace(/\\/$/,"").toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}
+function uniqueSources(rows){const seen=new Set();return rows.filter(s=>{s.url=safeUrl(s.url);if(!s.url||!s.title)return false;const k=s.url.replace(/\/$/,"").toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}
 async function fetchJson(path){if(!base||!key)throw new Error("Katalog sozlamalari yo‘q");const response=await fetch(base+path,{headers:{apikey:key,Authorization:"Bearer "+key}});if(!response.ok)throw new Error("HTTP "+response.status);return response.json()}
 async function loadSources(){
  let collected=fallback.map(s=>({...s,kind:s.kind||"program",origin:"fallback"}));
@@ -169,7 +169,7 @@ function scoresFor(stage,goal,sector,source){
  const s=stages[stage],title=normalize(source.title),body=normalize([source.description,source.provider,source.category,source.url,(source.tags||[]).join(" ")].join(" "));
  let score=0;
  const category=normalize(source.category);
- const official=/gov\\.uz|my\\.gov|lex\\.uz|adliya|awards\\.gov|it-park\\.uz|itparkventures|startupuzbekistan|innoyouth|uzcombinator/.test(normalize(source.url+" "+source.provider));
+ const official=/gov\.uz|my\.gov|lex\.uz|adliya|awards\.gov|it-park\.uz|itparkventures|startupuzbekistan|innoyouth|uzcombinator/.test(normalize(source.url+" "+source.provider));
  if(s.tags.some(tag=>body.includes(normalize(tag))))score+=3;
  if(title.includes("uzcombinator")&&["idea","validate","mvp","market"].includes(stage))score+=stage==="idea"?1:4;
  if(title.includes("it park")&&["idea","validate","mvp"].includes(stage))score+=3;
@@ -181,7 +181,7 @@ function scoresFor(stage,goal,sector,source){
  if(goal==="mentor"&&/mentor|incubat|acceler|advice|maslahat|community/.test(body))score+=5;
  if(goal==="team"&&/team|jamoa|volunteer|volontyor|hamkor|community/.test(body))score+=5;
  if(goal==="market"&&/market|customer|sales|savdo|business|startup|startap/.test(body))score+=5;
- if(goal==="legal"&&/lex\\.uz|adliya|law|legal|huquq|gov\\.uz|my\\.gov/.test(body))score+=7;
+ if(goal==="legal"&&/lex\.uz|adliya|law|legal|huquq|gov\.uz|my\.gov/.test(body))score+=7;
  if(sector==="technology"&&/tech|it|ai|digital|startup|startap|combinator|innovation/.test(body))score+=3;
  if(sector==="education"&&/education|ta'lim|talim|student|grant|youth|yoshlar/.test(body))score+=3;
  if(sector==="social"&&/social|community|volontyor|volunteer|youth|yoshlar|grant/.test(body))score+=3;
@@ -203,7 +203,7 @@ function renderRecommendations(){
   if(goal==="mentor"&&!/mentor|incubat|acceler|advice|maslahat|team|jamoa/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
   if(goal==="team"&&!/jamoa|team|volontyor|volunteer|hamkor|community/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
   if(goal==="market"&&!/market|customer|sales|savdo|business|startup|startap|venture/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
-  if(goal==="legal"&&!/lex\\.uz|adliya|law|legal|huquq|gov\\.uz|my\\.gov|data\\.egov/.test(normalize([s.title,s.provider,s.description,s.category,s.url].join(" "))))return false;
+  if(goal==="legal"&&!/lex\.uz|adliya|law|legal|huquq|gov\.uz|my\.gov|data\.egov/.test(normalize([s.title,s.provider,s.description,s.category,s.url].join(" "))))return false;
   if(sector==="technology"&&!/tech|it|ai|digital|startup|startap|combinator|innovation|venture|data/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
   if(sector==="education"&&!/education|talim|ta'lim|student|grant|youth|yoshlar|innoyouth/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
   if(sector==="social"&&!/social|community|volontyor|volunteer|youth|yoshlar|grant/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
