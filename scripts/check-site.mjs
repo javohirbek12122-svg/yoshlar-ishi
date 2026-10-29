@@ -182,7 +182,15 @@ assert.ok(liveHealthWorkflow.includes('"davlat-xizmatlari.html"'));
 assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html'));
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
-console.log("✓ live-site health check defaults to the known production alias and runs when public pages change");
+for (const marker of [
+  "G‘oyang bor.",
+  'id="afzalliklar"',
+  'class="platform-proof"',
+  'class="showcase-empty"',
+]) {
+  assert.ok(liveHealthWorkflow.includes(marker), `Live health check is missing new design freshness marker: ${marker}`);
+}
+console.log("✓ live-site health check defaults to the known production alias, checks current design markers and runs when public pages change");
 
 
 console.log("✓ daily official portal availability monitor is present");
@@ -458,6 +466,7 @@ for (const feature of [
   'class="benefit-grid"',
   'class="hero-note"',
   'class="art-sticker"',
+  'class="showcase-empty"',
   'id="jamoadoshlar"',
   'id="top-tashabbuslar"',
   'id="ai-yordamchi"',
