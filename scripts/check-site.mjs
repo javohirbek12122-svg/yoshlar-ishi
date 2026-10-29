@@ -509,7 +509,7 @@ for (const feature of [
   'id="ambientCanvas"',
   'class="hero-storyline"',
   'class="hero-story-step"',
-  "G‘OYA · NATIJA",
+  '<span>G‘OYA</span><span>→</span><span>NATIJA</span>',
   "G‘OYA · JAMOA · MAHSULOT · NATIJA",
   'id="readingProgress"',
   'id="draftReadiness"',
