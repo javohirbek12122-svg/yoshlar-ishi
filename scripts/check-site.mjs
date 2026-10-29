@@ -9,6 +9,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
+  "startap-yoli.html",
   "admin.html",
   "davlat-xizmatlari.html",
   "kabinet.html",
@@ -61,7 +62,7 @@ function inlineScripts(html) {
     .map((match) => match[1])
     .filter((source) => source.trim().length > 0);
 }
-for (const file of ["index.html", "admin.html", "davlat-xizmatlari.html", "kabinet.html"]) {
+for (const file of ["index.html", "startap-yoli.html", "admin.html", "davlat-xizmatlari.html", "kabinet.html"]) {
   const html = read(file);
   const scripts = inlineScripts(html);
   assert.ok(scripts.length > 0, `${file} has no inline JavaScript`);
@@ -565,5 +566,39 @@ assert.match(rlsInitplanMigration, /replace\(p\.with_check, 'auth\.jwt\(\)', '\(
 assert.match(rlsInitplanMigration, /\(select current_setting\('request\.headers'::text, true\)\)/);
 assert.match(rlsInitplanMigration, /public can track with matching reference header/);
 console.log("✓ RLS initplan optimization preserves admin allowlist and private tracking predicates");
+
+
+const startupPath = read("startap-yoli.html");
+for (const feature of [
+  'data-stage="idea"',
+  'data-stage="validate"',
+  'data-stage="mvp"',
+  'data-stage="market"',
+  'data-stage="growth"',
+  'id="readinessChecklist"',
+  'id="goalFilter"',
+  'id="sectorFilter"',
+  'id="sourceFilter"',
+  'id="recommendations"',
+  'function scoresFor(stage,goal,sector,source)',
+  'function renderChecklist()',
+  'function updateReadiness()',
+  'UzCombinator — 45 kunlik startap akseleratori',
+  'https://uzcombinator.uz/apply',
+  'https://www.it-park.uz/en/itpark/startups',
+  'https://itparkventures.uz/',
+  'https://www.startupuzbekistan.com/',
+  'official_portal_integrations',
+  'Supabase katalogi bilan sinxronlandi',
+  'Moslik '+match+'/10',
+  'Yoshlar-Ishi mustaqil navigator',
+]) {
+  assert.ok(startupPath.includes(feature), `Startup navigator feature missing: ${feature}`);
+}
+assert.match(publicHtml, /\.\/startap-yoli\.html/);
+assert.match(serviceDesign, /\.\/startap-yoli\.html/);
+assert.match(accountDesign, /\.\/startap-yoli\.html/);
+assert.doesNotMatch(startupPath, /% moslik/, "Heuristic rank must not be presented as a probability");
+console.log("✓ startup navigator has five stage paths, stage-specific readiness checklists, data-backed scoring and official source disclaimers");
 
 console.log("\nYoshlar-Ishi checks passed.");
