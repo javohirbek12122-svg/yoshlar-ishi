@@ -259,7 +259,7 @@ assert.match(serviceGuide, /function openDialog\(/);
 assert.match(serviceGuide, /function renderRecommender\(/);
 const imageCards = [...serviceGuide.matchAll(/<article class="media-card">/g)];
 assert.ok(imageCards.length >= 5, "Service guide should contain at least five attributed portal media cards");
-assert.match(serviceGuide, /alt="[^"]+"[^>]*><div class="caption">/);
+assert.match(serviceGuide, /onerror="this\.style\.display='none';this\.nextElementSibling\.style\.display='grid'"><div class="media-fallback"[^>]*>[\s\S]*?<\/div><div class="caption">/);
 assert.match(serviceGuide, /UZINFOCOM/);
 assert.match(serviceGuide, /Murojaat.gov.uz/);
 console.log(`✓ illustrated public-services guide, ${imageCards.length} attributed portal media cards, official directory categories, filters and service-flow visualization are present`);
