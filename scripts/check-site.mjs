@@ -490,7 +490,7 @@ assert.match(serviceDesign, /class="media-grid"/);
 const mediaSection = serviceDesign.match(/<section class="section" id="media"[\s\S]*?<\/section>/)?.[0] ?? "";
 assert.equal((mediaSection.match(/class="media-fallback"/g) || []).length, 5, "Each official screenshot needs an accessible fallback");
 assert.equal((mediaSection.match(/onerror="/g) || []).length, 5, "Each media image must define an onerror fallback");
-assert.ok(serviceDesign.includes("Xizmat tafsilotlari 2026-yil 28-oktabr") && serviceDesign.includes("markaziy idoralar katalogi 2026-yil 29-oktabr"), "Source verification dates must be clear and distinct");
+assert.ok(serviceDesign.includes("Xizmat tafsilotlari 2026-yil 28-oktabr") && serviceDesign.includes("URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan"), "Content and URL monitoring dates must be clearly distinguished");
 
 assert.match(accountDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(accountDesign, /rpc\/get_my_initiatives/);
