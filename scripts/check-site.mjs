@@ -276,6 +276,8 @@ assert.match(communitySubmit, /windowSeconds = 86400/);
 assert.match(communitySubmit, /windowSeconds = 600/);
 assert.match(communitySubmit, /httpsUrl\(enteredContact\)/);
 assert.match(communitySubmit, /status.*published/);
+assert.match(communitySubmit, /COMMUNITY_RATE_LIMIT_SALT.*serverSecret/);
+assert.match(communitySubmit, /rateHash\(action, clientAddress\(req\), key\)/);
 console.log("✓ community Edge Function validates consent, enforces status, checks public links and applies hashed-IP quotas");
 
 const communityMigration = read("supabase/migrations/20261029030615_server_side_community_submission_limits.sql");
@@ -301,6 +303,7 @@ assert.match(telegramWebhook, /telegram_subscriptions/);
 assert.match(telegramWebhook, /\/link/);
 assert.match(telegramNotify, /TELEGRAM_BOT_TOKEN/);
 assert.match(telegramNotify, /admin_allowlist/);
+assert.match(ideaReview, /AI_RATE_LIMIT_SALT.*key/);
 console.log("✓ server-side AI safeguards and protected Telegram webhook/notification handlers are present");
 
 const accountMigration = read("supabase/migrations/20261028163033_secure_account_owned_initiatives.sql");
