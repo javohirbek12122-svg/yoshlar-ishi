@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10283f">
+<meta name="description" content="Yoshlar-Ishi startap yo‘li: g‘oya bosqichini tanlang, tayyorgarlikni tekshiring va UzCombinator, IT Park hamda boshqa imkoniyatlarni saralang.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Startap yo‘li — Yoshlar-Ishi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#10283f;--navy2:#193b58;--accent:#b8df52;--accent2:#e9f5ca;--ink:#172b3c;--muted:#627486;--line:#dce4eb;--paper:#f4f7fa;--white:#fff;--blue:#246b9a;--shadow:0 22px 60px #10283f0d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "DM Sans",sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button,a,select,input{outline-offset:3px}.wrap{width:min(1160px,calc(100% - 36px));margin-inline:auto}.topbar{background:#0d2236;color:#c8d4dd;font-size:11px}.topbar .wrap{min-height:34px;display:flex;align-items:center;justify-content:space-between;gap:14px}.independent{border:1px solid #ffffff40;border-radius:100px;padding:3px 9px;color:#f2f7fb;white-space:nowrap}.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 0}.brand{display:flex;align-items:center;gap:10px;font:800 18px Manrope,sans-serif;letter-spacing:-.4px;white-space:nowrap}.logo{display:grid;place-items:center;width:36px;height:36px;border-radius:8px;background:var(--navy);color:var(--accent);font-size:12px}.links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.links a{font-size:12px;font-weight:700;color:#4f6070}.links a:hover{color:var(--blue)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--navy);border-radius:8px;background:var(--navy);color:#fff;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer;transition:transform .18s,background .18s}.btn:hover{transform:translateY(-1px);background:var(--navy2)}.btn.alt{background:#fff;color:var(--navy);border-color:var(--line)}.btn.green{background:var(--accent);border-color:var(--accent);color:var(--navy)}.hero{background:var(--navy);color:#fff;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-130px;top:-240px;background:radial-gradient(circle,#315e7d70,transparent 68%);pointer-events:none}.hero:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:18%;bottom:-330px;background:radial-gradient(circle,#b8df5230,transparent 70%);pointer-events:none}.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.14fr .86fr;gap:56px;align-items:center;padding:63px 0 55px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:#6282a0}.hero .eyebrow{color:var(--accent)}h1,h2,h3{font-family:Manrope,sans-serif;line-height:1.1;letter-spacing:-1.1px;margin-top:0}h1{font-size:clamp(40px,5vw,64px);margin:16px 0 18px;max-width:730px}h1 em{font-style:normal;color:var(--accent)}.hero-copy{max-width:640px;color:#d2dde6;font-size:16px;line-height:1.8;margin:0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.hero .btn.alt{background:#ffffff0c;border-color:#ffffff3d;color:white}.hero-note{font-size:11px;color:#aebfcd;margin-top:15px}.journey-visual{border:1px solid #ffffff2a;background:linear-gradient(145deg,#ffffff0c,#ffffff04);border-radius:12px;padding:23px;position:relative}.journey-visual:before{content:"";position:absolute;left:45px;top:63px;bottom:56px;width:1px;background:#ffffff35}.jv-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:#c5d3df;padding-bottom:18px;border-bottom:1px solid #ffffff22}.jv-head span:last-child{color:var(--accent);font-weight:800;letter-spacing:1px}.jv-stage{display:grid;grid-template-columns:35px 1fr auto;gap:11px;align-items:center;position:relative;padding:14px 0}.jv-num{width:30px;height:30px;border-radius:8px;background:#27465e;color:#fff;display:grid;place-items:center;font-size:10px;font-weight:800;border:1px solid #ffffff2b}.jv-stage:first-of-type .jv-num{background:var(--accent);color:var(--navy)}.jv-stage strong{display:block;font-size:12px}.jv-stage small{display:block;font-size:10px;color:#b3c1cd;margin-top:3px}.jv-tag{font-size:9px;color:var(--accent);font-weight:800;white-space:nowrap}.visual-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #ffffff22;font-size:10px;color:#bccbd7}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px}.section{padding:58px 0;border-bottom:1px solid var(--line)}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.section-head h2{font-size:clamp(28px,3.3vw,40px);margin:9px 0 0}.section-head p{max-width:470px;margin:0;color:var(--muted);font-size:13px;line-height:1.75}.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.stage-btn{display:flex;flex-direction:column;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px;min-height:128px;cursor:pointer;transition:border-color .16s,transform .16s,box-shadow .16s}.stage-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.stage-btn[aria-pressed=true]{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy);background:#fff}.stage-count{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#edf2f6;color:var(--blue);font-weight:800;font-size:10px}.stage-btn[aria-pressed=true] .stage-count{background:var(--accent);color:var(--navy)}.stage-btn strong{font-size:13px;font-family:Manrope,sans-serif;letter-spacing:-.2px}.stage-btn small{color:var(--muted);font-size:10px}.stage-detail{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:25px;margin-top:12px}.stage-detail h3{font-size:24px;margin:9px 0 10px}.stage-detail p{font-size:12px;color:var(--muted);margin:0}.detail-label{display:inline-flex;align-items:center;gap:7px;background:var(--accent2);color:#3e5614;font-size:10px;font-weight:800;border-radius:5px;padding:5px 8px}.stage-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.action-card{border:1px solid var(--line);border-radius:8px;background:#f9fbfc;padding:13px}.action-card b{font-size:11px;display:block;margin-bottom:5px}.action-card span{font-size:11px;color:var(--muted);line-height:1.5}.tools-grid{display:grid;grid-template-columns:.74fr 1.26fr;gap:16px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px}.panel h3{font-size:21px;margin-bottom:8px}.panel .intro{font-size:12px;color:var(--muted);margin:0 0 18px;line-height:1.7}.checklist{display:grid;gap:8px}.check-row{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);background:#fbfcfd;padding:10px;border-radius:7px;font-size:11px;line-height:1.5;cursor:pointer}.check-row input{margin-top:3px;accent-color:var(--blue)}.score-box{border-top:1px solid var(--line);margin-top:14px;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.score-number{font:800 28px Manrope,sans-serif;letter-spacing:-1px}.score-copy{font-size:10px;color:var(--muted);text-align:right;max-width:165px}.progress{height:7px;border-radius:99px;background:#e8edf2;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 14px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:10px;color:#526476;font-weight:800}.field select,.field input{width:100%;border:1px solid #d5dfe7;border-radius:7px;background:#fff;padding:11px 12px;font-size:12px;color:var(--ink);min-width:0}.search-row{display:flex;gap:9px;margin-bottom:12px}.search-row input{flex:1}.results-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted);margin:9px 0 12px}.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:9px;padding:16px;min-height:205px}.result-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.tag{background:#edf3f7;color:#4b6072;font-size:9px;font-weight:800;border-radius:4px;padding:4px 7px}.match{font-size:10px;color:#43651a;background:var(--accent2);font-weight:800;border-radius:4px;padding:4px 7px}.result-card h4{font:800 15px/1.35 Manrope,sans-serif;letter-spacing:-.3px;margin:14px 0 7px}.result-card p{margin:0;color:var(--muted);font-size:11px;line-height:1.6}.result-card .provider{font-size:10px;color:#6c7c89;margin-top:8px}.result-actions{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:9px}.result-actions a{color:var(--blue);font-size:11px;font-weight:800}.verified{font-size:9px;color:#7a8996}.empty{grid-column:1/-1;padding:26px;border:1px dashed #bdcad6;background:#fff;border-radius:9px;color:var(--muted);font-size:12px;text-align:center}.sources-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.source-chip{border:1px solid var(--line);border-radius:100px;padding:8px 11px;background:#fff;color:#43576a;font-size:10px;font-weight:800}.source-chip:hover{border-color:#9db1c0}.disclaimer{font-size:10px;color:#657889;line-height:1.75;margin-top:16px;padding:12px 14px;background:#edf2f6;border-left:3px solid var(--blue);border-radius:0 7px 7px 0}.cta-band{background:var(--navy);color:#fff;padding:32px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:25px}.cta-band h2{font-size:clamp(25px,3vw,35px);margin:8px 0}.cta-band p{font-size:12px;color:#c0ceda;max-width:610px;margin:0}.cta-links{display:flex;gap:9px;flex-wrap:wrap;flex-shrink:0}.footer{background:#0d2236;color:#c2d0dc;padding:26px 0;margin-top:58px}.footer-grid{display:flex;align-items:center;justify-content:space-between;gap:20px}.footer a{color:#fff;font-size:11px;font-weight:700}.footer small{font-size:10px;line-height:1.7;display:block;max-width:660px;margin-top:8px;color:#9dafbd}.status{font-size:10px;color:var(--muted);margin-top:9px}.status.error{color:#a33636}.mobile-menu{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:930px){.hero-grid{gap:28px}.stage-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.tools-grid{grid-template-columns:1fr}.nav{flex-wrap:wrap}.links{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;padding:4px 0}.nav>.btn{margin-left:auto}}
+@media(max-width:650px){.wrap{width:min(100% - 26px,1160px)}.topbar .wrap{align-items:flex-start;flex-direction:column;padding:8px 0;gap:6px}.independent{white-space:normal}.hero-grid{grid-template-columns:1fr;padding:40px 0 34px;gap:25px}.hero-copy{font-size:14px}.journey-visual{padding:16px}.section{padding:40px 0}.section-head{display:block}.section-head p{margin-top:12px}.stage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stage-btn{min-height:112px;padding:13px}.stage-detail{grid-template-columns:1fr;padding:17px;gap:18px}.stage-actions{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.results{grid-template-columns:1fr}.search-row{flex-direction:column}.cta-band{padding:22px;align-items:flex-start;flex-direction:column}.cta-links{width:100%}.cta-links .btn{flex:1}.footer-grid{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span>YOSHLAR-ISHI / STARTAP YO‘LI · G‘OYA → SINOV → O‘SISH</span><span class="independent">MUSTAQIL PLATFORMА · DAVLAT ORGANI EMAS</span></div></div>
+<header class="wrap nav">
+ <a class="brand" href="./index.html"><span class="logo">YI</span>Yoshlar-Ishi</a>
+ <nav class="links" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a href="#bosqichlar">Bosqichlar</a><a href="#imkoniyatlar">Imkoniyatlar</a><a href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="./kabinet.html">Shaxsiy kabinet</a></nav>
+ <a class="btn" href="./index.html#tashabbus">Tashabbus yuborish ↗</a>
+</header>
+<main>
+<section class="hero">
+ <div class="wrap hero-grid">
+  <div>
+   <div class="eyebrow">Startap va yoshlar tashabbuslari uchun navigator</div>
+   <h1>G‘oyani boshlang.<br><em>Keyingi qadamni biling.</em></h1>
+   <p class="hero-copy">Loyiha qaysi bosqichda ekanini tanlang, o‘zingizdagi dalil va tayyorgarlikni tekshiring. Yoshlar-Ishi katalogidagi akselerator, inkubatsiya, grant, mentorlik va rasmiy manbalarni shu bosqichga moslab saralaydi.</p>
+   <div class="hero-actions"><a class="btn green" href="#bosqichlar">Bosqichimni tanlayman ↓</a><a class="btn alt" href="./index.html#ai-yordamchi">G‘oyani AI bilan tahlil qilish ↗</a></div>
+   <p class="hero-note">Tavsiyalar yo‘naltiruvchi vosita. Qabul, grant, moliyalashtirish yoki dasturga moslik kafolati emas.</p>
+  </div>
+  <div class="journey-visual" aria-label="Startap rivojlanishining besh bosqichi">
+   <div class="jv-head"><span>STARTAP YO‘LI / 5 BOSQICH</span><span>AMALIY YO‘L XARITASI</span></div>
+   <div class="jv-stage"><span class="jv-num">01</span><div><strong>G‘oya</strong><small>Muammo kimda va nima uchun?</small></div><span class="jv-tag">ANIQLA</span></div>
+   <div class="jv-stage"><span class="jv-num">02</span><div><strong>Muammoni tasdiqlash</strong><small>Foydalanuvchi bilan gaplash</small></div><span class="jv-tag">TEKSHIR</span></div>
+   <div class="jv-stage"><span class="jv-num">03</span><div><strong>MVP / prototip</strong><small>Eng kichik ishlaydigan yechim</small></div><span class="jv-tag">YASА</span></div>
+   <div class="jv-stage"><span class="jv-num">04</span><div><strong>Bozorga chiqish</strong><small>Sinovchi va dastlabki mijoz</small></div><span class="jv-tag">SOT</span></div>
+   <div class="jv-stage"><span class="jv-num">05</span><div><strong>O‘sish</strong><small>Jamoa, daromad va investitsiya</small></div><span class="jv-tag">KENGAY</span></div>
+   <div class="visual-footer"><span><i class="live-dot"></i>Tanlovingizga qarab tavsiyalar o‘zgaradi</span><span>v1.0</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="bosqichlar">
+ <div class="wrap">
+  <div class="section-head"><div><div class="eyebrow">01 / Bosqichni belgilang</div><h2>Qayerdan boshlaymiz?</h2></div><p>O‘zingizni eng yaqin his qilgan bosqichni tanlang. Orqaga qaytish mumkin — tayyorgarlik chizig‘i imtihon emas, keyingi qadamni aniq qilish uchun.</p></div>
+  <div class="stage-grid" role="group" aria-label="Startap bosqichini tanlash">
+   <button type="button" class="stage-btn" data-stage="idea" aria-pressed="true"><span class="stage-count">01</span><strong>G‘oya</strong><small>Muammo va taxmin</small></button>
+   <button type="button" class="stage-btn" data-stage="validate" aria-pressed="false"><span class="stage-count">02</span><strong>Muammo tasdiqi</strong><small>Dalil va suhbatlar</small></button>
+   <button type="button" class="stage-btn" data-stage="mvp" aria-pressed="false"><span class="stage-count">03</span><strong>MVP / prototip</strong><small>Sinash mumkin bo‘lgan yechim</small></button>
+   <button type="button" class="stage-btn" data-stage="market" aria-pressed="false"><span class="stage-count">04</span><strong>Bozor</strong><small>Mijoz va daromad modeli</small></button>
+   <button type="button" class="stage-btn" data-stage="growth" aria-pressed="false"><span class="stage-count">05</span><strong>O‘sish</strong><small>Jamoa, investitsiya, kengayish</small></button>
+  </div>
+  <div class="stage-detail" id="stageDetail" aria-live="polite">
+   <div><span class="detail-label" id="stageTag">BOSQICH 01 · G‘OYA</span><h3 id="stageTitle">Muammoni yechimdan oldin aniqlang.</h3><p id="stageDescription">Kimning qaysi muammosi yechilishini bitta gap bilan yozing. Hali ilova yoki katta biznes-reja kerak emas; avval muammoning real ekanini tekshiring.</p></div>
+   <div class="stage-actions" id="stageActions">
+    <div class="action-card"><b>1. Muammoni yozing</b><span>Kimda uchraydi, qanchalik tez-tez va hozir qanday hal qilinadi?</span></div>
+    <div class="action-card"><b>2. 5 kishi bilan gaplashing</b><span>Taxminni emas, odamning haqiqiy tajribasini so‘rang.</span></div>
+    <div class="action-card"><b>3. O‘xshash yechimlarni ko‘ring</b><span>Raqobatchi va bepul muqobillarni toping.</span></div>
+    <div class="action-card"><b>4. Bitta keyingi qadam</b><span>Muammo aniq bo‘lsa, MVP yoki mentorlikka o‘ting.</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="imkoniyatlar">
+ <div class="wrap">
+  <div class="section-head"><div><div class="eyebrow">02 / Tayyorlik va imkoniyatlar</div><h2>O‘zingizni tekshiring.<br>Keraklisini tanlang.</h2></div><p>Tekshiruv ro‘yxati va tavsiya algoritmi o‘zaro bog‘langan. Bosqich, maqsad va yo‘nalishga qarab katalogdagi manbalar qayta tartiblanadi.</p></div>
+  <div class="tools-grid">
+   <aside class="panel">
+    <div class="eyebrow">Tayyorgarlik / mustaqil tekshiruv</div><h3 id="checklistTitle">G‘oya bosqichi uchun</h3><p class="intro">Bajarilgan bandlarni belgilang. Ball — o‘zingizni baholash uchun; rasmiy tanlov yoki davlat idorasi qarori emas.</p>
+    <div class="checklist" id="readinessChecklist">
+     <label class="check-row"><input type="checkbox" data-check="problem"><span>Muammoni bir gapda aniq tushuntira olaman.</span></label>
+     <label class="check-row"><input type="checkbox" data-check="audience"><span>Muammo kimda borligini bilaman.</span></label>
+     <label class="check-row"><input type="checkbox" data-check="evidence"><span>Kamida 3–5 potensial foydalanuvchidan fikr oldim.</span></label>
+     <label class="check-row"><input type="checkbox" data-check="solution"><span>Yechimim boshqalardan nimasi bilan farq qilishini tushuntira olaman.</span></label>
+     <label class="check-row"><input type="checkbox" data-check="test"><span>Keyingi 7 kun ichida tekshiriladigan kichik vazifam bor.</span></label>
+    </div>
+    <div class="score-box"><div><div class="score-number" id="readinessScore">0%</div><div class="progress" role="progressbar" aria-label="Tayyorgarlik foizi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readinessProgress"><span id="readinessFill"></span></div></div><div class="score-copy" id="readinessAdvice">Avval eng muhim bitta vazifani tanlang.</div></div>
+    <div class="sources-line"><a class="source-chip" href="./index.html#tashabbus">Tashabbusni yuborish ↗</a><a class="source-chip" href="./index.html#ai-yordamchi">AI tahlili ↗</a></div>
+   </aside>
+   <div class="panel">
+    <div class="eyebrow">Moslik bo‘yicha saralash</div><h3>Sizga qaysi eshik mos?</h3><p class="intro">Saralash manbaning nomi, tavsifi, toifasi, teglari va tanlangan bosqichdagi ehtiyojga qarab ball beradi. Yakuniy shartlar manbaning o‘zida tekshiriladi.</p>
+    <div class="filters">
+     <div class="field"><label for="goalFilter">Asosiy ehtiyoj</label><select id="goalFilter"><option value="all">Umumiy yo‘l xaritasi</option><option value="accelerator">Akselerator / inkubatsiya</option><option value="funding">Grant / investitsiya</option><option value="mentor">Mentor / tajriba</option><option value="team">Jamoa / hamkor</option><option value="market">Bozor / mijoz</option><option value="legal">Huquqiy / rasmiy ma’lumot</option></select></div>
+     <div class="field"><label for="sectorFilter">Yo‘nalish</label><select id="sectorFilter"><option value="all">Barcha yo‘nalishlar</option><option value="technology">IT / AI / texnologiya</option><option value="education">Ta’lim</option><option value="social">Ijtimoiy tashabbus</option><option value="business">Biznes / savdo</option><option value="agro">Agro / ekologiya</option></select></div>
+     <div class="field"><label for="sourceFilter">Manba turi</label><select id="sourceFilter"><option value="all">Barchasi</option><option value="official">Rasmiy / davlat</option><option value="program">Dastur / akselerator</option><option value="community">Jamoa / grant katalogi</option></select></div>
+    </div>
+    <div class="search-row"><label for="sourceSearch" class="sr-only">Imkoniyatlarni qidirish</label><input id="sourceSearch" type="search" placeholder="Masalan: UzCombinator, grant, MVP, mentor…"><button type="button" class="btn alt" id="resetFilters">Tozalash</button></div>
+    <div class="results-meta"><span id="resultCount" aria-live="polite">Manbalar yuklanmoqda…</span><span id="sourceStatus" class="status">Katalog bilan bog‘lanilmoqda…</span></div>
+    <div class="results" id="recommendations" aria-live="polite"><div class="empty">Mos imkoniyatlar shu yerda ko‘rsatiladi.</div></div>
+    <div class="disclaimer">Eslatma: Yoshlar-Ishi mustaqil navigator. Bu sahifa UzCombinator, IT Park yoki davlat tashkilotining rasmiy ariza tizimi emas. Ko‘rsatilgan havola tashqi sahifaga olib boradi; qabul sanasi, yosh talabi, to‘lov, grant summasi va mezonlarni o‘sha manbada tasdiqlang.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section">
+ <div class="wrap">
+  <div class="cta-band"><div><div class="eyebrow">03 / Harakatga o‘ting</div><h2>Rejani sahifada qoldirmang.</h2><p>O‘zingizdagi fikrni tashabbus shaklida qayd eting, AI yordamida kuchli va zaif tomonlarini tahlil qiling yoki kerakli ko‘nikmaga ega sherik izlang.</p></div><div class="cta-links"><a class="btn green" href="./index.html#tashabbus">Tashabbus yuborish ↗</a><a class="btn alt" href="./index.html#jamoadoshlar">Jamoa topish ↗</a></div></div>
+ </div>
+</section>
+</main>
+<footer class="footer"><div class="wrap footer-grid"><div><a href="./index.html">Yoshlar-Ishi</a><small>Mustaqil platforma. Rasmiy tashkilotlar nomi va tashqi havolalar ma’lumotni topishga yordam beradi, lekin hamkorlik yoki vakolatli integratsiyani anglatmaydi.</small></div><div><a href="./davlat-xizmatlari.html">Davlat xizmatlari</a> · <a href="./kabinet.html">Shaxsiy kabinet</a> · <a href="./privacy.html">Maxfiylik</a></div></div></footer>
+<script src="./config.js"></script>
+<script>
+(()=>{"use strict";
+const cfg=window.YI_CONFIG||{};
+const base=String(cfg.supabaseUrl||"").replace(/\\/$/,"")+"/rest/v1/";
+const key=cfg.supabaseAnonKey||cfg.supabaseKey||"";
+const $=id=>document.getElementById(id);
+const state={
+ stage:"idea",goal:"all",sector:"all",kind:"all",query:"",
+ sources:[],remoteLoaded:false
+};
+const stages={
+ idea:{n:"01",name:"G‘oya",title:"Muammoni yechimdan oldin aniqlang.",desc:"Kimning qaysi muammosi yechilishini bitta gap bilan yozing. Hali ilova yoki katta biznes-reja kerak emas; avval muammoning real ekanini tekshiring.",actions:[["1. Muammoni yozing","Kimda uchraydi, qanchalik tez-tez va hozir qanday hal qilinadi?"],["2. 5 kishi bilan gaplashing","Taxminni emas, odamning haqiqiy tajribasini so‘rang."],["3. O‘xshash yechimlarni ko‘ring","Raqobatchi va bepul muqobillarni toping."],["4. Bitta keyingi qadam","Muammo aniq bo‘lsa, MVP yoki mentorlikka o‘ting."]],tags:["idea","startap","incubat","grant","mentor","tanlov","startup","yoshlar"]},
+ validate:{n:"02",name:"Muammo tasdiqi",title:"Taxminni dalilga aylantiring.",desc:"Potensial foydalanuvchilar bilan suhbat, hozirgi muqobillar va muammoning tez-tez uchrashini hujjatlashtiring. Odamlarning maqtovi emas, amaldagi xatti-harakati muhim.",actions:[["1. Suhbatlar","5–10 maqsadli foydalanuvchiga bir xil ochiq savollar bering."],["2. Dalillar","Qaysi muqobil usuldan foydalanishlari va nima uchunligini yozing."],["3. Talabni o‘lchang","Kim sinovga vaqt, ma’lumot yoki mablag‘ ajratishga tayyor?"],["4. Davom etish qarori","Muammo tasdiqlanmasa, segment yoki yechim taxminini o‘zgartiring."]],tags:["research","problem","customer","incubat","mentor","education","startup"]},
+ mvp:{n:"03",name:"MVP / prototip",title:"Eng kichik sinovga yaroqli yechimni yarating.",desc:"MVP — barcha funksiyalar tayyor degani emas. Bitta asosiy muammoni tekshiradigan prototipni yaratib, real foydalanuvchi bilan sinang.",actions:[["1. Bitta vazifa","Birinchi versiya bajarishi shart bo‘lgan yagona asosiy ishni tanlang."],["2. 1–2 haftalik reja","Natijani o‘lchaydigan oddiy mezon belgilang."],["3. Sinov","Foydalanuvchi vazifani yordamsiz bajara oladimi?"],["4. Fikr-mulohaza","Eng ko‘p takrorlangan muammoni keyingi versiyada tuzating."]],tags:["mvp","prototype","technology","innovation","startup","accelerator","grant","incubat"]},
+ market:{n:"04",name:"Bozor",title:"Yechimni foydalanuvchi va daromad bilan tekshiring.",desc:"Mahsulot borligi talab borligini anglatmaydi. Sinov foydalanuvchilari, qayta foydalanish, narx va mijoz topish kanalini tekshiring.",actions:[["1. Kim to‘laydi?","Foydalanuvchi, xaridor va qaror qabul qiluvchi bir xilmi?"],["2. Qiymat taklifi","Mahsulot nimani arzonroq, tezroq yoki yaxshiroq qiladi?"],["3. Dastlabki mijozlar","10 ta maqsadli foydalanuvchi bilan sinov savdosini rejalang."],["4. O‘lchov","Konversiya, xarajat, daromad va qayta foydalanishni kuzating."]],tags:["market","business","sales","accelerator","startup","investment","mentor"]},
+ growth:{n:"05",name:"O‘sish",title:"Takrorlanadigan natijani tizimga aylantiring.",desc:"O‘sishdan oldin mijoz topish va xizmat ko‘rsatish jarayoni takrorlanishini, xarajatlar va daromadni tushuning. Investitsiya yagona yo‘l emas.",actions:[["1. Ko‘rsatkichlar","Daromad, xarajat, mijozni jalb qilish qiymati va saqlab qolishni yozing."],["2. Jamoa","Muhim bo‘sh rollar va mas’uliyatlarni belgilang."],["3. O‘sish kanali","Qaysi kanal muntazam mijoz olib kelishini dalil bilan ko‘rsating."],["4. Moliyalashtirish","Investor yoki fond bilan gaplashishdan avval pitch va moliyaviy reja tayyorlang."]],tags:["growth","venture","investment","investor","scale","export","fund","business"]}}
+;
+const fallback=[
+ {title:"UzCombinator — 45 kunlik startap akseleratori",provider:"UzCombinator",category:"startup",url:"https://uzcombinator.uz/apply",description:"Ariza topshirish va qabul shartlarini rasmiy sahifada tekshirish uchun.",verified_on:"2026-10-29",kind:"program",tags:["startup","accelerator","mvp","market","mentor"]},
+ {title:"IT Park Uzbekistan — Startups",provider:"IT Park Uzbekistan",category:"startup",url:"https://www.it-park.uz/en/itpark/startups",description:"Inkubatsiya va akseleratsiya yo‘nalishlari, startaplar uchun rasmiy ma’lumot.",verified_on:"2026-10-29",kind:"official",tags:["incubat","accelerator","startup","mentor","mvp"]},
+ {title:"Startup Uzbekistan — ekotizim portali",provider:"Startup Uzbekistan",category:"startup",url:"https://www.startupuzbekistan.com/",description:"O‘zbekiston startap ekotizimi, dasturlar va rivojlanish manbalari.",verified_on:"2026-10-29",kind:"official",tags:["startup","incubat","investment","growth"]},
+ {title:"IT Park Ventures",provider:"IT Park Ventures",category:"investment",url:"https://itparkventures.uz/",description:"Startaplar uchun ariza, pitch, mentorlik va investitsiyaga oid ma’lumotlar.",verified_on:"2026-10-29",kind:"program",tags:["venture","investment","investor","growth","market"]},
+ {title:"Innoyouth — inkubatsiya",provider:"Innoyouth",category:"startup",url:"https://www.innoyouth.uz/uz/incubation",description:"Inkubatsiya, g‘oyani rivojlantirish va jamoa bilan ishlash bo‘yicha ma’lumot.",verified_on:"2026-10-28",kind:"program",tags:["idea","incubat","mentor","startup"]},
+ {title:"Grantlar.uz",provider:"Grantlar.uz",category:"grants",url:"https://grantlar.uz/",description:"Grant va ta’lim imkoniyatlarini izlash uchun mustaqil katalog. Shartlarni manbada tekshiring.",verified_on:"2026-10-28",kind:"community",tags:["grant","education","funding"]},
+ {title:"Yoshlar uchun imkoniyatlar navigatori",provider:"YITO",category:"navigator",url:"https://navigator.yito.uz/",description:"Yoshlar uchun turli imkoniyatlar va dasturlarga yo‘naltiruvchi katalog.",verified_on:"2026-10-28",kind:"community",tags:["youth","grant","education","startup"]},
+ {title:"Yoshlar ishlari agentligi",provider:"Yoshlar ishlari agentligi",category:"official",url:"https://yoshlar.gov.uz/",description:"Yoshlarga oid davlat dasturlari va rasmiy yangiliklarni tekshirish.",verified_on:"2026-10-28",kind:"official",tags:["youth","official","grant","support"]},
+ {title:"Davlat startup funnel — bosqichlar bo‘yicha qo‘llab-quvvatlash",provider:"Awards.gov.uz",category:"startup",url:"https://awards.gov.uz/en/startup-stages/4",description:"Startap bosqichi bo‘yicha mavjud qo‘llab-quvvatlash yo‘nalishlari haqida rasmiy ma’lumot.",verified_on:"2026-10-29",kind:"official",tags:["idea","mvp","grant","investment","growth"]},
+ {title:"Ochiq ma’lumotlar portali",provider:"data.egov.uz",category:"open_data",url:"https://data.egov.uz/",description:"Tadqiqot, muammo tahlili va bozorni tushunish uchun davlat ochiq ma’lumotlarini izlash.",verified_on:"2026-10-28",kind:"official",tags:["research","market","data","business"]}
+];
+const normalize=s=>String(s||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase();
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl=value=>{try{const u=new URL(String(value||""));return u.protocol==="https:"?u.href:""}catch{return ""}};
+const categoryKind=s=>{const v=normalize([s.title,s.provider,s.category,s.description,s.url,(s.tags||[]).join(" ")].join(" "));if(/grant|invest|fund|venture|startup|startap|acceler|incubat|combinator|innovation|mvp|mentor|venture/.test(v))return /grantlar|navigator|volontyor/.test(v)?"community":(/gov\\.uz|it-park\\.uz|startupuzbekistan|awards\\.gov|itparkventures|innoyouth|uzcombinator/.test(v)?"program":"program");if(/gov\\.uz|my\\.gov|lex\\.uz|adliya|data\\.egov|stat\\.uz/.test(v))return "official";if(/jamoa|volontyor|hamkor/.test(v))return "community";return "community"};
+function mapOpportunity(row,origin){return {title:row.title||row.name||"Manba",provider:row.provider||row.agency||row.name||"",category:row.category||"opportunity",url:safeUrl(row.url||row.portal_url),description:row.description||row.purpose||row.detail_text||"",verified_on:row.verified_on||"",kind:row.kind||categoryKind(row),tags:Array.isArray(row.tags)?row.tags:[],origin:origin}}
+function uniqueSources(rows){const seen=new Set();return rows.filter(s=>{s.url=safeUrl(s.url);if(!s.url||!s.title)return false;const k=s.url.replace(/\\/$/,"").toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}
+async function fetchJson(path){if(!base||!key)throw new Error("Katalog sozlamalari yo‘q");const response=await fetch(base+path,{headers:{apikey:key,Authorization:"Bearer "+key}});if(!response.ok)throw new Error("HTTP "+response.status);return response.json()}
+async function loadSources(){
+ let collected=fallback.map(s=>({...s,kind:s.kind||"program",origin:"fallback"}));
+ try{
+  const encoded="select=title,description,category,url,provider,verified_on,active&active=eq.true&order=verified_on.desc";
+  const official="select=name,agency,purpose,category,portal_url,source_url,verified_on,active,tags,connection_mode,connection_status,audience&active=eq.true&order=sort_order.asc";
+  const settled=await Promise.allSettled([fetchJson("opportunity_sources?"+encoded),fetchJson("official_portal_integrations?"+official)]);
+  let additions=[];
+  if(settled[0].status==="fulfilled")additions=additions.concat(settled[0].value.map(x=>mapOpportunity(x,"opportunity_sources")));
+  if(settled[1].status==="fulfilled")additions=additions.concat(settled[1].value.map(x=>mapOpportunity({...x,url:x.portal_url,description:x.purpose||x.audience,provider:x.agency||x.name,kind:categoryKind({...x,url:x.portal_url})},"official_portal_integrations")));
+  const related=additions.filter(s=>/startup|startap|combinator|grant|invest|venture|acceler|incubat|mentor|yoshlar|youth|innovation|education|business|volontyor|volunteer|mvp|tanlov|technology|data/.test(normalize([s.title,s.provider,s.category,s.description,s.url,(s.tags||[]).join(" ")].join(" "))));
+  collected=uniqueSources(related.concat(collected));
+  $("sourceStatus").textContent="Supabase katalogi bilan sinxronlandi";
+  $("sourceStatus").classList.remove("error");state.remoteLoaded=true;
+ }catch(error){
+  $("sourceStatus").textContent="Zaxira manbalar ko‘rsatilmoqda";
+  $("sourceStatus").classList.add("error");
+ }
+ state.sources=uniqueSources(collected);
+ renderRecommendations();
+}
+function scoresFor(stage,goal,sector,source){
+ const s=stages[stage],title=normalize(source.title),body=normalize([source.description,source.provider,source.category,source.url,(source.tags||[]).join(" ")].join(" "));
+ let score=0;
+ const category=normalize(source.category);
+ const official=/gov\\.uz|my\\.gov|lex\\.uz|adliya|awards\\.gov|it-park\\.uz|itparkventures|startupuzbekistan|innoyouth|uzcombinator/.test(normalize(source.url+" "+source.provider));
+ if(s.tags.some(tag=>body.includes(normalize(tag))))score+=3;
+ if(title.includes("uzcombinator")&&["idea","validate","mvp","market"].includes(stage))score+=stage==="idea"?1:4;
+ if(title.includes("it park")&&["idea","validate","mvp"].includes(stage))score+=3;
+ if(title.includes("venture")&&["market","growth"].includes(stage))score+=5;
+ if(title.includes("grant")&&["idea","mvp"].includes(stage))score+=3;
+ if(/startup|startap|business|innovation/.test(category))score+=2;
+ if(goal==="accelerator"&&/acceler|incubat|startap|startup|combinator|innoyouth/.test(body))score+=6;
+ if(goal==="funding"&&/grant|invest|venture|fund|finance|moliyalasht/.test(body))score+=6;
+ if(goal==="mentor"&&/mentor|incubat|acceler|advice|maslahat|community/.test(body))score+=5;
+ if(goal==="team"&&/team|jamoa|volunteer|volontyor|hamkor|community/.test(body))score+=5;
+ if(goal==="market"&&/market|customer|sales|savdo|business|startup|startap/.test(body))score+=5;
+ if(goal==="legal"&&/lex\\.uz|adliya|law|legal|huquq|gov\\.uz|my\\.gov/.test(body))score+=7;
+ if(sector==="technology"&&/tech|it|ai|digital|startup|startap|combinator|innovation/.test(body))score+=3;
+ if(sector==="education"&&/education|ta'lim|talim|student|grant|youth|yoshlar/.test(body))score+=3;
+ if(sector==="social"&&/social|community|volontyor|volunteer|youth|yoshlar|grant/.test(body))score+=3;
+ if(sector==="business"&&/business|marketing|sales|venture|invest|startup|startap/.test(body))score+=3;
+ if(sector==="agro"&&/agro|agriculture|qishloq|green|eco|environment|innovation|data/.test(body))score+=3;
+ if(official)score+=1;
+ if(/yoshlar|youth/.test(body)&&["idea","validate"].includes(stage))score+=1;
+ if(source.kind==="community"&&goal==="legal")score-=1;
+ return Math.max(0,score);
+}
+function renderRecommendations(){
+ const goal=$("goalFilter").value,sector=$("sectorFilter").value,kind=$("sourceFilter").value,q=normalize($("sourceSearch").value.trim()),stage=state.stage;
+ let rows=state.sources.map(s=>({...s,score:scoresFor(stage,goal,sector,s)})).filter(s=>{
+  const searchable=normalize([s.title,s.provider,s.category,s.description,s.url].join(" "));
+  if(q&&!searchable.includes(q))return false;
+  if(kind!=="all"&&s.kind!==kind)return false;
+  if(goal==="accelerator"&&!/accelerator|accelerat|incubat|startap|startup|combinator|innoyouth|it park/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(goal==="funding"&&!/grant|invest|venture|fund|moliyalasht|finance/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(goal==="mentor"&&!/mentor|incubat|acceler|advice|maslahat|team|jamoa/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(goal==="team"&&!/jamoa|team|volontyor|volunteer|hamkor|community/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(goal==="market"&&!/market|customer|sales|savdo|business|startup|startap|venture/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(goal==="legal"&&!/lex\\.uz|adliya|law|legal|huquq|gov\\.uz|my\\.gov|data\\.egov/.test(normalize([s.title,s.provider,s.description,s.category,s.url].join(" "))))return false;
+  if(sector==="technology"&&!/tech|it|ai|digital|startup|startap|combinator|innovation|venture|data/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(sector==="education"&&!/education|talim|ta'lim|student|grant|youth|yoshlar|innoyouth/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(sector==="social"&&!/social|community|volontyor|volunteer|youth|yoshlar|grant/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(sector==="business"&&!/business|marketing|sales|venture|invest|startup|startap/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  if(sector==="agro"&&!/agro|agriculture|qishloq|green|eco|environment|innovation|data/.test(normalize([s.title,s.provider,s.description,s.category].join(" "))))return false;
+  return true;
+ }).sort((a,b)=>b.score-a.score||String(b.verified_on||"").localeCompare(String(a.verified_on||""))||a.title.localeCompare(b.title,"uz")).slice(0,12);
+ $("resultCount").textContent=rows.length+" ta mos manba";
+ if(!rows.length){$("recommendations").innerHTML='<div class="empty">Bu filtrda mos manba topilmadi. Filtrni o‘zgartiring yoki qidiruvni qisqartiring.</div>';return}
+ $("recommendations").innerHTML=rows.map(s=>{
+  const label=s.kind==="official"?"Rasmiy manba":(s.kind==="program"?"Dastur / akselerator":"Katalog");
+  const match=Math.min(99,Math.round(35+s.score*7));
+  const verified=s.verified_on?"Ko‘rib chiqilgan: "+esc(s.verified_on):"Shartlarni manbada tasdiqlang";
+  return '<article class="result-card"><div class="result-top"><span class="tag">'+label+'</span><span class="match">'+match+'% moslik</span></div><h4>'+esc(s.title)+'</h4><p>'+esc(s.description||"Batafsil ma’lumot va talablar tashqi manbada.")+'</p><div class="provider">'+esc(s.provider||"Tashqi manba")+'</div><div class="result-actions"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">Manbani ochish ↗</a><span class="verified">'+verified+'</span></div></article>';
+ }).join("");
+}
+function renderStage(){
+ const s=stages[state.stage];
+ document.querySelectorAll("[data-stage]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.stage===state.stage)));
+ $("stageTag").textContent="BOSQICH "+s.n+" · "+s.name.toLocaleUpperCase("uz");
+ $("stageTitle").textContent=s.title;$("stageDescription").textContent=s.desc;
+ $("checklistTitle").textContent=s.name+" bosqichi uchun";
+ $("stageActions").innerHTML=s.actions.map(a=>'<div class="action-card"><b>'+a[0]+'</b><span>'+a[1]+'</span></div>').join("");
+ $("readinessAdvice").textContent="Avval eng muhim bitta vazifani tanlang.";
+ renderRecommendations();
+}
+function updateReadiness(){
+ const boxes=[...document.querySelectorAll("[data-check]")],n=boxes.filter(b=>b.checked).length,pct=Math.round(n/boxes.length*100);
+ $("readinessScore").textContent=pct+"%";$("readinessFill").style.width=pct+"%";$("readinessProgress").setAttribute("aria-valuenow",String(pct));
+ $("readinessAdvice").textContent=pct===100?"Keyingi qadamni tanlang va dalillarni tayyorlang.":pct>=60?"Asosiy tayyorgarlik bor — qolgan kamchilikni yoping.":pct>=20?"Yaxshi boshlanish — dalil va sinovni kuchaytiring.":"Hozircha ballga emas, bitta aniq muammoga e’tibor bering.";
+}
+document.querySelectorAll("[data-stage]").forEach(b=>b.addEventListener("click",()=>{state.stage=b.dataset.stage;renderStage()}));
+["goalFilter","sectorFilter","sourceFilter"].forEach(id=>$(id).addEventListener("change",renderRecommendations));
+$("sourceSearch").addEventListener("input",renderRecommendations);
+$("resetFilters").addEventListener("click",()=>{$("goalFilter").value="all";$("sectorFilter").value="all";$("sourceFilter").value="all";$("sourceSearch").value="";renderRecommendations()});
+document.querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",updateReadiness));
+renderStage();updateReadiness();loadSources();
+})();
+</script>
+</body>
+</html>
