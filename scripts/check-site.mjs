@@ -206,7 +206,7 @@ assert.match(deployWorkflow, /VERCEL_PROJECT_ID:\s*\$\{\{ vars\.VERCEL_PROJECT_I
 assert.match(deployWorkflow, /vercel build --prod/);
 assert.match(deployWorkflow, /vercel deploy --prebuilt --prod/);
 assert.match(deployWorkflow, /smoke-test/i);
-assert.match(deployWorkflow, /Vercel deployment skipped/i);
+assert.match(deployWorkflow, /Vercel deployment blocked/i);
 const launchChecklist = read("DEPLOYMENT_CHECKLIST.md");
 assert.match(launchChecklist, /yoshlar-ishi-site/);
 assert.match(launchChecklist, /403/);
