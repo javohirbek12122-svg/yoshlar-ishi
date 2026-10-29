@@ -23,6 +23,12 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Accessible font-size and high-contrast controls, installable web app manifests, and a privacy notice
 - Mobile-friendly formal public-service layout with an explicit independent-platform disclaimer
 
+## Design direction
+
+The public experience now uses a founder-first product structure: one clear hero and primary action, feature-level proof points, short benefit cards, a five-step journey, a moderated project showcase, community matching, and resource discovery. Its information architecture takes inspiration from the public presentation pattern used by [UzCombinator](https://uzcombinator.uz/)—especially how it explains outcomes, programme value, process, portfolio and people—but the Yoshlar-Ishi wording, UI, branding and user flows are independently authored. No partnership or endorsement is implied.
+
+A current [UzCombinator application link](https://uzcombinator.uz/apply) is listed as an external startup resource when active in the opportunities registry. Selection, eligibility, deadline and programme terms are determined only by UzCombinator's official site.
+
 ## New user-facing modules
 See [`INTEGRATIONS_SETUP.md`](./INTEGRATIONS_SETUP.md) for safe setup of Groq AI, Telegram bot secrets, the personal cabinet and user-generated community pages. The AI Edge Function validates inputs and applies a per-IP-hash quota; it returns a local-rule fallback when the provider key is not set. Anonymous initiative, team-board and interest-form writes go through the `community-submit` Edge Function. It generates initiative tracking codes server-side, validates consent and fields, keeps new team posts pending for admin moderation, validates public HTTPS contact links, and applies limits (4 public initiatives/hour, 2 team posts/day, 5 interests/10 minutes per hashed network identity) using a server-secret-salted SHA-256 hash rather than storing raw IP addresses. Authenticated personal-cabinet inserts remain owner-scoped. Telegram bot tokens and the Groq API key belong only in Supabase Edge Function Secrets, never in browser configuration.
 
