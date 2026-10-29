@@ -58,7 +58,7 @@ function httpsUrl(value: string): string {
 }
 
 function clientAddress(req: Request): string {
-  const direct = req.headers.get("x-real-ip") || req.headers.get("cf-connecting-ip");
+  const direct = req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip");
   if (direct && direct.trim()) return direct.trim().slice(0, 120);
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) {
@@ -68,8 +68,8 @@ function clientAddress(req: Request): string {
   return "unknown";
 }
 
-async function rateHash(action: string, address: string, url: string): Promise<string> {
-  const salt = Deno.env.get("COMMUNITY_RATE_LIMIT_SALT") || url;
+async function rateHash(action: string, address: string, serverSecret: string): Promise<string> {
+  const salt = Deno.env.get("COMMUNITY_RATE_LIMIT_SALT") || serverSecret;
   const digest = await crypto.subtle.digest(
     "SHA-256",
     new TextEncoder().encode(salt + "|" + action + "|" + address),
@@ -226,7 +226,7 @@ Deno.serve(async (req: Request) => {
     responseMessage = "Qiziqishingiz yuborildi. Kontakt ma’lumotingiz ommaviy doskada ko‘rinmaydi.";
   }
 
-  const digest = await rateHash(action, clientAddress(req), url);
+  const digest = await rateHash(action, clientAddress(req), key);
   const quota = await db.rpc("consume_community_submission_quota", {
     p_action: action,
     p_rate_hash: digest,
