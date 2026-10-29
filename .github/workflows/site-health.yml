@@ -32,7 +32,7 @@ jobs:
         if: ${{ vars.SITE_URL == '' }}
         run: |
           echo "::notice::SITE_URL is unset; checking the known production alias https://yoshlar-ishi-site.vercel.app. Set SITE_URL only if the canonical domain changes."
-      - name: Check website and admin page
+      - name: Check website, current feature set and admin page
         run: |
           set -euo pipefail
           case "$SITE_URL" in
@@ -42,13 +42,25 @@ jobs:
           BASE_URL="${SITE_URL%/}"
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
+          # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
+          grep -Fqi 'action:"initiative_submit"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: server-side initiative submission marker is missing."; exit 1; }
+          grep -Fqi '/functions/v1/community-submit' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: secure community endpoint is missing."; exit 1; }
+          grep -Fqi 'id="teamBoardSearch"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: team matching filters are missing."; exit 1; }
+          grep -Fqi 'id="teamBoardCategory"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: team category filter is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin.html" -o /tmp/yoshlar-admin.html
           grep -qi "Boshqaruv markazi" /tmp/yoshlar-admin.html
+          grep -Fqi 'id="page-team"' /tmp/yoshlar-admin.html
+          grep -Fqi 'id="page-showcase"' /tmp/yoshlar-admin.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html
           grep -qi "Idorani toifasiga qarab toping" /tmp/yoshlar-services.html
           grep -qi "media-card" /tmp/yoshlar-services.html
+          grep -Fqi 'https://gov.uz/oz/all_ministry/15' /tmp/yoshlar-services.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/kabinet.html" -o /tmp/yoshlar-cabinet.html
+          grep -qi "Shaxsiy kabinet" /tmp/yoshlar-cabinet.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/privacy.html" -o /tmp/yoshlar-privacy.html
+          grep -qi "Maxfiylik" /tmp/yoshlar-privacy.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json
           node -e "JSON.parse(require('fs').readFileSync('/tmp/yoshlar-manifest.json','utf8'))"
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
           grep -q "<svg" /tmp/yoshlar-icon.svg
-          echo "Health check passed for $BASE_URL"
+          echo "Health check passed for the current Yoshlar-Ishi feature set at $BASE_URL"
