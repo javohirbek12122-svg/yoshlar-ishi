@@ -59,6 +59,7 @@ The live-site health check defaults to `https://yoshlar-ishi-site.vercel.app`, s
 - [ ] Test magic-link admin login, initiative status update, internal notes, catalogue toggle and CSV export.
 - [ ] Verify only allowlisted admin email can access management actions.
 - [ ] Test `davlat-xizmatlari.html` filters, details, official category directory cards, images and source links.
+- [ ] Test startap-yoli.html: five stage buttons, stage-specific checklist, category filters, scoring order, Supabase-loaded sources and fallback links; verify scores are ranking hints, not probabilities.
 - [ ] Test AI analysis after configuring the Groq key and confirm that missing-key fallback is labelled as rule-based.
 - [ ] Test team post → admin approval → public board → private interest request.
 - [ ] Test showcase publish → login → one-vote-per-project behavior.
