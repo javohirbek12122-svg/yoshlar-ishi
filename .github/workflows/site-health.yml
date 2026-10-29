@@ -16,6 +16,7 @@ on:
       - "icon.svg"
       - "davlat-xizmatlari.html"
       - "kabinet.html"
+      - "startap-yoli.html"
       - "config.js"
 
 permissions:
@@ -65,6 +66,10 @@ jobs:
           grep -Fqi "URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan" /tmp/yoshlar-services.html || { echo "::error::The live service guide does not include the current verification caveat."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/kabinet.html" -o /tmp/yoshlar-cabinet.html
           grep -qi "Shaxsiy kabinet" /tmp/yoshlar-cabinet.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/startap-yoli.html" -o /tmp/yoshlar-startup.html
+          grep -qi "Startap yo‘li" /tmp/yoshlar-startup.html
+          grep -Fqi "https://uzcombinator.uz/apply" /tmp/yoshlar-startup.html
+          grep -Fqi "function scoresFor(stage,goal,sector,source)" /tmp/yoshlar-startup.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/privacy.html" -o /tmp/yoshlar-privacy.html
           grep -qi "Maxfiylik" /tmp/yoshlar-privacy.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json
