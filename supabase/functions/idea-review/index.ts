@@ -55,8 +55,8 @@ Deno.serve(async (req: Request) => {
   if (containsSensitivePattern([title,problem,expected,resources].join("\n"))) {
     return json(400, { error: "Matnda telefon, email yoki maxfiy identifikator ko‘rinadi. Shaxsiy ma’lumotni olib tashlab, qayta yuboring." });
   }
-  const proxy = (req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown").split(",")[0].trim();
-  const salt = Deno.env.get("AI_RATE_LIMIT_SALT") || url;
+  const proxy = (req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || req.headers.get("x-forwarded-for") || "unknown").split(",")[0].trim();
+  const salt = Deno.env.get("AI_RATE_LIMIT_SALT") || key;
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(salt + "|" + proxy));
   const rateHash = Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2,"0")).join("").toUpperCase();
   const supabase = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
