@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#123255">
+<meta name="theme-color" content="#111411">
 <meta name="description" content="Yoshlar-Ishi: O‘zbekistonning rasmiy davlat portallari va elektron xizmatlari haqida tushunarli qo‘llanma.">
 <title>Davlat xizmatlari qo‘llanmasi — Yoshlar-Ishi</title>
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -45,6 +45,75 @@
 @media(max-width:980px){.directory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.directory-intro{grid-template-columns:1fr}.directory-flow{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:640px){.directory-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.directory-card{padding:12px 11px}.directory-services{grid-template-columns:1fr}.directory-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.directory-intro{gap:12px}}
 @media(max-width:380px){.directory-grid{grid-template-columns:1fr}.directory-flow{grid-template-columns:1fr}}
+
+
+/* Yoshlar-Ishi shared startup palette */
+:root{--ink:#111411;--muted:#656960;--paper:#f7f6f2;--line:#dedfd5;--blue:#111411;--navy:#111411;--sky:#eaf2d8;--card:#fffefa;--green:#607d15;--amber:#805a08;--shadow:0 18px 55px #1820110c}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink)}
+.topbar{background:#111411;color:#e9ecdf}
+.independent{background:#1e2419;border-color:#41463a;color:#d7ff66;border-radius:4px}
+.nav{border-color:var(--line)}
+.brand{color:#111411}
+.logo{background:#d7ff66;color:#111411;border-radius:8px}
+.links a{color:#35392f}
+.links a:hover{color:#607d15}
+.button{background:#111411;border-color:#111411;color:#fff;border-radius:6px;transition:transform .16s,background .16s}
+.button:hover{background:#353b2c;border-color:#353b2c;transform:translateY(-1px)}
+.button.ghost{background:#fffefa;color:#111411;border-color:#d0d3c6}
+.hero{background:#111411;border-color:#111411;color:#fff;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;left:-140px;bottom:-270px;width:440px;height:440px;border:1px solid #ffffff12;border-radius:50%;box-shadow:0 0 0 42px #ffffff04,0 0 0 84px #ffffff03;pointer-events:none}
+.hero .wrap,.hero-grid{position:relative;z-index:1}
+.hero .eyebrow{color:#d7ff66}
+.hero h1{color:#f7f8f1;letter-spacing:-.06em}
+.hero p{color:#c5c9bb}
+.hero .button{background:#d7ff66;border-color:#d7ff66;color:#111411}
+.hero .button.ghost{background:transparent;border-color:#52584a;color:#f4f7ea}
+.visual-tile{border-color:#d7ddc8;border-radius:9px;box-shadow:0 12px 38px #0002}
+.visual-tile .tilelabel{color:#1b2016}
+.visual-tile .tilelabel span{color:#68715a}
+.crumb{color:#74796d}
+.eyebrow{color:#5f7c12}
+.quickstats{background:#f7f6f2;border-color:#dedfd5}
+.quickstats strong,.stat-value{color:#151812}
+.service-card,.media-card,.directory-card,.directory-service,.dialog{border-color:#dedfd5;border-radius:10px}
+.service-card{box-shadow:0 5px 22px #171b1208;transition:transform .18s,border-color .18s,box-shadow .18s}
+.service-card:hover,.directory-card:hover,.media-card:hover{transform:translateY(-2px);border-color:#c2dc76;box-shadow:0 12px 30px #141b0c0d}
+.service-image{background:linear-gradient(135deg,#e8f2d2,#f7f8f0)}
+.service-image .image-chip{background:#d7ff66;color:#1b2211}
+.service-body h3{letter-spacing:-.04em}
+.tag,.category-chip,.chip{border-radius:4px}
+.status-mini{color:#667154}
+.detail-btn{background:#111411;color:#fff;border-color:#111411;border-radius:5px}
+.detail-btn:hover{background:#38422a}
+.official-link,.card-links a{color:#536f12}
+.directory-section{background:#eeefe7;border-color:#dedfd5}
+.directory-proof,.directory-disclaimer{background:#f4f7e8;border-color:#d5e2b5;color:#4a5438}
+.directory-proof strong{color:#1b2113}
+.directory-symbol{background:#d7ff66;color:#202913;border-radius:7px}
+.directory-card h3,.directory-service h3{letter-spacing:-.035em}
+.directory-meta i{background:#6a8b16}
+.directory-card a,.directory-service a{color:#576f16}
+.directory-flow-step{border-radius:7px;border-color:#d7dccb}
+.directory-flow-step:before{color:#607d15}
+.media-card img{background:#e8efdc}
+.fallback-art{color:#627c19}
+.notice{background:#f0f5e2;border-left-color:#8eae2f;color:#4b5537}
+.empty{background:#fbfcf7;border-color:#d5dcc7}
+.dialog-backdrop{background:#0a0e08b8;backdrop-filter:blur(7px)}
+.dialog{box-shadow:0 30px 100px #0004}
+.dialog-head{background:#111411;color:#fff;border-color:#30362a}
+.close{background:#252b20;color:#d7ff66;border-color:#515b41}
+.subhead{color:#607d15}
+.footer{background:#111411;color:#e4e8d9}
+.footer .brand{color:#fff}
+.footer .logo{background:#d7ff66;color:#111411}
+.footer p{color:#c4c9b9}
+.footer a{color:#d7ff66}
+.footer .legal{border-color:#363b2f;color:#adb3a4}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #93bf1e;outline-offset:3px}
+@media(max-width:760px){.hero{background:#111411}.hero h1{letter-spacing:-.055em}.hero-grid{gap:24px}.visual-collage{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important}}
 
 </style>
 </head>
