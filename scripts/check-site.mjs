@@ -43,7 +43,9 @@ const required = [
   "supabase/migrations/20261028181147_index_foreign_key_columns.sql",
   "supabase/migrations/20261029030212_deduplicate_official_portal_destinations.sql",
   "supabase/migrations/20261029030418_document_server_only_table_policies.sql",
+  "supabase/migrations/20261029030615_server_side_community_submission_limits.sql",
   "supabase/functions/idea-review/index.ts",
+  "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
 ];
@@ -94,6 +96,17 @@ for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbud
   assert.ok(publicHtml.includes(host), `Official portal missing from public directory: ${host}`);
 }
 console.log("✓ public forms, official portal directory, guided service finder, category-scored recommendations, readiness scoring, and privacy notice are present");
+
+assert.match(publicHtml, /\/functions\/v1\/community-submit/);
+assert.match(publicHtml, /function submitCommunity\(payload\)/);
+assert.match(publicHtml, /id="teamConsent"/);
+assert.match(publicHtml, /id="teamWebsite"/);
+assert.match(publicHtml, /id="interestConsent"/);
+assert.match(publicHtml, /id="interestWebsite"/);
+assert.doesNotMatch(publicHtml, /api\("team_posts"/);
+assert.doesNotMatch(publicHtml, /api\("team_interest_requests"/);
+console.log("✓ public community forms use the consent-checked server-side submission endpoint, not direct table inserts");
+
 
 const admin = read("admin.html");
 for (const feature of [
@@ -245,6 +258,37 @@ for (const feature of [
   assert.ok(admin.includes(feature), `Admin community moderation feature missing: ${feature}`);
 }
 console.log("✓ team-board and showcase moderation controls are present");
+
+
+const communitySubmit = read("supabase/functions/community-submit/index.ts");
+for (const feature of [
+  'action !== "team_post" && action !== "team_interest"',
+  "consume_community_submission_quota",
+  "COMMUNITY_RATE_LIMIT_SALT",
+  "crypto.subtle.digest",
+  "status: \"pending\"",
+  "status: \"new\"",
+  "contact_shared: shareContact",
+]) {
+  assert.ok(communitySubmit.includes(feature), `Community submission safeguard missing: ${feature}`);
+}
+assert.match(communitySubmit, /windowSeconds = 86400/);
+assert.match(communitySubmit, /windowSeconds = 600/);
+assert.match(communitySubmit, /httpsUrl\(enteredContact\)/);
+assert.match(communitySubmit, /status.*published/);
+console.log("✓ community Edge Function validates consent, enforces status, checks public links and applies hashed-IP quotas");
+
+const communityMigration = read("supabase/migrations/20261029030615_server_side_community_submission_limits.sql");
+for (const feature of [
+  "community_submission_rate_limits",
+  "consume_community_submission_quota",
+  "revoke insert on table public.team_posts from public, anon, authenticated",
+  "revoke insert on table public.team_interest_requests from public, anon, authenticated",
+  "grant execute on function public.consume_community_submission_quota(text,text,integer,integer) to service_role",
+]) {
+  assert.ok(communityMigration.toLowerCase().includes(feature.toLowerCase()), `Community submission migration requirement missing: ${feature}`);
+}
+console.log("✓ community write permissions are restricted and quota migration is reproducible");
 
 const ideaReview = read("supabase/functions/idea-review/index.ts");
 for (const feature of ["GROQ_API_KEY", "containsSensitivePattern", "consume_idea_review_quota", "AI_PROVIDER_NOT_CONFIGURED"]) {
