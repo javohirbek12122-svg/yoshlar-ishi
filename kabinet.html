@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#123255"><meta name="robots" content="noindex,follow"><meta name="description" content="Yoshlar-Ishi shaxsiy kabineti: o‘z tashabbuslaringizni yuboring va holatini kuzating.">
+<meta name="theme-color" content="#111411"><meta name="robots" content="noindex,follow"><meta name="description" content="Yoshlar-Ishi shaxsiy kabineti: o‘z tashabbuslaringizni yuboring va holatini kuzating.">
 <title>Shaxsiy kabinet — Yoshlar-Ishi</title>
 <link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,6 +10,45 @@
 <style>
 :root{--ink:#172b40;--muted:#5c6f82;--paper:#f3f7fb;--line:#dce5ef;--blue:#15558a;--navy:#10365d;--sky:#eaf4fc;--green:#167253}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.65 "DM Sans",sans-serif}a{color:var(--blue);text-decoration:none}.wrap{width:min(1060px,calc(100% - 32px));margin:auto}.top{background:#0d2c4c;color:#e8f2fc;font-size:10px;padding:8px 0}.nav{display:flex;justify-content:space-between;align-items:center;gap:15px;min-height:75px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:9px;color:var(--ink);font:800 18px Manrope}.logo{width:36px;height:36px;border-radius:7px;background:var(--blue);display:grid;place-items:center;color:white}.crumb{font-size:10px;color:var(--muted);padding:12px 0}.hero{padding:26px 0 19px}.eyebrow{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;color:#196aa3}.hero h1{font:800 clamp(29px,4vw,43px)/1.14 Manrope;letter-spacing:-1.4px;margin:9px 0}.hero p{font-size:12px;max-width:690px;color:var(--muted)}.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:15px;align-items:start;margin:16px 0 45px}.panel{border:1px solid var(--line);background:#fff;border-radius:11px;padding:18px;box-shadow:0 8px 24px #14395706}.panel h2{font:800 18px Manrope;margin:0 0 10px}.panel p{font-size:11px;color:var(--muted)}.field{display:grid;gap:5px;margin:12px 0}.field label{font-size:10px;font-weight:800;color:#415b73}.control,textarea,select{width:100%;border:1px solid #d1dce8;border-radius:7px;background:#fff;padding:10px 11px;font:12px "DM Sans",sans-serif;color:var(--ink)}textarea{min-height:82px;resize:vertical}.control:focus,textarea:focus{outline:0;border-color:#3982b7;box-shadow:0 0 0 3px #3982b71c}.button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border:1px solid var(--blue);border-radius:7px;background:var(--blue);color:white;font-size:11px;font-weight:800;cursor:pointer}.button.alt{color:var(--blue);background:white;border-color:var(--line)}.button:disabled{opacity:.55;cursor:not-allowed}.notice{border-radius:7px;background:#eef6fb;border-left:3px solid #3982b7;padding:11px 12px;font-size:10px;color:#45647d;margin-top:12px}.notice.error{background:#fff1ef;border-color:#b63d30;color:#963a30}.state{display:inline-block;border-radius:5px;background:#edf5fb;color:#244e6d;font-size:9px;font-weight:800;padding:4px 7px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:13px 0}.stat{border:1px solid var(--line);border-radius:8px;padding:10px;background:#f9fbfd}.stat strong{font:800 20px Manrope;display:block}.stat span{font-size:9px;color:var(--muted)}.initiative-list{display:grid;gap:10px}.initiative-card{border:1px solid var(--line);border-radius:9px;padding:13px;background:#fff}.initiative-card h3{font:800 14px Manrope;margin:8px 0 4px}.initiative-card p{font-size:11px;color:var(--muted);margin:5px 0}.initiative-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;border-top:1px solid #eef2f6;padding-top:10px;margin-top:10px}.sub{font-size:9px;color:#74869a}.empty{border:1px dashed #c8d8e7;border-radius:9px;padding:25px;text-align:center;color:var(--muted);font-size:11px}.footer{color:var(--muted);font-size:10px;padding:15px 0 28px;border-top:1px solid var(--line)}.hidden{display:none!important}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;gap:8px;align-items:flex-start;font-size:10px;color:var(--muted)}.check input{margin-top:3px}@media(max-width:800px){.layout{grid-template-columns:1fr}.nav{min-height:62px}.statrow{grid-template-columns:repeat(3,1fr)}}@media(max-width:520px){.wrap{width:calc(100% - 22px)}.hero h1{font-size:30px}.twocol{grid-template-columns:1fr}.panel{padding:14px}}
+
+/* Yoshlar-Ishi shared startup palette */
+:root{--ink:#111411;--muted:#656960;--paper:#f7f6f2;--line:#dedfd5;--blue:#111411;--navy:#111411;--sky:#edf4da;--green:#5f7d15}
+body{background:var(--paper);color:var(--ink)}
+.top{background:#111411;color:#e4e8dc}
+.nav{border-color:var(--line)}
+.brand{color:#111411}
+.logo{background:#d7ff66;color:#111411;border-radius:8px}
+.crumb{color:#73796c}
+.hero{background:#111411;border:1px solid #111411;color:#fff;border-radius:12px;padding:30px;margin:20px auto 17px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-110px;top:-180px;width:340px;height:340px;border:1px solid #ffffff12;border-radius:50%;box-shadow:0 0 0 38px #ffffff04,0 0 0 76px #ffffff03;pointer-events:none}
+.hero .eyebrow{color:#d7ff66;position:relative;z-index:1}
+.hero h1{color:#f7f8f0;letter-spacing:-.06em;position:relative;z-index:1}
+.hero p{color:#c5c9bb;position:relative;z-index:1}
+.layout{gap:14px}
+.panel{border-color:#dedfd5;border-radius:10px;box-shadow:0 5px 25px #171b1207;background:#fffefa}
+.panel h2{letter-spacing:-.04em}
+.field label{color:#40463a}
+.control,textarea,select{background:#fbfcf6;border-color:#d8dbcf;border-radius:6px;color:#111411}
+.control:focus,textarea:focus{border-color:#94b72d;box-shadow:0 0 0 3px #b1d94b24}
+.button{background:#111411;color:#fff;border-color:#111411;border-radius:6px}
+.button:hover{background:#353b2c}
+.button.alt{background:#fffefa;color:#111411;border-color:#d4d8c9}
+.button.primary{background:#d7ff66;color:#111411;border-color:#d7ff66}
+.button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #93bf1e;outline-offset:3px}
+.notice{background:#f0f5e2;border-left-color:#8eae2f;color:#4b5537;border-radius:5px}
+.notice.error{background:#fff1ef;border-left-color:#b63d30;color:#963a30}
+.state{background:#eff4df;color:#536c16;border-radius:4px}
+.statrow .stat{background:#f1f4e7;border-color:#e1e5d6;border-radius:7px}
+.stat strong{color:#141812;letter-spacing:-.05em}
+.stat span{color:#656d5d}
+.initiative-card{border-color:#dedfd5;border-radius:7px;background:#fbfcf7}
+.initiative-card h3{letter-spacing:-.035em}
+.empty{background:#fbfcf7;border-color:#d6ddc9;border-radius:7px}
+footer,.footer{color:#e4e8dc;background:#111411}
+.legal{border-color:#353a2e;color:#adb3a4}
+@media(max-width:700px){.hero{padding:22px 18px;border-radius:10px}.layout{grid-template-columns:1fr}.panel{padding:15px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
