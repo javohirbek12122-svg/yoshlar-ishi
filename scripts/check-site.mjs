@@ -463,7 +463,9 @@ console.log("✓ AI quota and Telegram subscription tables are explicitly scoped
 
 const startupDesignHome = read("index.html");
 for (const feature of [
-  "G‘oyang bor.",
+  "G‘oya bilan to‘xtama.",
+  'class="hero-expanded-copy"',
+  'class="hero-focus"',
   'id="afzalliklar"',
   'class="platform-proof"',
   'class="benefit-grid"',
@@ -476,12 +478,19 @@ for (const feature of [
   'id="ariza-holati"',
   'content="#101317"',
   "--uc-acid:#d7ff66",
+  "Full-bleed, borderless startup hero",
+  "width:100%;",
+  "border:0!important;",
+  "class=\"hero-storyline\"",
 ]) {
   assert.ok(startupDesignHome.includes(feature), `Startup-first homepage redesign missing: ${feature}`);
 }
 assert.match(startupDesignHome, /prefers-reduced-motion/);
 assert.match(startupDesignHome, /@media\(max-width:600px\)/);
-console.log("✓ founder-first homepage design, proof strip, benefits, accessibility and responsive breakpoints are present");
+assert.match(startupDesignHome, /hero\\.wrap:after\\{display:none/i, "Full-width hero must not draw a decorative grid frame");
+assert.match(startupDesignHome, /softGlow\(width\*/, "Animated background should use diffuse light rather than grid/orbit lines");
+assert.match(startupDesignHome, /hero\\.storyline\\{border:0!important/i, "Hero journey strip must remain borderless");
+console.log("✓ founder-first full-bleed hero, expanded messaging, diffuse animated background, proof strip, benefits and responsive breakpoints are present");
 
 const serviceDesign = read("davlat-xizmatlari.html");
 const accountDesign = read("kabinet.html");
