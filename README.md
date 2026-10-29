@@ -12,6 +12,10 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Server-side AI review and Telegram webhook/notification Edge Functions
 - Moderated team matching and admin-curated initiative showcase
 
+## Compact interactive experience
+
+The homepage keeps the complete workflow while collapsing long supporting information into accessible accordions. Its dark hero uses a custom particle network animation instead of an external background video. A live checklist estimates form completeness and identifies missing fields; a reading-progress line, return-to-top control, and subtle card reveals make navigation feel more responsive. The animation pauses when the hero is off-screen or the tab is hidden and respects reduced-motion preferences. AI review, team matching, voting, initiative tracking, the personal cabinet and the illustrated official-services guide remain available.
+
 ## Public MVP
 - Submit an initiative and receive a high-entropy tracking code
 - Check only the safe status summary through `rpc/track_initiative`
