@@ -42,6 +42,7 @@ const required = [
   "supabase/migrations/20261028175222_complete_youth_ledger_service_entry.sql",
   "supabase/migrations/20261028181147_index_foreign_key_columns.sql",
   "supabase/migrations/20261029030212_deduplicate_official_portal_destinations.sql",
+  "supabase/migrations/20261029030418_document_server_only_table_policies.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -348,5 +349,13 @@ assert.match(dedupMigration, /set active = false/i);
 assert.match(dedupMigration, /where slug = 'advice-legal'/i);
 assert.match(dedupMigration, /https:\/\/advice\.adliya\.uz\//i);
 console.log("✓ duplicate portal listings are normalized to distinct useful destinations");
+
+
+const backendOnlyMigration = read("supabase/migrations/20261029030418_document_server_only_table_policies.sql");
+assert.match(backendOnlyMigration, /on public\.ai_review_rate_limits/i);
+assert.match(backendOnlyMigration, /to service_role/i);
+assert.match(backendOnlyMigration, /on public\.telegram_subscriptions/i);
+assert.match(backendOnlyMigration, /with check \(true\)/i);
+console.log("✓ AI quota and Telegram subscription tables are explicitly scoped to the server role");
 
 console.log("\nYoshlar-Ishi checks passed.");
