@@ -194,7 +194,6 @@ console.log("✓ live-site health check defaults to the known production alias, 
 
 
 console.log("✓ daily official portal availability monitor is present");
-const liveHealthWorkflow = read(".github/workflows/site-health.yml");
 assert.match(liveHealthWorkflow, /class="media-fallback"/);
 assert.match(liveHealthWorkflow, /URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan/);
 
@@ -503,5 +502,33 @@ assert.match(adminDesign, /id="page-team"/);
 assert.match(adminDesign, /id="page-showcase"/);
 console.log("✓ service directory, personal cabinet and admin panel share the visual system without removing core flows");
 
+
+
+const compactHome = read("index.html");
+for (const feature of [
+  'id="ambientCanvas"',
+  'id="readingProgress"',
+  'id="draftReadiness"',
+  'id="draftReadinessScore"',
+  'id="draftReadinessFill"',
+  'id="backToTop"',
+  'function updateDraftReadiness()',
+  'function initAmbientBackground()',
+  'foldAfterHeader("jarayon"',
+  'foldAfterHeader("imkoniyatlar-yakun"',
+  'className="compact-fold compact-ai"',
+  'className="compact-fold compact-composer"',
+  'className="compact-fold compact-partner-fold"',
+  'prefers-reduced-motion:reduce',
+]) {
+  assert.ok(compactHome.includes(feature), `Compact homepage feature missing: ${feature}`);
+}
+assert.match(compactHome, /requestAnimationFrame/);
+assert.match(compactHome, /scrollIntoView\(/);
+assert.match(compactHome, /IntersectionObserver/);
+assert.match(compactHome, /new ResizeObserver/);
+assert.match(compactHome, /Tashabbus formasi tayyorgarligi/);
+assert.match(compactHome, /grant yoki davlat tanlovi bahosi emas/);
+console.log("✓ compact homepage, live form completeness score, motion-safe background, accordions and scroll interactions are checked");
 
 console.log("\nYoshlar-Ishi checks passed.");
