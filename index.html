@@ -100,6 +100,11 @@
   </form>
  </div>
  <div class="head" style="margin-top:25px"><div><div class="eyebrow">Ochiq doska</div><h3 style="font:800 21px Manrope;margin:5px 0">Jamoa va sherik izlash e’lonlari</h3></div><button id="teamRefresh" class="btn alt" type="button">↻ Yangilash</button></div>
+ <div class="two" style="margin:12px 0 8px">
+  <div class="field"><label for="teamBoardSearch">Kalit so‘z yoki ko‘nikma</label><input id="teamBoardSearch" type="search" maxlength="120" placeholder="React, Figma, marketing, volontyor..."></div>
+  <div class="field"><label for="teamBoardCategory">Yo‘nalish</label><select id="teamBoardCategory"><option value="all">Barcha yo‘nalishlar</option><option value="technology">Texnologiya</option><option value="design">Dizayn</option><option value="marketing">Marketing</option><option value="content">Kontent</option><option value="business">Biznes</option><option value="research">Tadqiqot</option><option value="volunteer">Ko‘ngillilik</option><option value="other">Boshqa</option></select></div>
+ </div>
+ <p id="teamBoardCount" class="smallmuted" aria-live="polite">Ochiq e’lonlar yuklanmoqda…</p>
  <div id="teamBoard" class="team-board"><div class="community-empty">Ochiq e’lonlar yuklanmoqda…</div></div>
 </div></section>
 <section class="section" id="top-tashabbuslar"><div class="wrap">
@@ -268,9 +273,34 @@ $("aiIdeaForm").addEventListener("submit",async ev=>{
 let currentTeamPost=null;
 function splitTags(value){return String(value||"").split(/[;,]/).map(s=>s.trim()).filter(Boolean).slice(0,10)}
 function httpsOnly(value){try{const u=new URL(value);return u.protocol==="https:"?u.href:""}catch{return""}}
+let teamBoardRows=[];
 function renderTeamBoard(rows){
  const cat={technology:"Texnologiya",design:"Dizayn",marketing:"Marketing",content:"Kontent",business:"Biznes",research:"Tadqiqot",volunteer:"Ko‘ngillilik",other:"Boshqa"};
- $("teamBoard").innerHTML=rows.length?rows.map(x=>'<article class="team-card"><div class="team-meta"><span class="tag">'+escapeHtml(cat[x.category]||"Jamoa")+'</span><span>'+escapeHtml(x.district||"Hudud ko‘rsatilmagan")+'</span></div><h3>'+escapeHtml(x.title)+'</h3><p>'+escapeHtml(x.description)+'</p><div class="role-tags">'+[...(Array.isArray(x.roles)?x.roles:[]),...(Array.isArray(x.skills)?x.skills:[])].slice(0,8).map(t=>'<span>'+escapeHtml(t)+'</span>').join("")+'</div><div class="bottom"><span>'+escapeHtml(x.commitment||"Kelishiladi")+'</span>'+(x.contact_shared&&httpsOnly(x.public_contact_url)?'<a class="official-link" href="'+escapeHtml(httpsOnly(x.public_contact_url))+'" target="_blank" rel="noopener noreferrer">Ochiq kontakt ↗</a>':'<button type="button" class="detail-btn" data-interest="'+escapeHtml(x.id)+'" data-title="'+escapeHtml(x.title)+'">Qiziqaman ↗</button>')+'</div></article>').join(""):'<div class="community-empty">Hozircha tasdiqlangan e’lon yo‘q. E’lon yuborishingiz mumkin; moderatsiyadan keyin doskada ko‘rinadi.</div>';
+ if(Array.isArray(rows))teamBoardRows=rows;
+ const term=$("teamBoardSearch").value.trim().toLowerCase();
+ const category=$("teamBoardCategory").value;
+ const words=term.split(/\s+/).filter(Boolean);
+ const score=(x)=>{
+  const title=String(x.title||"").toLowerCase();
+  const desc=String(x.description||"").toLowerCase();
+  const roles=(Array.isArray(x.roles)?x.roles:[]).join(" ").toLowerCase();
+  const skills=(Array.isArray(x.skills)?x.skills:[]).join(" ").toLowerCase();
+  const district=String(x.district||"").toLowerCase();
+  const hay=[title,desc,roles,skills,district,cat[x.category]||x.category||"",x.commitment||""].join(" ").toLowerCase();
+  if(words.some(word=>!hay.includes(word)))return -1;
+  return words.reduce((total,word)=>total+(title.includes(word)?6:0)+(roles.includes(word)?5:0)+(skills.includes(word)?4:0)+(desc.includes(word)?2:0)+(district.includes(word)?1:0),0);
+ };
+ const rowsToShow=teamBoardRows.filter(x=>category==="all"||x.category===category)
+  .map(x=>({...x,_matchScore:score(x)})).filter(x=>x._matchScore>=0)
+  .sort((a,b)=>(term?b._matchScore-a._matchScore:0)||new Date(b.created_at||0)-new Date(a.created_at||0));
+ $("teamBoardCount").textContent=rowsToShow.length+" ta mos e’lon · "+teamBoardRows.length+" ta ochiq e’lon";
+ if(!rowsToShow.length){
+  $("teamBoard").innerHTML=teamBoardRows.length
+   ?'<div class="community-empty">Bu qidiruv yoki yo‘nalish bo‘yicha e’lon topilmadi. Boshqa kalit so‘z sinab ko‘ring.</div>'
+   :'<div class="community-empty">Hozircha tasdiqlangan e’lon yo‘q. E’lon yuborishingiz mumkin; moderatsiyadan keyin doskada ko‘rinadi.</div>';
+  return;
+ }
+ $("teamBoard").innerHTML=rowsToShow.map(x=>'<article class="team-card"><div class="team-meta"><span class="tag">'+escapeHtml(cat[x.category]||"Jamoa")+'</span><span>'+escapeHtml(x.district||"Hudud ko‘rsatilmagan")+'</span></div><h3>'+escapeHtml(x.title)+'</h3><p>'+escapeHtml(x.description)+'</p><div class="role-tags">'+[...(Array.isArray(x.roles)?x.roles:[]),...(Array.isArray(x.skills)?x.skills:[])].slice(0,8).map(t=>'<span>'+escapeHtml(t)+'</span>').join("")+'</div><div class="bottom"><span>'+escapeHtml(x.commitment||"Kelishiladi")+'</span>'+(x.contact_shared&&httpsOnly(x.public_contact_url)?'<a class="official-link" href="'+escapeHtml(httpsOnly(x.public_contact_url))+'" target="_blank" rel="noopener noreferrer">Ochiq kontakt ↗</a>':'<button type="button" class="detail-btn" data-interest="'+escapeHtml(x.id)+'" data-title="'+escapeHtml(x.title)+'">Qiziqaman ↗</button>')+'</div></article>').join("");
 }
 async function loadTeamBoard(){
  try{const rows=await api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at&status=eq.published&order=created_at.desc&limit=60");renderTeamBoard(rows||[])}
@@ -288,6 +318,8 @@ $("teamPostForm").addEventListener("submit",async ev=>{
  finally{btn.disabled=false}
 });
 $("teamRefresh").addEventListener("click",loadTeamBoard);
+$("teamBoardSearch").addEventListener("input",()=>renderTeamBoard());
+$("teamBoardCategory").addEventListener("change",()=>renderTeamBoard());
 $("teamBoard").addEventListener("click",e=>{
  const btn=e.target.closest("[data-interest]");if(!btn)return;
  currentTeamPost=btn.dataset.interest;$("interestPostId").value=currentTeamPost;$("teamInterestTitle").textContent="Qiziqish: "+btn.dataset.title;$("interestNotice").textContent="";$("teamInterestModal").classList.add("open");$("interestName").focus();
