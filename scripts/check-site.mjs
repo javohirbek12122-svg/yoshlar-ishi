@@ -97,6 +97,24 @@ for (const host of ["my.gov.uz", "gov.uz", "lex.uz", "murojaat.gov.uz", "openbud
 }
 console.log("✓ public forms, official portal directory, guided service finder, category-scored recommendations, readiness scoring, and privacy notice are present");
 
+for (const feature of [
+  'id="teamBoardSearch"',
+  'id="teamBoardCategory"',
+  'id="teamBoardCount"',
+  "function renderTeamBoard(rows)",
+  "const rowsToShow=teamBoardRows.filter",
+]) {
+  assert.ok(publicHtml.includes(feature), `Team matching UX missing: ${feature}`);
+}
+assert.match(publicHtml, /teamBoardRows\.filter/);
+assert.match(publicHtml, /title\.includes\(word\)\?6:0/);
+const privacy = read("privacy.html");
+assert.match(privacy, /xom IP manzili saqlanmaydi/);
+assert.match(privacy, /24 soatda 2 ta/);
+assert.match(privacy, /10 daqiqada 5 ta/);
+console.log("✓ matching board has keyword relevance ranking, filters and visible rate-limit privacy disclosure");
+
+
 assert.match(publicHtml, /\/functions\/v1\/community-submit/);
 assert.match(publicHtml, /function submitCommunity\(payload\)/);
 assert.match(publicHtml, /id="teamConsent"/);
