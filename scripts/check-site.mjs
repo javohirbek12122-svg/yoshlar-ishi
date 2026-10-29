@@ -176,7 +176,7 @@ console.log("✓ daily official endpoint monitor plus dynamic registry and image
 
 const liveHealthWorkflow = read(".github/workflows/site-health.yml");
 assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site\.vercel\.app' \}\}/);
-assert.match(liveHealthWorkflow, /Check website and admin page/);
+assert.match(liveHealthWorkflow, /Check website, current feature set and admin page/);
 assert.match(liveHealthWorkflow, /paths:/);
 assert.ok(liveHealthWorkflow.includes('"davlat-xizmatlari.html"'));
 assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html'));
