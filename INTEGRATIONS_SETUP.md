@@ -77,14 +77,19 @@ Hamkorlik murojaatlarining emaili, telefoni, xabari va ichki admin izohi `admin_
 Deploydan keyin Supabase Auth URL Configuration’da haqiqiy production domenini va /kabinet.html hamda /admin.html redirect manzillarini qo‘shing:
 https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configuration
 
-## 5. Jamoa doskasi va Top tashabbuslar
+## 5. Jamoa doskasi, moderatsiya va yuborish himoyasi
 
-- team_posts: yangi e’lon pending bo‘ladi; admin published qilgach ommaga ko‘rinadi.
-- team_interest_requests: qiziqish bildirish formasidagi shaxsiy kontakt faqat admin paneliga ko‘rinadi.
-- initiative_showcase: faqat admin kiritgan yoki tasdiqlagan yozuvlar public bo‘ladi; foydalanuvchi bitta loyiha uchun bir marta ovoz beradi.
-- ai_review_rate_limits: AI tahlil endpointi uchun server tomonidagi limit.
+Ommaviy formalar `/functions/v1/community-submit` Edge Function orqali yoziladi; brauzer endi `team_posts` yoki `team_interest_requests` jadvaliga to‘g‘ridan-to‘g‘ri INSERT qilmaydi.
 
-Moderatsiya spamni hamda foydalanuvchi ruxsatisiz kontakt ommaga chiqish xavfini kamaytiradi.
+- `team_posts`: e’lonlar serverda `pending` statusi bilan saqlanadi; ommaviy doskada faqat admin tasdiqlagan `published` yozuvlar chiqadi.
+- `team_interest_requests`: faqat hali ochiq/published e’longa qiziqish qabul qilinadi; kontakt va xabar ommaviy katalogga qo‘shilmaydi.
+- Rozilik belgilanmasa Edge Function arizani qabul qilmaydi. Formada spamga qarshi ko‘rinmas honeypot maydonlari ham bor.
+- `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, SHA-256 xeshini saqlaydi. Har bir xesh uchun jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
+- `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi.
+- `initiative_showcase`: faqat admin tasdiqlagan yozuvlar public bo‘ladi; foydalanuvchi bitta loyiha uchun bir marta ovoz beradi.
+- `ai_review_rate_limits`: AI tahlil endpointi uchun server tomonidagi alohida limit.
+
+Moderatsiya spam, ruxsatsiz e’lonlar va foydalanuvchi roziligisiz kontakt ommaga chiqish xavfini kamaytiradi. Lekin bu barcha zararli xabarlarni to‘liq yo‘qotishga kafolat bermaydi — admin tasdiqlashi zarur.
 
 ## 6. Ishga tushirishdan oldingi nazorat
 
@@ -96,6 +101,7 @@ Moderatsiya spamni hamda foydalanuvchi ruxsatisiz kontakt ommaga chiqish xavfini
 - [ ] Jamoa e’loni yuborish → admin tasdiqlash → ommaviy doska → qiziqish formasi zanjirini sinang.
 - [ ] Showcase e’lon qilish → login bilan ovoz berish oqimini sinang.
 - [ ] Operatorning haqiqiy aloqa manzilini, ma’lumotlarni saqlash muddatini va o‘chirish tartibini maxfiylik sahifasida tasdiqlang.
+
 
 ## 7. Backend-only tables and security advisor notes
 
