@@ -85,15 +85,14 @@ A separate [live-site check](https://github.com/javohirbek12122-svg/yoshlar-ishi
 Project: `yoshlar-ishi`
 URL: https://nnodsqnqsqrmzcycrmpr.supabase.co
 
-Tables:
-- `profiles`
-- `initiatives`
-- `initiative_updates`
-- `opportunity_sources`
-- `connection_requests`
-- `admin_allowlist`
-- `admin_activity_log`
-- `official_portal_integrations`
+Tables (all with Row Level Security enabled):
+- `profiles`, `initiatives`, `initiative_updates`
+- `opportunity_sources`, `official_portal_integrations`, `official_portal_admin_notes`
+- `connection_requests`, `admin_allowlist`, `admin_activity_log`
+- `team_posts`, `team_interest_requests`
+- `initiative_showcase`, `initiative_showcase_votes`
+- `telegram_subscriptions`
+- `ai_review_rate_limits`, `community_submission_rate_limits`
 
 Migration SQL is stored in `supabase/migrations/`. These migrations have already been applied to the current database; do not rerun the same migrations against it. The tracking RPC intentionally uses a tightly validated tracking code and returns only limited fields. Internal trigger functions have direct execute grants revoked.
 
