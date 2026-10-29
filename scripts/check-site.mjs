@@ -449,4 +449,40 @@ assert.match(backendOnlyMigration, /on public\.telegram_subscriptions/i);
 assert.match(backendOnlyMigration, /with check \(true\)/i);
 console.log("✓ AI quota and Telegram subscription tables are explicitly scoped to the server role");
 
+
+const startupDesignHome = read("index.html");
+for (const feature of [
+  "G‘oyang bor.",
+  'id="afzalliklar"',
+  'class="platform-proof"',
+  'class="benefit-grid"',
+  'class="hero-note"',
+  'class="art-sticker"',
+  'id="jamoadoshlar"',
+  'id="top-tashabbuslar"',
+  'id="ai-yordamchi"',
+  'id="ariza-holati"',
+  'content="#101317"',
+  "--uc-acid:#d7ff66",
+]) {
+  assert.ok(startupDesignHome.includes(feature), `Startup-first homepage redesign missing: ${feature}`);
+}
+assert.match(startupDesignHome, /prefers-reduced-motion/);
+assert.match(startupDesignHome, /@media\(max-width:600px\)/);
+console.log("✓ founder-first homepage design, proof strip, benefits, accessibility and responsive breakpoints are present");
+
+const serviceDesign = read("davlat-xizmatlari.html");
+const accountDesign = read("kabinet.html");
+const adminDesign = read("admin.html");
+assert.match(serviceDesign, /Yoshlar-Ishi shared startup palette/);
+assert.match(serviceDesign, /id="tashkilotlar"/);
+assert.match(serviceDesign, /class="media-grid"/);
+assert.match(accountDesign, /Yoshlar-Ishi shared startup palette/);
+assert.match(accountDesign, /rpc\/get_my_initiatives/);
+assert.match(adminDesign, /Yoshlar-Ishi shared startup palette/);
+assert.match(adminDesign, /id="page-team"/);
+assert.match(adminDesign, /id="page-showcase"/);
+console.log("✓ service directory, personal cabinet and admin panel share the visual system without removing core flows");
+
+
 console.log("\nYoshlar-Ishi checks passed.");
