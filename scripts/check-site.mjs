@@ -44,6 +44,7 @@ const required = [
   "supabase/migrations/20261029030212_deduplicate_official_portal_destinations.sql",
   "supabase/migrations/20261029030418_document_server_only_table_policies.sql",
   "supabase/migrations/20261029030615_server_side_community_submission_limits.sql",
+  "supabase/migrations/20261029031505_server_side_public_initiative_submissions.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
@@ -80,6 +81,9 @@ console.log("✓ public Supabase config has URL + publishable key and no known s
 const publicHtml = read("index.html");
 assert.match(publicHtml, /id="initiativeForm"/);
 assert.match(publicHtml, /id="trackForm"/);
+assert.match(publicHtml, /action:"initiative_submit"/);
+assert.match(publicHtml, /functions\/v1\/community-submit/);
+assert.doesNotMatch(publicHtml, /api\("initiatives"/);
 assert.match(publicHtml, /id="partnerForm"/);
 assert.match(publicHtml, /rpc\/track_initiative/);
 assert.match(publicHtml, /official_portal_integrations\?select=slug/);
@@ -297,6 +301,28 @@ assert.match(communitySubmit, /status.*published/);
 assert.match(communitySubmit, /COMMUNITY_RATE_LIMIT_SALT.*serverSecret/);
 assert.match(communitySubmit, /rateHash\(action, clientAddress\(req\), key\)/);
 console.log("✓ community Edge Function validates consent, enforces status, checks public links and applies hashed-IP quotas");
+
+
+for (const feature of [
+  "initiative_submit",
+  "newReferenceCode()",
+  'status: "submitted"',
+  'ageBands.has(ageBand)',
+  "initiativeCategories.has(category)",
+  "windowSeconds = 3600",
+  "reference_code: referenceCode",
+]) {
+  assert.ok(communitySubmit.includes(feature), `Public initiative server safeguard missing: ${feature}`);
+}
+assert.match(communitySubmit, /supportTypes\.has\(item\)/);
+assert.match(communitySubmit, /owner_id: ownerId/);
+console.log("✓ public initiative submission validates fields, generates tracking codes server-side and derives owner identity from a verified session");
+
+const publicInitiativeMigration = read("supabase/migrations/20261029031505_server_side_public_initiative_submissions.sql");
+assert.match(publicInitiativeMigration, /initiative_submit/);
+assert.match(publicInitiativeMigration, /drop policy if exists "public can submit initiatives"/i);
+assert.match(publicInitiativeMigration, /revoke insert on table public\.initiatives from public, anon/i);
+assert.match(publicInitiativeMigration, /grant execute on function public\.consume_community_submission_quota/i);
 
 const communityMigration = read("supabase/migrations/20261029030615_server_side_community_submission_limits.sql");
 for (const feature of [
