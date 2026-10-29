@@ -45,6 +45,7 @@ const required = [
   "supabase/migrations/20261029030418_document_server_only_table_policies.sql",
   "supabase/migrations/20261029030615_server_side_community_submission_limits.sql",
   "supabase/migrations/20261029031323_server_side_public_initiative_submissions.sql",
+  "supabase/migrations/20261029051817_optimize_rls_policy_initplans.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
@@ -556,5 +557,13 @@ assert.match(compactHome, /Tashabbus formasi tayyorgarligi/);
 assert.match(compactHome, /grant yoki davlat tanlovi bahosi emas/);
 assert.match(compactHome, /Yangi tashabbusni to‘ldirish/);
 console.log("✓ compact homepage, live form completeness score, motion-safe background, accordions and scroll interactions are checked");
+
+
+const rlsInitplanMigration = read("supabase/migrations/20261029051817_optimize_rls_policy_initplans.sql");
+assert.match(rlsInitplanMigration, /replace\(p\.qual, 'auth\.jwt\(\)', '\(select auth\.jwt\(\)\)'\)/);
+assert.match(rlsInitplanMigration, /replace\(p\.with_check, 'auth\.jwt\(\)', '\(select auth\.jwt\(\)\)'\)/);
+assert.match(rlsInitplanMigration, /\(select current_setting\('request\.headers'::text, true\)\)/);
+assert.match(rlsInitplanMigration, /public can track with matching reference header/);
+console.log("✓ RLS initplan optimization preserves admin allowlist and private tracking predicates");
 
 console.log("\nYoshlar-Ishi checks passed.");
