@@ -99,25 +99,20 @@ The browser configuration in `config.js` contains only public Supabase client ke
 
 The step-by-step owner checklist is in [`DEPLOYMENT_CHECKLIST.md`](./DEPLOYMENT_CHECKLIST.md).
 
-A separate Vercel project named `yoshlar-ishi` exists. Direct deployment from the connected agent returned HTTP 403, so the repository includes a protected GitHub Actions CLI fallback at `.github/workflows/deploy-vercel.yml`. This is prepared but it deliberately skips the deployment until you configure your own Vercel credentials in GitHub; no token should be pasted into ChatGPT or committed to the repository.
+Two similarly named Vercel projects were identified. `yoshlar-ishi` is an empty project; `yoshlar-ishi-site` is the intended canonical site, with the known domain [`yoshlar-ishi-site.vercel.app`](https://yoshlar-ishi-site.vercel.app). The connected deployment tool returned 403 when asked to create a new deployment, so this repository's GitHub Actions fallback deliberately skips deployment until a valid Vercel token and the correct canonical project ID are configured.
 
 ### One-time setup
-1. Create a Vercel token in your Vercel account, with access to the team/project that owns `yoshlar-ishi`.
-2. Open [GitHub Actions secrets](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/secrets/actions) and add the repository **secret** `VERCEL_TOKEN`. Paste the token directly in GitHub, not into chat or source files.
-3. Open [GitHub Actions variables](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/variables/actions) and add:
-   - `VERCEL_ORG_ID` = `team_PiDVgH5WveQEWukqlgkctSEW`
-   - `VERCEL_PROJECT_ID` = `prj_HdGyAf9nd9NfkPhP9Q6Vh9il7XU5`
-4. In the same Variables page, after the first deploy gives you an HTTPS domain, set `SITE_URL` to the real production domain, e.g. `https://your-real-site.vercel.app`. This enables the six-hour health-check workflow.
 
-Every successful `Yoshlar-Ishi Quality Checks` run on `main` then triggers the deploy workflow. It verifies the tested commit, runs the pinned Vercel CLI, builds production output, deploys, and checks the public page, admin page, privacy notice and manifest. You can also run [Deploy Yoshlar-Ishi to Vercel](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/deploy-vercel.yml) manually after configuration.
+1. Open [Vercel Git settings for `yoshlar-ishi-site`](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings/git) and verify that it points to `javohirbek12122-svg/yoshlar-ishi` on the `main` branch.
+2. In [Vercel project settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings), verify the project ID before enabling automation. The current checklist records `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA`; re-check it in the dashboard rather than trusting a copied identifier.
+3. Create a Vercel token in the Vercel account that owns the canonical project.
+4. Open [GitHub Actions secrets](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/secrets/actions) and add the repository **secret** `VERCEL_TOKEN`. Paste it directly into GitHub, never into ChatGPT or source files.
+5. Open [GitHub Actions variables](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/variables/actions) and add `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` using values confirmed in the canonical Vercel project settings. Do not use the ID of the empty `yoshlar-ishi` project.
+6. Set `SITE_URL=https://yoshlar-ishi-site.vercel.app` if you want the live health workflow's destination to be explicit. The workflow defaults to this known domain otherwise.
+7. Run [Deploy Yoshlar-Ishi to Vercel](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/deploy-vercel.yml). Verify the workflow summary says it built and deployed and that its smoke tests passed; the job's `success` status alone can also mean deployment was skipped.
 
-Vercel's regular Git integration is an alternative: open the [Vercel Git settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi/settings/git), select `javohirbek12122-svg/yoshlar-ishi`, and use production branch `main`. Set the repository root, framework preset **Other**, and leave build/install commands blank. Do not set both paths up to deploy the same commit unless you intentionally want duplicate deployments.
+After an actual production deployment, open [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configuration), set Site URL to the canonical domain and add `https://yoshlar-ishi-site.vercel.app/admin.html` and `https://yoshlar-ishi-site.vercel.app/kabinet.html` to redirect URLs. Then test initiative submission, tracking, admin magic-link login, and the personal cabinet.
 
-### After the first successful deployment
-1. Open [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configuration).
-2. Set Site URL to the actual deployed domain.
-3. Add the exact admin redirect, e.g. `https://YOUR-VERCEL-DOMAIN/admin.html`, to Redirect URLs.
-4. Test initiative submission, tracking code lookup, partner requests and admin magic-link login.
 
 ## Privacy and launch checklist
 - The public privacy notice is `privacy.html`; it explains which fields are stored, why they are needed, and the current MVP limitations.
