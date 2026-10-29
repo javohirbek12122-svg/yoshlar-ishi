@@ -43,7 +43,9 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
-          grep -Fqi "G‘oyang bor." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: founder-first hero redesign is missing."; exit 1; }
+          grep -Fqi "G‘oya bilan to‘xtama." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current full-bleed hero headline is missing."; exit 1; }
+          grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
+          grep -Fqi "Full-bleed, borderless startup hero" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: full-bleed borderless hero styling is missing."; exit 1; }
           grep -Fqi 'id="afzalliklar"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: benefits section is missing."; exit 1; }
           grep -Fqi 'class="platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: feature proof strip is missing."; exit 1; }
           grep -Fqi 'class="showcase-empty"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: portfolio-first showcase state is missing."; exit 1; }
