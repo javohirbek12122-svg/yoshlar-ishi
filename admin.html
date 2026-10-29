@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#153e68"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Yoshlar-Ishi"><link rel="manifest" href="./admin-manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#111411"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Yoshlar-Ishi"><link rel="manifest" href="./admin-manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><meta name="robots" content="noindex,nofollow">
 <title>Boshqaruv markazi — Yoshlar-Ishi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -10,6 +10,45 @@
 @media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.barrow{grid-template-columns:115px 1fr 30px}}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{padding:12px;gap:10px}.sidebar .brand{padding:3px 8px}.sidebar .smallcap,.sidebarfoot{display:none}.navlist{display:flex;overflow:auto}.navitem{white-space:nowrap;flex:0 0 auto;padding:10px}.topbar{padding:12px 15px}.content{padding:18px 14px 32px}.formsgrid{grid-template-columns:1fr}.welcome{align-items:start;flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}.sectiontitle{align-items:start;flex-direction:column}.filters input{min-width:150px}.loginbox{padding:23px}}
 @media(max-width:480px){.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:26px}.stathead{font-size:9px}.topactions .button{padding:9px}.topbar h1{font-size:16px}.barrow{grid-template-columns:80px 1fr 22px}.inlineform{grid-template-columns:1fr}.panelhead{padding:13px}.panelbody{padding:13px}}
+
+/* Yoshlar-Ishi shared startup palette */
+:root{--paper:#f7f6f2;--ink:#111411;--muted:#656960;--line:#dedfd5;--green:#111411;--lime:#d7ff66;--card:#fffefa;--danger:#a13e31;--shadow:0 12px 34px #1b21100b}
+body{background:var(--paper);color:var(--ink)}
+.sidebar{background:#111411;color:#f0f3e8;border-right:1px solid #252b20}
+.brand{color:#f7f8f1}
+.logo{background:#d7ff66;color:#111411;border-radius:8px}
+.smallcap{color:#9fa797}
+.navitem{color:#c7ccbf;border-radius:6px}
+.navitem.active,.navitem:hover{background:#d7ff66;color:#111411}
+.navitem.active .ico,.navitem:hover .ico{color:#111411}
+.sidebarfoot{border-color:#353a2e;color:#c7ccbf}
+.sidebarfoot span{color:#d7ff66}
+.topbar{background:#fbfaf6;border-color:#dedfd5}
+.crumb{color:#74796c}
+.topbar h1{color:#111411;letter-spacing:-.04em}
+.content{background:var(--paper)}
+.page,.welcome h2,.page-title{color:#111411}
+.eyebrow{color:#627d16}
+.button{border-color:#d6d9cc;background:#fffefa;color:#111411;border-radius:6px}
+.button:hover{border-color:#b7d15d;background:#f7faee}
+.button.primary,.button.dark{background:#111411;color:#fff;border-color:#111411}
+.button.primary:hover,.button.dark:hover{background:#31382a}
+.kpi,.stat,.metric,.panel,.tablewrap,.chart-card,.widget,.integration-card,.source-card,.audit-card{border-color:#dedfd5;border-radius:9px;box-shadow:0 5px 22px #171b1208}
+.kpi strong,.metric strong{letter-spacing:-.05em}
+.status,.badge,.tag{border-radius:4px}
+input,select,textarea{border-color:#d8dbcf;border-radius:6px;background:#fbfcf7;color:#111411}
+input:focus,select:focus,textarea:focus{outline:2px solid #99c733;outline-offset:1px}
+table th{background:#f0f3e6;color:#3f4735}
+table td,table th{border-color:#e2e4db}
+tr:hover td{background:#fafcf3}
+.notice,.alert{border-radius:6px}
+.notice{background:#f0f5e2;color:#4b5537;border-color:#d2e2a7}
+.notice.error,.alert.error{background:#fff1ef;border-color:#e8b7ae;color:#963a30}
+.kpi-icon,.metric-icon{background:#eff4df;color:#536d17;border-radius:6px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #99c733;outline-offset:3px}
+@media(max-width:850px){.sidebar{border-bottom:1px solid #353a2e}.navitem.active,.navitem:hover{background:#d7ff66;color:#111411}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
