@@ -487,9 +487,9 @@ for (const feature of [
 }
 assert.match(startupDesignHome, /prefers-reduced-motion/);
 assert.match(startupDesignHome, /@media\(max-width:600px\)/);
-assert.match(startupDesignHome, /hero\\.wrap:after\\{display:none/i, "Full-width hero must not draw a decorative grid frame");
+assert.ok(startupDesignHome.includes(".hero.wrap:after{display:none!important;"), "Full-width hero must not draw a decorative grid frame");
 assert.match(startupDesignHome, /softGlow\(width\*/, "Animated background should use diffuse light rather than grid/orbit lines");
-assert.match(startupDesignHome, /hero\\.storyline\\{border:0!important/i, "Hero journey strip must remain borderless");
+assert.ok(startupDesignHome.includes(".hero-storyline{border:0!important;"), "Hero journey strip must remain borderless");
 console.log("✓ founder-first full-bleed hero, expanded messaging, diffuse animated background, proof strip, benefits and responsive breakpoints are present");
 
 const serviceDesign = read("davlat-xizmatlari.html");
