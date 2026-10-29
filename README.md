@@ -59,6 +59,10 @@ on conflict (email) do update set active = true;
 
 Remove access by setting `active = false`. Do not add self-service admin claiming or expose a service-role key.
 
+## Backend-only internal tables
+
+AI quota rows and Telegram subscription records are server-only. Public REST access is revoked, and server-side Edge Functions use the service role. Admin review functions contain explicit `admin_allowlist` checks; see `INTEGRATIONS_SETUP.md` for security-advisor context and the remaining Auth password-hardening setting.
+
 ## GitHub
 Repository: https://github.com/javohirbek12122-svg/yoshlar-ishi
 Production branch: `main`
