@@ -116,6 +116,9 @@ jobs:
           grep -qi "Davlat xizmatini izlash" /tmp/services.html
           curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/kabinet.html" -o /tmp/cabinet.html
           grep -qi "Shaxsiy kabinet" /tmp/cabinet.html
+          curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/startap-yoli.html" -o /tmp/startup.html
+          grep -qi "Startap yo‘li" /tmp/startup.html
+          grep -Fqi "https://uzcombinator.uz/apply" /tmp/startup.html
           curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/manifest.webmanifest" -o /tmp/manifest.json
           node -e "JSON.parse(require('fs').readFileSync('/tmp/manifest.json','utf8'))"
           echo "Production smoke test passed for $SITE_URL"
