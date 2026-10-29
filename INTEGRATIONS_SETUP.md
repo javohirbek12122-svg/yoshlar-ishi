@@ -84,7 +84,7 @@ Ommaviy formalar `/functions/v1/community-submit` Edge Function orqali yoziladi;
 - `team_posts`: e’lonlar serverda `pending` statusi bilan saqlanadi; ommaviy doskada faqat admin tasdiqlagan `published` yozuvlar chiqadi.
 - `team_interest_requests`: faqat hali ochiq/published e’longa qiziqish qabul qilinadi; kontakt va xabar ommaviy katalogga qo‘shilmaydi.
 - Rozilik belgilanmasa Edge Function arizani qabul qilmaydi. Formada spamga qarshi ko‘rinmas honeypot maydonlari ham bor.
-- `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, SHA-256 xeshini saqlaydi. Har bir xesh uchun jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
+- `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, server-side maxfiy kalit bilan tuzlangan SHA-256 xeshini saqlaydi. Ixtiyoriy `COMMUNITY_RATE_LIMIT_SALT` va `AI_RATE_LIMIT_SALT` maxfiy sozlamalari berilmasa, Edge Functions o‘z server kalitidan foydalanadi; uni brauzerga chiqarmaydi. Har bir xesh uchun jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
 - `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi.
 - `initiative_showcase`: faqat admin tasdiqlagan yozuvlar public bo‘ladi; foydalanuvchi bitta loyiha uchun bir marta ovoz beradi.
 - `ai_review_rate_limits`: AI tahlil endpointi uchun server tomonidagi alohida limit.
