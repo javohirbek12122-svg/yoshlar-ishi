@@ -9,6 +9,8 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
+  "sitemap.xml",
+  "BENCHMARK_NOTES.md",
   "startap-yoli.html",
   "admin.html",
   "davlat-xizmatlari.html",
@@ -599,6 +601,18 @@ assert.match(publicHtml, /\.\/startap-yoli\.html/);
 assert.match(serviceDesign, /\.\/startap-yoli\.html/);
 assert.match(accountDesign, /\.\/startap-yoli\.html/);
 assert.doesNotMatch(startupPath, /% moslik/, "Heuristic rank must not be presented as a probability");
+const sitemap = read("sitemap.xml");
+const robots = read("robots.txt");
+assert.match(sitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+for (const path of ["/", "/startap-yoli.html", "/davlat-xizmatlari.html", "/privacy.html"]) {
+  assert.ok(sitemap.includes("https://yoshlar-ishi-site.vercel.app" + path), `Public sitemap page missing: ${path}`);
+}
+assert.match(robots, /Sitemap: https:\/\/yoshlar-ishi-site\.vercel\.app\/sitemap\.xml/);
+assert.doesNotMatch(sitemap, /admin\.html|kabinet\.html/);
+assert.match(read("BENCHMARK_NOTES.md"), /IT Park Uzbekistan — Startups/);
+assert.match(read("BENCHMARK_NOTES.md"), /does \*\*not\*\* submit applications/);
+console.log("✓ startup benchmarking notes, canonical public sitemap and private-page exclusions are present");
+
 console.log("✓ startup navigator has five stage paths, stage-specific readiness checklists, data-backed scoring and official source disclaimers");
 
 console.log("\nYoshlar-Ishi checks passed.");
