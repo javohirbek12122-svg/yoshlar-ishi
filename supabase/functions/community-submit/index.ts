@@ -97,6 +97,15 @@ const categories = new Set([
   "technology", "design", "marketing", "content", "business", "research", "volunteer", "other",
 ]);
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const ageBands = new Set(["under_16", "16-18", "19-24", "25-30", "30_plus"]);
+const initiativeCategories = new Set(["startup", "education", "community", "volunteer", "culture", "technology", "other"]);
+const supportTypes = new Set(["mentor", "team", "funding", "resources"]);
+function newReferenceCode(): string {
+  const bytes = new Uint8Array(12);
+  crypto.getRandomValues(bytes);
+  return "YI-" + Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
@@ -119,12 +128,12 @@ Deno.serve(async (req: Request) => {
   }
 
   const action = String(body.action || "");
-  if (action !== "team_post" && action !== "team_interest") {
+  if (action !== "team_post" && action !== "team_interest" && action !== "initiative_submit") {
     return json(400, { error: "Yuborish turi noto‘g‘ri." });
   }
 
   // Honeypots reduce basic bot traffic without storing the supplied content.
-  const honeypot = textValue(body, action === "team_post" ? "website" : "interest_website", 500);
+  const honeypot = textValue(body, action === "team_interest" ? "interest_website" : "website", 500);
   if (honeypot) {
     return json(200, { ok: true, message: "So‘rov qabul qilindi." });
   }
@@ -190,7 +199,7 @@ Deno.serve(async (req: Request) => {
       status: "pending",
     };
     responseMessage = "E’lon moderatsiyaga yuborildi. Admin tasdiqlagach jamoa doskasida ko‘rinadi.";
-  } else {
+  } else if (action === "team_interest") {
     const postId = textValue(body, "team_post_id", 36);
     const name = textValue(body, "name", 120);
     const contact = textValue(body, "contact", 300);
@@ -224,6 +233,61 @@ Deno.serve(async (req: Request) => {
       status: "new",
     };
     responseMessage = "Qiziqishingiz yuborildi. Kontakt ma’lumotingiz ommaviy doskada ko‘rinmaydi.";
+  } else {
+    const submitterName = textValue(body, "submitter_name", 120);
+    const ageBand = textValue(body, "age_band", 20);
+    const district = textValue(body, "district", 120);
+    const category = textValue(body, "category", 40);
+    const title = textValue(body, "title", 160);
+    const problem = textValue(body, "problem", 3000);
+    const expectedResult = textValue(body, "expected_result", 2000);
+    const contact = textValue(body, "contact", 200);
+    const rawSupport = body.support_needed;
+    if (submitterName.length < 2 || submitterName.length > 120) {
+      return json(400, { error: "Ism-familiya 2–120 belgi oralig‘ida bo‘lishi kerak." });
+    }
+    if (!ageBands.has(ageBand)) return json(400, { error: "Yosh toifasi noto‘g‘ri tanlangan." });
+    if (district.length > 120) return json(400, { error: "Tuman yoki shahar nomi juda uzun." });
+    if (!initiativeCategories.has(category)) return json(400, { error: "Tashabbus yo‘nalishi noto‘g‘ri." });
+    if (title.length < 5 || title.length > 160) {
+      return json(400, { error: "Tashabbus nomi 5–160 belgi oralig‘ida bo‘lishi kerak." });
+    }
+    if (problem.length < 15 || problem.length > 3000) {
+      return json(400, { error: "Muammo tavsifi 15–3000 belgi oralig‘ida bo‘lishi kerak." });
+    }
+    if (expectedResult.length < 10 || expectedResult.length > 2000) {
+      return json(400, { error: "Kutilayotgan natija 10–2000 belgi oralig‘ida bo‘lishi kerak." });
+    }
+    if (contact.length > 200) return json(400, { error: "Aloqa maydoni juda uzun." });
+    if (rawSupport !== undefined && !Array.isArray(rawSupport)) {
+      return json(400, { error: "Yordam turlari noto‘g‘ri yuborildi." });
+    }
+    const supportNeeded = Array.isArray(rawSupport)
+      ? rawSupport.filter((item): item is string => typeof item === "string" && supportTypes.has(item)).slice(0, 4)
+      : [];
+    if (Array.isArray(rawSupport) && supportNeeded.length !== rawSupport.length) {
+      return json(400, { error: "Yordam turlaridan biri noto‘g‘ri." });
+    }
+
+    limit = 4;
+    windowSeconds = 3600;
+    const ownerId = await signedInOwner(req, db);
+    const referenceCode = newReferenceCode();
+    insertPayload = {
+      reference_code: referenceCode,
+      owner_id: ownerId,
+      submitter_name: submitterName,
+      age_band: ageBand,
+      district,
+      category,
+      title,
+      problem,
+      expected_result: expectedResult,
+      support_needed: supportNeeded,
+      contact,
+      status: "submitted",
+    };
+    responseMessage = "Tashabbus yuborildi. Kuzatuv kodingizni saqlab qo‘ying.";
   }
 
   const digest = await rateHash(action, clientAddress(req), key);
@@ -237,18 +301,25 @@ Deno.serve(async (req: Request) => {
   if (quota.data !== true) {
     return json(429, {
       error: action === "team_post"
-        ? "Bir tarmoqdan kuniga ko‘pi bilan 2 ta e’lon yuborish mumkin."
-        : "Qiziqish so‘rovlari soni vaqtincha cheklangan. Biroz kutib qayta urinib ko‘ring.",
+        ? "Bir tarmoq xeshidan kuniga ko‘pi bilan 2 ta jamoa e’loni yuboriladi."
+        : action === "initiative_submit"
+          ? "Bir tarmoq xeshidan soatiga ko‘pi bilan 4 ta tashabbus yuboriladi."
+          : "Qiziqish so‘rovlari soni vaqtincha cheklangan. Biroz kutib qayta urinib ko‘ring.",
     });
   }
 
-  const table = action === "team_post" ? "team_posts" : "team_interest_requests";
+  const table = action === "team_post" ? "team_posts" : action === "initiative_submit" ? "initiatives" : "team_interest_requests";
   const { error: insertError } = await db.from(table).insert(insertPayload);
   if (insertError) {
     // Do not log or return the user-entered data, which may contain personal information.
     console.error("Community submission insert failed", { action, code: insertError.code || "unknown" });
+    if (action === "initiative_submit" && insertError.code === "23505") {
+      return json(409, { error: "Kuzatuv kodi to‘qnashdi. Iltimos, yana bir bor yuboring." });
+    }
     return json(503, { error: "So‘rov saqlanmadi. Keyinroq qayta urinib ko‘ring." });
   }
 
-  return json(200, { ok: true, message: responseMessage });
+  const success: Record<string, unknown> = { ok: true, message: responseMessage };
+  if (action === "initiative_submit") success.reference_code = insertPayload.reference_code;
+  return json(200, success);
 });
