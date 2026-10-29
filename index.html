@@ -722,7 +722,7 @@ function initAmbientBackground(){
     const q=points[j],dx=p.x-q.x,dy=p.y-q.y,dist=Math.sqrt(dx*dx+dy*dy);
     if(dist<limit){ctx.strokeStyle="rgba(215,255,102,"+((1-dist/limit)*.18).toFixed(3)+")";ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
    }
-   const pulse=reduced?.7:(.52+.48*Math.sin(time*.0011+p.phase));ctx.beginPath();ctx.arc(p.x,p.y,p.r*(.8+pulse*.28),0,Math.PI*2);ctx.fillStyle="rgba(215,255,102,"+(.25+pulse*.45).toFixed(3)+")";ctx.fill();
+   const pulse=reduced ? 0.7 :(.52+.48*Math.sin(time*.0011+p.phase));ctx.beginPath();ctx.arc(p.x,p.y,p.r*(.8+pulse*.28),0,Math.PI*2);ctx.fillStyle="rgba(215,255,102,"+(.25+pulse*.45).toFixed(3)+")";ctx.fill();
    if(pointer.x>-100&&Math.hypot(p.x-pointer.x,p.y-pointer.y)<105){ctx.strokeStyle="rgba(215,255,102,.22)";ctx.lineWidth=.55;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pointer.x,pointer.y);ctx.stroke();}
   }
   if(!reduced&&visible&&tabVisible)raf=requestAnimationFrame(draw);
