@@ -19,7 +19,7 @@
 <div class="eyebrow">Maxfiylik va ochiqlik</div>
 <h1>Ma’lumotlarni qayta ishlash haqida</h1>
 <p class="lead">Ushbu bildirishnoma Yoshlar-Ishi MVP saytida foydalanuvchi yuboradigan ma’lumotlar qanday maqsadda ishlatilishini tushuntiradi. Yoshlar-Ishi davlat organining rasmiy platformasi emas.</p>
-<div class="notice"><strong>Holati:</strong> 2026-yil 28-oktabr. Sayt mustaqil loyihaning dastlabki talqini. Keng ommaga e’lon qilishdan avval platforma operatorining aloqa ma’lumoti, saqlash muddati va so‘rovlarni ko‘rib chiqish tartibi yakuniy tasdiqlanishi kerak.</div>
+<div class="notice"><strong>Holati:</strong> 2026-yil 29-oktabr. Sayt mustaqil loyihaning dastlabki talqini. Keng ommaga e’lon qilishdan avval platforma operatorining aloqa ma’lumoti, saqlash muddati va so‘rovlarni ko‘rib chiqish tartibi yakuniy tasdiqlanishi kerak.</div>
 <h2>1. Qanday ma’lumotlar saqlanadi?</h2>
 <p>Tashabbus formasi yuborilganda ism-familiya, yosh toifasi, tuman yoki shahar, tashabbus nomi, muammo tavsifi, kutilayotgan natija va tanlangan yordam turlari saqlanishi mumkin. Aloqa maydoni ixtiyoriy. Hamkorlik formasida ism, tashkilot, taklif turi, xabar va ixtiyoriy email/telefon saqlanishi mumkin.</p>
 <p>Maxfiy hujjat, pasport raqami, OneID paroli, bank kartasi yoki boshqa ortiqcha maxfiy ma’lumotlarni matn maydonlariga kiritmang.</p>
@@ -29,6 +29,7 @@
 <p>G‘oya tahlili funksiyasiga kiritgan sarlavha, muammo tavsifi, kutilayotgan natija va ixtiyoriy resurslar tashqi AI provayderiga server tomondan yuborilishi mumkin. AI tahlili uchun matn alohida tashabbus yozuvi sifatida bazaga saqlanmaydi. Funksiya telefon, email yoki ayrim maxfiy identifikatorlarga o‘xshash matnni aniqlasa, so‘rovni rad etishga urinadi; bu filtr mutlaq kafolat emas. Shu sababli pasport, JSHSHIR, OneID paroli, bank ma’lumoti yoki boshqa maxfiy ma’lumotni kiritmang. AI javobi avtomatik huquqiy yoki davlat qarori hisoblanmaydi.</p>
 <h2>4. Jamoa doskasi va sherik izlash</h2>
 <p>Jamoa e’lonida loyiha nomi, tavsif, kategoriya, rol, ko‘nikmalar, hudud va vaqt majburiyati bo‘lishi mumkin. Kontakt havolasi faqat foydalanuvchi “ommaviy kontakt” roziligini alohida belgilasa e’londa ko‘rsatiladi. “Qiziqaman” shaklidagi ism, kontakt va xabar ommaviy katalogda ko‘rinmaydi; ular admin ko‘rib chiqishi uchun saqlanadi. E’lonlar admin tasdiqlagandan keyingina ommaga ko‘rsatiladi.</p>
+<p>Jamoa e’lonlari va qiziqish shakllari server-side Edge Function orqali tekshiriladi. Yuborish limitlarini qo‘llash uchun server so‘rov manzilidan xesh hosil qiladi; jamoa limitlari jadvalida xom IP manzili saqlanmaydi. Xesh, amal turi, hisoblagich va vaqt yozuvlari spamni kamaytirish uchungina ishlatiladi. Tozalash mexanizmi 3 kundan eski limit yozuvlarini keyingi quota tekshiruvlarida o‘chiradi; bu shaxsni aniqlash vositasi emas.</p>
 <h2>5. Telegram xabarnomalari</h2>
 <p>Botga kuzatuv kodi bilan obuna bo‘lsangiz, Telegram chat identifikatori, Telegram foydalanuvchi identifikatori, bog‘langan ariza kodi va obuna faolligi saqlanadi. Bot ariza sarlavhasi va holati o‘zgargani haqida xabar beradi. Xabarni to‘xtatish uchun botga /unlink YI-... yuboring. Kuzatuv kodini boshqa odamga bermang.</p>
 <h2>6. Tashqi davlat portallari bilan bog‘lanish</h2>
@@ -36,12 +37,12 @@
 <h2>7. Kim ma’lumotlarni ko‘ra oladi?</h2>
 <p>Ommaviy katalogda faol manbalar ko‘rsatiladi. Arizalar va hamkorlik murojaatlari ommaga ro‘yxat sifatida ochilmaydi; ular cheklangan admin ruxsati orqali boshqariladi. Tashabbus holatini kuzatish funksiyasi maxsus kod bilan cheklangan va faqat holatni ko‘rsatish uchun zarur ma’lumotlarni qaytaradi.</p>
 <h2>8. Ma’lumotni yangilash yoki o‘chirish</h2>
-<p>MVP’da saqlash muddatini avtomatik boshqaradigan jadval yo‘q. Ma’lumotni tuzatish yoki o‘chirish so‘rovi yuborish uchun bosh sahifadagi hamkorlik formasi orqali “Fikr-mulohaza” turini tanlab, so‘rovingizni aniq yozishingiz mumkin. Platforma operatorining alohida aloqa manzili ommaviy ishga tushirishdan avval shu sahifaga qo‘shilishi kerak.</p>
+<p>Ariza, aloqa so‘rovlari va tashabbuslarning asosiy ma’lumotlari uchun hozircha umumiy avtomatik saqlash muddati belgilanmagan. Spamga qarshi kvota xeshlari esa faqat rate-limit hisoblash uchun ishlatiladi va so‘rovlar kelganda 3 kundan eskilari tozalanadi. Ma’lumotni tuzatish yoki o‘chirish so‘rovi yuborish uchun bosh sahifadagi hamkorlik formasi orqali “Fikr-mulohaza” turini tanlab, so‘rovingizni aniq yozishingiz mumkin. Platforma operatorining alohida aloqa manzili ommaviy ishga tushirishdan avval shu sahifaga qo‘shilishi kerak.</p>
 <h2>9. Xavfsizlik va cheklovlar</h2>
 <p>Ma’lumotlar alohida Supabase loyihasida saqlanadi va ma’lumotlar bazasi darajasida ruxsatlar qo‘llanadi. Bu dastlabki MVP bo‘lgani uchun mutlaq xavfsizlik yoki ma’lumotlarni cheksiz muddat saqlamaslik kafolatlanmaydi. Keng jamoatchilikka chiqarishdan oldin ma’lumotlar bo‘yicha mas’ul shaxs, saqlash va o‘chirish tartibi hamda aloqa kanali aniq belgilanishi zarur.</p>
 <h2>10. Savollar</h2>
 <p>Hozircha platforma bilan bog‘liq savol yoki ma’lumotni yangilash so‘rovini <a href="./index.html#hamkorlik">hamkorlik formasi</a> orqali yuboring. Ushbu loyiha rasmiy davlat portali hisoblanmaydi va davlat xizmatlari yoki grant olishni kafolatlamaydi.</p>
-<p class="muted">Oxirgi yangilanish: 28-oktabr 2026.</p>
+<p class="muted">Oxirgi yangilanish: 29-oktabr 2026.</p>
 </article>
 </main>
 <footer class="wrap footer">© 2026 Yoshlar-Ishi · Mustaqil yoshlar tashabbuslari platformasi</footer>
