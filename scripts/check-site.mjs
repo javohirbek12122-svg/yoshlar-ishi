@@ -518,6 +518,7 @@ for (const feature of [
   'foldAfterHeader("imkoniyatlar-yakun"',
   'className="compact-fold compact-ai"',
   'className="compact-fold compact-composer"',
+  'className="compact-fold compact-composer compact-initiative"',
   'className="compact-fold compact-partner-fold"',
   'prefers-reduced-motion:reduce',
 ]) {
@@ -529,6 +530,7 @@ assert.match(compactHome, /IntersectionObserver/);
 assert.match(compactHome, /new ResizeObserver/);
 assert.match(compactHome, /Tashabbus formasi tayyorgarligi/);
 assert.match(compactHome, /grant yoki davlat tanlovi bahosi emas/);
+assert.match(compactHome, /Yangi tashabbusni to‘ldirish/);
 console.log("✓ compact homepage, live form completeness score, motion-safe background, accordions and scroll interactions are checked");
 
 console.log("\nYoshlar-Ishi checks passed.");
