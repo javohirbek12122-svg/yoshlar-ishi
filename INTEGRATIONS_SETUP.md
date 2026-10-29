@@ -86,7 +86,7 @@ Ommaviy tashabbus, jamoa e’loni va qiziqish formasi `/functions/v1/community-s
 - `team_interest_requests`: faqat hali ochiq/published e’longa qiziqish qabul qilinadi; kontakt va xabar ommaviy katalogga qo‘shilmaydi.
 - Rozilik belgilanmasa Edge Function arizani qabul qilmaydi. Formada spamga qarshi ko‘rinmas honeypot maydonlari ham bor.
 - `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, server-side maxfiy kalit bilan tuzlangan SHA-256 xeshini saqlaydi. Ixtiyoriy `COMMUNITY_RATE_LIMIT_SALT` va `AI_RATE_LIMIT_SALT` maxfiy sozlamalari berilmasa, Edge Functions o‘z server kalitidan foydalanadi; uni brauzerga chiqarmaydi. Har bir xesh uchun anonim tashabbus soatiga 4 tagacha, jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
-- `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi. Ushbu ruxsat o‘zgarishlari `20261029031505_server_side_public_initiative_submissions.sql` migratsiyasida ham qayd etilgan.
+- `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi. Ushbu ruxsat o‘zgarishlari `20261029031323_server_side_public_initiative_submissions.sql` migratsiyasida ham qayd etilgan.
 - `initiative_showcase`: faqat admin tasdiqlagan yozuvlar public bo‘ladi; foydalanuvchi bitta loyiha uchun bir marta ovoz beradi.
 - `ai_review_rate_limits`: AI tahlil endpointi uchun server tomonidagi alohida limit.
 
