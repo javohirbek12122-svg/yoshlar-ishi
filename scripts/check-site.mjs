@@ -590,7 +590,7 @@ for (const feature of [
   'https://www.startupuzbekistan.com/',
   'official_portal_integrations',
   'Supabase katalogi bilan sinxronlandi',
-  'Moslik '+match+'/10',
+  "Moslik '+match+'/10",
   'Yoshlar-Ishi mustaqil navigator',
 ]) {
   assert.ok(startupPath.includes(feature), `Startup navigator feature missing: ${feature}`);
