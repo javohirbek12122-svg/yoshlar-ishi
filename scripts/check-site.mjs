@@ -194,6 +194,10 @@ console.log("✓ live-site health check defaults to the known production alias, 
 
 
 console.log("✓ daily official portal availability monitor is present");
+const liveHealthWorkflow = read(".github/workflows/site-health.yml");
+assert.match(liveHealthWorkflow, /class="media-fallback"/);
+assert.match(liveHealthWorkflow, /URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan/);
+
 assert.match(deployWorkflow, /VERCEL_TOKEN:\s*\$\{\{ secrets\.VERCEL_TOKEN \}\}/);
 assert.match(deployWorkflow, /VERCEL_ORG_ID:\s*\$\{\{ vars\.VERCEL_ORG_ID \}\}/);
 assert.match(deployWorkflow, /VERCEL_PROJECT_ID:\s*\$\{\{ vars\.VERCEL_PROJECT_ID \}\}/);
