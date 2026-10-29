@@ -105,17 +105,18 @@ The step-by-step owner checklist is in [`DEPLOYMENT_CHECKLIST.md`](./DEPLOYMENT_
 
 Two similarly named Vercel projects were identified. `yoshlar-ishi` is an empty project; `yoshlar-ishi-site` is the intended canonical site, with the known domain [`yoshlar-ishi-site.vercel.app`](https://yoshlar-ishi-site.vercel.app). The connected deployment tool returned 403 when asked to create a new deployment, so this repository's GitHub Actions fallback deliberately skips deployment until a valid Vercel token and the correct canonical project ID are configured.
 
+The canonical Vercel project has a verified production alias, but the last recorded Production Deployment is behind GitHub `main`. GitHub's live-site check detected this accurately. The Vercel integration denied a new production deployment from the current connected tool, and the Actions fallback had its build/deploy steps skipped when credentials were absent. The deployment workflow now fails visibly instead of reporting a misleading green success when no deployment occurred.
+
 ### One-time setup
 
 1. Open [Vercel Git settings for `yoshlar-ishi-site`](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings/git) and verify that it points to `javohirbek12122-svg/yoshlar-ishi` on the `main` branch.
-2. In [Vercel project settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings), verify the project ID before enabling automation. The current checklist records `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA`; re-check it in the dashboard rather than trusting a copied identifier.
-3. Create a Vercel token in the Vercel account that owns the canonical project.
+2. In [Vercel project settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings), verify the project ID before enabling automation. Current value: `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA`; current team/org ID: `team_PiDVgH5WveQEWukqlgkctSEW`. Re-check both in the dashboard.
+3. Create a Vercel token in the account that owns the canonical project.
 4. Open [GitHub Actions secrets](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/secrets/actions) and add the repository **secret** `VERCEL_TOKEN`. Paste it directly into GitHub, never into ChatGPT or source files.
-5. Open [GitHub Actions variables](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/variables/actions) and add `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` using values confirmed in the canonical Vercel project settings. Do not use the ID of the empty `yoshlar-ishi` project.
-6. Set `SITE_URL=https://yoshlar-ishi-site.vercel.app` if you want the live health workflow's destination to be explicit. The workflow defaults to this known domain otherwise.
-7. Run [Deploy Yoshlar-Ishi to Vercel](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/deploy-vercel.yml). Verify the workflow summary says it built and deployed and that its smoke tests passed; the job's `success` status alone can also mean deployment was skipped.
-
-After an actual production deployment, open [Supabase Auth URL Configuration](https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configuration), set Site URL to the canonical domain and add `https://yoshlar-ishi-site.vercel.app/admin.html` and `https://yoshlar-ishi-site.vercel.app/kabinet.html` to redirect URLs. Then test initiative submission, tracking, admin magic-link login, and the personal cabinet.
+5. Open [GitHub Actions variables](https://github.com/javohirbek12122-svg/yoshlar-ishi/settings/variables/actions) and add `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` using the verified values above.
+6. Open [GitHub Actions](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/deploy-vercel.yml) and select **Run workflow**. The run must show the Build, Deploy, and Smoke-test steps as completed — not skipped.
+7. Set Actions variable `SITE_URL` to `https://yoshlar-ishi-site.vercel.app` if that remains the intended production URL. The scheduled live-site check must then pass for the current full-bleed hero and service guide.
+8. Verify the deployed commit SHA in Vercel's deployment details matches the GitHub `main` commit that passed quality checks.
 
 
 ## Privacy and launch checklist
