@@ -75,13 +75,7 @@
   <div class="tools-grid">
    <aside class="panel">
     <div class="eyebrow">Tayyorgarlik / mustaqil tekshiruv</div><h3 id="checklistTitle">G‘oya bosqichi uchun</h3><p class="intro">Bajarilgan bandlarni belgilang. Ball — o‘zingizni baholash uchun; rasmiy tanlov yoki davlat idorasi qarori emas.</p>
-    <div class="checklist" id="readinessChecklist">
-     <label class="check-row"><input type="checkbox" data-check="problem"><span>Muammoni bir gapda aniq tushuntira olaman.</span></label>
-     <label class="check-row"><input type="checkbox" data-check="audience"><span>Muammo kimda borligini bilaman.</span></label>
-     <label class="check-row"><input type="checkbox" data-check="evidence"><span>Kamida 3–5 potensial foydalanuvchidan fikr oldim.</span></label>
-     <label class="check-row"><input type="checkbox" data-check="solution"><span>Yechimim boshqalardan nimasi bilan farq qilishini tushuntira olaman.</span></label>
-     <label class="check-row"><input type="checkbox" data-check="test"><span>Keyingi 7 kun ichida tekshiriladigan kichik vazifam bor.</span></label>
-    </div>
+    <div class="checklist" id="readinessChecklist"></div>
     <div class="score-box"><div><div class="score-number" id="readinessScore">0%</div><div class="progress" role="progressbar" aria-label="Tayyorgarlik foizi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readinessProgress"><span id="readinessFill"></span></div></div><div class="score-copy" id="readinessAdvice">Avval eng muhim bitta vazifani tanlang.</div></div>
     <div class="sources-line"><a class="source-chip" href="./index.html#tashabbus">Tashabbusni yuborish ↗</a><a class="source-chip" href="./index.html#ai-yordamchi">AI tahlili ↗</a></div>
    </aside>
@@ -117,7 +111,7 @@ const key=cfg.supabaseAnonKey||cfg.supabaseKey||"";
 const $=id=>document.getElementById(id);
 const state={
  stage:"idea",goal:"all",sector:"all",kind:"all",query:"",
- sources:[],remoteLoaded:false
+ sources:[],remoteLoaded:false,checklistState:{}
 };
 const stages={
  idea:{n:"01",name:"G‘oya",title:"Muammoni yechimdan oldin aniqlang.",desc:"Kimning qaysi muammosi yechilishini bitta gap bilan yozing. Hali ilova yoki katta biznes-reja kerak emas; avval muammoning real ekanini tekshiring.",actions:[["1. Muammoni yozing","Kimda uchraydi, qanchalik tez-tez va hozir qanday hal qilinadi?"],["2. 5 kishi bilan gaplashing","Taxminni emas, odamning haqiqiy tajribasini so‘rang."],["3. O‘xshash yechimlarni ko‘ring","Raqobatchi va bepul muqobillarni toping."],["4. Bitta keyingi qadam","Muammo aniq bo‘lsa, MVP yoki mentorlikka o‘ting."]],tags:["idea","startap","incubat","grant","mentor","tanlov","startup","yoshlar"]},
@@ -126,6 +120,13 @@ const stages={
  market:{n:"04",name:"Bozor",title:"Yechimni foydalanuvchi va daromad bilan tekshiring.",desc:"Mahsulot borligi talab borligini anglatmaydi. Sinov foydalanuvchilari, qayta foydalanish, narx va mijoz topish kanalini tekshiring.",actions:[["1. Kim to‘laydi?","Foydalanuvchi, xaridor va qaror qabul qiluvchi bir xilmi?"],["2. Qiymat taklifi","Mahsulot nimani arzonroq, tezroq yoki yaxshiroq qiladi?"],["3. Dastlabki mijozlar","10 ta maqsadli foydalanuvchi bilan sinov savdosini rejalang."],["4. O‘lchov","Konversiya, xarajat, daromad va qayta foydalanishni kuzating."]],tags:["market","business","sales","accelerator","startup","investment","mentor"]},
  growth:{n:"05",name:"O‘sish",title:"Takrorlanadigan natijani tizimga aylantiring.",desc:"O‘sishdan oldin mijoz topish va xizmat ko‘rsatish jarayoni takrorlanishini, xarajatlar va daromadni tushuning. Investitsiya yagona yo‘l emas.",actions:[["1. Ko‘rsatkichlar","Daromad, xarajat, mijozni jalb qilish qiymati va saqlab qolishni yozing."],["2. Jamoa","Muhim bo‘sh rollar va mas’uliyatlarni belgilang."],["3. O‘sish kanali","Qaysi kanal muntazam mijoz olib kelishini dalil bilan ko‘rsating."],["4. Moliyalashtirish","Investor yoki fond bilan gaplashishdan avval pitch va moliyaviy reja tayyorlang."]],tags:["growth","venture","investment","investor","scale","export","fund","business"]}}
 ;
+const checklistItems={
+ idea:[["problem","Muammoni bir gapda aniq tushuntira olaman."],["audience","Muammo kimda borligini bilaman."],["alternatives","Mavjud yechim yoki muqobillarni ko‘rdim."],["solution","Yechimim nimasi bilan farq qilishini tushuntira olaman."],["test","Keyingi 7 kun ichida tekshiriladigan vazifam bor."]],
+ validate:[["interviews","Kamida 5 maqsadli foydalanuvchi bilan gaplashdim."],["evidence","Muammoni ko‘rsatadigan aniq misol yoki dalilim bor."],["alternatives","Odamlar hozir qanday yo‘l tutishini bilaman."],["need","Birinchi hal qilinadigan segmentni tanladim."],["next","Muammo tasdiqlanmasa, nimani o‘zgartirishimni bilaman."]],
+ mvp:[["core","MVP bitta asosiy vazifani bajaradi."],["prototype","Sinab ko‘rish mumkin bo‘lgan prototip yoki demo bor."],["users","Sinov uchun foydalanuvchilarni topdim."],["feedback","Fikr-mulohaza yig‘ish usulim bor."],["metric","Sinov natijasini o‘lchaydigan mezon belgiladim."]],
+ market:[["customer","Maqsadli mijoz va qaror qabul qiluvchini ajratdim."],["price","Narx yoki qiymat modeli haqida taxminim bor."],["channel","Mijozni qayerdan topishimni bilaman."],["repeat","Qayta foydalanish yoki tavsiya haqida dalilim bor."],["metrics","Savdo va xarajat ko‘rsatkichlarini qayd etaman."]],
+ growth:[["revenue","Daromad va xarajatlarimni raqam bilan bilaman."],["unit","Bir mijozning qiymati va xizmat xarajatini taxmin qildim."],["team","Jamoa rollari va javobgarliklari aniqlangan."],["repeat","Mijoz topish jarayoni takrorlanadi."],["pitch","Hamkor yoki investor uchun dalilli pitch tayyorlayapman."]]
+};
 const fallback=[
  {title:"UzCombinator — 45 kunlik startap akseleratori",provider:"UzCombinator",category:"startup",url:"https://uzcombinator.uz/apply",description:"Ariza topshirish va qabul shartlarini rasmiy sahifada tekshirish uchun.",verified_on:"2026-10-29",kind:"program",tags:["startup","accelerator","mvp","market","mentor"]},
  {title:"IT Park Uzbekistan — Startups",provider:"IT Park Uzbekistan",category:"startup",url:"https://www.it-park.uz/en/itpark/startups",description:"Inkubatsiya va akseleratsiya yo‘nalishlari, startaplar uchun rasmiy ma’lumot.",verified_on:"2026-10-29",kind:"official",tags:["incubat","accelerator","startup","mentor","mvp"]},
@@ -154,6 +155,7 @@ async function loadSources(){
   let additions=[];
   if(settled[0].status==="fulfilled")additions=additions.concat(settled[0].value.map(x=>mapOpportunity(x,"opportunity_sources")));
   if(settled[1].status==="fulfilled")additions=additions.concat(settled[1].value.map(x=>mapOpportunity({...x,url:x.portal_url,description:x.purpose||x.audience,provider:x.agency||x.name,kind:categoryKind({...x,url:x.portal_url})},"official_portal_integrations")));
+  if(settled.every(x=>x.status==="rejected"))throw new Error("Supabase manbalari ulanmagan");
   const related=additions.filter(s=>/startup|startap|combinator|grant|invest|venture|acceler|incubat|mentor|yoshlar|youth|innovation|education|business|volontyor|volunteer|mvp|tanlov|technology|data/.test(normalize([s.title,s.provider,s.category,s.description,s.url,(s.tags||[]).join(" ")].join(" "))));
   collected=uniqueSources(related.concat(collected));
   $("sourceStatus").textContent="Supabase katalogi bilan sinxronlandi";
@@ -215,9 +217,9 @@ function renderRecommendations(){
  if(!rows.length){$("recommendations").innerHTML='<div class="empty">Bu filtrda mos manba topilmadi. Filtrni o‘zgartiring yoki qidiruvni qisqartiring.</div>';return}
  $("recommendations").innerHTML=rows.map(s=>{
   const label=s.kind==="official"?"Rasmiy manba":(s.kind==="program"?"Dastur / akselerator":"Katalog");
-  const match=Math.min(99,Math.round(35+s.score*7));
+  const match=Math.min(10,Math.max(1,Math.round(s.score/2)));
   const verified=s.verified_on?"Ko‘rib chiqilgan: "+esc(s.verified_on):"Shartlarni manbada tasdiqlang";
-  return '<article class="result-card"><div class="result-top"><span class="tag">'+label+'</span><span class="match">'+match+'% moslik</span></div><h4>'+esc(s.title)+'</h4><p>'+esc(s.description||"Batafsil ma’lumot va talablar tashqi manbada.")+'</p><div class="provider">'+esc(s.provider||"Tashqi manba")+'</div><div class="result-actions"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">Manbani ochish ↗</a><span class="verified">'+verified+'</span></div></article>';
+  return '<article class="result-card"><div class="result-top"><span class="tag">'+label+'</span><span class="match">Moslik '+match+'/10</span></div><h4>'+esc(s.title)+'</h4><p>'+esc(s.description||"Batafsil ma’lumot va talablar tashqi manbada.")+'</p><div class="provider">'+esc(s.provider||"Tashqi manba")+'</div><div class="result-actions"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">Manbani ochish ↗</a><span class="verified">'+verified+'</span></div></article>';
  }).join("");
 }
 function renderStage(){
@@ -227,20 +229,28 @@ function renderStage(){
  $("stageTitle").textContent=s.title;$("stageDescription").textContent=s.desc;
  $("checklistTitle").textContent=s.name+" bosqichi uchun";
  $("stageActions").innerHTML=s.actions.map(a=>'<div class="action-card"><b>'+a[0]+'</b><span>'+a[1]+'</span></div>').join("");
- $("readinessAdvice").textContent="Avval eng muhim bitta vazifani tanlang.";
- renderRecommendations();
+ renderChecklist();renderRecommendations();
+}
+function renderChecklist(){
+ const items=checklistItems[state.stage],saved=state.checklistState[state.stage]||{};
+ $("readinessChecklist").innerHTML=items.map(item=>'<label class="check-row"><input type="checkbox" data-check="'+item[0]+'" '+(saved[item[0]]?"checked":"")+'><span>'+item[1]+'</span></label>').join("");
+ document.querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",()=>{
+  const values={};document.querySelectorAll("[data-check]").forEach(box=>values[box.dataset.check]=box.checked);
+  state.checklistState[state.stage]=values;updateReadiness();
+ }));
+ updateReadiness();
 }
 function updateReadiness(){
- const boxes=[...document.querySelectorAll("[data-check]")],n=boxes.filter(b=>b.checked).length,pct=Math.round(n/boxes.length*100);
+ const boxes=[...document.querySelectorAll("[data-check]")],n=boxes.filter(b=>b.checked).length,pct=boxes.length?Math.round(n/boxes.length*100):0;
  $("readinessScore").textContent=pct+"%";$("readinessFill").style.width=pct+"%";$("readinessProgress").setAttribute("aria-valuenow",String(pct));
- $("readinessAdvice").textContent=pct===100?"Keyingi qadamni tanlang va dalillarni tayyorlang.":pct>=60?"Asosiy tayyorgarlik bor — qolgan kamchilikni yoping.":pct>=20?"Yaxshi boshlanish — dalil va sinovni kuchaytiring.":"Hozircha ballga emas, bitta aniq muammoga e’tibor bering.";
+ $("readinessAdvice").textContent=pct===100?"Bu bosqichdagi asosiy bandlar belgilandi — keyingi amaliy qadamni tanlang.":pct>=60?"Yaxshi tayyorgarlik — qolgan kamchilikni aniq reja bilan yoping.":pct>=20?"Yaxshi boshlanish — dalil va sinovni kuchaytiring.":"Ballga emas, hozirgi bosqichdagi eng muhim vazifaga e’tibor bering.";
 }
+
 document.querySelectorAll("[data-stage]").forEach(b=>b.addEventListener("click",()=>{state.stage=b.dataset.stage;renderStage()}));
 ["goalFilter","sectorFilter","sourceFilter"].forEach(id=>$(id).addEventListener("change",renderRecommendations));
 $("sourceSearch").addEventListener("input",renderRecommendations);
 $("resetFilters").addEventListener("click",()=>{$("goalFilter").value="all";$("sectorFilter").value="all";$("sourceFilter").value="all";$("sourceSearch").value="";renderRecommendations()});
-document.querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",updateReadiness));
-renderStage();updateReadiness();loadSources();
+renderStage();loadSources();
 })();
 </script>
 </body>
