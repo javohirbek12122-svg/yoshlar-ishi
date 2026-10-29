@@ -5,3 +5,6 @@ Disallow: /kabinet.html
 Disallow: /admin-manifest.webmanifest
 
 # Admin routes require Supabase Auth and database allowlist; robots.txt is not access control.
+
+Sitemap: https://yoshlar-ishi-site.vercel.app/sitemap.xml
+
