@@ -41,6 +41,7 @@ const required = [
   "supabase/migrations/20261028174334_admin_only_partner_review_rpc.sql",
   "supabase/migrations/20261028175222_complete_youth_ledger_service_entry.sql",
   "supabase/migrations/20261028181147_index_foreign_key_columns.sql",
+  "supabase/migrations/20261029030212_deduplicate_official_portal_destinations.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
   "supabase/functions/telegram-notify/index.ts",
@@ -339,5 +340,13 @@ for (const feature of [
 }
 console.log("✓ foreign-key index migration includes all 12 performance indexes");
 
+
+
+const dedupMigration = read("supabase/migrations/20261029030212_deduplicate_official_portal_destinations.sql");
+assert.match(dedupMigration, /where slug = 'ministries-directory'/i);
+assert.match(dedupMigration, /set active = false/i);
+assert.match(dedupMigration, /where slug = 'advice-legal'/i);
+assert.match(dedupMigration, /https:\/\/advice\.adliya\.uz\//i);
+console.log("✓ duplicate portal listings are normalized to distinct useful destinations");
 
 console.log("\nYoshlar-Ishi checks passed.");
