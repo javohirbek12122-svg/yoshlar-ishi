@@ -97,3 +97,8 @@ Moderatsiya spamni hamda foydalanuvchi ruxsatisiz kontakt ommaga chiqish xavfini
 - [ ] Showcase e’lon qilish → login bilan ovoz berish oqimini sinang.
 - [ ] Operatorning haqiqiy aloqa manzilini, ma’lumotlarni saqlash muddatini va o‘chirish tartibini maxfiylik sahifasida tasdiqlang.
 
+## 7. Backend-only tables and security advisor notes
+
+- `ai_review_rate_limits` and `telegram_subscriptions` intentionally have no public-table grants. They are accessed by server-side Edge Functions using the Supabase service role; the corresponding RLS policies now document that boundary.
+- Admin review RPCs are `SECURITY DEFINER` because they read/write private review fields. Each function checks the signed-in user's active email against `admin_allowlist`; anonymous execution is revoked. Supabase's generic security advisor may still report that authenticated users can execute these functions. Treat the report as a reminder to keep those internal allowlist checks and function grants covered by tests—not as proof that the functions are publicly accessible.
+- Enable leaked-password protection in Supabase Auth if password-based sign-in is enabled. The current user/admin entry points primarily use email magic links; this setting is still a worthwhile defense-in-depth measure.
