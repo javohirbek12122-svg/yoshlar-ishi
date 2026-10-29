@@ -79,13 +79,14 @@ https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configurati
 
 ## 5. Jamoa doskasi, moderatsiya va yuborish himoyasi
 
-Ommaviy formalar `/functions/v1/community-submit` Edge Function orqali yoziladi; brauzer endi `team_posts` yoki `team_interest_requests` jadvaliga to‘g‘ridan-to‘g‘ri INSERT qilmaydi.
+Ommaviy tashabbus, jamoa e’loni va qiziqish formasi `/functions/v1/community-submit` Edge Function orqali yoziladi; brauzer endi `initiatives`, `team_posts` yoki `team_interest_requests` jadvaliga anonim to‘g‘ridan-to‘g‘ri INSERT qilmaydi. Shaxsiy kabinetga kirgan foydalanuvchi esa owner-scoped ruxsatlar orqali o‘z tashabbuslarini boshqarishda davom etadi.
 
+- `initiatives`: server 96-bit tasodifiy kuzatuv kodini o‘zi yaratadi, formadagi maydonlarni tekshiradi va holatni har doim `submitted` qilib saqlaydi. Anonim tashabbuslar bir tarmoq xeshi uchun soatiga 4 tagacha cheklanadi; to‘g‘ridan-to‘g‘ri anonim INSERT ruxsati bekor qilingan.
 - `team_posts`: e’lonlar serverda `pending` statusi bilan saqlanadi; ommaviy doskada faqat admin tasdiqlagan `published` yozuvlar chiqadi.
 - `team_interest_requests`: faqat hali ochiq/published e’longa qiziqish qabul qilinadi; kontakt va xabar ommaviy katalogga qo‘shilmaydi.
 - Rozilik belgilanmasa Edge Function arizani qabul qilmaydi. Formada spamga qarshi ko‘rinmas honeypot maydonlari ham bor.
-- `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, server-side maxfiy kalit bilan tuzlangan SHA-256 xeshini saqlaydi. Ixtiyoriy `COMMUNITY_RATE_LIMIT_SALT` va `AI_RATE_LIMIT_SALT` maxfiy sozlamalari berilmasa, Edge Functions o‘z server kalitidan foydalanadi; uni brauzerga chiqarmaydi. Har bir xesh uchun jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
-- `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi.
+- `community_submission_rate_limits` jadvali IP manzilining o‘zini emas, server-side maxfiy kalit bilan tuzlangan SHA-256 xeshini saqlaydi. Ixtiyoriy `COMMUNITY_RATE_LIMIT_SALT` va `AI_RATE_LIMIT_SALT` maxfiy sozlamalari berilmasa, Edge Functions o‘z server kalitidan foydalanadi; uni brauzerga chiqarmaydi. Har bir xesh uchun anonim tashabbus soatiga 4 tagacha, jamoa e’loni 24 soatda 2 tagacha, qiziqish so‘rovi 10 daqiqada 5 tagacha cheklanadi. Bu qat’iy identifikatsiya emas; proksi tarmoqlari va dinamik IP sababli chegaralar umumiy himoya sifatida ishlaydi.
+- `community_submission_rate_limits` va quota RPC uchun `anon`/ `authenticated` ruxsatlari yopiq; yozuv faqat server-side Edge Function xizmat roli orqali bajariladi. Ushbu ruxsat o‘zgarishlari `20261029031505_server_side_public_initiative_submissions.sql` migratsiyasida ham qayd etilgan.
 - `initiative_showcase`: faqat admin tasdiqlagan yozuvlar public bo‘ladi; foydalanuvchi bitta loyiha uchun bir marta ovoz beradi.
 - `ai_review_rate_limits`: AI tahlil endpointi uchun server tomonidagi alohida limit.
 
