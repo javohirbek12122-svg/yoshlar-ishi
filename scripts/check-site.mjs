@@ -12,6 +12,7 @@ const required = [
   "sitemap.xml",
   "BENCHMARK_NOTES.md",
   "startap-yoli.html",
+  "laboratoriya.html",
   "admin.html",
   "davlat-xizmatlari.html",
   "kabinet.html",
@@ -49,6 +50,7 @@ const required = [
   "supabase/migrations/20261029030615_server_side_community_submission_limits.sql",
   "supabase/migrations/20261029031323_server_side_public_initiative_submissions.sql",
   "supabase/migrations/20261029051817_optimize_rls_policy_initplans.sql",
+  "supabase/migrations/20261104155500_add_virtual_lab_runs.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
@@ -615,4 +617,26 @@ console.log("✓ startup benchmarking notes, canonical public sitemap and privat
 
 console.log("✓ startup navigator has five stage paths, stage-specific readiness checklists, data-backed scoring and official source disclaimers");
 
+const laboratory = read("laboratoriya.html");
+for (const feature of [
+  'data-mode="projectile"',
+  'data-mode="pendulum"',
+  'data-mode="gas"',
+  'data-mode="wave"',
+  'data-mode="refraction"',
+  'data-mode="nuclear"',
+  'new THREE.WebGLRenderer',
+  'OrbitControls',
+  'n₁ sin(θ₁) = n₂ sin(θ₂)',
+  'Yadro bo‘linishining konseptual modeli',
+  'lab_runs',
+  'experiment_key:currentMode==="nuclear"?"nuclear-concept":currentMode',
+]) {
+  assert.ok(laboratory.includes(feature), "Virtual lab feature missing: " + feature);
+}
+const laboratoryModule = laboratory.match(/<script type="module">([\s\S]*?)<\/script>/i)?.[1];
+assert.ok(laboratoryModule, "Virtual lab module script missing");
+const parseableLabModule = laboratoryModule.replace(/^import .*?;\s*/gm, "");
+new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" });
+console.log("✓ 3D virtual laboratory, six learning models, module syntax and account-scoped result storage are present");
 console.log("\nYoshlar-Ishi checks passed.");
