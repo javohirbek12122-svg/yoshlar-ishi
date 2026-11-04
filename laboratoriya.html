@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111711">
+<meta name="description" content="Yoshlar-Ishi 3D virtual fizik laboratoriyasi: mexanika, to‘lqinlar, gazlar, optika va yadro fizikasi bo‘yicha interaktiv ta’limiy modellar.">
+<title>3D Virtual laboratoriya — Yoshlar-Ishi</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f5ef;--ink:#111711;--muted:#687064;--line:#dce0d4;--acid:#d7ff66;--dark:#111711;--panel:#fffefa;--green:#8eaf27;--blue:#77c8ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "DM Sans",sans-serif}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
+.top{background:var(--dark);color:#dce3d2;padding:10px 0;font-size:10px;letter-spacing:.09em}.wrap{width:min(1440px,calc(100% - 38px));margin:auto}.top .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.top a{color:var(--acid);font-weight:700}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:68px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:9px;font:800 17px Manrope;letter-spacing:-.04em}.logo{display:grid;place-items:center;width:34px;height:34px;background:var(--acid);border-radius:8px;font-size:11px}.navlinks{display:flex;gap:20px;font-size:11px;font-weight:700;color:#434b3d}
+.hero{padding:27px 0 20px}.eyebrow{font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#607a19}.hero h1{font:800 clamp(29px,3.8vw,43px)/1.12 Manrope;letter-spacing:-.055em;margin:7px 0 8px}.hero p{font-size:12px;color:var(--muted);max-width:800px;margin:0}
+.lab-shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:14px;align-items:start;padding:12px 0 30px}
+.sidebar{position:sticky;top:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px;box-shadow:0 7px 25px #1b241008}
+.side-label{font-size:9px;letter-spacing:.14em;color:#7a8174;font-weight:800;padding:7px 8px 10px}
+.mode-btn{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:10px 9px;margin:2px 0;border:1px solid transparent;border-radius:8px;background:transparent;color:#424a3d;font-size:11px;font-weight:700;transition:.15s}
+.mode-btn:hover{background:#f0f3e7}.mode-btn.active{background:#edf4d9;border-color:#dae8b1;color:#283514}
+.mode-icon{width:29px;height:29px;display:grid;place-items:center;border-radius:7px;background:#eef0e8;font-size:15px;flex:0 0 auto}.mode-btn.active .mode-icon{background:var(--acid)}
+.side-note{margin-top:12px;padding:11px;border-radius:8px;background:#f2f4eb;color:#68705f;font-size:9px;line-height:1.7}
+.workspace{min-width:0}
+.scene-card{background:#111a20;border:1px solid #26363d;border-radius:13px;overflow:hidden;box-shadow:0 12px 36px #14251c12}
+.scene-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #27343b;color:#edf2e8;flex-wrap:wrap}
+.scene-title{display:flex;align-items:center;gap:10px}.scene-title h2{font:800 16px Manrope;letter-spacing:-.04em;margin:0}.scene-title p{margin:3px 0 0;color:#9ca9a8;font-size:10px}
+.live-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #405040;border-radius:5px;color:#d7ff66;font-size:9px;font-weight:800;letter-spacing:.1em}.live-pill:before{content:"";width:6px;height:6px;border-radius:50%;background:#d7ff66;box-shadow:0 0 10px #d7ff66}
+.scene-actions{display:flex;gap:7px;flex-wrap:wrap}.scene-btn{border:1px solid #52615c;border-radius:6px;padding:8px 10px;background:transparent;color:#eff5e9;font-size:10px;font-weight:800}.scene-btn.primary{background:var(--acid);border-color:var(--acid);color:#17200e}.scene-btn:disabled{opacity:.4;cursor:not-allowed}
+.viewport{height:480px;position:relative;background:radial-gradient(ellipse at 50% 30%,#20343e 0%,#101a20 68%);overflow:hidden}.viewport canvas{display:block;width:100%;height:100%}
+.hud{position:absolute;left:13px;top:13px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:none}.hud span{background:#101c22c9;border:1px solid #42535a;color:#d8e5dc;border-radius:5px;padding:5px 7px;font-size:9px;backdrop-filter:blur(8px)}.viewport-hint{position:absolute;right:13px;bottom:12px;padding:6px 8px;border-radius:5px;background:#101c22c9;border:1px solid #42535a;color:#b8c5c3;font-size:9px;pointer-events:none}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#dce9dd;font-size:11px;pointer-events:none}
+.lower-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(230px,.8fr);gap:12px;margin-top:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:15px;min-width:0}.card h3{font:800 14px Manrope;letter-spacing:-.035em;margin:0 0 5px}.card .sub{font-size:10px;color:var(--muted);margin:0 0 12px}
+.control-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}.control{min-width:0}.control-top{display:flex;justify-content:space-between;gap:8px;font-size:10px;font-weight:700;color:#394233}.control output{font-weight:800;color:#637e19;font-variant-numeric:tabular-nums}.control input[type=range]{width:100%;accent-color:#91b52e;margin:8px 0 0;cursor:pointer}
+.control-help{font-size:8px;color:#899082}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}.stat{background:#f1f4e8;border:1px solid #e2e8d7;border-radius:7px;padding:9px}.stat strong{display:block;font:800 18px Manrope;letter-spacing:-.05em;overflow-wrap:anywhere}.stat span{display:block;font-size:8px;color:#69715f;margin-top:2px}
+.formula{border-left:3px solid #b0d44b;background:#f3f6e9;padding:10px 12px;border-radius:0 7px 7px 0;font:600 12px/1.7 "DM Sans",sans-serif;color:#354126;margin:10px 0}.theory-text{color:#687064;font-size:10px;line-height:1.75;margin:0}.safety-note{border:1px solid #e5ddbd;background:#fcf7e6;color:#736235;padding:10px 11px;border-radius:7px;font-size:9px;line-height:1.7;margin-top:10px}
+.save-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px}.small-btn{border:1px solid #d7deca;background:#fff;border-radius:6px;padding:8px 10px;font-size:10px;font-weight:800;color:#303a28}.small-btn.dark{background:#111711;border-color:#111711;color:#fff}.status{font-size:9px;color:#697064;min-height:18px;margin-top:8px}.status.error{color:#a84032}
+.history{margin-top:12px}.history-list{display:grid;gap:7px}.history-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e3e6dc;background:#fff;border-radius:7px;padding:9px 10px}.history-row strong{font-size:10px;display:block}.history-row small{font-size:8px;color:#80877a}.empty{padding:15px;border:1px dashed #d5dccb;border-radius:7px;text-align:center;font-size:9px;color:#7a8274;background:#fbfcf7}
+.nuclear-warning{display:block}
+.footer{border-top:1px solid var(--line);padding:16px 0 25px;color:#71786a;font-size:9px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b72c;outline-offset:3px}
+[hidden]{display:none!important}
+@media(max-width:1000px){.lab-shell{grid-template-columns:190px minmax(0,1fr)}.lower-grid{grid-template-columns:1fr}.viewport{height:430px}}
+@media(max-width:720px){.wrap{width:calc(100% - 22px)}.navlinks{display:none}.lab-shell{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow-x:auto;gap:5px;padding:8px}.side-label,.side-note{display:none}.mode-btn{min-width:115px;width:auto;flex-direction:column;gap:5px;text-align:center;padding:8px 9px;font-size:9px}.mode-icon{width:27px;height:27px}.viewport{height:370px}.control-list{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat strong{font-size:15px}.scene-head{align-items:flex-start}.scene-actions{width:100%}}
+@media(max-width:420px){.viewport{height:315px}.scene-title h2{font-size:14px}.scene-btn{padding:7px 8px}.stats{gap:5px}.stat{padding:7px}.stat strong{font-size:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important}}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div class="top"><div class="wrap"><span>YOSHLAR-ISHI <span style="color:#d7ff66">/</span> TA’LIM VA TEXNOLOGIYA</span><a href="./index.html">← Yoshlar-Ishi bosh sahifasi</a></div></div>
+<header class="wrap nav"><a class="brand" href="./index.html"><span class="logo">YI</span>Yoshlar-Ishi <span style="font-size:10px;color:#818779;font-weight:600">/ LAB</span></a><nav class="navlinks"><a href="#laboratoriya">Laboratoriya</a><a href="#nazariya">Nazariya</a><a href="#saqlangan">Tajribalar tarixi</a><a href="./kabinet.html">Shaxsiy kabinet ↗</a></nav></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">INTERAKTIV 3D MUHIT · FIZIKA</div><h1>Fizikani kuzatma. <span style="color:#718d25">Tajriba qil.</span></h1><p>Parametrlarni o‘zgartiring, fizik modelning 3D harakatini kuzating va hisoblangan natijalarni taqqoslang. Modellar fizik qonunlarga tayangan, lekin haqiqiy laboratoriya o‘lchovlarini to‘liq almashtirmaydi.</p></section>
+<div class="lab-shell" id="laboratoriya">
+<aside class="sidebar" aria-label="Tajriba turlari">
+<div class="side-label">TAJRIBA TANLANG</div>
+<button class="mode-btn active" data-mode="projectile"><span class="mode-icon">↗</span><span>Jism harakati</span></button>
+<button class="mode-btn" data-mode="pendulum"><span class="mode-icon">◉</span><span>Mayatnik</span></button>
+<button class="mode-btn" data-mode="gas"><span class="mode-icon">✣</span><span>Gaz molekulalari</span></button>
+<button class="mode-btn" data-mode="wave"><span class="mode-icon">〰</span><span>To‘lqinlar</span></button>
+<button class="mode-btn" data-mode="refraction"><span class="mode-icon">◇</span><span>Yorug‘lik sinishi</span></button>
+<button class="mode-btn" data-mode="nuclear"><span class="mode-icon">⚛</span><span>Yadro fizikasi</span></button>
+<div class="side-note">Har bir modelda parametrlarni o‘zgartirib, natijaga ta’sirini kuzating. 3D sahnani sichqoncha bilan aylantirish va yaqinlashtirish mumkin.</div>
+</aside>
+<section class="workspace">
+<div class="scene-card">
+<div class="scene-head"><div class="scene-title"><div><div class="live-pill">3D SIMULYATSIYA</div></div><div><h2 id="modeTitle">Jismning parabolik harakati</h2><p id="modeSubtitle">Boshlang‘ich tezlik va burchakni o‘zgartiring.</p></div></div><div class="scene-actions"><button class="scene-btn" id="resetBtn" type="button">↺ Qayta boshlash</button><button class="scene-btn primary" id="playBtn" type="button">Ⅱ Pauza</button></div></div>
+<div class="viewport" id="viewport"><div class="hud"><span id="hudMode">MEKANIKA</span><span id="hudState">MODEL ISHLAYAPTI</span></div><div class="loading" id="loading">3D muhit yuklanmoqda…</div><div class="viewport-hint">Sichqoncha: aylantirish · Scroll: zoom</div></div>
+</div>
+<div class="lower-grid">
+<div class="card"><h3>Eksperiment parametrlari</h3><p class="sub" id="controlIntro">Qiymatlarni o‘zgartirib modelga ta’sirini ko‘ring.</p><div class="control-list" id="controlList"></div><div class="save-row"><button class="small-btn dark" id="saveBtn" type="button">Natijani bazaga saqlash ↗</button><a class="small-btn" href="./kabinet.html" target="_blank" rel="noopener">Kabinetga kirish</a></div><div class="status" id="saveStatus" role="status" aria-live="polite"></div></div>
+<div class="card"><h3>Hisoblangan natijalar</h3><p class="sub">Model bo‘yicha real vaqt ko‘rsatkichlari</p><div class="stats" id="stats"></div><div class="formula" id="formula">x = v₀ cos(θ)t<br>y = v₀ sin(θ)t − ½gt²</div><p class="theory-text" id="theoryText"></p><div class="safety-note" id="safetyNote" hidden></div></div>
+</div>
+<div class="card history" id="saqlangan"><h3>Saqlangan tajribalar</h3><p class="sub">Shaxsiy kabinetingiz orqali saqlangan so‘nggi tajribalar.</p><div class="history-list" id="historyList"><div class="empty">Tajriba natijalarini saqlash uchun email orqali kabinetga kiring.</div></div></div>
+</section>
+</div>
+</main>
+<footer class="wrap footer"><span>© 2026 Yoshlar-Ishi · Mustaqil ta’limiy modul</span><span>Modellar — o‘quv maqsadida. Haqiqiy tajriba uchun laboratoriya xavfsizligi qoidalariga rioya qiling.</span></footer>
+<script src="./config.js"></script>
+<script type="module">
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id);
+const cfg=window.YI_CONFIG||{};
+const apiBase=(cfg.supabaseUrl||"").replace(/\/$/,"");
+const apiKey=cfg.supabaseAnonKey||cfg.supabaseKey||"";
+let token=sessionStorage.getItem("yi_user_token")||"";
+let refreshToken=sessionStorage.getItem("yi_user_refresh")||"";
+let currentUser=null;
+let scene,camera,renderer,controls,group,clock;
+let running=true,elapsed=0,currentMode="projectile",params={};
+let activeObjects={};
+let particleData=[],waveLine=null,pendulumLine=null,projectileBall=null,nucleusBalls=[],nucleusStart=0,nucleusRunning=false;
+const RED=0xff876f,BLUE=0x80d4ff,GREEN=0xd7ff66,YELLOW=0xffd76d;
+const definitions={
+ projectile:{title:"Jismning parabolik harakati",subtitle:"Boshlang‘ich tezlik, uchish burchagi va gravitatsiyani boshqaring.",hud:"MEKANIKA",intro:"Jismning boshlang‘ich tezligi va burchagi trayektoriyani qanday o‘zgartirishini tekshiring.",formula:"x = v₀ cos(θ)t<br>y = v₀ sin(θ)t − ½gt²<br>T = 2v₀ sin(θ) / g",theory:"Havo qarshiligi hisobga olinmagan ideal model. Gorizontal yo‘nalishda tezlik o‘zgarmaydi, vertikal yo‘nalishda esa gravitatsiya tezlanishi ta’sir qiladi.",controls:[{key:"v0",label:"Boshlang‘ich tezlik",min:5,max:35,step:1,unit:"m/s"},{key:"angle",label:"Uchish burchagi",min:15,max:75,step:1,unit:"°"},{key:"g",label:"Gravitatsiya",min:1.6,max:24,step:.1,unit:"m/s²"}],defaults:{v0:20,angle:45,g:9.81}},
+ pendulum:{title:"Matematik mayatnik",subtitle:"Ip uzunligi, boshlang‘ich og‘ish va gravitatsiyani o‘zgartiring.",hud:"TEBRANISH",intro:"Mayatnikning tebranish davri uzunlik va gravitatsiyaga qanday bog‘liqligini kuzating.",formula:"T ≈ 2π√(L/g)<br>θ(t) = θ₀ cos(√(g/L) · t)",theory:"Kichik burchaklar uchun matematik mayatnik yaqinlashuvi ishlatiladi. Bu modelda ip vaznsiz, osilish nuqtasi mahkam va ishqalanish e’tiborsiz.",controls:[{key:"length",label:"Ip uzunligi",min:.5,max:4,step:.1,unit:"m"},{key:"angle",label:"Boshlang‘ich og‘ish",min:5,max:45,step:1,unit:"°"},{key:"g",label:"Gravitatsiya",min:1.6,max:24,step:.1,unit:"m/s²"}],defaults:{length:2,angle:28,g:9.81}},
+ gas:{title:"Ideal gaz molekulalari",subtitle:"Harorat va zarrachalar sonining harakatga ta’sirini ko‘ring.",hud:"MOLEKULYAR FIZIKA",intro:"Yopiq hajmdagi zarrachalarning tasodifiy harakati va devorlarga urilishini kuzating.",formula:"PV = nRT<br>⟨Eₖ⟩ = 3/2 kᵦT<br>P/P₀ ≈ (N/N₀)(T/T₀)",theory:"Soddalashtirilgan ideal gaz modeli: zarrachalar o‘zaro tortishmaydi, to‘qnashuvlar elastik deb olinadi. Bosim ko‘rsatkichi mutlaq laboratoriya bosimi emas, boshlang‘ich holatga nisbiy qiymatdir.",controls:[{key:"temperature",label:"Harorat",min:100,max:600,step:10,unit:"K"},{key:"count",label:"Zarrachalar soni",min:25,max:100,step:5,unit:"ta"}],defaults:{temperature:300,count:60}},
+ wave:{title:"Mexanik to‘lqin",subtitle:"Amplituda, chastota va to‘lqin uzunligini sozlang.",hud:"TO‘LQINLAR",intro:"To‘lqin shakli, davri va tarqalish tezligi o‘rtasidagi bog‘lanishni kuzating.",formula:"y(x,t) = A sin(2π(x/λ − ft))<br>v = fλ<br>T = 1/f",theory:"Bu bir o‘lchamli sinusoidal ko‘ndalang to‘lqin modeli. Muhitdagi nuqtalar muvozanat holati atrofida tebranadi, energiya esa to‘lqin bilan tarqaladi.",controls:[{key:"amplitude",label:"Amplituda",min:.2,max:1.8,step:.1,unit:"m"},{key:"frequency",label:"Chastota",min:.2,max:3,step:.1,unit:"Hz"},{key:"wavelength",label:"To‘lqin uzunligi",min:1,max:6,step:.1,unit:"m"}],defaults:{amplitude:1,frequency:1,wavelength:3}},
+ refraction:{title:"Yorug‘likning sinishi",subtitle:"Tushish burchagi va optik muhit ko‘rsatkichini o‘zgartiring.",hud:"OPTIKA",intro:"Yorug‘lik nuri ikki optik muhit chegarasida qanday yo‘nalishini tekshiring.",formula:"n₁ sin(θ₁) = n₂ sin(θ₂)<br>sin(θ₂) = (n₁/n₂) sin(θ₁)",theory:"Snell qonuni ideal, tekis chegara uchun ishlaydi. Bu ko‘rinishda prizma emas, parallel yuzali shaffof plastina ko‘rsatilgan; nurlar sxematik ravishda tasvirlanadi.",controls:[{key:"angle",label:"Tushish burchagi",min:5,max:70,step:1,unit:"°"},{key:"n2",label:"Ikkinchi muhit indeksi",min:1.1,max:2.4,step:.05,unit:"n"}],defaults:{angle:35,n2:1.5}},
+ nuclear:{title:"Yadro bo‘linishining konseptual modeli",subtitle:"Atom yadrosining bo‘linishi va energiya ajralishini ta’limiy ko‘rinishda kuzating.",hud:"YADRO FIZIKASI",intro:"Yadro bo‘linishi hodisasining umumiy g‘oyasini xavfsiz, abstrakt modelda ko‘ring.",formula:"Yadro holati → bo‘linish mahsulotlari + energiya<br>ΔE = Δm · c²",theory:"Ba’zi og‘ir atom yadrolari bo‘linganda energiya ajraladi. Zanjir reaksiyasi tushunchasi — ajralgan zarrachalar boshqa yadrolarga ta’sir qilishi natijasida keyingi bo‘linishlar yuz berishi mumkinligi. Bu model faqat umumiy ilmiy g‘oyani ko‘rsatadi; moddalar, miqdorlar, geometriya, reaktor yoki qurol konstruksiyasi parametrlari berilmaydi.",controls:[],defaults:{}}
+};
+function makeMaterial(color,rough=.55,metal=.05,transparent=false,opacity=1){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,transparent,opacity})}
+function addSphere(x,y,z,r,color,parent=group){const mesh=new THREE.Mesh(new THREE.SphereGeometry(r,20,14),makeMaterial(color,.35,.12));mesh.position.set(x,y,z);parent.add(mesh);return mesh}
+function addLine(points,color=GREEN,width=1){const geom=new THREE.BufferGeometry().setFromPoints(points);const line=new THREE.Line(geom,new THREE.LineBasicMaterial({color,linewidth:width}));group.add(line);return line}
+function clearGroup(){while(group.children.length){const obj=group.children.pop();if(obj.geometry)obj.geometry.dispose();if(obj.material){if(Array.isArray(obj.material))obj.material.forEach(m=>m.dispose());else obj.material.dispose();}}particleData=[];waveLine=null;pendulumLine=null;projectileBall=null;nucleusBalls=[];nucleusRunning=false}
+function addBase(){const grid=new THREE.GridHelper(24,24,0x52656b,0x283b42);grid.position.y=-.03;group.add(grid);const axes=new THREE.AxesHelper(2.2);axes.material.transparent=true;axes.material.opacity=.45;group.add(axes)}
+function lineFromArray(arr,color){const geometry=new THREE.BufferGeometry().setFromPoints(arr);const line=new THREE.Line(geometry,new THREE.LineBasicMaterial({color}));group.add(line);return line}
+function buildProjectile(){
+ const v=params.v0,ang=params.angle*Math.PI/180,g=params.g,T=2*v*Math.sin(ang)/g,range=v*Math.cos(ang)*T,points=[];
+ for(let i=0;i<=90;i++){const t=T*i/90;points.push(new THREE.Vector3(v*Math.cos(ang)*t,v*Math.sin(ang)*t-.5*g*t*t,0))}
+ lineFromArray(points,GREEN);addLine([new THREE.Vector3(-1,0,0),new THREE.Vector3(range+3,0,0)],0x71838a);
+ projectileBall=addSphere(0,.18,0,.18,RED);activeObjects={T,range,maxH:(v*v*Math.sin(ang)**2)/(2*g),v,ang,g};
+}
+function buildPendulum(){
+ const pivot=new THREE.Vector3(0,3.2,0);addSphere(0,3.2,0,.11,YELLOW);
+ addLine([new THREE.Vector3(-3,0,0),new THREE.Vector3(3,0,0)],0x71838a);
+ pendulumLine=addLine([pivot,new THREE.Vector3(0,1,0)],0xcbd9da);
+ const bob=addSphere(0,1.2,0,.24,RED);activeObjects={pivot,bob,L:params.length,theta0:params.angle*Math.PI/180,omega:Math.sqrt(params.g/params.length)};
+}
+function buildGas(){
+ const box=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(5,3.6,5)),new THREE.LineBasicMaterial({color:0x71909a}));box.position.y=1.8;group.add(box);
+ const n=params.count,speedScale=Math.sqrt(params.temperature/300);
+ for(let i=0;i<n;i++){const x=(Math.random()-.5)*4.65,y=.25+Math.random()*3.1,z=(Math.random()-.5)*4.65;const m=addSphere(x,y,z,.055,i%3===0?YELLOW:BLUE);const d=new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar((.55+Math.random()*.7)*speedScale);particleData.push({mesh:m,v:d})}
+ activeObjects={speedScale};
+}
+function buildWave(){const pts=[];for(let i=0;i<140;i++)pts.push(new THREE.Vector3(-4+i*8/139,0,0));waveLine=lineFromArray(pts,BLUE);activeObjects={marker:addSphere(-4,0,0,.12,YELLOW)}}
+function buildRefraction(){
+ const angle=params.angle*Math.PI/180,n1=1,n2=params.n2,sin2=n1/n2*Math.sin(angle),a2=Math.asin(Math.max(-1,Math.min(1,sin2))),yEntry=0,yInside=2*Math.tan(a2);
+ const slab=new THREE.Mesh(new THREE.BoxGeometry(2,4,.28),new THREE.MeshPhysicalMaterial({color:0x83cfff,transparent:true,opacity:.15,roughness:.12,metalness:.08,transmission:.5}));slab.position.set(0,0,0);group.add(slab);
+ addLine([new THREE.Vector3(-4,-3*Math.tan(angle),.18),new THREE.Vector3(-1,yEntry,.18)],RED,2);
+ addLine([new THREE.Vector3(-1,yEntry,.18),new THREE.Vector3(1,yInside,.18)],BLUE,2);
+ addLine([new THREE.Vector3(1,yInside,.18),new THREE.Vector3(4,yInside+3*Math.tan(angle),.18)],YELLOW,2);
+ addLine([new THREE.Vector3(-1,-2.2,.22),new THREE.Vector3(-1,2.2,.22)],0x7f959a);
+ addLine([new THREE.Vector3(1,-2.2,.22),new THREE.Vector3(1,2.2,.22)],0x7f959a);
+ addLine([new THREE.Vector3(-1.7,0,.3),new THREE.Vector3(2.1,0,.3)],0xc5d0d1);
+ addSphere(-1,0,.2,.07,RED);addSphere(1,yInside,.2,.07,YELLOW);
+ activeObjects={a2,n2};
+}
+function buildNuclear(){
+ const core=new THREE.Group();group.add(core);
+ for(let i=0;i<34;i++){
+  const radius=.62*Math.cbrt(Math.random()),theta=Math.random()*Math.PI*2,phi=Math.acos(2*Math.random()-1);
+  const x=radius*Math.sin(phi)*Math.cos(theta),y=radius*Math.sin(phi)*Math.sin(theta),z=radius*Math.cos(phi);
+  const bead=addSphere(x,y,z,.105,i%2?0x76c9ff:0xffb56b,core);nucleusBalls.push({mesh:bead,base:new THREE.Vector3(x,y,z),side:i%2?1:-1});
+ }
+ const halo=new THREE.Mesh(new THREE.SphereGeometry(.95,26,18),new THREE.MeshBasicMaterial({color:0x85bce1,wireframe:true,transparent:true,opacity:.11}));core.add(halo);
+ activeObjects={core,halo,events:[]};
+}
+function buildSimulation(){if(!group)return;clearGroup();addBase();if(currentMode==="projectile")buildProjectile();if(currentMode==="pendulum")buildPendulum();if(currentMode==="gas")buildGas();if(currentMode==="wave")buildWave();if(currentMode==="refraction")buildRefraction();if(currentMode==="nuclear")buildNuclear();elapsed=0;updateStats();$("hudMode").textContent=definitions[currentMode].hud;$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":"MODEL ISHLAYAPTI"}
+function fmt(x,d=2){return Number(x).toFixed(d)}
+function updateStats(){
+ let s=[];
+ if(currentMode==="projectile"){const a=params.v0*Math.sin(params.angle*Math.PI/180),T=2*a/params.g,R=params.v0*Math.cos(params.angle*Math.PI/180)*T,H=a*a/(2*params.g);s=[["Uchish vaqti",fmt(T)+" s"],["Masofa",fmt(R)+" m"],["Maks. balandlik",fmt(H)+" m"]]}
+ if(currentMode==="pendulum"){const T=2*Math.PI*Math.sqrt(params.length/params.g);s=[["Tebranish davri",fmt(T)+" s"],["Chastota",fmt(1/T)+" Hz"],["Uzunlik",fmt(params.length)+" m"]]}
+ if(currentMode==="gas"){const pr=(params.count/60)*(params.temperature/300);s=[["Harorat",fmt(params.temperature,0)+" K"],["Nisbiy bosim",fmt(pr)+" × P₀"],["Zarrachalar",String(params.count)] ]}
+ if(currentMode==="wave"){const T=1/params.frequency,v=params.frequency*params.wavelength;s=[["Davr",fmt(T)+" s"],["Tarqalish tezligi",fmt(v)+" m/s"],["Amplituda",fmt(params.amplitude)+" m"]]}
+ if(currentMode==="refraction"){const a1=params.angle*Math.PI/180,a2=Math.asin(Math.sin(a1)/params.n2);s=[["Tushish burchagi",fmt(params.angle,0)+"°"],["Sinish burchagi",fmt(a2*180/Math.PI)+"°"],["Muhit indeksi",fmt(params.n2,2)]]}
+ if(currentMode==="nuclear"){s=[["Model turi","Konseptual"],["Jarayon","Yadro bo‘linishi"],["Energiya","Ajraladi"]]}
+ $("stats").innerHTML=s.map(x=>'<div class="stat"><strong>'+x[1]+'</strong><span>'+x[0]+'</span></div>').join("");
+}
+function renderControls(){
+ const d=definitions[currentMode];$("controlIntro").textContent=d.intro;$("formula").innerHTML=d.formula;$("theoryText").textContent=d.theory;
+ $("safetyNote").hidden=currentMode!=="nuclear";
+ if(currentMode==="nuclear"){$("safetyNote").textContent="Xavfsizlik chegarasi: bu faqat atom yadrosining umumiy bo‘linish g‘oyasini ko‘rsatuvchi abstrakt ko‘rinish. Qurol yasash, konstruksiya, material tanlash, hisob-kitob yoki detonatsiya bosqichlari mavjud emas."}
+ $("controlList").innerHTML=d.controls.map(c=>'<div class="control"><div class="control-top"><label for="param-'+c.key+'">'+c.label+'</label><output id="out-'+c.key+'">'+params[c.key]+ ' '+c.unit+'</output></div><input type="range" id="param-'+c.key+'" data-param="'+c.key+'" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'" value="'+params[c.key]+'"><div class="control-help">'+c.min+' – '+c.max+' '+c.unit+'</div></div>').join("");
+ $("controlList").querySelectorAll("input[type=range]").forEach(input=>{
+  const c=d.controls.find(x=>x.key===input.dataset.param);
+  input.addEventListener("input",()=>{$("out-"+c.key).textContent=input.value+" "+c.unit;params[c.key]=Number(input.value);updateStats()});
+  input.addEventListener("change",()=>{params[c.key]=Number(input.value);buildSimulation()});
+ });
+ if(currentMode==="nuclear")$("controlList").innerHTML='<div class="empty" style="grid-column:1/-1">Bu konseptual tajribada xavfsizlik sababli texnik parametrlar sozlanmaydi. Jarayonni ko‘rish uchun pastdagi tugmani bosing.</div>';
+ $("playBtn").hidden=currentMode==="nuclear";
+ $("runNuclear").hidden=currentMode!=="nuclear";
+}
+function setMode(key){if(!definitions[key])return;currentMode=key;params={...definitions[key].defaults};document.querySelectorAll(".mode-btn").forEach(b=>b.classList.toggle("active",b.dataset.mode===key));$("modeTitle").textContent=definitions[key].title;$("modeSubtitle").textContent=definitions[key].subtitle;renderControls();buildSimulation();$("saveStatus").textContent=""}
+function updateFrame(dt){
+ if(!group)return;
+ if(currentMode==="projectile"&&projectileBall){const T=activeObjects.T;const t=elapsed%T;const a=activeObjects;projectileBall.position.set(a.v*Math.cos(a.ang)*t,a.v*Math.sin(a.ang)*t-.5*a.g*t*t+.18,0)}
+ if(currentMode==="pendulum"&&activeObjects.bob){const a=activeObjects;const theta=a.theta0*Math.cos(a.omega*elapsed);const pos=new THREE.Vector3(a.L*Math.sin(theta),a.pivot.y-a.L*Math.cos(theta),0);a.bob.position.copy(pos);const attr=pendulumLine.geometry.attributes.position;attr.setXYZ(0,a.pivot.x,a.pivot.y,a.pivot.z);attr.setXYZ(1,pos.x,pos.y,pos.z);attr.needsUpdate=true;pendulumLine.geometry.computeBoundingSphere()}
+ if(currentMode==="gas"){const s=.7+params.temperature/300;particleData.forEach(p=>{p.mesh.position.addScaledVector(p.v,dt*s);const v=p.mesh.position;if(v.x>2.42||v.x< -2.42){p.v.x*=-1;v.x=Math.max(-2.42,Math.min(2.42,v.x))}if(v.y>3.48||v.y<.12){p.v.y*=-1;v.y=Math.max(.12,Math.min(3.48,v.y))}if(v.z>2.42||v.z< -2.42){p.v.z*=-1;v.z=Math.max(-2.42,Math.min(2.42,v.z))}})}
+ if(currentMode==="wave"&&waveLine){const a=params.amplitude,f=params.frequency,lambda=params.wavelength,pts=[];for(let i=0;i<140;i++){const x=-4+i*8/139,y=a*Math.sin(2*Math.PI*(x/lambda-f*elapsed));pts.push(new THREE.Vector3(x,y,0))}waveLine.geometry.dispose();waveLine.geometry=new THREE.BufferGeometry().setFromPoints(pts);const x=-4+((elapsed*f*lambda)%8);activeObjects.marker.position.set(x,a*Math.sin(2*Math.PI*(x/lambda-f*elapsed)),.04)}
+ if(currentMode==="nuclear"&&nucleusRunning){const t=elapsed-nucleusStart;const split=Math.min(1,Math.max(0,(t-1.1)/1.4));nucleusBalls.forEach(p=>{const side=p.side;const target=new THREE.Vector3(side*(.72+split*1.1)+p.base.x*.48,p.base.y*.75,p.base.z*.75);p.mesh.position.lerpVectors(p.base,target,split)});if(activeObjects.halo)activeObjects.halo.material.opacity=Math.max(.015,.12*(1-split));if(t>2.5)$("hudState").textContent="BO‘LINISH MODELI YAKUNLANDI"}
+}
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);if(running)elapsed+=dt;updateFrame(running?dt:0);controls&&controls.update();renderer.render(scene,camera)}
+function resize(){if(!renderer)return;const el=$("viewport"),w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
+async function init3d(){
+ try{
+  scene=new THREE.Scene();scene.background=new THREE.Color(0x111a20);scene.fog=new THREE.Fog(0x111a20,18,38);
+  camera=new THREE.PerspectiveCamera(48,1,.1,100);camera.position.set(8,6.5,10);
+  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+  $("viewport").insertBefore(renderer.domElement,$("viewport").firstChild);renderer.domElement.setAttribute("aria-label","Interaktiv 3D fizik modeli");
+  controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.target.set(0,1.3,0);controls.minDistance=4;controls.maxDistance=26;controls.maxPolarAngle=Math.PI*.48;
+  const hemi=new THREE.HemisphereLight(0xddeeff,0x26332d,2.1);scene.add(hemi);const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(5,9,7);scene.add(key);const fill=new THREE.PointLight(0x78b8c4,30,25);fill.position.set(-5,4,-3);scene.add(fill);
+  group=new THREE.Group();scene.add(group);clock=new THREE.Clock();$("loading").remove();$("runNuclear").addEventListener("click",startNuclear);setMode("projectile");window.addEventListener("resize",resize);resize();animate();
+ }catch(e){$("loading").textContent="3D muhitni yuklab bo‘lmadi. WebGL qo‘llab-quvvatlanishini va internet aloqasini tekshiring.";console.error(e)}
+}
+function startNuclear(){if(!activeObjects.core)return;activeObjects.core.position.set(0,1.5,0);nucleusBalls.forEach(p=>p.mesh.position.copy(p.base));activeObjects.halo.material.opacity=.12;elapsed=0;nucleusStart=0;nucleusRunning=true;running=true;$("hudState").textContent="KONSEPTUAL BO‘LINISH";$("saveStatus").textContent="Model qayta ishga tushirildi."}
+$("runNuclear").addEventListener("click",startNuclear);
+$("resetBtn").addEventListener("click",()=>{buildSimulation();running=true;$("playBtn").textContent="Ⅱ Pauza";$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":"MODEL ISHLAYAPTI"});
+$("playBtn").addEventListener("click",()=>{running=!running;$("playBtn").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";$("hudState").textContent=running?"MODEL ISHLAYAPTI":"PAUZA"});
+document.querySelectorAll(".mode-btn").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
+const nuclearBtn=document.createElement("button");nuclearBtn.id="runNuclear";nuclearBtn.className="scene-btn primary";nuclearBtn.type="button";nuclearBtn.textContent="⚛ Bo‘linish modelini ko‘rish";nuclearBtn.hidden=true;$("scene-head-placeholder");
+document.querySelector(".scene-actions").appendChild(nuclearBtn);
+function fmtDate(v){return new Date(v).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"})}
+async function authRequest(path,opts={}){const h={apikey:apiKey,Authorization:"Bearer "+(token||apiKey),"Content-Type":"application/json",...(opts.headers||{})};const res=await fetch(apiBase+path,{...opts,headers:h});if(!res.ok){const body=await res.text();throw new Error("Server so‘rovi ("+res.status+"): "+body.slice(0,170))}if(res.status===204)return null;return res.json()}
+async function refreshSession(){if(!apiBase||!apiKey)return false;if(!token)return false;try{const r=await fetch(apiBase+"/auth/v1/user",{headers:{apikey:apiKey,Authorization:"Bearer "+token}});if(r.ok){currentUser=await r.json();sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}if(refreshToken){try{const r=await fetch(apiBase+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:apiKey,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});if(r.ok){const d=await r.json();token=d.access_token;refreshToken=d.refresh_token;currentUser=d.user;sessionStorage.setItem("yi_user_token",token);sessionStorage.setItem("yi_user_refresh",refreshToken);sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}}return false}
+function resultSummary(){if(currentMode==="projectile"){return "Uchish vaqti "+fmt(2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" s; masofa "+fmt(params.v0*Math.cos(params.angle*Math.PI/180)*2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" m."}if(currentMode==="pendulum")return "Mayatnik davri "+fmt(2*Math.PI*Math.sqrt(params.length/params.g))+" s.";if(currentMode==="gas")return "Harorat "+params.temperature+" K; "+params.count+" zarracha; nisbiy bosim "+fmt(params.count/60*params.temperature/300)+" × P₀.";if(currentMode==="wave")return "To‘lqin tezligi "+fmt(params.frequency*params.wavelength)+" m/s; amplituda "+fmt(params.amplitude)+" m.";if(currentMode==="refraction")return "Sinish burchagi "+fmt(Math.asin(Math.sin(params.angle*Math.PI/180)/params.n2)*180/Math.PI)+"°.";return "Atom yadrosi bo‘linishining konseptual modeli kuzatildi; texnik yoki konstruktiv parametrlar qo‘llanilmagan."}
+$("saveBtn").addEventListener("click",async()=>{
+ const btn=$("saveBtn");btn.disabled=true;$("saveStatus").classList.remove("error");
+ try{
+  if(!await refreshSession())throw new Error("Saqlash uchun avval Yoshlar-Ishi shaxsiy kabinetiga kiring.");
+  const payload={user_id:currentUser.id,experiment_key:currentMode,params:params,result_summary:resultSummary()};
+  await authRequest("/rest/v1/lab_runs",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});
+  $("saveStatus").textContent="Tajriba natijasi shaxsiy bazangizga saqlandi.";await loadHistory();
+ }catch(e){$("saveStatus").textContent=e.message;$("saveStatus").classList.add("error")}
+ finally{btn.disabled=false}
+});
+async function loadHistory(){
+ if(!await refreshSession()){$("historyList").innerHTML='<div class="empty">Bulutdagi tarixni ko‘rish uchun <a href="./kabinet.html" target="_blank" rel="noopener" style="font-weight:800;text-decoration:underline">shaxsiy kabinetga kiring</a>. Simulyatsiyalardan mehmon sifatida foydalanish mumkin.</div>';return}
+ try{
+  const rows=await authRequest("/rest/v1/lab_runs?select=id,experiment_key,params,result_summary,created_at&order=created_at.desc&limit=8");
+  const names={projectile:"Jism harakati",pendulum:"Mayatnik",gas:"Gaz molekulalari",wave:"To‘lqin",refraction:"Yorug‘lik sinishi","nuclear-concept":"Yadro fizikasi"};
+  $("historyList").innerHTML=rows.length?rows.map(r=>'<div class="history-row"><div><strong>'+names[r.experiment_key]+'</strong><small>'+fmtDate(r.created_at)+' · '+String(r.result_summary||"").replace(/[<>]/g,"")+'</small></div><button type="button" class="small-btn" data-delete="'+r.id+'">O‘chirish</button></div>').join(""):'<div class="empty">Hozircha saqlangan tajribalar yo‘q.</div>';
+ }catch(e){$("historyList").innerHTML='<div class="empty">Tarixni yuklab bo‘lmadi. '+String(e.message).slice(0,140)+'</div>'}
+}
+$("historyList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete]");if(!b)return;b.disabled=true;try{await authRequest("/rest/v1/lab_runs?id=eq."+encodeURIComponent(b.dataset.delete),{method:"DELETE",headers:{"Prefer":"return=minimal"}});await loadHistory()}catch(err){b.disabled=false;$("saveStatus").textContent=err.message;$("saveStatus").classList.add("error")}});
+init3d();loadHistory();
+})();
+</script>
+</body>
+</html>
