@@ -17,6 +17,7 @@ on:
       - "davlat-xizmatlari.html"
       - "kabinet.html"
       - "startap-yoli.html"
+      - "laboratoriya.html"
       - "config.js"
 
 permissions:
@@ -67,6 +68,8 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/kabinet.html" -o /tmp/yoshlar-cabinet.html
           grep -qi "Shaxsiy kabinet" /tmp/yoshlar-cabinet.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/startap-yoli.html" -o /tmp/yoshlar-startup.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/laboratoriya.html" -o /tmp/yoshlar-lab.html
+          grep -q "Fizikani kuzatma. <span" /tmp/yoshlar-lab.html
           grep -qi "Startap yo‘li" /tmp/yoshlar-startup.html
           grep -Fqi "https://uzcombinator.uz/apply" /tmp/yoshlar-startup.html
           grep -Fqi "function scoresFor(stage,goal,sector,source)" /tmp/yoshlar-startup.html
