@@ -55,6 +55,7 @@ jobs:
           grep -Fqi '/functions/v1/community-submit' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: secure community endpoint is missing."; exit 1; }
           grep -Fqi 'id="teamBoardSearch"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: team matching filters are missing."; exit 1; }
           grep -Fqi 'id="teamBoardCategory"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: team category filter is missing."; exit 1; }
+          grep -Fqi 'href="./laboratoriya.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the 3D laboratory navigation link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin.html" -o /tmp/yoshlar-admin.html
           grep -qi "Boshqaruv markazi" /tmp/yoshlar-admin.html
           grep -Fqi 'id="page-team"' /tmp/yoshlar-admin.html
