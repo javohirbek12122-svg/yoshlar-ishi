@@ -83,26 +83,128 @@ function update(dt){if(mode==="town"){updateTown(dt)}if(mode==="biology"){update
 function animate(){requestAnimationFrame(animate);const frameDelta=Math.min(clock.getDelta(),.05),dt=frameDelta*timeScale;if(running)elapsed+=dt;update(running?dt:0);orbit.update();renderer.render(scene,camera)}
 function resize(){if(!camera||!renderer)return;const e=$("viewport");const w=Math.max(1,e.clientWidth),h=Math.max(1,e.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
 function buildTown(){
- const ground=new THREE.Mesh(new THREE.PlaneGeometry(34,34),new THREE.MeshStandardMaterial({color:0x8b9b79}));ground.rotation.x=-Math.PI/2;ground.position.y=-.04;world.add(ground);
- const roadMat=new THREE.MeshStandardMaterial({color:0x3d4850,roughness:.95}),sideMat=new THREE.MeshStandardMaterial({color:0xc4c3b2});
- function slab(x,z,w,d,h,col){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:col,roughness:.82}));m.position.set(x,h/2,z);world.add(m);return m}
- slab(0,.5,34,3.3,.08,0x3d4850);slab(-.4,0,2.8,34,.08,0x3d4850);
- for(let i=-15;i<=15;i+=3){slab(i,.5,.08,3.2,.015,0xe5d9a4);slab(-.4,i,2.7,.08,.015,0xe5d9a4)}
- const colors=[0xd4b99b,0xc7d0c9,0xb6c4cf,0xd5c9a7,0xb4bca7];
- for(let z=-12;z<=12;z+=6)for(let x=-12;x<=12;x+=6){if(Math.abs(x)<3.5||Math.abs(z)<3.5)continue;const h=2.4+Math.random()*3.4,w=2.7+Math.random()*.8,d=2.7+Math.random()*.8;const b=slab(x,z,w,d,h,colors[Math.floor(Math.random()*colors.length)]);for(let y=1;y<h-0.2;y+=1.1){for(let xx=-w/2+.45;xx<w/2;xx+=.85){const win=new THREE.Mesh(new THREE.BoxGeometry(.38,.42,.04),new THREE.MeshStandardMaterial({color:0x8fc1ce,emissive:0x233c44}));win.position.set(x+xx,y,z+d/2+.025);world.add(win)}}}
- for(let i=0;i<24;i++){const x=(Math.random()-.5)*28,z=(Math.random()-.5)*28;if(Math.abs(x)<2.2||Math.abs(z)<2.2)continue;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.09,.13,.9,7),new THREE.MeshStandardMaterial({color:0x70543a}));trunk.position.set(x,.45,z);world.add(trunk);const crown=new THREE.Mesh(new THREE.SphereGeometry(.55,10,8),new THREE.MeshStandardMaterial({color:0x47784d}));crown.position.set(x,1.25,z);world.add(crown)}
- for(let i=0;i<12;i++){const g=makeAvatar([0xd6a16d,0x7c9bb0,0xb3a1c9,0xd0c5a0][i%4]);g.position.set((Math.random()-.5)*5,.08,(Math.random()-.5)*5);world.add(g);g.userData.phase=Math.random()*6.28;attackers.push(g)}
- camera.position.set(18,18,22);orbit.target.set(0,0,0);$("hudState").textContent="SHAHARCHA MUHITI";
+ // Architectural streetscape with realistic massing, sidewalks, facades and street furniture.
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(42,42),new THREE.MeshStandardMaterial({color:0x71816c,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.08;world.add(ground);
+ const asphalt=new THREE.MeshStandardMaterial({color:0x30363a,roughness:.96}),concrete=new THREE.MeshStandardMaterial({color:0xb9b8ad,roughness:.95});
+ const curb=new THREE.MeshStandardMaterial({color:0xaaa99e,roughness:1});
+ function box(x,y,z,w,h,d,mat){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);world.add(m);return m}
+ // two crossing roads with sidewalks, curbs and lane markings
+ box(0,-.015,.5,42,.08,4.4,asphalt);box(-.5,-.014,0,4.4,.08,42,asphalt);
+ box(0,.025,2.55,42,.12,.85,concrete);box(0,.025,-1.55,42,.12,.85,concrete);
+ box(1.95,.025,0,.85,.12,42,concrete);box(-2.05,.025,0,.85,.12,42,concrete);
+ for(let x=-19;x<=19;x+=4){box(x,.034,.5,.09,.012,2.8,new THREE.MeshStandardMaterial({color:0xe5dfc7}))}
+ for(let z=-19;z<=19;z+=4){box(-.5,.034,z,2.8,.012,.09,new THREE.MeshStandardMaterial({color:0xe5dfc7}))}
+ const wallColors=[0xc9b79d,0xb9c1bd,0xd2c8b7,0xaeb8b1,0xc8b9a7];
+ const glass=new THREE.MeshStandardMaterial({color:0x526f78,metalness:.25,roughness:.25});
+ const trim=new THREE.MeshStandardMaterial({color:0xe5ded0,roughness:.75});
+ const roof=new THREE.MeshStandardMaterial({color:0x55504a,roughness:.92});
+ let idx=0;
+ for(let z=-15;z<=15;z+=7.5)for(let x=-15;x<=15;x+=7.5){
+  if(Math.abs(x)<4.5||Math.abs(z)<4.5)continue;
+  const w=4.4+Math.random()*.8,d=4.3+Math.random()*.7,h=3.8+Math.random()*3.5,base=wallColors[idx++%wallColors.length];
+  const wall=new THREE.MeshStandardMaterial({color:base,roughness:.88});
+  box(x,h/2,z,w,h,d,wall);
+  // roof parapet and fascia
+  box(x,h+.08,z,w+.12,.18,d+.12,trim);
+  box(x,h+.2,z,w+.05,.12,d+.05,roof);
+  // windows on street-facing facade; dark frames, reflective glazing, sills
+  const front=z+d/2+.012;
+  for(let floor=0;floor<Math.floor(h/1.35);floor++)for(let wx=-w/2+.65;wx<w/2-.3;wx+=1.05){
+   const yy=.75+floor*1.3;
+   box(x+wx,yy,front,.62,.82,.045,trim);
+   box(x+wx,yy,front+.028,.51,.69,.035,glass);
+   box(x+wx,yy,front+.055,.025,.7,.018,trim);
+   box(x+wx,yy+.36,front+.055,.52,.025,.018,trim);
+   box(x+wx,yy-.39,front+.08,.68,.07,.12,trim);
+  }
+  // entrance, steps and door
+  box(x,h>.5?.95:.5,z+d/2+.04,.82,1.85,.07,roof);
+  box(x,.95,z+d/2+.09,.68,1.68,.035,glass);
+  box(x,.09,z+d/2+.45,1.1,.18,.7,concrete);
+  // balconies and AC units
+  for(let floor=1;floor<Math.floor(h/2.2);floor++){
+   const yy=floor*1.3+.65;
+   box(x,yy,z+d/2+.28,1.25,.08,.55,trim);
+   box(x,yy+.22,z+d/2+.53,1.25,.035,.035,roof);
+   for(let k=-1;k<=1;k++)box(x+k*.58,yy+.12,z+d/2+.53,.025,.25,.025,roof);
+  }
+  box(x+w/2-.35,1.8,z+d/2+.08,.42,.32,.2,trim);
+ }
+ // street trees with branching trunks and layered foliage
+ for(let i=0;i<32;i++){
+  const x=(Math.random()-.5)*36,z=(Math.random()-.5)*36;
+  if(Math.abs(x)<3||Math.abs(z)<3)continue;
+  const trunkMat=new THREE.MeshStandardMaterial({color:0x594434,roughness:1}),leafMat=new THREE.MeshStandardMaterial({color:[0x416348,0x52734d,0x657e54][i%3],roughness:1});
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.09,.15,1.65,9),trunkMat);trunk.position.set(x,.82,z);world.add(trunk);
+  for(let j=0;j<3;j++){const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(.65,2),leafMat);crown.position.set(x+(Math.random()-.5)*.35,1.8+j*.22,z+(Math.random()-.5)*.3);crown.scale.set(1,.9,1);world.add(crown)}
+ }
+ // street lamps and benches
+ for(let i=-15;i<=15;i+=10){const pole=new THREE.Mesh(new THREE.CylinderGeometry(.035,.055,3.3,10),roof);pole.position.set(i,1.65,3.2);world.add(pole);const arm=box(i+.35,3.2,3.2,.75,.06,.06,roof);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.13,12,8),new THREE.MeshStandardMaterial({color:0xffe5a8,emissive:0x55401e}));lamp.position.set(i+.65,3.14,3.2);world.add(lamp)}
+ // pedestrians: varied clothing and positions, with gait animation
+ const palettes=[0x425e76,0x8d5547,0x586b4c,0x6b627b,0xb28b58,0x3d4b4b];
+ for(let i=0;i<18;i++){const person=makeAvatar(palettes[i%palettes.length]);person.scale.setScalar(.9+Math.random()*.13);person.position.set((Math.random()-.5)*5,.08,(Math.random()-.5)*5);person.userData.walkPhase=Math.random()*6.28;world.add(person);attackers.push(person)}
+ camera.position.set(22,18,24);orbit.target.set(0,1,0);$("hudState").textContent="SHAHARCHA · ARXITEKTURA VA KO‘CHA HAYOTI";
+}function makeAvatar(color){
+ const g=new THREE.Group();
+ const skin=new THREE.MeshStandardMaterial({color:0xc99570,roughness:.82});
+ const skinShade=new THREE.MeshStandardMaterial({color:0x9d684f,roughness:.9});
+ const cloth=new THREE.MeshStandardMaterial({color,roughness:.78});
+ const clothDark=new THREE.MeshStandardMaterial({color:new THREE.Color(color).multiplyScalar(.66),roughness:.9});
+ const pants=new THREE.MeshStandardMaterial({color:0x303944,roughness:.92});
+ const shoes=new THREE.MeshStandardMaterial({color:0x20262c,roughness:.8});
+ const hair=new THREE.MeshStandardMaterial({color:0x29231f,roughness:1});
+ const white=new THREE.MeshStandardMaterial({color:0xf3eee4,roughness:.4});
+ const iris=new THREE.MeshStandardMaterial({color:0x46352b,roughness:.35});
+ const add=(geo,mat,x,y,z,sx=1,sy=1,sz=1)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.scale.set(sx,sy,sz);g.add(m);return m};
+ const sphere=(mat,x,y,z,sx,sy,sz)=>add(new THREE.SphereGeometry(1,20,16),mat,x,y,z,sx,sy,sz);
+ // human proportions: head, shoulders, pelvis, articulated-looking limbs
+ add(new THREE.CapsuleGeometry(.235,.52,8,16),cloth,0,1.12,0,1,.95,.72);
+ add(new THREE.BoxGeometry(.39,.19,.25),clothDark,0,.78,0);
+ add(new THREE.CylinderGeometry(.105,.13,.16,16),skin,0,1.54,0);
+ sphere(skin,0,1.79,0,.19,.235,.18);
+ // ears, nose, eyes and brows
+ for(const side of [-1,1]){
+  sphere(skin,side*.19,1.8,0,.045,.07,.045);
+  sphere(white,side*.073,1.82,.158,.034,.023,.014);
+  sphere(iris,side*.073,1.82,.171,.014,.016,.008);
+  add(new THREE.BoxGeometry(.075,.018,.018),hair,side*.073,1.87,.157);
+ }
+ add(new THREE.ConeGeometry(.035,.09,8),skin,0,1.77,.19,1,1,1);
+ add(new THREE.CapsuleGeometry(.17,.09,4,12),hair,0,1.98,-.015,1,.65,1);
+ // neck collar
+ add(new THREE.CylinderGeometry(.11,.12,.09,12),white,0,1.52,0);
+ // arms with upper arm, elbow, forearm, hands
+ const arms=[];
+ for(const side of [-1,1]){
+  const upper=add(new THREE.CapsuleGeometry(.075,.34,5,10),cloth,side*.29,1.22,0,1,1,1);upper.rotation.z=side*-.12;
+  sphere(clothDark,side*.34,1.01,0,.075,.08,.075);
+  const fore=add(new THREE.CapsuleGeometry(.061,.31,5,10),cloth,side*.37,.84,.005);fore.rotation.z=side*-.05;
+  sphere(skin,side*.38,.64,.015,.065,.085,.06);
+  arms.push({upper,fore});
+ }
+ // hips and separated legs
+ add(new THREE.BoxGeometry(.34,.2,.23),pants,0,.68,0);
+ const legs=[];
+ for(const side of [-1,1]){
+  const thigh=add(new THREE.CapsuleGeometry(.09,.36,6,12),pants,side*.105,.39,0);
+  const knee=sphere(pants,side*.105,.19,.012,.09,.09,.09);
+  const shin=add(new THREE.CapsuleGeometry(.067,.29,6,12),pants,side*.105,.08,0);
+  const foot=add(new THREE.BoxGeometry(.13,.09,.25),shoes,side*.105,-.105,.055);
+  legs.push({thigh,knee,shin,foot});
+ }
+ // subtle clothing seam and belt
+ add(new THREE.BoxGeometry(.34,.045,.24),shoes,0,.62,0);
+ g.userData={arms,legs,walkPhase:Math.random()*Math.PI*2};
+ return g
 }
-function makeAvatar(color){const g=new THREE.Group(),skin=new THREE.MeshStandardMaterial({color:0xc99570}),cloth=new THREE.MeshStandardMaterial({color}),dark=new THREE.MeshStandardMaterial({color:0x27313a});const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.55,4,8),cloth);torso.position.y=.72;g.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.17,12,10),skin);head.position.y=1.22;g.add(head);for(const x of [-.13,.13]){const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.35,3,6),dark);leg.position.set(x,.22,0);g.add(leg)}return g}
 function buildBiology(){const body=new THREE.Group();world.add(body);const skin=new THREE.MeshStandardMaterial({color:0xd8b9a1,transparent:true,opacity:.28,roughness:.8});const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.72,1.65,8,16),skin);torso.position.y=1.65;body.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.48,18,14),skin);head.position.y=3.05;body.add(head);const limbMat=new THREE.MeshStandardMaterial({color:0xd8b9a1,transparent:true,opacity:.38});for(const side of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.17,.95,5,10),limbMat);arm.position.set(side*.95,1.9,0);arm.rotation.z=side*-.18;body.add(arm);const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.22,1.15,5,10),limbMat);leg.position.set(side*.34,.25,0);body.add(leg)}
  const heart=new THREE.Mesh(new THREE.SphereGeometry(.28,20,16),new THREE.MeshStandardMaterial({color:0xc84c55,emissive:0x4a1016}));heart.position.set(-.2,1.9,.58);body.add(heart);const lungMat=new THREE.MeshStandardMaterial({color:0x75b9c7,transparent:true,opacity:.88});for(const x of [-.42,.25]){const lung=new THREE.Mesh(new THREE.SphereGeometry(.3,16,12),lungMat);lung.scale.set(.75,1.3,.7);lung.position.set(x,2.05,.55);body.add(lung)}const brain=new THREE.Mesh(new THREE.SphereGeometry(.3,16,12),new THREE.MeshStandardMaterial({color:0xe2a5bc}));brain.position.set(0,3.12,.05);body.add(brain);o.heart=heart;o.lungs=body.children.filter(x=>x.material===lungMat);o.body=body;camera.position.set(6,5,9);orbit.target.set(0,1.7,0);$("hudState").textContent="FIZIOLOGIK MODEL";}
 function buildBattle(){const floor=new THREE.Mesh(new THREE.CylinderGeometry(9,9,.3,64),new THREE.MeshStandardMaterial({color:0x263d43,metalness:.3,roughness:.65}));floor.position.y=-.2;world.add(floor);const ring=new THREE.Mesh(new THREE.TorusGeometry(8.5,.08,8,80),new THREE.MeshBasicMaterial({color:0x8bd8df}));ring.rotation.x=Math.PI/2;ring.position.y=.02;world.add(ring);for(let i=0;i<8;i++){const a=i*Math.PI/4;const p=new THREE.Vector3(Math.cos(a)*6,0,Math.sin(a)*6);const pillar=new THREE.Mesh(new THREE.CylinderGeometry(.25,.35,2.5,8),new THREE.MeshStandardMaterial({color:0x536d77,metalness:.5}));pillar.position.set(p.x,1.25,p.z);world.add(pillar)}heroGroup=new THREE.Group();world.add(heroGroup);for(let i=0;i<3;i++){const h=makeAvatar([0x5db6dc,0x9d86d5,0x6fc49a][i]);h.scale.setScalar(1.3);h.position.set((i-1)*1.5,0,3);heroGroup.add(h)}for(let i=0;i<5;i++){const a=ball((i-2)*2,.35,-6,.24,0xf08b68);attackers.push({mesh:a,phase:i*.9,done:false})}camera.position.set(0,12,16);orbit.target.set(0,.6,0);$("hudState").textContent="HIMOYA MAYDONI";}
-function updateTown(dt){attackers.forEach((g,i)=>{g.position.x+=Math.sin(elapsed*.45+g.userData.phase)*dt*.35;g.position.z+=Math.cos(elapsed*.38+g.userData.phase)*dt*.25})}
+function updateTown(dt){attackers.forEach((g,i)=>{const ph=elapsed*3+g.userData.walkPhase;g.position.x+=Math.sin(elapsed*.45+g.userData.walkPhase)*dt*.12;g.position.z+=Math.cos(elapsed*.38+g.userData.walkPhase)*dt*.1;g.rotation.y=Math.sin(elapsed*.4+g.userData.walkPhase)*.22;if(g.userData.legs){g.userData.legs.forEach((leg,j)=>{leg.thigh.rotation.x=Math.sin(ph+j*Math.PI)*.32;leg.shin.rotation.x=Math.max(0,-Math.sin(ph+j*Math.PI))*.22});g.userData.arms.forEach((arm,j)=>{arm.upper.rotation.x=Math.sin(ph+j*Math.PI+Math.PI)*.22;arm.fore.rotation.x=Math.sin(ph+j*Math.PI+Math.PI)*.12})}})}
 function updateBiology(dt){if(o.heart){const pulse=1+Math.sin(elapsed*Math.PI*2*p.hr/60)*.13;o.heart.scale.setScalar(pulse)}if(o.lungs){const breath=1+Math.sin(elapsed*Math.PI*2*p.rr/60)*.08;o.lungs.forEach(x=>x.scale.y=.39*breath)}}
 function placeShield(x,z){const group=new THREE.Group();const geo=new THREE.SphereGeometry(1,24,18,0,Math.PI*2,0,Math.PI);const mat=new THREE.MeshPhysicalMaterial({color:0x64dcf5,transparent:true,opacity:.36,roughness:.18,metalness:.25,emissive:0x124b61,side:THREE.DoubleSide});const dome=new THREE.Mesh(geo,mat);dome.scale.set(1.1,1.5,.25);group.add(dome);const edge=new THREE.Mesh(new THREE.TorusGeometry(1,.045,8,36),new THREE.MeshBasicMaterial({color:0x9df4ff}));edge.scale.set(1.1,1.5,1);group.add(edge);group.position.set(x,1.25,z);world.add(group);shields.push(group);return group}
 function updateBattle(dt){attackers.forEach(a=>{if(a.done)return;a.mesh.position.z+=dt*1.6;if(a.mesh.position.z>4){const stopped=shields.some(s=>Math.abs(s.position.x-a.mesh.position.x)<1.5&&Math.abs(s.position.z-a.mesh.position.z)<1.2);totalAttacks++;if(stopped){blocked++;a.mesh.material.color.setHex(0x75e6d1);a.mesh.position.z=3.9;a.done=true}else{a.mesh.material.color.setHex(0x777777);a.done=true}}});$("battleStatus").textContent="Qalqon: "+shields.length+" · To‘silgan energiya zarbalari: "+blocked+"/"+totalAttacks}
-function init(){try{scene=new THREE.Scene();scene.background=new THREE.Color(0x111b20);scene.fog=new THREE.Fog(0x111b20,18,38);camera=new THREE.PerspectiveCamera(48,1,.1,100);camera.position.set(8,6.5,10);renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;$("viewport").prepend(renderer.domElement);orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.target.set(0,1.3,0);orbit.minDistance=4;orbit.maxDistance=26;orbit.maxPolarAngle=Math.PI*.48;scene.add(new THREE.HemisphereLight(0xddeeff,0x26332d,2));const l=new THREE.DirectionalLight(0xffffff,2.2);l.position.set(5,9,7);scene.add(l);world=new THREE.Group();scene.add(world);clock=new THREE.Clock();$("loading").remove();select("projectile");window.addEventListener("resize",resize);resize();animate()}catch(e){$("loading").textContent="3D muhit ishga tushmadi. WebGL va internet aloqasini tekshiring.";console.error(e)}}
+function init(){try{scene=new THREE.Scene();scene.background=new THREE.Color(0x111b20);scene.fog=new THREE.Fog(0x111b20,18,38);camera=new THREE.PerspectiveCamera(48,1,.1,100);camera.position.set(8,6.5,10);renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;$("viewport").prepend(renderer.domElement);orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.target.set(0,1.3,0);orbit.minDistance=4;orbit.maxDistance=26;orbit.maxPolarAngle=Math.PI*.48;scene.add(new THREE.HemisphereLight(0xddeeff,0x26332d,1.45));const l=new THREE.DirectionalLight(0xfff1dc,3.1);l.position.set(9,16,10);l.castShadow=true;l.shadow.mapSize.set(2048,2048);l.shadow.camera.left=-24;l.shadow.camera.right=24;l.shadow.camera.top=24;l.shadow.camera.bottom=-24;scene.add(l);world=new THREE.Group();scene.add(world);clock=new THREE.Clock();$("loading").remove();select("projectile");window.addEventListener("resize",resize);resize();animate()}catch(e){$("loading").textContent="3D muhit ishga tushmadi. WebGL va internet aloqasini tekshiring.";console.error(e)}}
 function saved(){try{const r=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(r)?r:[]}catch{return []}}
 function result(){if(mode==="town")return "Generativ shaharcha maketi.";if(mode==="biology")return "Yurak urishi "+p.hr+" bpm; nafas "+p.rr+"/min; harorat "+p.temp+" °C; suyuqlik "+p.hydr+"%.";if(mode==="battle")return "To‘silgan energiya zarbalari: "+blocked+"/"+totalAttacks+".";if(mode==="projectile"){const t=2*p.v*Math.sin(p.a*Math.PI/180)/p.g;return "Uchish vaqti "+t.toFixed(2)+" s; masofa "+(p.v*Math.cos(p.a*Math.PI/180)*t).toFixed(2)+" m."}if(mode==="pendulum")return "Mayatnik davri "+(6.283*Math.sqrt(p.L/p.g)).toFixed(2)+" s.";if(mode==="gas")return "Harorat "+p.T+" K; "+p.N+" zarracha.";if(mode==="wave")return "To‘lqin tezligi "+(p.f*p.l).toFixed(2)+" m/s.";if(mode==="refraction")return "Sinish burchagi "+(Math.asin(Math.sin(p.a*Math.PI/180)/p.n)*180/Math.PI).toFixed(2)+"°.";return "Yadro bo‘linishi konseptual modeli."}
 function renderHistory(){const names={projectile:"Jism harakati",pendulum:"Mayatnik",gas:"Gaz molekulalari",wave:"To‘lqin",refraction:"Yorug‘lik sinishi",nuclear:"Yadro fizikasi"},r=saved();$("historyList").innerHTML=r.length?r.map(x=>'<div class="history-row"><div><strong>'+(names[x.mode]||"Tajriba")+'</strong><small>'+new Date(x.time).toLocaleString("uz-UZ")+' · '+x.summary+'</small></div><div class="history-actions"><button class="load" data-action="load" data-id="'+x.id+'">Qayta yuklash</button><button class="delete" data-action="delete" data-id="'+x.id+'">O‘chirish</button></div></div>').join(""):'<div class="empty">Hozircha saqlangan tajribalar yo‘q. Birinchi natijangizni saqlash uchun yuqoridagi tugmani bosing.</div>'}
