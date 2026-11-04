@@ -17,6 +17,12 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 
 The dedicated startap-yoli.html page converts startup-program discovery into a practical flow: select one of five stages, work through a stage-specific self-check, and rank active opportunities by stage, need, sector, source type, and search query. It uses the public opportunity catalog with reviewed fallback links for UzCombinator, IT Park Uzbekistan, Startup Uzbekistan, IT Park Ventures, Innoyouth, and other sources. Match scores are explainable ranking hints, not probabilities or an eligibility decision. The page is independent and is not an official IT Park or UzCombinator application portal.
 
+## 3D Virtual Physics Laboratory
+
+The standalone [3D Virtual Physics Laboratory](./laboratoriya.html) adds interactive, browser-based educational models for projectile motion, a mathematical pendulum, ideal-gas particles, mechanical waves, refraction, and a conceptual nuclear-fission demonstration. Three.js renders the 3D scene; users can change model parameters, inspect calculated values and save experiment snapshots to their own account.
+
+Saved snapshots are stored in `public.lab_runs`. Row Level Security allows an authenticated user to read, insert and delete only their own runs; anonymous access is revoked. Running the simulations does not require login. The nuclear-physics view is deliberately limited to a high-level educational explanation of fission and energy release; it does not model nuclear-weapon construction, assembly, weapon parameters or detonation.
+
 ## Compact interactive experience
 
 The homepage keeps the complete workflow while collapsing long supporting information into accessible accordions. Its dark hero uses a custom particle network animation instead of an external background video. A live checklist estimates form completeness and identifies missing fields; a reading-progress line, return-to-top control, and subtle card reveals make navigation feel more responsive. The animation pauses when the hero is off-screen or the tab is hidden and respects reduced-motion preferences. AI review, team matching, voting, initiative tracking, the personal cabinet and the illustrated official-services guide remain available.
