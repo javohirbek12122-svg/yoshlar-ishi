@@ -117,6 +117,8 @@ create index if not exists opportunity_journeys_user_updated_idx
   on public.opportunity_journeys (user_id, updated_at desc);
 create index if not exists opportunity_journeys_program_status_idx
   on public.opportunity_journeys (program_slug, status);
+create unique index if not exists opportunity_journeys_user_program_unique_idx
+  on public.opportunity_journeys (user_id, program_slug);
 
 insert into public.youth_opportunity_programs
 (slug,title,provider,category,summary,benefit,age_min,age_max,audience_tags,eligibility,steps,documents,application_channel,application_url,source_title,source_url,secondary_source_url,deadline_note,status_note,verified_on,active,featured,sort_order)
