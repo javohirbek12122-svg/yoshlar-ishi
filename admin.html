@@ -75,6 +75,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
       <button class="navitem" data-page="initiatives"><span class="ico">▤</span> Tashabbuslar</button>
       <button class="navitem" data-page="partners"><span class="ico">◎</span> Hamkorlik murojaatlari</button>
       <button class="navitem" data-page="sources"><span class="ico">↗</span> Manbalar va portallar</button>
+      <button class="navitem" data-page="youth-programs"><span class="ico">✦</span> Yoshlar dasturlari</button>
       <button class="navitem" data-page="integrations"><span class="ico">⌘</span> Tashqi integratsiyalar</button>
       <button class="navitem" data-page="team"><span class="ico">◎</span> Jamoa doskasi</button>
       <button class="navitem" data-page="showcase"><span class="ico">★</span> Top tashabbuslar</button>
@@ -130,6 +131,37 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
           <div class="panel"><div class="panelhead"><div><h3>Mavjud manbalar</h3><p>Faol manbalar ommaviy saytda ko‘rinadi.</p></div><span class="statuspill" id="sourceTotal">— ta</span></div><div class="tablewrap"><table style="min-width:500px"><thead><tr><th>Manba</th><th>Kategoriya</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="sourcesBody"><tr><td colspan="4" class="empty">Manbalar yuklanmoqda…</td></tr></tbody></table></div></div>
         </div>
       </section>
+      <section class="page" id="page-youth-programs">
+        <div class="sectiontitle"><div><div class="eyebrow">Davlat va yoshlar dasturlari</div><h2>Yoshlar imkoniyatlari reyestri</h2><p>Dastur shartlari, hujjatlar, qadamlar va rasmiy manbalarni boshqaring.</p></div><span class="statuspill" id="youthProgramCount">— ta</span></div>
+        <div class="formsgrid">
+          <div class="panel"><div class="panelhead"><div><h3 id="programFormTitle">Yangi dastur qo‘shish</h3><p>Ommaviy “Imkoniyatlar” katalogi shu ma’lumotlardan foydalanadi.</p></div></div>
+            <form class="form" id="youthProgramForm">
+              <input type="hidden" id="programEditId">
+              <div class="field"><label for="programTitle">Dastur nomi *</label><input id="programTitle" required maxlength="180"></div>
+              <div class="inlineform"><div class="field"><label for="programSlug">Slug *</label><input id="programSlug" required pattern="[a-z0-9-]{3,100}" maxlength="100"></div><div class="field"><label for="programProvider">Tashkilot *</label><input id="programProvider" required maxlength="180"></div></div>
+              <div class="field"><label for="programCategory">Yo‘nalish *</label><select id="programCategory"><option value="social_support">Ijtimoiy yordam</option><option value="language">Til / subsidiya</option><option value="business">Biznes / kredit</option><option value="career">Ish / stajirovka</option><option value="education">Ta’lim</option><option value="community">Jamoa / tashabbus</option></select></div>
+              <div class="field"><label for="programSummary">Qisqa tushuntirish *</label><textarea id="programSummary" required maxlength="3000"></textarea></div>
+              <div class="field"><label for="programBenefit">Nima beradi? *</label><textarea id="programBenefit" required maxlength="3000"></textarea></div>
+              <div class="inlineform"><div class="field"><label for="programAgeMin">Eng kam yosh</label><input id="programAgeMin" type="number" min="0" max="100"></div><div class="field"><label for="programAgeMax">Eng yuqori yosh</label><input id="programAgeMax" type="number" min="0" max="100"></div></div>
+              <div class="field"><label for="programAudience">Kimlar uchun? (har qatorga bittadan)</label><textarea id="programAudience" maxlength="6000"></textarea></div>
+              <div class="field"><label for="programEligibility">Muvofiqlik shartlari (JSON obyekt)</label><textarea id="programEligibility" maxlength="12000" placeholder='{"important":"Rasmiy talablarni tekshiring."}'></textarea></div>
+              <div class="field"><label for="programSteps">Ariza qadamlari (har qatorga bittadan)</label><textarea id="programSteps" maxlength="16000"></textarea></div>
+              <div class="field"><label for="programDocuments">Kerakli hujjatlar (har qatorga bittadan)</label><textarea id="programDocuments" maxlength="12000"></textarea></div>
+              <div class="field"><label for="programChannel">Ariza topshirish kanali</label><textarea id="programChannel" maxlength="3000"></textarea></div>
+              <div class="field"><label for="programApplicationUrl">Ariza / rasmiy portal URL</label><input id="programApplicationUrl" type="url" placeholder="https://..."></div>
+              <div class="inlineform"><div class="field"><label for="programSourceTitle">Rasmiy manba nomi *</label><input id="programSourceTitle" required maxlength="180"></div><div class="field"><label for="programVerified">Tekshirilgan sana *</label><input id="programVerified" type="date" required></div></div>
+              <div class="field"><label for="programSourceUrl">Rasmiy manba URL *</label><input id="programSourceUrl" type="url" required placeholder="https://..."></div>
+              <div class="field"><label for="programSecondaryUrl">Qo‘shimcha manba URL</label><input id="programSecondaryUrl" type="url" placeholder="https://..."></div>
+              <div class="field"><label for="programDeadline">Muddat / qabul holati haqida izoh</label><textarea id="programDeadline" maxlength="2000"></textarea></div>
+              <div class="field"><label for="programStatusNote">Muhim ogohlantirish / holat izohi</label><textarea id="programStatusNote" maxlength="3000"></textarea></div>
+              <div class="inlineform"><label class="check"><input id="programActive" type="checkbox" checked> Ommaviy katalogda faol</label><label class="check"><input id="programFeatured" type="checkbox"> Muhim imkoniyat</label></div>
+              <div class="inlineform"><button class="button primary" type="submit">Dastur ma’lumotini saqlash</button><button class="button" id="programReset" type="button">Yangi forma</button></div>
+              <div id="programFormNotice" class="notice" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+          <div class="panel"><div class="panelhead"><div><h3>Mavjud dasturlar</h3><p>Tahrirlash yoki vaqtincha yashirish uchun yozuvni tanlang.</p></div></div><div class="tablewrap"><table style="min-width:620px"><thead><tr><th>Dastur</th><th>Yosh / sana</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="youthProgramsBody"><tr><td colspan="4" class="empty">Dasturlar yuklanmoqda…</td></tr></tbody></table></div></div>
+        </div>
+      </section>
       <section class="page" id="page-integrations">
         <div class="sectiontitle"><div><div class="eyebrow">Tashqi rasmiy portallar</div><h2>Integratsiyalar reyestri</h2><p>Havolalar, texnik ulanish turi, ruxsat talabi va integratsiya tayyorgarligini kuzating.</p></div><button class="button" id="integrationRefresh">↻ Yangilash</button></div>
         <div class="notice" style="background:#eaf3fb;border:1px solid #d8e5f0;border-radius:8px;padding:13px 15px;color:#36536d;font-size:11px;margin-bottom:14px">Hozirgi holat: rasmiy portallar katalogi tashqi havolalar orqali ishlaydi. <strong>“Ulangan API/SSO”</strong> holatini faqat tegishli tashkilot ruxsati, texnik hujjat va haqiqiy test muvaffaqiyatli bo‘lgandan keyin belgilang. Ushbu reyestrning o‘zi tashqi tizimga ulanishni yaratmaydi.</div>
@@ -175,7 +207,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{},url=(cfg.supabaseUrl||"").replace(/\/$/,""),key=cfg.supabaseAnonKey||cfg.supabaseKey;
 const $=id=>document.getElementById(id),statusNames={submitted:"Yangi",reviewing:"Ko‘rib chiqilmoqda",needs_details:"Qo‘shimcha ma’lumot kerak",approved:"Ma’qullangan",in_progress:"Jarayonda",completed:"Yakunlangan",declined:"Rad etilgan"},requestNames={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",handled:"Ko‘rib chiqildi",archived:"Arxiv"},typeNames={mentor:"Mentorlik",organization:"Tashkilot",event:"Tadbir",resource:"Resurs",feedback:"Fikr-mulohaza"},categoryNames={official:"Rasmiy manba",support:"Yordam",navigator:"Navigator",startup:"Startap",volunteer:"Ko‘ngillilik",grants:"Grantlar",education:"Ta’lim",opportunity:"Imkoniyat",community:"Jamiyat",technology:"Texnologiya",culture:"Madaniyat",other:"Boshqa"};
-let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],audit=[],timer=null;
+let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],youthPrograms=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],audit=[],timer=null;
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function notify(text){const t=$("toast");t.textContent=text;t.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.style.display="none",4000)}
 function tell(id,text,error=false){const e=$(id);e.textContent=text;e.classList.toggle("error",!!error)}
@@ -194,7 +226,7 @@ function fmt(d){if(!d)return "—";try{return new Date(d).toLocaleString("uz-UZ"
 function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("uz-UZ",{day:"2-digit",month:"short",year:"numeric"})}
 function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
 async function loadData(){try{
- const [i,p,s,a,g,gn,tp,ti,sh]=await Promise.all([
+ const [i,p,s,a,g,gn,tp,ti,sh,yp]=await Promise.all([
   api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),
   api("rpc/admin_list_connection_requests",{method:"POST",body:JSON.stringify({})}),
   api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
@@ -203,12 +235,13 @@ async function loadData(){try{
   api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),
   api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),
   api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),
-  api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300")
+  api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300"),
+  api("youth_opportunity_programs?select=*&order=featured.desc,sort_order.asc,title.asc&limit=300")
  ]);
  initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];
  const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));
  integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));
- teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];
+ teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];youthPrograms=yp||[];
  renderAll();setDbHealth(true,"Ulandi");$("lastRefresh").textContent="Yangilandi";$("lastUpdated").textContent=fmt(new Date().toISOString());
  }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e)}}
 async function loadStats(){try{
@@ -285,8 +318,8 @@ async function addShowcase(ev){
  finally{btn.disabled=false}
 }
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
-function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
-function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar",integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
+function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderYouthPrograms();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
+function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar", "youth-programs":"Yoshlar dasturlari", integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
 async function saveInitiative(btn){
  const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;
  btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value,oldStatus=row.status;
