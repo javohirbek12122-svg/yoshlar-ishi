@@ -61,6 +61,11 @@ jobs:
           grep -Fqi 'href="./laboratoriya.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the 3D laboratory navigation link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin.html" -o /tmp/yoshlar-admin.html
           grep -qi "Boshqaruv markazi" /tmp/yoshlar-admin.html
+          grep -Fqi 'id="otpPanel"' /tmp/yoshlar-admin.html || { echo "::error::The live admin page is missing its email OTP gate."; exit 1; }
+          grep -Fqi 'id="passwordForm"' /tmp/yoshlar-admin.html || { echo "::error::The live admin page is missing its password fallback."; exit 1; }
+          grep -Fqi 'rpc/admin_console_check' /tmp/yoshlar-admin.html || { echo "::error::The live admin page is missing its server-side allowlist check."; exit 1; }
+          grep -Fqi 'create_user:false' /tmp/yoshlar-admin.html || { echo "::error::The live admin login must not permit automatic account creation."; exit 1; }
+          if grep -Fqi 'create_user:true' /tmp/yoshlar-admin.html; then echo "::error::Unsafe self-signup marker found in admin page."; exit 1; fi
           grep -Fqi 'id="page-team"' /tmp/yoshlar-admin.html
           grep -Fqi 'id="page-showcase"' /tmp/yoshlar-admin.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html
