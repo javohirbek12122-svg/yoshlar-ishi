@@ -318,6 +318,63 @@ async function addShowcase(ev){
  finally{btn.disabled=false}
 }
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
+
+function renderYouthPrograms(){
+ $("youthProgramCount").textContent=youthPrograms.length+" ta dastur";
+ $("youthProgramsBody").innerHTML=youthPrograms.length?youthPrograms.map(p=>'<tr data-id="'+esc(p.id)+'"><td><strong>'+esc(p.title)+'</strong><span class="sub">'+esc(p.provider)+' · '+esc(p.category)+'</span><span class="sub">'+esc(p.slug)+'</span></td><td>'+esc(p.age_min??"—")+'–'+esc(p.age_max??"—")+'<span class="sub">Tekshirilgan: '+esc(p.verified_on||"—")+'</span></td><td><span class="statuspill '+(p.active?'':'warn')+'">'+(p.active?'Faol':'Yashirilgan')+'</span><span class="sub">'+(p.featured?'Muhim dastur':'Oddiy')+'</span></td><td><button type="button" class="savebtn js-program-edit">Tahrirlash</button> <button type="button" class="savebtn js-program-toggle">'+(p.active?'Yashirish':'Faollashtirish')+'</button></td></tr>').join(""):'<tr><td colspan="4" class="empty">Dastur yo‘q. Chapdagi forma orqali birinchi imkoniyatni qo‘shing.</td></tr>';
+}
+function resetYouthProgramForm(){
+ $("youthProgramForm").reset();$("programEditId").value="";$("programFormTitle").textContent="Yangi dastur qo‘shish";
+ $("programVerified").value=new Date().toISOString().slice(0,10);$("programActive").checked=true;$("programFeatured").checked=false;
+ tell("programFormNotice","Forma yangi dastur uchun tayyor.");
+}
+function editYouthProgram(id){
+ const p=youthPrograms.find(x=>x.id===id);if(!p)return;
+ $("programEditId").value=p.id;$("programTitle").value=p.title||"";$("programSlug").value=p.slug||"";$("programProvider").value=p.provider||"";
+ $("programCategory").value=p.category||"social_support";$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
+ $("programAgeMin").value=p.age_min??"";$("programAgeMax").value=p.age_max??"";
+ $("programAudience").value=(p.audience_tags||[]).join("\n");$("programEligibility").value=JSON.stringify(p.eligibility||{},null,2);
+ $("programSteps").value=(p.steps||[]).join("\n");$("programDocuments").value=(p.documents||[]).join("\n");
+ $("programChannel").value=p.application_channel||"";$("programApplicationUrl").value=p.application_url||"";
+ $("programSourceTitle").value=p.source_title||"";$("programVerified").value=p.verified_on||new Date().toISOString().slice(0,10);
+ $("programSourceUrl").value=p.source_url||"";$("programSecondaryUrl").value=p.secondary_source_url||"";
+ $("programDeadline").value=p.deadline_note||"";$("programStatusNote").value=p.status_note||"";
+ $("programActive").checked=p.active===true;$("programFeatured").checked=p.featured===true;
+ $("programFormTitle").textContent="Dastur ma’lumotini tahrirlash";tell("programFormNotice","Tahrir rejimi: "+p.title);
+ $("youthProgramForm").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function saveYouthProgram(ev){
+ ev.preventDefault();const btn=ev.currentTarget.querySelector('button[type="submit"]');btn.disabled=true;
+ try{
+  let eligibility={};const raw=$("programEligibility").value.trim();
+  if(raw){eligibility=JSON.parse(raw);if(!eligibility||Array.isArray(eligibility)||typeof eligibility!=="object")throw Error("Muvofiqlik shartlari JSON obyekt bo‘lishi kerak.");}
+  const sourceUrl=$("programSourceUrl").value.trim(),appUrl=$("programApplicationUrl").value.trim(),secondaryUrl=$("programSecondaryUrl").value.trim();
+  if(!/^[a-z0-9-]{3,100}$/.test($("programSlug").value.trim().toLowerCase()))throw Error("Slug faqat kichik lotin harflari, raqam va defisdan iborat bo‘lsin.");
+  if(!/^https?:\/\//i.test(sourceUrl))throw Error("Rasmiy manba URL http:// yoki https:// bilan boshlanishi kerak.");
+  if(appUrl&&!/^https?:\/\//i.test(appUrl))throw Error("Ariza portali URL noto‘g‘ri.");
+  if(secondaryUrl&&!/^https?:\/\//i.test(secondaryUrl))throw Error("Qo‘shimcha manba URL noto‘g‘ri.");
+  const splitLines=id=>$(id).value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const min=$("programAgeMin").value,max=$("programAgeMax").value;
+  if(min!==""&&max!==""&&Number(min)>Number(max))throw Error("Eng kam yosh eng yuqori yoshdan katta bo‘lishi mumkin emas.");
+  const payload={slug:$("programSlug").value.trim().toLowerCase(),title:$("programTitle").value.trim(),provider:$("programProvider").value.trim(),category:$("programCategory").value,
+   summary:$("programSummary").value.trim(),benefit:$("programBenefit").value.trim(),age_min:min===""?null:Number(min),age_max:max===""?null:Number(max),
+   audience_tags:splitLines("programAudience"),eligibility:eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
+   application_channel:$("programChannel").value.trim(),application_url:appUrl,source_title:$("programSourceTitle").value.trim(),source_url:sourceUrl,
+   secondary_source_url:secondaryUrl,deadline_note:$("programDeadline").value.trim(),status_note:$("programStatusNote").value.trim(),
+   verified_on:$("programVerified").value,active:$("programActive").checked,featured:$("programFeatured").checked,updated_at:new Date().toISOString()};
+  const id=$("programEditId").value;
+  if(id){await api("youth_opportunity_programs?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});notify("Yoshlar dasturi yangilandi.")}
+  else{await api("youth_opportunity_programs",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});notify("Yangi yoshlar dasturi qo‘shildi.")}
+  resetYouthProgramForm();await loadData();await loadStats();
+ }catch(e){tell("programFormNotice","Saqlash xatosi: "+e.message,true)}
+ finally{btn.disabled=false}
+}
+async function toggleYouthProgram(btn){
+ const tr=btn.closest("tr"),p=youthPrograms.find(x=>x.id===tr.dataset.id);if(!p)return;btn.disabled=true;
+ try{await api("youth_opportunity_programs?id=eq."+encodeURIComponent(p.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!p.active,updated_at:new Date().toISOString()})});await loadData();notify("Dastur katalog holati yangilandi.")}
+ catch(e){notify("Dastur holatini yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
+}
+
 function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderYouthPrograms();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
 function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar", "youth-programs":"Yoshlar dasturlari", integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
 async function saveInitiative(btn){
@@ -376,6 +433,7 @@ $("initiativesBody").addEventListener("click",ev=>{const b=ev.target.closest(".j
 $("partnersBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-psave");if(b)savePartner(b)});
 $("sourcesBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-stoggle");if(b)toggleSource(b)});
 $("exportBtn").addEventListener("click",downloadCsv);$("sourceForm").addEventListener("submit",addSource);
+$("youthProgramForm").addEventListener("submit",saveYouthProgram);$("programReset").addEventListener("click",resetYouthProgramForm);$("programVerified").value=new Date().toISOString().slice(0,10);$("youthProgramsBody").addEventListener("click",ev=>{const edit=ev.target.closest(".js-program-edit"),toggle=ev.target.closest(".js-program-toggle");if(edit)editYouthProgram(edit.closest("tr").dataset.id);if(toggle)toggleYouthProgram(toggle)});
 (async()=>{try{parseHashSession();if(token){await establish()}else showLogin()}catch(e){signOut();tell("loginNotice","Kirish tekshiruvi: "+e.message,true);showLogin()}})();
 })();
 </script>
