@@ -256,6 +256,7 @@ console.log("✓ app icon is an SVG with a square viewBox");
 
 const youthOpportunityMigration = read("supabase/migrations/20261107101800_youth_opportunity_engine.sql");
 const contractSupportMigration = read("supabase/migrations/20261107113500_add_professional_education_contract_support.sql");
+const updatedYouthCatalogueMigration = read("supabase/migrations/20261107120000_refresh_youth_opportunities_2026.sql");
 for (const feature of [
   "youth_opportunity_programs",
   "opportunity_journeys",
@@ -275,6 +276,17 @@ for (const feature of [
 ]) {
   assert.ok(contractSupportMigration.includes(feature), "Updated official youth support migration missing: " + feature);
 }
+for (const feature of [
+  "yoshlar-daftari-kontrakt",
+  "kelajak-tadbirkori-uzvc",
+  "B1/B2",
+  "PF-175",
+  "2plus6.uz/",
+]) {
+  assert.ok(updatedYouthCatalogueMigration.includes(feature), "Updated catalogue migration missing: " + feature);
+}
+assert.ok(opportunitiesPage.includes('p.application_url?"Rasmiy ariza kanalini ochish ↗":"Rasmiy ma’lumotni ko‘rish ↗"'), "Unconfirmed application paths must not be labelled as application forms");
+assert.ok(admin.includes('id="programSort"'), "Admin must preserve manual programme ordering");
 console.log("✓ youth opportunity schema, owner-scoped progress, professional-education contract support and current official 2+6 route are reproducible");
 
 const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));

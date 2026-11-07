@@ -140,6 +140,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
               <div class="field"><label for="programTitle">Dastur nomi *</label><input id="programTitle" required maxlength="180"></div>
               <div class="inlineform"><div class="field"><label for="programSlug">Slug *</label><input id="programSlug" required pattern="[a-z0-9-]{3,100}" maxlength="100"></div><div class="field"><label for="programProvider">Tashkilot *</label><input id="programProvider" required maxlength="180"></div></div>
               <div class="field"><label for="programCategory">Yo‘nalish *</label><select id="programCategory"><option value="social_support">Ijtimoiy yordam</option><option value="language">Til / subsidiya</option><option value="business">Biznes / kredit</option><option value="career">Ish / stajirovka</option><option value="education">Ta’lim</option><option value="community">Jamoa / tashabbus</option></select></div>
+              <div class="field"><label for="programSort">Katalogdagi tartib raqami</label><input id="programSort" type="number" min="0" max="9999" value="100"></div>
               <div class="field"><label for="programSummary">Qisqa tushuntirish *</label><textarea id="programSummary" required maxlength="3000"></textarea></div>
               <div class="field"><label for="programBenefit">Nima beradi? *</label><textarea id="programBenefit" required maxlength="3000"></textarea></div>
               <div class="inlineform"><div class="field"><label for="programAgeMin">Eng kam yosh</label><input id="programAgeMin" type="number" min="0" max="100"></div><div class="field"><label for="programAgeMax">Eng yuqori yosh</label><input id="programAgeMax" type="number" min="0" max="100"></div></div>
@@ -325,13 +326,13 @@ function renderYouthPrograms(){
 }
 function resetYouthProgramForm(){
  $("youthProgramForm").reset();$("programEditId").value="";$("programFormTitle").textContent="Yangi dastur qo‘shish";
- $("programVerified").value=new Date().toISOString().slice(0,10);$("programActive").checked=true;$("programFeatured").checked=false;
+ $("programVerified").value=new Date().toISOString().slice(0,10);$("programSort").value="100";$("programActive").checked=true;$("programFeatured").checked=false;
  tell("programFormNotice","Forma yangi dastur uchun tayyor.");
 }
 function editYouthProgram(id){
  const p=youthPrograms.find(x=>x.id===id);if(!p)return;
  $("programEditId").value=p.id;$("programTitle").value=p.title||"";$("programSlug").value=p.slug||"";$("programProvider").value=p.provider||"";
- $("programCategory").value=p.category||"social_support";$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
+ $("programCategory").value=p.category||"social_support";$("programSort").value=p.sort_order??100;$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
  $("programAgeMin").value=p.age_min??"";$("programAgeMax").value=p.age_max??"";
  $("programAudience").value=(p.audience_tags||[]).join("\n");$("programEligibility").value=JSON.stringify(p.eligibility||{},null,2);
  $("programSteps").value=(p.steps||[]).join("\n");$("programDocuments").value=(p.documents||[]).join("\n");
@@ -357,6 +358,7 @@ async function saveYouthProgram(ev){
   const min=$("programAgeMin").value,max=$("programAgeMax").value;
   if(min!==""&&max!==""&&Number(min)>Number(max))throw Error("Eng kam yosh eng yuqori yoshdan katta bo‘lishi mumkin emas.");
   const payload={slug:$("programSlug").value.trim().toLowerCase(),title:$("programTitle").value.trim(),provider:$("programProvider").value.trim(),category:$("programCategory").value,
+   sort_order:Number($("programSort").value)||100,
    summary:$("programSummary").value.trim(),benefit:$("programBenefit").value.trim(),age_min:min===""?null:Number(min),age_max:max===""?null:Number(max),
    audience_tags:splitLines("programAudience"),eligibility:eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
    application_channel:$("programChannel").value.trim(),application_url:appUrl,source_title:$("programSourceTitle").value.trim(),source_url:sourceUrl,
