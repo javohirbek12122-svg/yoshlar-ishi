@@ -265,7 +265,7 @@ for (const feature of [
   "2-plus-6",
   "kelajak-tadbirkori",
 ]) {
-  assert.ok(youthOpportunityMigration.includes(feature), \`Youth opportunity schema/seed missing: \${feature}\`);
+  assert.ok(youthOpportunityMigration.includes(feature), "Youth opportunity schema/seed missing: " + feature);
 }
 for (const feature of [
   "yoshlar-daftari-kontrakt",
@@ -273,7 +273,7 @@ for (const feature of [
   "2plus6.uz/opportunity",
   "BHM",
 ]) {
-  assert.ok(contractSupportMigration.includes(feature), \`Updated official youth support migration missing: \${feature}\`);
+  assert.ok(contractSupportMigration.includes(feature), "Updated official youth support migration missing: " + feature);
 }
 console.log("✓ youth opportunity schema, owner-scoped progress, professional-education contract support and current official 2+6 route are reproducible");
 
