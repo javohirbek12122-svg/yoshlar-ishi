@@ -66,6 +66,7 @@ Dashboard capabilities:
 - Search/filter, review, update status, and add internal notes on initiatives
 - Review partnership requests and mark their handling status
 - Add or hide opportunity links from the public catalog
+- Create, edit, feature, activate, or hide youth opportunity programmes with official-source dates, eligibility rules, required documents and application steps through the allowlist-protected admin panel
 - Maintain a separate official-portal integration registry (link-only / docs-needed / approval-needed / connected / disabled), including technical-doc URLs and internal notes
 - Prevent an external link alone from being marked as a connected API/SSO integration
 - Automatic audit log when initiative status changes
