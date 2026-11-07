@@ -140,7 +140,9 @@ console.log("✓ public community forms use the consent-checked server-side subm
 const admin = read("admin.html");
 for (const feature of [
   'id="loginForm"',
-  'admin_allowlist',
+  'id="otpPanel"',
+  'id="passwordForm"',
+  'rpc/admin_console_check',
   'id="page-initiatives"',
   'id="page-partners"',
   'id="page-sources"',
@@ -164,6 +166,12 @@ for (const feature of [
 }
 assert.ok(admin.includes('official_portal_integrations?select=id'), "Admin integration registry query missing");
 assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"'), "Admin must prevent false connected status for plain external links");
+assert.match(admin, /create_user:false/);
+assert.match(admin, /verify.*type:"email"/);
+assert.match(admin, /token\?grant_type=password/);
+assert.match(admin, /authorize\?provider=google/);
+assert.doesNotMatch(admin, /create_user:true/);
+console.log("✓ Parkent-style admin OTP/password/Google gate uses a server-side allowlist RPC and prevents self-signup");
 console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
 for (const feature of [
   'data-page="youth-programs"',
@@ -450,6 +458,11 @@ assert.match(ideaReview, /AI_RATE_LIMIT_SALT.*key/);
 console.log("✓ server-side AI safeguards and protected Telegram webhook/notification handlers are present");
 
 const accountMigration = read("supabase/migrations/20261028163033_secure_account_owned_initiatives.sql");
+const adminLoginMigration = read("supabase/migrations/20261107163000_admin_login_otp_gate.sql");
+assert.match(adminLoginMigration, /create or replace function public\.admin_console_check\(\)/i);
+assert.match(adminLoginMigration, /security invoker/i);
+assert.match(adminLoginMigration, /revoke all on function public\.admin_console_check\(\) from anon/i);
+assert.match(adminLoginMigration, /grant execute on function public\.admin_console_check\(\) to authenticated/i);
 const authorityMigration = read("supabase/migrations/20261028163747_add_core_public_authority_portals.sql");
 assert.match(accountMigration, /get_my_initiatives/);
 assert.match(accountMigration, /update_my_initiative/);
