@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123255">
+<meta name="description" content="Yoshlar uchun davlat dasturlari va imkoniyatlar: moslikni tekshiring, hujjatlarni tayyorlang, ariza loyihasini tuzing va jarayonni kuzating.">
+<title>Yoshlar imkoniyatlari — Yoshlar-Ishi</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#123255;--blue:#15558a;--blue2:#eaf3fb;--ink:#152336;--muted:#62758a;--line:#dce5ed;--paper:#f5f8fb;--white:#fff;--green:#176b51;--greenbg:#e8f5ef;--gold:#9b671e;--goldbg:#fff5e5;--red:#a13d3d;--redbg:#fff0ef;--shadow:0 18px 48px #16385810}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 "DM Sans",sans-serif}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+.topbar{background:var(--navy);color:#eaf3fb;font-size:12px}.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:8px 0}.topbar a{color:#fff}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 0}.brand{display:flex;align-items:center;gap:10px;color:var(--ink);font:800 17px Manrope}.brand-mark{display:grid;place-items:center;background:var(--blue);color:white;width:36px;height:36px;border-radius:8px;font-size:13px}.navlinks{display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:12px;font-weight:700}.navlinks a{color:#40556a}.navlinks a.active{color:var(--blue)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 16px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:white;font-weight:800;font-size:12px}.btn:hover{background:#0f426d;color:#fff;text-decoration:none}.btn.secondary{background:#fff;color:var(--blue);border-color:#c7d7e6}.btn.ghost{background:transparent;color:var(--blue);border-color:#c7d7e6}.btn:disabled{opacity:.55;cursor:not-allowed}
+.hero{background:linear-gradient(120deg,#123255,#194c78);color:#fff;padding:46px 0 42px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-120px;top:-170px;width:520px;height:520px;border:1px solid #ffffff22;border-radius:50%;box-shadow:0 0 0 42px #ffffff09,0 0 0 90px #ffffff06}.hero-inner{position:relative;z-index:1;max-width:760px}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#6e9ec6}.hero .eyebrow{color:#a9d5f7}.hero h1{font:800 clamp(32px,5vw,54px)/1.07 Manrope;letter-spacing:-1.8px;margin:12px 0}.hero p{max-width:680px;color:#d6e6f2;font-size:15px;margin:14px 0 20px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap}.hero .btn{background:#fff;color:#143d62;border-color:#fff}.hero .btn.secondary{background:#ffffff12;color:#fff;border-color:#ffffff60}
+.flowbar{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:-20px;position:relative;z-index:2}.flowstep{background:#fff;border:1px solid var(--line);border-radius:9px;padding:13px 12px;box-shadow:var(--shadow);min-width:0}.flowstep b{display:block;font:800 17px Manrope;color:var(--blue)}.flowstep span{font-size:11px;font-weight:700;color:#53687c}
+.section{padding:34px 0}.section-head{display:flex;justify-content:space-between;gap:22px;align-items:end;margin-bottom:16px}.section-head h2{font:800 25px/1.2 Manrope;margin:5px 0}.section-head p{max-width:510px;color:var(--muted);font-size:12px;margin:0}
+.finder{display:grid;grid-template-columns:1fr 1fr 1.1fr auto;gap:10px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px;box-shadow:var(--shadow)}.field label{display:block;font-size:10px;font-weight:800;color:#4c6277;margin:0 0 5px}.control{width:100%;min-width:0;padding:10px 11px;border:1px solid #cbd9e5;border-radius:7px;background:#fff;color:var(--ink);font-size:12px;outline:none}.control:focus{border-color:#4386bc;box-shadow:0 0 0 3px #1d75b51a}.finder .btn{align-self:end;min-height:40px}
+.results-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:11px;margin:15px 0 10px}.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{border:1px solid #cbd9e5;background:white;color:#557087;border-radius:99px;padding:6px 10px;font-size:10px;font-weight:700}.chip.active{background:var(--blue2);border-color:#b8d1e5;color:var(--blue)}
+.program-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.program-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px;display:flex;flex-direction:column;min-width:0;box-shadow:0 8px 26px #193b5c08}.program-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.tag{display:inline-flex;border-radius:5px;background:var(--blue2);color:#1e5d8e;padding:4px 7px;font-size:9px;font-weight:800;letter-spacing:.04em}.fit{border-radius:99px;padding:4px 8px;font-size:9px;font-weight:800;white-space:nowrap}.fit.good{background:var(--greenbg);color:var(--green)}.fit.check{background:var(--goldbg);color:var(--gold)}.fit.no{background:var(--redbg);color:var(--red)}.program-card h3{font:800 17px/1.3 Manrope;margin:12px 0 7px}.program-card p{color:#5c7084;font-size:12px;line-height:1.65;margin:0 0 10px}.program-benefit{border-top:1px solid #edf1f5;padding-top:10px;margin-top:auto;color:#334f67;font-size:11px}.program-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}.program-foot .small{font-size:10px;color:#718497}
+.empty{background:#fff;border:1px dashed #c6d6e5;border-radius:10px;padding:24px;text-align:center;color:var(--muted);font-size:12px;grid-column:1/-1}
+.detail-shell{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.8fr);gap:14px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:11px;padding:18px;box-shadow:var(--shadow);min-width:0}.panel h3{font:800 18px/1.25 Manrope;margin:6px 0}.panel h4{font:800 12px Manrope;margin:18px 0 7px;color:#334f67}.muted{color:var(--muted);font-size:11px;line-height:1.7}.notice{background:#f1f6fa;border:1px solid #d8e5ef;border-radius:8px;padding:10px 12px;color:#4f667b;font-size:10px;line-height:1.6}.notice.warn{background:var(--goldbg);border-color:#f0ddb8;color:#74531e}.notice.ok{background:var(--greenbg);border-color:#cbe8d8;color:#245c48}.program-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.fact{background:#f4f8fb;border-radius:7px;padding:9px}.fact b{display:block;font:800 13px Manrope;color:#173f63}.fact span{display:block;color:#6b7f91;font-size:9px}.plain-list{padding-left:18px;margin:8px 0}.plain-list li{margin:6px 0;color:#52687d;font-size:11px;line-height:1.6}
+.checklist{display:grid;gap:7px}.checkrow{display:flex;gap:9px;align-items:flex-start;padding:9px;border:1px solid #e5edf3;border-radius:7px;background:#fbfdfe}.checkrow input{margin-top:3px;accent-color:var(--blue)}.checkrow span{font-size:11px;line-height:1.5;color:#415b72}
+.side-sticky{position:sticky;top:12px}.draft-grid{display:grid;gap:9px}.draft-grid textarea{min-height:76px;resize:vertical}.draft-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.smallnote{font-size:9px;line-height:1.6;color:#75879a;margin-top:8px}.status-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.divider{height:1px;background:#e9eff4;margin:15px 0}
+.saved-list{display:grid;gap:7px}.saved-item{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:white}.saved-item strong{font-size:11px}.saved-item small{display:block;color:var(--muted);font-size:9px;margin-top:2px}.inline-link{font-size:10px;font-weight:800}
+.footer{padding:25px 0 35px;border-top:1px solid var(--line);color:#718497;font-size:10px}.footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.finder{grid-template-columns:1fr 1fr}.finder .btn{grid-column:1/-1}.detail-shell{grid-template-columns:1fr}.side-sticky{position:static}}
+@media(max-width:650px){.wrap{width:min(100% - 28px,1160px)}.nav{align-items:flex-start;flex-direction:column}.navlinks{gap:10px 15px}.hero{padding:35px 0}.flowbar{grid-template-columns:repeat(2,1fr);margin-top:12px}.flowstep:last-child{grid-column:1/-1}.section{padding:25px 0}.section-head{display:block}.section-head p{margin-top:8px}.finder{grid-template-columns:1fr}.finder .btn{grid-column:auto}.program-grid{grid-template-columns:1fr}.program-facts{grid-template-columns:1fr 1fr 1fr}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span>Yoshlar-Ishi · imkoniyatlar navigatori</span><span>Mustaqil platforma · rasmiy manbalarni tekshirib foydalaning</span></div></div>
+<header class="wrap nav">
+ <a class="brand" href="./index.html"><span class="brand-mark">YI</span><span>Yoshlar-Ishi</span></a>
+ <nav class="navlinks" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a class="active" href="./imkoniyatlar.html">Imkoniyatlar</a><a href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="./startap-yoli.html">Startap yo‘li</a></nav>
+ <a class="btn secondary" href="./kabinet.html">Shaxsiy kabinet ↗</a>
+</header>
+<main>
+<section class="hero"><div class="wrap hero-inner">
+ <div class="eyebrow">Davlat va yoshlar dasturlari · amaliy yo‘riqnoma</div>
+ <h1>Imkoniyatni toping.<br>Arizaga tayyor bo‘ling.</h1>
+ <p>Faqat havolani ko‘rsatmaymiz. Kimlar qatnashishi mumkinligini tushuntiramiz, hujjatlar ro‘yxatini beramiz, tayyorgarlikni belgilaymiz va rasmiy ariza uchun matn loyihasini tuzishga yordam beramiz.</p>
+ <div class="hero-actions"><a class="btn" href="#catalog">Mos imkoniyatni qidirish ↓</a><a class="btn secondary" href="./kabinet.html">Jarayonimni saqlash ↗</a></div>
+</div></section>
+<div class="wrap flowbar" aria-label="Imkoniyatdan arizagacha bo‘lgan jarayon">
+ <div class="flowstep"><b>01</b><span>Imkoniyatni topish</span></div><div class="flowstep"><b>02</b><span>Moslikni tekshirish</span></div><div class="flowstep"><b>03</b><span>Hujjatlarni tayyorlash</span></div><div class="flowstep"><b>04</b><span>Ariza loyihasi</span></div><div class="flowstep"><b>05</b><span>Rasmiy portal va kuzatuv</span></div>
+</div>
+<section class="section" id="catalog"><div class="wrap">
+ <div class="section-head"><div><div class="eyebrow">01 · Imkoniyatlar katalogi</div><h2>Qaysi dastur sizga mos?</h2></div><p>Yosh va yo‘nalish bo‘yicha saralang. Natija dastlabki yo‘naltirishdir — yakuniy muvofiqlikni dastur egasi tasdiqlaydi.</p></div>
+ <div class="finder">
+  <div class="field"><label for="ageFilter">Yoshingiz</label><input class="control" id="ageFilter" type="number" min="10" max="100" placeholder="Masalan, 18"></div>
+  <div class="field"><label for="categoryFilter">Qaysi yo‘nalish?</label><select class="control" id="categoryFilter"><option value="all">Barcha yo‘nalishlar</option><option value="social_support">Ijtimoiy yordam</option><option value="language">Til o‘rganish</option><option value="business">Biznes va kredit</option><option value="career">Ish va stajirovka</option><option value="education">Ta’lim</option><option value="community">Jamoa va tashabbus</option></select></div>
+  <div class="field"><label for="queryFilter">Kalit so‘z</label><input class="control" id="queryFilter" type="search" placeholder="Masalan, subsidiya, kurs, biznes"></div>
+  <button class="btn" id="filterButton" type="button">Saralash ↗</button>
+ </div>
+ <div class="results-meta"><span id="resultCount">Imkoniyatlar yuklanmoqda…</span><div class="chips"><button class="chip active" type="button" data-filter="all">Barchasi</button><button class="chip" type="button" data-filter="featured">Muhimlari</button><button class="chip" type="button" data-filter="age">Yoshimga mos</button></div></div>
+ <div class="program-grid" id="programGrid"><div class="empty">Dasturlar yuklanmoqda…</div></div>
+ <p class="smallnote">Katalogdagi “tekshirilgan sana” manba sahifasi qayta ko‘rilgan vaqtni bildiradi; ariza qabul qilinayotgani yoki mablag‘ mavjudligini kafolatlamaydi.</p>
+</div></section>
+<section class="section" id="programDetail" hidden><div class="wrap">
+ <div class="section-head"><div><div class="eyebrow">02–05 · Amaliy tayyorgarlik</div><h2>Tanlangan imkoniyat bo‘yicha yo‘l xaritasi</h2></div><p>Har bir qadamni bajarganingizda belgilang. Kabinetga kirgan bo‘lsangiz, jarayon va ariza loyihasi hisobingizda saqlanadi.</p></div>
+ <div class="detail-shell">
+  <article class="panel" id="detailMain"><div class="muted">Dastur tanlanmagan.</div></article>
+  <aside class="panel side-sticky">
+   <div class="eyebrow">Ariza loyihasi</div><h3>Arizaga tayyorgarlik</h3>
+   <p class="muted">Bu matn tayyor qoralama. Rasmiy portal formasi, talab etilgan maydonlar va hujjatlar bilan solishtirib, o‘zingiz tekshiring.</p>
+   <div class="draft-grid">
+    <div class="field"><label for="draftSituation">Hozirgi holatingiz / muammo</label><textarea class="control" id="draftSituation" maxlength="1500" placeholder="Vaziyatingizni qisqa va aniq tushuntiring…"></textarea></div>
+    <div class="field"><label for="draftSupport">Qanday yordam yoki imkoniyat so‘rayapsiz?</label><textarea class="control" id="draftSupport" maxlength="1000" placeholder="Masalan: til kursi xarajatining bir qismini qoplash…"></textarea></div>
+    <div class="field"><label for="draftResult">Kutilayotgan natija</label><textarea class="control" id="draftResult" maxlength="1000" placeholder="Yordamdan keyin qanday natijaga erishasiz?"></textarea></div>
+    <div class="field"><label for="draftAmount">Miqdor yoki xarajat (ixtiyoriy)</label><input class="control" id="draftAmount" maxlength="120" placeholder="Masalan, kurs qiymati / smeta"></div>
+    <div class="field"><label for="draftExtra">Qo‘shimcha izoh (ixtiyoriy)</label><textarea class="control" id="draftExtra" maxlength="1000" placeholder="Boshqa muhim ma’lumot…"></textarea></div>
+   </div>
+   <div class="draft-actions"><button class="btn" id="copyDraft" type="button">Qoralamani nusxalash</button><button class="btn secondary" id="saveJourney" type="button">Jarayonni saqlash</button></div>
+   <p class="smallnote" id="saveNotice" role="status" aria-live="polite">Saqlash uchun avval <a href="./kabinet.html">shaxsiy kabinetga</a> email orqali kiring.</p>
+   <div class="divider"></div>
+   <div class="field"><label for="journeyStatus">Jarayon holati</label><select class="control" id="journeyStatus"><option value="preparing">Tayyorlanyapman</option><option value="ready">Ariza topshirishga tayyor</option><option value="submitted">Rasmiy portalga yubordim</option><option value="waiting">Javobni kutyapman</option><option value="approved">Ma’qullandi</option><option value="declined">Rad etildi / tuzatish kerak</option><option value="completed">Yakunlandi</option><option value="paused">Vaqtincha to‘xtatdim</option></select></div>
+   <div class="field" style="margin-top:9px"><label for="externalReference">Rasmiy ariza raqami (ixtiyoriy)</label><input class="control" id="externalReference" maxlength="160" placeholder="Rasmiy portal bergan raqam"></div>
+   <p class="smallnote">Holat va raqamni o‘zingiz kiritasiz. Davlat portalidagi ma’lumotlar bu yerga avtomatik ulanmagan.</p>
+   <div class="divider"></div>
+   <a class="btn" id="officialApply" href="https://my.gov.uz/uz" target="_blank" rel="noopener noreferrer">Rasmiy manbaga o‘tish ↗</a>
+   <p class="smallnote">Arizani faqat dastur egasining rasmiy portali yoki belgilangan kanali orqali yuboring.</p>
+  </aside>
+ </div>
+</div></section>
+<section class="section"><div class="wrap">
+ <div class="section-head"><div><div class="eyebrow">Mening jarayonlarim</div><h2>Boshlagan ishlaringiz</h2></div><p>Saqlangan tayyorgarlik, hujjatlar va ariza qoralamalari shaxsiy hisobingiz bilan bog‘lanadi.</p></div>
+ <div class="panel"><div class="status-line"><strong id="authState">Kirish holati tekshirilmoqda…</strong><a class="inline-link" href="./kabinet.html">Kabinetni ochish ↗</a></div><div class="divider"></div><div class="saved-list" id="savedJourneys"><div class="muted">Saqlangan jarayonlar yuklanmoqda…</div></div></div>
+</div></section>
+</main>
+<footer class="footer"><div class="wrap"><span>© 2026 Yoshlar-Ishi · Mustaqil platforma.</span><span>Rasmiy qaror, subsidiya yoki kredit ajratish Yoshlar-Ishi vakolatiga kirmaydi. <a href="./privacy.html">Maxfiylik</a> · <a href="./index.html">Bosh sahifa</a></span></div></footer>
+<script src="./config.js"></script>
+<script>
+(()=>{"use strict";
+const cfg=window.YI_CONFIG||{},base=String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/rest/v1/",anon=cfg.supabaseAnonKey||cfg.supabaseKey||"";
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const labels={social_support:"Ijtimoiy yordam",language:"Til va ta’lim",business:"Biznes va moliya",career:"Ish va stajirovka",education:"Ta’lim",community:"Jamoa va tashabbus"};
+const statusLabels={interested:"Qiziqish bildirildi",preparing:"Tayyorlanyapman",ready:"Ariza topshirishga tayyor",submitted:"Rasmiy portalga yuborildi",waiting:"Javob kutilmoqda",approved:"Ma’qullandi",declined:"Rad etildi / tuzatish kerak",completed:"Yakunlandi",paused:"Vaqtincha to‘xtatildi"};
+let programs=[],selected=null,journey=null,user=null,token=sessionStorage.getItem("yi_user_token")||"",refreshToken=sessionStorage.getItem("yi_user_refresh")||"",chipFilter="all";
+function setNotice(id,text,bad){const el=$(id);if(el){el.textContent=text;el.classList.toggle("error",!!bad)}}
+async function api(path,opts){const headers={apikey:anon,Authorization:"Bearer "+(token||anon),"Content-Type":"application/json",...(opts&&opts.headers||{})};const r=await fetch(base+path,{...(opts||{}),headers});if(!r.ok){let t="";try{t=await r.text()}catch{}throw new Error("So‘rov bajarilmadi ("+r.status+"). "+t.slice(0,180))}if(r.status===204)return null;const text=await r.text();return text?JSON.parse(text):null}
+async function authCheck(){
+ if(!token){user=null;return null}
+ let r=await fetch(String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/auth/v1/user",{headers:{apikey:anon,Authorization:"Bearer "+token}});
+ if(r.ok){user=await r.json();return user}
+ if(refreshToken){
+  const rr=await fetch(String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:anon,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});
+  if(rr.ok){const d=await rr.json();token=d.access_token;refreshToken=d.refresh_token;user=d.user;sessionStorage.setItem("yi_user_token",token);sessionStorage.setItem("yi_user_refresh",refreshToken);sessionStorage.setItem("yi_user_id",user.id);return user}
+ }
+ token="";refreshToken="";user=null;["yi_user_token","yi_user_refresh","yi_user_id"].forEach(k=>sessionStorage.removeItem(k));return null;
+}
+function fitProgram(p){
+ const ageRaw=$("ageFilter").value,age=ageRaw===""?null:Number(ageRaw);
+ if(age===null||!Number.isFinite(age))return {kind:"check",text:"Moslikni tekshiring",eligible:null};
+ const min=p.age_min===null?null:Number(p.age_min),max=p.age_max===null?null:Number(p.age_max);
+ if((min!==null&&age<min)||(max!==null&&age>max))return {kind:"no",text:"Yosh mezoniga mos emas",eligible:false};
+ if(min===null&&max===null)return {kind:"check",text:"Qo‘shimcha mezon bor",eligible:null};
+ return {kind:"good",text:"Yosh mezoniga mos",eligible:true};
+}
+function searchable(p){return [p.title,p.provider,p.summary,p.benefit,p.category,(p.audience_tags||[]).join(" ")].join(" ").toLowerCase()}
+function renderPrograms(){
+ const category=$("categoryFilter").value,q=$("queryFilter").value.trim().toLowerCase();
+ const rows=programs.filter(p=>(category==="all"||p.category===category)&&(!q||searchable(p).includes(q))&&(chipFilter!=="featured"||p.featured===true)&&(chipFilter!=="age"||fitProgram(p).eligible===true));
+ $("resultCount").textContent=rows.length+" ta imkoniyat ko‘rsatilmoqda · jami "+programs.length;
+ $("programGrid").innerHTML=rows.length?rows.map(p=>{
+  const fit=fitProgram(p),age=p.age_min===null&&p.age_max===null?"Yosh mezoni e’londa aniqlashtiriladi":(p.age_min??"—")+"–"+(p.age_max??"—")+" yosh";
+  return '<article class="program-card"><div class="program-top"><span class="tag">'+esc(labels[p.category]||"Imkoniyat")+'</span><span class="fit '+fit.kind+'">'+esc(fit.text)+'</span></div><h3>'+esc(p.title)+'</h3><p>'+esc(p.summary)+'</p><div class="program-benefit"><strong>Foyda:</strong> '+esc(p.benefit)+'</div><div class="program-foot"><span class="small">'+esc(p.provider)+' · '+esc(age)+'</span><button class="btn secondary" type="button" data-open="'+esc(p.slug)+'">Yo‘l xaritasini ochish ↗</button></div></article>';
+ }).join(""):'<div class="empty">Bu filtr bo‘yicha imkoniyat topilmadi. Boshqa kategoriya yoki so‘z bilan qidiring.</div>';
+}
+function renderObject(obj){
+ const entries=Object.entries(obj||{}).filter(([k,v])=>typeof v==="string"&&v.trim());
+ const nice={min_age:"Eng kam yosh",max_age:"Eng yuqori yosh",social_register_primary:"Ijtimoiy reestr talabi",special_medical_path:"Tibbiy yordam mezoni",required_certificate:"Sertifikat talabi",required_payment:"Dastlabki to‘lov",provider_condition:"O‘quv markazi talabi",monthly_caps:"Hududiy limitlar",important:"Muhim shart",funding_type:"Moliyalashtirish turi",terms:"Kredit sharti",audience:"Kimlar uchun",selection:"Saralash",stipend:"Stipendiya"};
+ return entries.map(([k,v])=>'<li><strong>'+esc(nice[k]||k.replace(/_/g," ")) + ':</strong> '+esc(v)+'</li>').join("");
+}
+function draftText(){
+ if(!selected)return "";
+ const lines=["ARIZA LOYIHASI", "Dastur: "+selected.title, "Tashkilot: "+selected.provider, "", "Hozirgi holatim / muammo:", $("draftSituation").value.trim()||"—", "", "So‘ralayotgan yordam:", $("draftSupport").value.trim()||"—", "", "Kutilayotgan natija:", $("draftResult").value.trim()||"—", "", "Miqdor / xarajat:", $("draftAmount").value.trim()||"Ko‘rsatilmagan", "", "Qo‘shimcha izoh:", $("draftExtra").value.trim()||"—", "", "Eslatma: ushbu matn qoralama. Rasmiy ariza talablari bilan solishtiring."];
+ return lines.join("\n");
+}
+function collectChecks(){
+ const steps=Array.from(document.querySelectorAll("[data-step-check]:checked")).map(x=>x.value);
+ const docs={};document.querySelectorAll("[data-doc-check]").forEach(x=>docs[x.value]=x.checked);
+ return {steps:steps,docs:docs};
+}
+function hydrateDetail(p,row){
+ journey=row||null;
+ $("programDetail").hidden=false;
+ const fit=fitProgram(p),steps=Array.isArray(p.steps)?p.steps:[],docs=Array.isArray(p.documents)?p.documents:[];
+ const ageText=p.age_min===null&&p.age_max===null?"Yosh chegarasi e’londa alohida tekshiriladi":(p.age_min??"—")+" yoshdan "+(p.age_max??"—")+" yoshgacha";
+ $("detailMain").innerHTML='<div class="eyebrow">'+esc(labels[p.category]||"Imkoniyat")+' · '+esc(p.provider)+'</div><h3>'+esc(p.title)+'</h3><p class="muted">'+esc(p.summary)+'</p><div class="program-facts"><div class="fact"><b>'+esc(ageText)+'</b><span>Yosh mezoni</span></div><div class="fact"><b>'+esc(new Date((p.verified_on||"2026-01-01")+"T00:00:00").toLocaleDateString("uz-UZ"))+'</b><span>Manba tekshirilgan</span></div><div class="fact"><b>'+esc(fit.text)+'</b><span>Dastlabki moslik</span></div></div><div class="notice warn">'+esc(p.status_note||"Talablar va qabul holatini rasmiy manbada qayta tekshiring.")+'</div><h4>Kimlar qatnashishi mumkin?</h4><ul class="plain-list">'+(p.audience_tags||[]).map(x=>"<li>"+esc(x)+"</li>").join("")+'</ul>'+(renderObject(p.eligibility)?'<h4>Asosiy shartlar</h4><ul class="plain-list">'+renderObject(p.eligibility)+'</ul>':"")+'<h4>Arizagacha bo‘lgan amaliy qadamlar</h4><div class="checklist">'+steps.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-step-check value="step-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Hujjatlar va tayyorlanadigan ma’lumotlar</h4><div class="checklist">'+docs.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-doc-check value="doc-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Rasmiy ariza kanali</h4><p class="muted">'+esc(p.application_channel||"Dastur egasining rasmiy kanalini aniqlang.")+'</p><p class="muted"><strong>Qabul / muddat:</strong> '+esc(p.deadline_note||"Muddat rasmiy e’londa tekshiriladi.")+'</p><div class="notice">Manba: <a href="'+esc(p.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.source_title||"Rasmiy manbani ochish")+' ↗</a>'+(p.secondary_source_url?' · <a href="'+esc(p.secondary_source_url)+'" target="_blank" rel="noopener noreferrer">Qo‘shimcha manba ↗</a>':"")+'</div>';
+ $("officialApply").href=p.application_url||p.source_url;
+ $("officialApply").textContent="Rasmiy ariza kanalini ochish ↗";
+ $("journeyStatus").value=row&&statusLabels[row.status]?row.status:"preparing";
+ $("externalReference").value=row?row.external_reference||"":"";
+ $("draftSituation").value=row&&row.application_draft?row.application_draft.situation||"":"";
+ $("draftSupport").value=row&&row.application_draft?row.application_draft.support||"":"";
+ $("draftResult").value=row&&row.application_draft?row.application_draft.result||"":"";
+ $("draftAmount").value=row&&row.application_draft?row.application_draft.amount||"":"";
+ $("draftExtra").value=row&&row.application_draft?row.application_draft.extra||"":"";
+ const checks=row?row.completed_steps||[]:[];
+ const docChecks=row?row.document_checks||{}:{};
+ document.querySelectorAll("[data-step-check]").forEach(x=>x.checked=checks.includes(x.value));
+ document.querySelectorAll("[data-doc-check]").forEach(x=>x.checked=docChecks[x.value]===true);
+ $("programDetail").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function openProgram(slug){
+ const p=programs.find(x=>x.slug===slug);if(!p)return;
+ selected=p;journey=null;
+ let row=null;
+ if(user){try{const rows=await api("opportunity_journeys?select=*&program_slug=eq."+encodeURIComponent(p.slug)+"&limit=1");row=rows&&rows[0]||null}catch(e){setNotice("saveNotice","Saqlangan jarayonni yuklab bo‘lmadi: "+e.message,true)}}
+ hydrateDetail(p,row);
+}
+function renderSaved(rows){
+ $("savedJourneys").innerHTML=rows&&rows.length?rows.map(r=>'<div class="saved-item"><div><strong>'+esc(r.program_title)+'</strong><small>'+esc(statusLabels[r.status]||r.status)+' · '+esc(new Date(r.updated_at).toLocaleDateString("uz-UZ"))+'</small></div><button type="button" class="btn secondary" data-resume="'+esc(r.program_slug)+'">Davom ettirish ↗</button></div>').join(""):'<div class="muted">Hozircha saqlangan jarayon yo‘q. Katalogdan dastur tanlab, tayyorgarlikni boshlang.</div>';
+}
+async function loadSaved(){
+ if(!user){renderSaved([]);$("authState").textContent="Jarayonlarni saqlash uchun email orqali kiring.";return}
+ $("authState").textContent="Kabinetga kirilgan · jarayonlaringiz shaxsiy hisobingiz bilan himoyalangan.";
+ try{const rows=await api("opportunity_journeys?select=id,program_slug,program_title,status,updated_at&order=updated_at.desc&limit=50");renderSaved(rows||[])}
+ catch(e){$("savedJourneys").innerHTML='<div class="muted">Saqlangan jarayonlar yuklanmadi: '+esc(e.message)+'</div>'}
+}
+async function saveJourney(){
+ if(!selected)return;
+ if(!user){setNotice("saveNotice","Jarayonni hisobingizda saqlash uchun avval shaxsiy kabinetga kiring.",true);return}
+ const c=collectChecks(),draft={situation:$("draftSituation").value.trim(),support:$("draftSupport").value.trim(),result:$("draftResult").value.trim(),amount:$("draftAmount").value.trim(),extra:$("draftExtra").value.trim()};
+ const status=$("journeyStatus").value;
+ const body={user_id:user.id,program_slug:selected.slug,program_title:selected.title,status:status,completed_steps:c.steps,document_checks:c.docs,application_draft:draft,next_action:status==="submitted"||status==="waiting"?"Rasmiy portalda ariza holatini tekshiring":"Bajarilmagan qadamlar va hujjatlarni yakunlang.",external_reference:$("externalReference").value.trim(),submitted_at:status==="submitted"||status==="waiting"?(journey&&journey.submitted_at?journey.submitted_at:new Date().toISOString()):null};
+ try{
+  if(journey&&journey.id){await api("opportunity_journeys?id=eq."+encodeURIComponent(journey.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(body)})}
+  else{const rows=await api("opportunity_journeys?select=*",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(body)});journey=rows&&rows[0]||null}
+  if(!journey||!journey.id){const rows=await api("opportunity_journeys?select=*&program_slug=eq."+encodeURIComponent(selected.slug)+"&limit=1");journey=rows&&rows[0]||null}
+  setNotice("saveNotice","Tayyorgarlik jarayoni hisobingizga saqlandi.",false);await loadSaved();
+ }catch(e){setNotice("saveNotice","Saqlab bo‘lmadi: "+e.message,true)}
+}
+async function loadPrograms(){
+ try{
+  programs=await api("youth_opportunity_programs?select=slug,title,provider,category,summary,benefit,age_min,age_max,audience_tags,eligibility,steps,documents,application_channel,application_url,source_title,source_url,secondary_source_url,deadline_note,status_note,verified_on,active,featured,sort_order&active=eq.true&order=featured.desc,sort_order.asc,title.asc",{headers:{Authorization:"Bearer "+anon}});
+  renderPrograms();
+ }catch(e){
+  $("programGrid").innerHTML='<div class="empty">Imkoniyatlar katalogi hozir yuklanmadi. Sahifani yangilang yoki keyinroq urinib ko‘ring.</div>'; $("resultCount").textContent="Ma’lumotni yuklashda xatolik";
+ }
+}
+$("filterButton").addEventListener("click",renderPrograms);
+["ageFilter","categoryFilter","queryFilter"].forEach(id=>$(id).addEventListener(id==="queryFilter"?"input":"change",renderPrograms));
+document.querySelectorAll("[data-filter]").forEach(btn=>btn.addEventListener("click",()=>{chipFilter=btn.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===btn));renderPrograms()}));
+$("programGrid").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openProgram(b.dataset.open)});
+$("savedJourneys").addEventListener("click",e=>{const b=e.target.closest("[data-resume]");if(b)openProgram(b.dataset.resume)});
+$("saveJourney").addEventListener("click",saveJourney);
+$("copyDraft").addEventListener("click",async()=>{const text=draftText();if(!text)return;try{await navigator.clipboard.writeText(text);setNotice("saveNotice","Ariza qoralamasi nusxalandi.",false)}catch(e){setNotice("saveNotice","Brauzer nusxalashga ruxsat bermadi. Matnni qo‘lda belgilang.",true)}});
+async function init(){
+ try{await authCheck()}catch(e){user=null}
+ $("authState").textContent=user?"Kabinetga kirilgan · jarayonlaringiz himoyalangan.":"Saqlash uchun shaxsiy kabinetga kiring.";
+ await loadPrograms();await loadSaved();
+}
+init();
+})();
+</script>
+</body>
+</html>

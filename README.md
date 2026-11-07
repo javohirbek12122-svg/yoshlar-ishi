@@ -8,6 +8,7 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Vercel static deployment
 - Secure owner dashboard in `admin.html`
 - Illustrated searchable service portal at `davlat-xizmatlari.html`
+- Actionable youth programme navigator at `imkoniyatlar.html` with eligibility guidance, document/step checklists, application-draft builder, and account-owned progress tracking
 - Email magic-link personal cabinet at `kabinet.html`
 - Stage-based startup navigator at `startap-yoli.html`, with adaptive readiness checks and Supabase-powered opportunity scoring
 - Server-side AI review and Telegram webhook/notification Edge Functions
@@ -55,7 +56,7 @@ The separate [illustrated service guide](./davlat-xizmatlari.html) provides a se
 
 The portal catalogue links to official destinations such as my.gov.uz, gov.uz, LEX.UZ, Murojaat.gov.uz, the presidential virtual reception, Open Budget, and the open-data portal, alongside youth, grant, startup, and volunteering resources. A daily GitHub Actions monitor also checks every active catalogue portal/source URL and image URL from Supabase, deduplicates targets, and reports HTTP status and latency. Bot blocks and timeouts are flagged for manual review, not treated automatically as a confirmed outage. The searchable catalogue pulls government portal records from `official_portal_integrations` and other opportunities from `opportunity_sources`, merging duplicate URLs. Users can use a guided service finder and a six-criterion readiness calculator.
 
-## Owner monitoring dashboard
+## Youth opportunity journey\n\nThe dedicated [youth opportunity navigator](./imkoniyatlar.html) turns a catalogue record into a practical application-preparation workflow. It shows audience, age boundaries, programme-specific conditions, the official source, possible documents, and a step-by-step checklist. A draft builder helps users structure the reason for applying, requested support, intended result and cost estimate. Authenticated users can save checklists, draft text, and a manually updated status in `opportunity_journeys`; RLS restricts every journey row to its owner. The status is user-maintained and is not automatically synced with a government portal. The catalogue content is curated and must be rechecked at the source; the platform is not a state body and does not submit public-service applications on a user’s behalf.\n\n## Owner monitoring dashboard
 Open `/admin.html` after deployment. Sign-in is by emailed magic link through Supabase Auth. The `/kabinet.html` user dashboard uses a separate session key and only calls owner-scoped RPCs for listing/editing its own unreviewed initiatives. Only emails active in `public.admin_allowlist` are permitted; row-level security (RLS) also enforces the same authorization in the database.
 
 Dashboard can be added to a phone home screen as a separate “YI Admin” shortcut after the site is deployed; it uses its own manifest and starts directly at `/admin.html`.
@@ -100,7 +101,8 @@ URL: https://nnodsqnqsqrmzcycrmpr.supabase.co
 
 Tables (all with Row Level Security enabled):
 - `profiles`, `initiatives`, `initiative_updates`
-- `opportunity_sources`, `official_portal_integrations`, `official_portal_admin_notes`
+- `opportunity_sources`, `youth_opportunity_programs`, `opportunity_journeys`
+- `official_portal_integrations`, `official_portal_admin_notes`
 - `connection_requests`, `admin_allowlist`, `admin_activity_log`
 - `team_posts`, `team_interest_requests`
 - `initiative_showcase`, `initiative_showcase_votes`

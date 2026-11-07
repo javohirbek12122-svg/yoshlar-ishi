@@ -15,6 +15,7 @@ const required = [
   "laboratoriya.html",
   "admin.html",
   "davlat-xizmatlari.html",
+  "imkoniyatlar.html",
   "kabinet.html",
   "INTEGRATIONS_SETUP.md",
   "privacy.html",
@@ -66,7 +67,7 @@ function inlineScripts(html) {
     .map((match) => match[1])
     .filter((source) => source.trim().length > 0);
 }
-for (const file of ["index.html", "startap-yoli.html", "admin.html", "davlat-xizmatlari.html", "kabinet.html"]) {
+for (const file of ["index.html", "startap-yoli.html", "admin.html", "davlat-xizmatlari.html", "imkoniyatlar.html", "kabinet.html"]) {
   const html = read(file);
   const scripts = inlineScripts(html);
   assert.ok(scripts.length > 0, `${file} has no inline JavaScript`);
@@ -274,6 +275,27 @@ assert.match(serviceGuide, /onerror="this\.style\.display='none';this\.nextEleme
 assert.match(serviceGuide, /UZINFOCOM/);
 assert.match(serviceGuide, /Murojaat.gov.uz/);
 console.log(`✓ illustrated public-services guide, ${imageCards.length} attributed portal media cards, official directory categories, filters and service-flow visualization are present`);
+
+
+const opportunitiesPage = read("imkoniyatlar.html");
+for (const feature of [
+  "youth_opportunity_programs?select=",
+  "opportunity_journeys?select=",
+  'id="programGrid"',
+  'id="detailMain"',
+  'id="draftSituation"',
+  'id="saveJourney"',
+  "data-step-check",
+  "data-doc-check",
+  "function fitProgram(p)",
+  "function saveJourney()",
+  "Rasmiy manbaga o‘tish",
+  "Kredit — grant emas",
+]) {
+  assert.ok(opportunitiesPage.includes(feature), `Youth opportunity engine feature missing: ${feature}`);
+}
+assert.match(opportunitiesPage, /opportunity_journeys\?select=\*&program_slug=eq\./);
+console.log("✓ youth opportunity catalogue, age-fit guide, preparation checklist, draft builder and owner-scoped journey tracker are present");
 
 const cabinet = read("kabinet.html");
 for (const feature of [
