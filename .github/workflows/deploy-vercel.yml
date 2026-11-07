@@ -38,8 +38,9 @@ jobs:
               echo "Missing one or more required GitHub Actions values: secret VERCEL_TOKEN, variable VERCEL_ORG_ID, or variable VERCEL_PROJECT_ID."
               echo "Use the verified canonical project yoshlar-ishi-site; do not deploy to the empty project named yoshlar-ishi."
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::error::Deployment blocked: configure VERCEL_TOKEN and the canonical VERCEL_ORG_ID / VERCEL_PROJECT_ID in GitHub Actions."
-            exit 1
+            echo "::notice::Optional Vercel CLI deploy skipped. The repository is connected to the Vercel Git integration, which deploys pushes to main automatically."
+            echo "::notice::Live deployment health is checked separately by the Yoshlar-Ishi Live Site Health workflow."
+            exit 0
           fi
 
       - name: Checkout the tested commit

@@ -67,6 +67,7 @@ Dashboard capabilities:
 - Review partnership requests and mark their handling status
 - Add or hide opportunity links from the public catalog
 - Create, edit, feature, activate, or hide youth opportunity programmes with official-source dates, eligibility rules, required documents and application steps through the allowlist-protected admin panel
+- The Vercel project `yoshlar-ishi-site` is connected to this GitHub repository; normal `main` pushes deploy through Vercel's native Git integration. The GitHub CLI-deploy workflow is an optional fallback and skips cleanly when its separate Vercel CLI credentials are not configured. Live health checks verify the public opportunity navigator and admin programme manager.
 - Maintain a separate official-portal integration registry (link-only / docs-needed / approval-needed / connected / disabled), including technical-doc URLs and internal notes
 - Prevent an external link alone from being marked as a connected API/SSO integration
 - Automatic audit log when initiative status changes
