@@ -285,7 +285,7 @@ for (const feature of [
 ]) {
   assert.ok(updatedYouthCatalogueMigration.includes(feature), "Updated catalogue migration missing: " + feature);
 }
-assert.ok(opportunitiesPage.includes('p.application_url?"Rasmiy ariza kanalini ochish ↗":"Rasmiy ma’lumotni ko‘rish ↗"'), "Unconfirmed application paths must not be labelled as application forms");
+assert.ok(read("imkoniyatlar.html").includes('p.application_url?"Rasmiy ariza kanalini ochish ↗":"Rasmiy ma’lumotni ko‘rish ↗"'), "Unconfirmed application paths must not be labelled as application forms");
 assert.ok(admin.includes('id="programSort"'), "Admin must preserve manual programme ordering");
 console.log("✓ youth opportunity schema, owner-scoped progress, professional-education contract support and current official 2+6 route are reproducible");
 
