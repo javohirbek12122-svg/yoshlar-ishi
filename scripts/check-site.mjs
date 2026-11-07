@@ -144,6 +144,15 @@ for (const feature of [
   'id="page-initiatives"',
   'id="page-partners"',
   'id="page-sources"',
+  'id="page-youth-programs"',
+  'id="youthProgramForm"',
+  'id="youthProgramsBody"',
+  "function renderYouthPrograms()",
+  "function saveYouthProgram(ev)",
+  "function editYouthProgram(id)",
+  "async function toggleYouthProgram(btn)",
+  "youth_opportunity_programs?select=*",
+
   'id="page-integrations"',
   "official_portal_integrations?select=id",
   'nextStatus==="connected"&&nextMode==="external_link"',
@@ -156,6 +165,19 @@ for (const feature of [
 assert.ok(admin.includes('official_portal_integrations?select=id'), "Admin integration registry query missing");
 assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"'), "Admin must prevent false connected status for plain external links");
 console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
+for (const feature of [
+  'data-page="youth-programs"',
+  'programSourceUrl',
+  'programEligibility',
+  'programSteps',
+  'programDocuments',
+  'programActive',
+  'function resetYouthProgramForm()',
+]) {
+  assert.ok(admin.includes(feature), `Admin youth catalogue control missing: ${feature}`);
+}
+console.log("✓ allowlist-protected youth programme admin form supports create, edit, activate/deactivate and official-source verification fields");
+
 
 const deployWorkflow = read(".github/workflows/deploy-vercel.yml");
 const portalHealthWorkflow = read(".github/workflows/official-portal-health.yml");
