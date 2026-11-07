@@ -253,6 +253,30 @@ const icon = read("icon.svg");
 assert.match(icon, /<svg[\s\S]*viewBox="0 0 512 512"/);
 console.log("✓ app icon is an SVG with a square viewBox");
 
+
+const youthOpportunityMigration = read("supabase/migrations/20261107101800_youth_opportunity_engine.sql");
+const contractSupportMigration = read("supabase/migrations/20261107113500_add_professional_education_contract_support.sql");
+for (const feature of [
+  "youth_opportunity_programs",
+  "opportunity_journeys",
+  "users read own opportunity journeys",
+  "public can read active youth programmes",
+  "yoshlar-daftari",
+  "2-plus-6",
+  "kelajak-tadbirkori",
+]) {
+  assert.ok(youthOpportunityMigration.includes(feature), \`Youth opportunity schema/seed missing: \${feature}\`);
+}
+for (const feature of [
+  "yoshlar-daftari-kontrakt",
+  "advice.adliya.uz/oz/news/3230",
+  "2plus6.uz/opportunity",
+  "BHM",
+]) {
+  assert.ok(contractSupportMigration.includes(feature), \`Updated official youth support migration missing: \${feature}\`);
+}
+console.log("✓ youth opportunity schema, owner-scoped progress, professional-education contract support and current official 2+6 route are reproducible");
+
 const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));
 assert.ok(migrationFiles.length >= 6, "Migration history files are incomplete");
 const dashboardMigration = read("supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql");
