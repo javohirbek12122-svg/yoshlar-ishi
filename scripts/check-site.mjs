@@ -223,7 +223,7 @@ assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
   "Imkoniyatni top.",
   'class="hero-expanded-copy"',
-  "Opportunity-first, full-width hero styling",
+  'class="hero-storyline"',
   'id="afzalliklar"',
   'class="platform-proof"',
   'class="showcase-empty"',

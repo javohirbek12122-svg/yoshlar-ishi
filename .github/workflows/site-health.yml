@@ -52,7 +52,7 @@ jobs:
           grep -Fqi "IMKONIYAT · ARIZA · ISHTIROK · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
           grep -Fqi 'href="./imkoniyatlar.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the opportunity catalogue route."; exit 1; }
           grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
-          grep -Fqi "Opportunity-first, full-width hero styling" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-first homepage styling is missing."; exit 1; }
+          grep -Fqi 'class="hero-storyline"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: five-stage journey strip is missing."; exit 1; }
           grep -Fqi 'id="afzalliklar"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: benefits section is missing."; exit 1; }
           grep -Fqi 'class="platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: feature proof strip is missing."; exit 1; }
           grep -Fqi 'class="showcase-empty"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: portfolio-first showcase state is missing."; exit 1; }
