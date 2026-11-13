@@ -6,7 +6,7 @@ import { chromium } from "playwright";
 
 const root=process.cwd();
 const types={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"text/javascript; charset=utf-8",".json":"application/json; charset=utf-8",".webmanifest":"application/manifest+json",".svg":"image/svg+xml",".png":"image/png",".jpg":"image/jpeg",".webp":"image/webp"};
-const remoteBase=(process.env.MOBILE_BASE_URL||"").trim().replace(/\\/+$/,"");
+const remoteBase=(process.env.MOBILE_BASE_URL||"").trim().replace(/\/+$/,"");
 const server=remoteBase?null:http.createServer((req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url||"/","http://127.0.0.1").pathname);
