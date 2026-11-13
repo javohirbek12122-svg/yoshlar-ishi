@@ -10,6 +10,7 @@ on:
       - ".github/workflows/site-health.yml"
       - "index.html"
       - "site.css"
+      - "mobile-guard.css"
       - "shared-theme.css"
       - "admin.html"
       - "privacy.html"
@@ -51,6 +52,10 @@ jobs:
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/mobile-guard.css" -o /tmp/yoshlar-mobile-guard.css
+          grep -Fqi -- "--yi-mobile-tap-size:44px" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the 44px mobile touch-target rules."; exit 1; }
+          grep -Fqi "@media(max-width:900px)" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the phone/tablet responsive rules."; exit 1; }
+          if grep -Eqi "overflow-x:[[:space:]]*clip" /tmp/yoshlar-mobile-guard.css; then echo "::error::The live mobile stylesheet hides horizontal overflow instead of fixing layout."; exit 1; fi
           grep -Fqi -- '--navy:#123255' /tmp/yoshlar-site.css || { echo "::error::The live homepage stylesheet does not contain the current navy design tokens."; exit 1; }
           grep -Fqi '.compact-fold' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing its accessible collapsible-panel styles."; exit 1; }
           grep -Fqi '#backToTop.is-visible' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the scroll-to-top control styles."; exit 1; }

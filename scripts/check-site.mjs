@@ -228,6 +228,7 @@ console.log("✓ daily official endpoint monitor plus dynamic registry and image
 const liveHealthWorkflow = read(".github/workflows/site-health.yml");
 assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site\.vercel\.app' \}\}/);
 assert.match(liveHealthWorkflow, /Check website, current feature set and admin page/);
+assert.ok(liveHealthWorkflow.includes('"$BASE_URL/mobile-guard.css"'), "Live health must verify the mobile stylesheet is deployed");
 assert.match(liveHealthWorkflow, /paths:/);
 assert.ok(liveHealthWorkflow.includes('"davlat-xizmatlari.html"'));
 assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html'));
@@ -257,6 +258,9 @@ assert.match(deployWorkflow, /vercel build --prod/);
 assert.match(deployWorkflow, /vercel deploy --prebuilt --prod/);
 assert.match(deployWorkflow, /smoke-test/i);
 assert.match(deployWorkflow, /Vercel deployment blocked/i);
+assert.match(deployWorkflow, /Vercel deployment is blocked/);
+assert.match(deployWorkflow, /exit 1\s+fi/);
+assert.ok(deployWorkflow.includes('"$SITE_URL/mobile-guard.css"'), "Deployment smoke test must verify the mobile stylesheet");
 const launchChecklist = read("DEPLOYMENT_CHECKLIST.md");
 assert.match(launchChecklist, /yoshlar-ishi-site/);
 assert.match(launchChecklist, /403/);

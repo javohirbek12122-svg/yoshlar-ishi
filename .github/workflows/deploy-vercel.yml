@@ -38,9 +38,9 @@ jobs:
               echo "Missing one or more required GitHub Actions values: secret VERCEL_TOKEN, variable VERCEL_ORG_ID, or variable VERCEL_PROJECT_ID."
               echo "No Yoshlar-Ishi project is currently visible in the connected Vercel team. First connect this GitHub repository to the intended Vercel project and verify its owner/team, then configure these values."
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::notice::No verified Vercel Git project connection is currently available. A push to main must not be treated as a production deployment until the project is connected and the deployed commit is verified."
+            echo "::error::Vercel deployment is blocked: the canonical project is not connected or its deployment credentials are missing."
             echo "::notice::Live deployment health is checked separately by the Yoshlar-Ishi Live Site Health workflow."
-            exit 0
+            exit 1
           fi
 
       - name: Checkout the tested commit
@@ -120,6 +120,9 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/startap-yoli.html" -o /tmp/startup.html
           grep -qi "Startap yo‘li" /tmp/startup.html
           grep -Fqi "https://uzcombinator.uz/apply" /tmp/startup.html
+          curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/mobile-guard.css" -o /tmp/mobile-guard.css
+          grep -Fq -- "--yi-mobile-tap-size:44px" /tmp/mobile-guard.css
+          if grep -Eqi "overflow-x:[[:space:]]*clip" /tmp/mobile-guard.css; then echo "::error::Mobile CSS must not hide horizontal overflow."; exit 1; fi
           curl --fail --silent --show-error --location --max-time 30 "$SITE_URL/manifest.webmanifest" -o /tmp/manifest.json
           node -e "JSON.parse(require('fs').readFileSync('/tmp/manifest.json','utf8'))"
           echo "Production smoke test passed for $SITE_URL"
