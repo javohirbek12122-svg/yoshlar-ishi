@@ -52,6 +52,7 @@ const required = [
   "supabase/migrations/20261029031323_server_side_public_initiative_submissions.sql",
   "supabase/migrations/20261029051817_optimize_rls_policy_initplans.sql",
   "supabase/migrations/20261104155500_add_virtual_lab_runs.sql",
+  "supabase/migrations/20261113180000_add_opportunity_journey_event_history.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
@@ -220,9 +221,9 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "G‘oya bilan to‘xtama.",
+  "Imkoniyatni top.",
   'class="hero-expanded-copy"',
-  "Full-bleed, borderless startup hero",
+  "Opportunity-first, full-width hero styling",
   'id="afzalliklar"',
   'class="platform-proof"',
   'class="showcase-empty"',
@@ -295,7 +296,11 @@ for (const feature of [
 }
 assert.ok(read("imkoniyatlar.html").includes('p.application_url?"Rasmiy ariza kanalini ochish ↗":"Rasmiy ma’lumotni ko‘rish ↗"'), "Unconfirmed application paths must not be labelled as application forms");
 assert.ok(admin.includes('id="programSort"'), "Admin must preserve manual programme ordering");
-console.log("✓ youth opportunity schema, owner-scoped progress, professional-education contract support and current official 2+6 route are reproducible");
+const journeyEventMigration = read("supabase/migrations/20261113180000_add_opportunity_journey_event_history.sql");
+for (const feature of ["opportunity_journey_events", "journey_started", "progress_updated", "status_changed", "enable row level security", "users read own opportunity journey events", "users create own opportunity journey events", "opportunity_journey_events_journey_created_idx"]) {
+  assert.ok(journeyEventMigration.includes(feature), "Private journey event history migration missing: " + feature);
+}
+console.log("✓ youth opportunity schema, owner-scoped progress and private chronological event history are reproducible");
 
 const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));
 assert.ok(migrationFiles.length >= 6, "Migration history files are incomplete");
@@ -351,6 +356,10 @@ for (const feature of [
   'id="detailMain"',
   'id="draftSituation"',
   'id="saveJourney"',
+  'id="journeyTimeline"',
+  "opportunity_journey_events?select=",
+  "async function loadJourneyTimeline(journeyId)",
+  "event_type:eventType",
   "data-step-check",
   "data-doc-check",
   "function fitProgram(p)",
@@ -361,7 +370,7 @@ for (const feature of [
   assert.ok(opportunitiesPage.includes(feature), `Youth opportunity engine feature missing: ${feature}`);
 }
 assert.match(opportunitiesPage, /opportunity_journeys\?select=\*&program_slug=eq\./);
-console.log("✓ youth opportunity catalogue, age-fit guide, preparation checklist, draft builder and owner-scoped journey tracker are present");
+console.log("✓ youth opportunity catalogue, age-fit guide, preparation checklist, draft builder and owner-scoped journey tracker and chronological event timeline are present");
 
 const cabinet = read("kabinet.html");
 for (const feature of [
@@ -562,9 +571,14 @@ assert.match(backendOnlyMigration, /with check \(true\)/i);
 console.log("✓ AI quota and Telegram subscription tables are explicitly scoped to the server role");
 
 
-const startupDesignHome = read("index.html");
+const opportunityDesignHome = read("index.html");
 for (const feature of [
-  "G‘oya bilan to‘xtama.",
+  '<title>Yoshlar-Ishi — Imkoniyatdan natijagacha</title>',
+  "Imkoniyatni top.",
+  "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
+  "Imkoniyatlar katalogi ↗",
+  "Mening jarayonlarim",
+  "Imkoniyatni top.",
   'class="hero-expanded-copy"',
   'class="hero-focus"',
   'id="afzalliklar"',
@@ -579,19 +593,19 @@ for (const feature of [
   'id="ariza-holati"',
   'content="#101317"',
   "--uc-acid:#d7ff66",
-  "Full-bleed, borderless startup hero",
+  "Opportunity-first, full-width hero styling",
   "width:100%;",
   "border:0!important;",
   "class=\"hero-storyline\"",
 ]) {
-  assert.ok(startupDesignHome.includes(feature), `Startup-first homepage redesign missing: ${feature}`);
+  assert.ok(opportunityDesignHome.includes(feature), `Opportunity-first homepage redesign missing: ${feature}`);
 }
-assert.match(startupDesignHome, /prefers-reduced-motion/);
-assert.match(startupDesignHome, /@media\(max-width:600px\)/);
-assert.ok(startupDesignHome.includes(".hero.wrap:after{display:none!important;"), "Full-width hero must not draw a decorative grid frame");
-assert.match(startupDesignHome, /softGlow\(width\*/, "Animated background should use diffuse light rather than grid/orbit lines");
-assert.ok(startupDesignHome.includes(".hero-storyline{border:0!important;"), "Hero journey strip must remain borderless");
-console.log("✓ founder-first full-bleed hero, expanded messaging, diffuse animated background, proof strip, benefits and responsive breakpoints are present");
+assert.match(opportunityDesignHome, /prefers-reduced-motion/);
+assert.match(opportunityDesignHome, /@media\(max-width:600px\)/);
+assert.ok(opportunityDesignHome.includes(".hero.wrap:after{display:none!important;"), "Full-width hero must not draw a decorative grid frame");
+assert.match(opportunityDesignHome, /softGlow\(width\*/, "Animated background should use diffuse light rather than grid/orbit lines");
+assert.ok(opportunityDesignHome.includes(".hero-storyline{border:0!important;"), "Hero journey strip must remain borderless");
+console.log("✓ opportunity-first full-width hero, expanded messaging, diffuse animated background, proof strip, benefits and responsive breakpoints are present");
 
 const serviceDesign = read("davlat-xizmatlari.html");
 const accountDesign = read("kabinet.html");
@@ -619,8 +633,8 @@ for (const feature of [
   'id="ambientCanvas"',
   'class="hero-storyline"',
   'class="hero-story-step"',
-  '<span>G‘OYA</span><span>→</span><span>NATIJA</span>',
-  "G‘OYA · JAMOA · MAHSULOT · NATIJA",
+  '<span>IMKONIYAT</span><span>→</span><span>NATIJA</span>',
+  "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
   'id="readingProgress"',
   'id="draftReadiness"',
   'id="draftReadinessScore"',
