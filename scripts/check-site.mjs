@@ -793,7 +793,7 @@ new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" 
 console.log("✓ 3D virtual laboratory, six learning models, module syntax and account-scoped result storage are present");
 
 const mobileGuard = read("mobile-guard.css");
-for (const feature of ["--yi-mobile-tap-size:44px","overflow-x:clip","font-size:16px !important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
+for (const feature of ["--yi-mobile-tap-size:44px","overflow-x:clip","font-size:16px!important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
   assert.ok(mobileGuard.includes(feature), "Mobile resilience rule missing: " + feature);
 }
 for (const file of ["index.html","imkoniyatlar.html","davlat-xizmatlari.html","kabinet.html","admin.html","startap-yoli.html","laboratoriya.html","privacy.html","physics-lab/index.html"]) {
