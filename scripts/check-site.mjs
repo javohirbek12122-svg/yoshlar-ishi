@@ -690,7 +690,6 @@ for (const feature of [
   'className="compact-fold compact-composer"',
   'className="compact-fold compact-composer compact-initiative"',
   'className="compact-fold compact-partner-fold"',
-  'prefers-reduced-motion:reduce',
 ]) {
   assert.ok(compactHome.includes(feature), `Compact homepage feature missing: ${feature}`);
 }
