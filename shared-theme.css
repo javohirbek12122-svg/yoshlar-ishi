@@ -32,3 +32,14 @@ input:focus,select:focus,textarea:focus,.control:focus{outline:0;border-color:#4
 .sidebarfoot{border-color:#3a5872!important;color:#d8e6f1!important}
 .sidebarfoot span{color:#a8d4f1!important}
 @media(max-width:800px){.sidebar{background:var(--navy)!important}}
+
+/* Shared public navigation, including the compact personal cabinet header. */
+.navlinks{display:flex;align-items:center;gap:clamp(10px,1.5vw,20px);flex-wrap:wrap;font-size:11px;font-weight:700}
+.navlinks a{color:#46596d;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--blue);text-decoration:none}
+@media(max-width:800px){
+ .navlinks{gap:12px}
+}
+@media(max-width:520px){
+ .navlinks{gap:9px;font-size:10px}
+}

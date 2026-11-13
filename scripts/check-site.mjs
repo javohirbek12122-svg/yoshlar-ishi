@@ -663,6 +663,9 @@ assert.equal((mediaSection.match(/onerror="/g) || []).length, 5, "Each media ima
 assert.ok(serviceDesign.includes("Xizmat tafsilotlari 2026-yil 28-oktabr") && serviceDesign.includes("URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan"), "Content and URL monitoring dates must be clearly distinguished");
 
 assert.match(accountDesign, /Yoshlar-Ishi shared startup palette/);
+assert.ok(read("shared-theme.css").includes(".navlinks{"), "Personal cabinet navigation must use the shared visual rules");
+assert.ok(read("site.css").includes(".showcase-empty-art"), "Empty portfolio state must have its own accessible visual hierarchy");
+assert.ok(read("site.css").includes(".detail-btn"), "Dynamic team interest actions must not fall back to unstyled browser buttons");
 assert.match(accountDesign, /rpc\/get_my_initiatives/);
 assert.match(adminDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(adminDesign, /id="page-team"/);
