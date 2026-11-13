@@ -647,6 +647,7 @@ assert.match(opportunityStyles, /@media\(max-width:680px\)/);
 assert.match(opportunityStyles, /prefers-reduced-motion:reduce/);
 assert.ok(!opportunityDesignHome.includes('#101317') && !opportunityDesignHome.includes('--uc-acid:#d7ff66'), "Superseded dark lime design tokens must not remain embedded in homepage markup");
 assert.match(opportunityDesignHome, /function softGlow\(/, "Animated background source remains in the homepage JavaScript");
+assert.ok(opportunityDesignHome.includes("document.body.style.zoom=String(fontScale)"), "A11y text-size controls must scale the visible interface, not only an inherited base font");
 console.log("✓ opportunity-first homepage uses one consolidated navy/blue design system, sticky navigation, accessible mobile menu and reduced-motion layouts");
 
 const serviceDesign = read("davlat-xizmatlari.html");

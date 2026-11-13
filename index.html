@@ -186,8 +186,9 @@ $("partnerForm").addEventListener("submit",async ev=>{ev.preventDefault();const 
 
 // Local accessibility controls: keep user preference in this tab only.
 let fontScale=1;
-$("fontSmaller").addEventListener("click",()=>{fontScale=Math.max(.9,fontScale-.05);document.body.style.fontSize=(15*fontScale)+"px"});
-$("fontLarger").addEventListener("click",()=>{fontScale=Math.min(1.2,fontScale+.05);document.body.style.fontSize=(15*fontScale)+"px"});
+const applyFontScale=()=>{document.body.style.zoom=String(fontScale)};
+$("fontSmaller").addEventListener("click",()=>{fontScale=Math.max(.9,fontScale-.05);applyFontScale()});
+$("fontLarger").addEventListener("click",()=>{fontScale=Math.min(1.2,fontScale+.05);applyFontScale()});
 $("contrastToggle").addEventListener("click",()=>document.body.classList.toggle("high-contrast"));
 
 // Official portals directory: these are verified outbound links, not API/SSO integrations.
