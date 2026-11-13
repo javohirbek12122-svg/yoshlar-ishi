@@ -155,6 +155,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
               <div class="field"><label for="programTitle">Dastur nomi *</label><input id="programTitle" required maxlength="180"></div>
               <div class="inlineform"><div class="field"><label for="programSlug">Slug *</label><input id="programSlug" required pattern="[a-z0-9-]{3,100}" maxlength="100"></div><div class="field"><label for="programProvider">Tashkilot *</label><input id="programProvider" required maxlength="180"></div></div>
               <div class="field"><label for="programCategory">Yo‘nalish *</label><select id="programCategory"><option value="social_support">Ijtimoiy yordam</option><option value="language">Til / subsidiya</option><option value="business">Biznes / kredit</option><option value="career">Ish / stajirovka</option><option value="education">Ta’lim</option><option value="community">Jamoa / tashabbus</option></select></div>
+              <div class="field"><label for="programAvailabilityStatus">Ariza qabul holati *</label><select id="programAvailabilityStatus" required><option value="open">Ochiq qabul — rasmiy muddat bor</option><option value="permanent">Doimiy xizmat — individual qaror</option><option value="upcoming">Rejalashtirilgan — hali ochilmagan</option><option value="unverified">Tasdiqlanmagan — tekshirish kerak</option><option value="closed">Yopilgan — qabul tugagan</option></select><small class="sub">“Ommaviy katalogda faol” faqat kartani ko‘rsatadi. Bu maydon esa ariza qabul holatini bildiradi.</small></div>
               <div class="field"><label for="programSort">Katalogdagi tartib raqami</label><input id="programSort" type="number" min="0" max="9999" value="100"></div>
               <div class="field"><label for="programSummary">Qisqa tushuntirish *</label><textarea id="programSummary" required maxlength="3000"></textarea></div>
               <div class="field"><label for="programBenefit">Nima beradi? *</label><textarea id="programBenefit" required maxlength="3000"></textarea></div>
@@ -175,7 +176,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
               <div id="programFormNotice" class="notice" role="status" aria-live="polite"></div>
             </form>
           </div>
-          <div class="panel"><div class="panelhead"><div><h3>Mavjud dasturlar</h3><p>Tahrirlash yoki vaqtincha yashirish uchun yozuvni tanlang.</p></div></div><div class="tablewrap"><table style="min-width:620px"><thead><tr><th>Dastur</th><th>Yosh / sana</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="youthProgramsBody"><tr><td colspan="4" class="empty">Dasturlar yuklanmoqda…</td></tr></tbody></table></div></div>
+          <div class="panel"><div class="panelhead"><div><h3>Mavjud dasturlar</h3><p>Tahrirlash yoki vaqtincha yashirish uchun yozuvni tanlang.</p></div></div><div class="tablewrap"><table style="min-width:620px"><thead><tr><th>Dastur</th><th>Yosh / sana</th><th>Qabul / ko‘rinish</th><th>Amal</th></tr></thead><tbody id="youthProgramsBody"><tr><td colspan="4" class="empty">Dasturlar yuklanmoqda…</td></tr></tbody></table></div></div>
         </div>
       </section>
       <section class="page" id="page-integrations">
@@ -340,18 +341,19 @@ async function addShowcase(ev){
 function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
 
 function renderYouthPrograms(){
- $("youthProgramCount").textContent=youthPrograms.length+" ta dastur";
- $("youthProgramsBody").innerHTML=youthPrograms.length?youthPrograms.map(p=>'<tr data-id="'+esc(p.id)+'"><td><strong>'+esc(p.title)+'</strong><span class="sub">'+esc(p.provider)+' · '+esc(p.category)+'</span><span class="sub">'+esc(p.slug)+'</span></td><td>'+esc(p.age_min??"—")+'–'+esc(p.age_max??"—")+'<span class="sub">Tekshirilgan: '+esc(p.verified_on||"—")+'</span></td><td><span class="statuspill '+(p.active?'':'warn')+'">'+(p.active?'Faol':'Yashirilgan')+'</span><span class="sub">'+(p.featured?'Muhim dastur':'Oddiy')+'</span></td><td><button type="button" class="savebtn js-program-edit">Tahrirlash</button> <button type="button" class="savebtn js-program-toggle">'+(p.active?'Yashirish':'Faollashtirish')+'</button></td></tr>').join(""):'<tr><td colspan="4" class="empty">Dastur yo‘q. Chapdagi forma orqali birinchi imkoniyatni qo‘shing.</td></tr>';
+ const statusLabels={open:"Ochiq qabul",permanent:"Doimiy xizmat",upcoming:"Rejalashtirilgan",unverified:"Tasdiqlanmagan",closed:"Yopilgan"};
+ $("youthProgramCount").textContent=youthPrograms.length+" ta dastur · "+youthPrograms.filter(p=>p.active).length+" ta ommaviy";
+ $("youthProgramsBody").innerHTML=youthPrograms.length?youthPrograms.map(p=>'<tr data-id="'+esc(p.id)+'"><td><strong>'+esc(p.title)+'</strong><span class="sub">'+esc(p.provider)+' · '+esc(p.category)+'</span><span class="sub">'+esc(p.slug)+'</span></td><td>'+esc(p.age_min??"—")+'–'+esc(p.age_max??"—")+'<span class="sub">Tekshirilgan: '+esc(p.verified_on||"—")+'</span></td><td><span class="statuspill '+(p.active?'':'warn')+'">'+(p.active?'Ommaviy':'Yashirilgan')+'</span><span class="sub">Qabul: '+esc(statusLabels[p.availability_status]||"Tasdiqlanmagan")+'</span><span class="sub">'+(p.featured?'Muhim':'Oddiy')+'</span></td><td><button type="button" class="savebtn js-program-edit">Tahrirlash</button> <button type="button" class="savebtn js-program-toggle">'+(p.active?'Yashirish':'Ommaga chiqarish')+'</button></td></tr>').join(""):'<tr><td colspan="4" class="empty">Dastur yo‘q. Chapdagi forma orqali birinchi imkoniyatni qo‘shing.</td></tr>';
 }
 function resetYouthProgramForm(){
  $("youthProgramForm").reset();$("programEditId").value="";$("programFormTitle").textContent="Yangi dastur qo‘shish";
- $("programVerified").value=new Date().toISOString().slice(0,10);$("programSort").value="100";$("programActive").checked=true;$("programFeatured").checked=false;
+ $("programVerified").value=new Date().toISOString().slice(0,10);$("programAvailabilityStatus").value="unverified";$("programSort").value="100";$("programActive").checked=true;$("programFeatured").checked=false;
  tell("programFormNotice","Forma yangi dastur uchun tayyor.");
 }
 function editYouthProgram(id){
  const p=youthPrograms.find(x=>x.id===id);if(!p)return;
  $("programEditId").value=p.id;$("programTitle").value=p.title||"";$("programSlug").value=p.slug||"";$("programProvider").value=p.provider||"";
- $("programCategory").value=p.category||"social_support";$("programSort").value=p.sort_order??100;$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
+ $("programCategory").value=p.category||"social_support";$("programAvailabilityStatus").value=p.availability_status||"unverified";$("programSort").value=p.sort_order??100;$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
  $("programAgeMin").value=p.age_min??"";$("programAgeMax").value=p.age_max??"";
  $("programAudience").value=(p.audience_tags||[]).join("\n");$("programEligibility").value=JSON.stringify(p.eligibility||{},null,2);
  $("programSteps").value=(p.steps||[]).join("\n");$("programDocuments").value=(p.documents||[]).join("\n");
@@ -378,6 +380,7 @@ async function saveYouthProgram(ev){
   if(min!==""&&max!==""&&Number(min)>Number(max))throw Error("Eng kam yosh eng yuqori yoshdan katta bo‘lishi mumkin emas.");
   const payload={slug:$("programSlug").value.trim().toLowerCase(),title:$("programTitle").value.trim(),provider:$("programProvider").value.trim(),category:$("programCategory").value,
    sort_order:Number($("programSort").value)||100,
+   availability_status:$("programAvailabilityStatus").value,
    summary:$("programSummary").value.trim(),benefit:$("programBenefit").value.trim(),age_min:min===""?null:Number(min),age_max:max===""?null:Number(max),
    audience_tags:splitLines("programAudience"),eligibility:eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
    application_channel:$("programChannel").value.trim(),application_url:appUrl,source_title:$("programSourceTitle").value.trim(),source_url:sourceUrl,
