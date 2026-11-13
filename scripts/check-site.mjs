@@ -724,8 +724,8 @@ for (const feature of [
   assert.ok(startupPath.includes(feature), `Startup navigator feature missing: ${feature}`);
 }
 assert.match(publicHtml, /\.\/startap-yoli\.html/);
-assert.match(serviceDesign, /\.\/startap-yoli\.html/);
-assert.match(accountDesign, /\.\/startap-yoli\.html/);
+assert.match(serviceDesign, /\.\/imkoniyatlar\.html/);
+assert.match(accountDesign, /\.\/imkoniyatlar\.html/);
 assert.doesNotMatch(startupPath, /% moslik/, "Heuristic rank must not be presented as a probability");
 const sitemap = read("sitemap.xml");
 const robots = read("robots.txt");
