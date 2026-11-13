@@ -9,6 +9,8 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
+  "site.css",
+  "shared-theme.css",
   "sitemap.xml",
   "BENCHMARK_NOTES.md",
   "startap-yoli.html",
@@ -89,6 +91,13 @@ assert.doesNotMatch(config, /service_role[\s\S]{0,100}eyJ[A-Za-z0-9_-]+/i);
 console.log("✓ public Supabase config has URL + publishable key and no known secret-key pattern");
 
 const publicHtml = read("index.html");
+assert.ok(publicHtml.includes('./site.css'), "Homepage must load its single consolidated design system");
+assert.ok(publicHtml.includes('Loyiha va hamjamiyat vositalari'), "Secondary project/community tools must be separated from the primary public-opportunity journey");
+assert.ok(publicHtml.includes('Bu forma davlat idorasiga ariza yubormaydi.'), "Internal initiative submission must not be confused with an official government application");
+for (const page of ["imkoniyatlar.html","davlat-xizmatlari.html","kabinet.html","admin.html"]) {
+  assert.ok(read(page).includes('./shared-theme.css'), `${page} must share the platform design tokens and navigation language`);
+}
+console.log("✓ one consolidated homepage design system, shared cross-page theme and clearly separated internal-vs-government actions");
 assert.match(publicHtml, /id="initiativeForm"/);
 assert.match(publicHtml, /id="trackForm"/);
 assert.match(publicHtml, /action:"initiative_submit"/);

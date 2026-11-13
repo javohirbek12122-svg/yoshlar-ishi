@@ -1,0 +1,34 @@
+:root{
+ --navy:#123255;--blue:#15558a;--blue2:#eaf3fb;--ink:#152336;--muted:#62758a;
+ --line:#dce5ed;--paper:#f5f8fb;--white:#fff;--card:#fff;--green:#176b51;
+ --greenbg:#e8f5ef;--gold:#9b671e;--goldbg:#fff5e5;--red:#a13d3d;
+ --sky:#eaf3fb;--shadow:0 14px 38px rgba(18,50,85,.08)
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink)}
+a{color:var(--blue)}
+.top,.topbar{background:var(--navy)!important;color:#eaf3fb!important}
+.nav{border-color:var(--line)!important}
+.brand{color:var(--navy)!important}
+.brand .logo,.logo,.brand-mark{background:var(--blue)!important;color:#fff!important;border-radius:8px!important}
+.btn,.button{border-radius:8px!important;background:var(--blue)!important;border-color:var(--blue)!important;color:#fff!important}
+.btn:hover,.button:hover{background:#0f426d!important;border-color:#0f426d!important}
+.btn.alt,.button.alt,.button.ghost{background:#fff!important;border-color:#cbd9e7!important;color:var(--blue)!important}
+.btn.alt:hover,.button.alt:hover,.button.ghost:hover{background:var(--blue2)!important}
+.hero{background:linear-gradient(115deg,#123255,#16517e)!important;color:#fff!important}
+.hero .eyebrow{color:#b9d8ef!important}
+.panel,.card,.program-card,.step,.directory-card,.service-card,.metric,.question,.catalogue,.search-panel{
+ border-color:var(--line)!important;border-radius:10px!important;box-shadow:0 7px 22px rgba(18,50,85,.055)
+}
+input,select,textarea,.control{border-color:#cbd8e3!important;border-radius:7px!important}
+input:focus,select:focus,textarea:focus,.control:focus{outline:0;border-color:#4b91c0!important;box-shadow:0 0 0 3px #2c83bd20!important}
+.sidebar{background:var(--navy)!important;color:#fff!important;border-right-color:#214766!important}
+.sidebar .brand{color:#fff!important}
+.sidebar .logo{background:#fff!important;color:var(--navy)!important}
+.sidebar .smallcap{color:#b6c9d9!important}
+.sidebar .navitem{color:#d8e6f1!important;border-radius:7px!important}
+.sidebar .navitem.active,.sidebar .navitem:hover{background:#eaf3fb!important;color:var(--navy)!important}
+.sidebar .navitem.active .ico,.sidebar .navitem:hover .ico{color:var(--navy)!important}
+.sidebarfoot{border-color:#3a5872!important;color:#d8e6f1!important}
+.sidebarfoot span{color:#a8d4f1!important}
+@media(max-width:800px){.sidebar{background:var(--navy)!important}}
