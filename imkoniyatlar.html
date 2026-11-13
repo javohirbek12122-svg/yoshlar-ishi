@@ -41,13 +41,33 @@
 .journey-event strong{display:block;font-size:12px}
 .journey-event p{margin:3px 0 0;color:var(--muted);font-size:11px}
 @media(max-width:620px){.journey-history{padding:15px}.journey-history .section-head{display:block}.journey-event{grid-template-columns:1fr;gap:4px}}
+
+.status-filters{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 17px;padding:10px 0;border-top:1px solid #edf1e6;border-bottom:1px solid #edf1e6}
+.status-filters>span{font-size:10px;font-weight:800;color:#64705a;margin-right:3px}
+.status-filter{border:1px solid #d7dfcc;background:#fff;border-radius:99px;padding:7px 10px;font-size:10px;font-weight:700;color:#58634c;cursor:pointer}
+.status-filter.active{background:#eaf4cc;border-color:#bbd77d;color:#3b5016}
+.program-top{flex-wrap:wrap}
+.availability-pill{display:inline-flex;align-items:center;border-radius:99px;padding:5px 8px;font-size:9px;line-height:1.2;font-weight:800;max-width:100%}
+.availability-pill.open,.availability-detail.open{background:#eaf5ed;color:#286142;border-color:#b9ddc6}
+.availability-pill.permanent,.availability-detail.permanent{background:#edf3e5;color:#49631e;border-color:#d1dfbd}
+.availability-pill.upcoming,.availability-detail.upcoming{background:#edf2fa;color:#3b5d8d;border-color:#cbd8ee}
+.availability-pill.unverified,.availability-detail.unverified{background:#fff4df;color:#835b12;border-color:#eed8a5}
+.availability-pill.closed,.availability-detail.closed{background:#f8eaea;color:#8c3b3b;border-color:#e8c9c9}
+.program-foot{align-items:flex-end}
+.program-foot .small{line-height:1.55}
+.verified-date{display:inline-block;margin-top:4px;color:#899386;font-size:9px}
+.card-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.availability-detail{display:grid;gap:4px;margin:14px 0;padding:12px 14px;border:1px solid;border-radius:8px;font-size:10px;line-height:1.6}
+.availability-detail strong{font-size:11px}
+@media(max-width:640px){.status-filters{gap:6px}.status-filters>span{width:100%}.status-filter{padding:7px 9px}.program-foot{align-items:flex-start;flex-direction:column}.card-actions{width:100%;justify-content:space-between}.program-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div class="topbar"><div class="wrap"><span>Yoshlar-Ishi · imkoniyatlar navigatori</span><span>Mustaqil platforma · rasmiy manbalarni tekshirib foydalaning</span></div></div>
 <header class="wrap nav">
  <a class="brand" href="./index.html"><span class="brand-mark">YI</span><span>Yoshlar-Ishi</span></a>
- <nav class="navlinks" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a class="active" href="./imkoniyatlar.html">Imkoniyatlar</a><a href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="./startap-yoli.html">Startap yo‘li</a></nav>
+ <nav class="navlinks" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a class="active" href="./imkoniyatlar.html">Imkoniyatlar</a><a href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="./imkoniyatlar.html#savedJourneys">Jarayonlarim</a></nav>
  <a class="btn secondary" href="./kabinet.html">Shaxsiy kabinet ↗</a>
 </header>
 <main>
@@ -69,8 +89,9 @@
   <button class="btn" id="filterButton" type="button">Saralash ↗</button>
  </div>
  <div class="results-meta"><span id="resultCount">Imkoniyatlar yuklanmoqda…</span><div class="chips"><button class="chip active" type="button" data-filter="all">Barchasi</button><button class="chip" type="button" data-filter="featured">Muhimlari</button><button class="chip" type="button" data-filter="age">Yoshimga mos</button></div></div>
+ <div class="status-filters" aria-label="Ariza qabul holati"><span>Qabul holati:</span><button class="status-filter active" type="button" data-status="all">Barchasi</button><button class="status-filter" type="button" data-status="open">Ochiq qabul</button><button class="status-filter" type="button" data-status="permanent">Doimiy xizmat</button><button class="status-filter" type="button" data-status="upcoming">Keyinroq</button><button class="status-filter" type="button" data-status="unverified">Tasdiqlanmagan</button></div>
  <div class="program-grid" id="programGrid"><div class="empty">Dasturlar yuklanmoqda…</div></div>
- <p class="smallnote">Katalogdagi “tekshirilgan sana” manba sahifasi qayta ko‘rilgan vaqtni bildiradi; ariza qabul qilinayotgani yoki mablag‘ mavjudligini kafolatlamaydi.</p>
+ <p class="smallnote">“Ochiq qabul” faqat rasmiy e’londa topshirish oynasi ko‘rsatilgan yozuvlarga qo‘yiladi. “Doimiy xizmat” — umumiy murojaat yo‘li bor, lekin har bir yordam avtomatik ajratilmaydi. “Tasdiqlanmagan” — qabul holatini rasmiy kanal orqali aniqlashtirish kerak. Muddat va manbani har bir kartada ko‘ring.</p>
 </div></section>
 <section class="section" id="programDetail" hidden><div class="wrap">
  <div class="section-head"><div><div class="eyebrow">02–05 · Amaliy tayyorgarlik</div><h2>Tanlangan imkoniyat bo‘yicha yo‘l xaritasi</h2></div><p>Har bir qadamni bajarganingizda belgilang. Kabinetga kirgan bo‘lsangiz, jarayon va ariza loyihasi hisobingizda saqlanadi.</p></div>
@@ -114,8 +135,10 @@
 const cfg=window.YI_CONFIG||{},base=String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/rest/v1/",anon=cfg.supabaseAnonKey||cfg.supabaseKey||"";
 const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const labels={social_support:"Ijtimoiy yordam",language:"Til va ta’lim",business:"Biznes va moliya",career:"Ish va stajirovka",education:"Ta’lim",community:"Jamoa va tashabbus"};
+const availabilityLabels={open:"Ochiq qabul",permanent:"Doimiy xizmat",upcoming:"Keyinroq / rejalashtirilgan",unverified:"Qabul holati tasdiqlanmagan",closed:"Qabul yopilgan"};
+const availabilityKinds={open:"open",permanent:"permanent",upcoming:"upcoming",unverified:"unverified",closed:"closed"};
 const statusLabels={interested:"Qiziqish bildirildi",preparing:"Tayyorlanyapman",ready:"Ariza topshirishga tayyor",submitted:"Rasmiy portalga yuborildi",waiting:"Javob kutilmoqda",approved:"Ma’qullandi",declined:"Rad etildi / tuzatish kerak",completed:"Yakunlandi",paused:"Vaqtincha to‘xtatildi"};
-let programs=[],selected=null,journey=null,user=null,token=sessionStorage.getItem("yi_user_token")||"",refreshToken=sessionStorage.getItem("yi_user_refresh")||"",chipFilter="all";
+let programs=[],selected=null,journey=null,user=null,token=sessionStorage.getItem("yi_user_token")||"",refreshToken=sessionStorage.getItem("yi_user_refresh")||"",chipFilter="all",availabilityFilter="all";
 function setNotice(id,text,bad){const el=$(id);if(el){el.textContent=text;el.classList.toggle("error",!!bad)}}
 async function api(path,opts){const headers={apikey:anon,Authorization:"Bearer "+(token||anon),"Content-Type":"application/json",...(opts&&opts.headers||{})};const r=await fetch(base+path,{...(opts||{}),headers});if(!r.ok){let t="";try{t=await r.text()}catch{}throw new Error("So‘rov bajarilmadi ("+r.status+"). "+t.slice(0,180))}if(r.status===204)return null;const text=await r.text();return text?JSON.parse(text):null}
 async function authCheck(){
@@ -139,12 +162,13 @@ function fitProgram(p){
 function searchable(p){return [p.title,p.provider,p.summary,p.benefit,p.category,(p.audience_tags||[]).join(" ")].join(" ").toLowerCase()}
 function renderPrograms(){
  const category=$("categoryFilter").value,q=$("queryFilter").value.trim().toLowerCase();
- const rows=programs.filter(p=>(category==="all"||p.category===category)&&(!q||searchable(p).includes(q))&&(chipFilter!=="featured"||p.featured===true)&&(chipFilter!=="age"||fitProgram(p).eligible===true));
- $("resultCount").textContent=rows.length+" ta imkoniyat ko‘rsatilmoqda · jami "+programs.length;
+ const rows=programs.filter(p=>(category==="all"||p.category===category)&&(!q||searchable(p).includes(q))&&(chipFilter!=="featured"||p.featured===true)&&(chipFilter!=="age"||fitProgram(p).eligible===true)&&(availabilityFilter==="all"||(p.availability_status||"unverified")===availabilityFilter));
+ $("resultCount").textContent=rows.length+" ta imkoniyat ko‘rsatilmoqda · faol katalogda "+programs.length+" ta";
  $("programGrid").innerHTML=rows.length?rows.map(p=>{
   const fit=fitProgram(p),age=p.age_min===null&&p.age_max===null?"Yosh mezoni e’londa aniqlashtiriladi":(p.age_min??"—")+"–"+(p.age_max??"—")+" yosh";
-  return '<article class="program-card"><div class="program-top"><span class="tag">'+esc(labels[p.category]||"Imkoniyat")+'</span><span class="fit '+fit.kind+'">'+esc(fit.text)+'</span></div><h3>'+esc(p.title)+'</h3><p>'+esc(p.summary)+'</p><div class="program-benefit"><strong>Foyda:</strong> '+esc(p.benefit)+'</div><div class="program-foot"><span class="small">'+esc(p.provider)+' · '+esc(age)+'</span><button class="btn secondary" type="button" data-open="'+esc(p.slug)+'">Yo‘l xaritasini ochish ↗</button></div></article>';
- }).join(""):'<div class="empty">Bu filtr bo‘yicha imkoniyat topilmadi. Boshqa kategoriya yoki so‘z bilan qidiring.</div>';
+  const status=p.availability_status||"unverified",statusKind=availabilityKinds[status]||"unverified";
+  return '<article class="program-card"><div class="program-top"><span class="tag">'+esc(labels[p.category]||"Imkoniyat")+'</span><span class="availability-pill '+statusKind+'">'+esc(availabilityLabels[status]||availabilityLabels.unverified)+'</span></div><h3>'+esc(p.title)+'</h3><p>'+esc(p.summary)+'</p><div class="program-benefit"><strong>Foyda:</strong> '+esc(p.benefit)+'</div><div class="program-foot"><span class="small">'+esc(p.provider)+' · '+esc(age)+'<br><span class="verified-date">Manba tekshirilgan: '+esc(p.verified_on||"—")+'</span></span><span class="card-actions"><span class="fit '+fit.kind+'">'+esc(fit.text)+'</span><button class="btn secondary" type="button" data-open="'+esc(p.slug)+'">Tafsilotlar ↗</button></span></div></article>';
+ }).join(""):'<div class="empty">Bu holat yoki filtr bo‘yicha imkoniyat topilmadi. Boshqa qabul holatini tanlang yoki kalit so‘zni o‘zgartiring.</div>';
 }
 function renderObject(obj){
  const entries=Object.entries(obj||{}).filter(([k,v])=>typeof v==="string"&&v.trim());
@@ -167,7 +191,10 @@ function hydrateDetail(p,row){
  const fit=fitProgram(p),steps=Array.isArray(p.steps)?p.steps:[],docs=Array.isArray(p.documents)?p.documents:[];
  const ageText=p.age_min===null&&p.age_max===null?"Yosh chegarasi e’londa alohida tekshiriladi":(p.age_min??"—")+" yoshdan "+(p.age_max??"—")+" yoshgacha";
  const fundingNotice=p.category==="business"?'<div class="notice warn"><strong>Kredit — grant emas.</strong> Mablag‘ni qaytarish sharti, foiz, muddat va bank talablarini imzolashdan oldin tekshiring.</div>':"";
- $("detailMain").innerHTML='<div class="eyebrow">'+esc(labels[p.category]||"Imkoniyat")+' · '+esc(p.provider)+'</div><h3>'+esc(p.title)+'</h3><p class="muted">'+esc(p.summary)+'</p>'+fundingNotice+'<div class="program-facts"><div class="fact"><b>'+esc(ageText)+'</b><span>Yosh mezoni</span></div><div class="fact"><b>'+esc(new Date((p.verified_on||"2026-01-01")+"T00:00:00").toLocaleDateString("uz-UZ"))+'</b><span>Manba tekshirilgan</span></div><div class="fact"><b>'+esc(fit.text)+'</b><span>Dastlabki moslik</span></div></div><div class="notice warn">'+esc(p.status_note||"Talablar va qabul holatini rasmiy manbada qayta tekshiring.")+'</div><h4>Kimlar qatnashishi mumkin?</h4><ul class="plain-list">'+(p.audience_tags||[]).map(x=>"<li>"+esc(x)+"</li>").join("")+'</ul>'+(renderObject(p.eligibility)?'<h4>Asosiy shartlar</h4><ul class="plain-list">'+renderObject(p.eligibility)+'</ul>':"")+'<h4>Arizagacha bo‘lgan amaliy qadamlar</h4><div class="checklist">'+steps.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-step-check value="step-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Hujjatlar va tayyorlanadigan ma’lumotlar</h4><div class="checklist">'+docs.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-doc-check value="doc-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Rasmiy ariza kanali</h4><p class="muted">'+esc(p.application_channel||"Dastur egasining rasmiy kanalini aniqlang.")+'</p><p class="muted"><strong>Qabul / muddat:</strong> '+esc(p.deadline_note||"Muddat rasmiy e’londa tekshiriladi.")+'</p><div class="notice">Manba: <a href="'+esc(p.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.source_title||"Rasmiy manbani ochish")+' ↗</a>'+(p.secondary_source_url?' · <a href="'+esc(p.secondary_source_url)+'" target="_blank" rel="noopener noreferrer">Qo‘shimcha manba ↗</a>':"")+'</div>';
+ const availability=p.availability_status||"unverified";
+ const statusCopy=availability==="open"?"Rasmiy e’londa ariza oynasi ko‘rsatilgan; topshirish kanali va muddatni manbada yana tekshiring.":availability==="permanent"?"Umumiy murojaat yo‘li mavjud. Muayyan yordam turi uchun moslik va qaror alohida ko‘riladi.":availability==="upcoming"?"Dastur rejalashtirilgan, lekin ochiq ariza formasi yoki tanlov sanasi hali tasdiqlanmagan.":availability==="closed"?"Rasmiy qabul oynasi yopilgan. Yangi e’lon chiqmaguncha ariza topshirish mumkin deb hisoblamang.":"Rasmiy qabul oynasi to‘liq tasdiqlanmagan. Tashkilotdan aniqlashtirmasdan shaxsiy hujjat yoki pul yubormang.";
+ const statusNotice='<div class="availability-detail '+(availabilityKinds[availability]||"unverified")+'"><strong>Qabul holati: '+esc(availabilityLabels[availability]||availabilityLabels.unverified)+'</strong><span>'+esc(statusCopy)+'</span></div>';
+ $("detailMain").innerHTML='<div class="eyebrow">'+esc(labels[p.category]||"Imkoniyat")+' · '+esc(p.provider)+'</div><h3>'+esc(p.title)+'</h3><p class="muted">'+esc(p.summary)+'</p>'+fundingNotice+statusNotice+'<div class="program-facts"><div class="fact"><b>'+esc(ageText)+'</b><span>Yosh mezoni</span></div><div class="fact"><b>'+esc(new Date((p.verified_on||"2026-01-01")+"T00:00:00").toLocaleDateString("uz-UZ"))+'</b><span>Manba tekshirilgan</span></div><div class="fact"><b>'+esc(fit.text)+'</b><span>Dastlabki moslik</span></div></div><div class="notice warn">'+esc(p.status_note||"Talablar va qabul holatini rasmiy manbada qayta tekshiring.")+'</div><h4>Kimlar qatnashishi mumkin?</h4><ul class="plain-list">'+(p.audience_tags||[]).map(x=>"<li>"+esc(x)+"</li>").join("")+'</ul>'+(renderObject(p.eligibility)?'<h4>Asosiy shartlar</h4><ul class="plain-list">'+renderObject(p.eligibility)+'</ul>':"")+'<h4>Arizagacha bo‘lgan amaliy qadamlar</h4><div class="checklist">'+steps.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-step-check value="step-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Hujjatlar va tayyorlanadigan ma’lumotlar</h4><div class="checklist">'+docs.map((x,i)=>'<label class="checkrow"><input type="checkbox" data-doc-check value="doc-'+i+'"><span>'+esc(x)+'</span></label>').join("")+'</div><h4>Rasmiy ariza kanali</h4><p class="muted">'+esc(p.application_channel||"Dastur egasining rasmiy kanalini aniqlang.")+'</p><p class="muted"><strong>Qabul / muddat:</strong> '+esc(p.deadline_note||"Muddat rasmiy e’londa tekshiriladi.")+'</p><div class="notice">Manba: <a href="'+esc(p.source_url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.source_title||"Rasmiy manbani ochish")+' ↗</a>'+(p.secondary_source_url?' · <a href="'+esc(p.secondary_source_url)+'" target="_blank" rel="noopener noreferrer">Qo‘shimcha manba ↗</a>':"")+'</div>';
  $("officialApply").href=p.application_url||p.source_url;
  $("officialApply").textContent=p.application_url?"Rasmiy ariza kanalini ochish ↗":"Rasmiy ma’lumotni ko‘rish ↗";
  $("journeyStatus").value=row&&statusLabels[row.status]?row.status:"preparing";
@@ -235,7 +262,7 @@ async function saveJourney(){
 }
 async function loadPrograms(){
  try{
-  programs=await api("youth_opportunity_programs?select=slug,title,provider,category,summary,benefit,age_min,age_max,audience_tags,eligibility,steps,documents,application_channel,application_url,source_title,source_url,secondary_source_url,deadline_note,status_note,verified_on,active,featured,sort_order&active=eq.true&order=featured.desc,sort_order.asc,title.asc",{headers:{Authorization:"Bearer "+anon}});
+  programs=await api("youth_opportunity_programs?select=slug,title,provider,category,summary,benefit,age_min,age_max,audience_tags,eligibility,steps,documents,application_channel,application_url,source_title,source_url,secondary_source_url,deadline_note,status_note,verified_on,active,featured,sort_order,availability_status&active=eq.true&order=featured.desc,sort_order.asc,title.asc",{headers:{Authorization:"Bearer "+anon}});
   renderPrograms();
  }catch(e){
   $("programGrid").innerHTML='<div class="empty">Imkoniyatlar katalogi hozir yuklanmadi. Sahifani yangilang yoki keyinroq urinib ko‘ring.</div>'; $("resultCount").textContent="Ma’lumotni yuklashda xatolik";
@@ -244,6 +271,7 @@ async function loadPrograms(){
 $("filterButton").addEventListener("click",renderPrograms);
 ["ageFilter","categoryFilter","queryFilter"].forEach(id=>$(id).addEventListener(id==="queryFilter"?"input":"change",renderPrograms));
 document.querySelectorAll("[data-filter]").forEach(btn=>btn.addEventListener("click",()=>{chipFilter=btn.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===btn));renderPrograms()}));
+document.querySelectorAll("[data-status]").forEach(btn=>btn.addEventListener("click",()=>{availabilityFilter=btn.dataset.status;document.querySelectorAll("[data-status]").forEach(x=>x.classList.toggle("active",x===btn));renderPrograms()}));
 $("programGrid").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openProgram(b.dataset.open)});
 $("savedJourneys").addEventListener("click",e=>{const b=e.target.closest("[data-resume]");if(b)openProgram(b.dataset.resume)});
 $("saveJourney").addEventListener("click",saveJourney);
