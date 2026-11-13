@@ -53,6 +53,7 @@ const required = [
   "supabase/migrations/20261029051817_optimize_rls_policy_initplans.sql",
   "supabase/migrations/20261104155500_add_virtual_lab_runs.sql",
   "supabase/migrations/20261113180000_add_opportunity_journey_event_history.sql",
+  "supabase/migrations/20261113193000_verified_opportunity_status_and_2026_contest.sql",
   "supabase/functions/idea-review/index.ts",
   "supabase/functions/community-submit/index.ts",
   "supabase/functions/telegram-webhook/index.ts",
@@ -139,6 +140,8 @@ console.log("✓ public community forms use the consent-checked server-side subm
 
 
 const admin = read("admin.html");
+assert.ok(admin.includes('id="programAvailabilityStatus"'), "Admin must expose an explicit application-status selector");
+assert.ok(admin.includes('availability_status:$("programAvailabilityStatus").value'), "Admin must save the separate application-status field");
 for (const feature of [
   'id="loginForm"',
   'id="otpPanel"',
@@ -321,6 +324,8 @@ console.log(`✓ database migrations: ${migrationFiles.length} file(s); admin RL
 
 
 const serviceGuide = read("davlat-xizmatlari.html");
+assert.ok(serviceGuide.includes('href="./imkoniyatlar.html"'), "Service guide must route to the real opportunities catalogue");
+assert.ok(!serviceGuide.includes("Tashabbus yuborish ↗"), "Service guide must not use the legacy initiative CTA");
 for (const feature of [
   'id="tashkilotlar"',
   'id="serviceCatalogue"',
@@ -357,6 +362,10 @@ for (const feature of [
   'id="draftSituation"',
   'id="saveJourney"',
   'id="journeyTimeline"',
+  "availability_status",
+  "availabilityLabels",
+  "Ochiq qabul",
+  "Tasdiqlanmagan",
   "opportunity_journey_events?select=",
   "async function loadJourneyTimeline(journeyId)",
   "event_type:eventType",
@@ -370,7 +379,7 @@ for (const feature of [
   assert.ok(opportunitiesPage.includes(feature), `Youth opportunity engine feature missing: ${feature}`);
 }
 assert.match(opportunitiesPage, /opportunity_journeys\?select=\*&program_slug=eq\./);
-console.log("✓ youth opportunity catalogue, age-fit guide, preparation checklist, draft builder and owner-scoped journey tracker and chronological event timeline are present");
+console.log("✓ youth opportunity catalogue, explicit application states, age-fit guide, preparation checklist, draft builder and private journey timeline are present");
 
 const cabinet = read("kabinet.html");
 for (const feature of [
@@ -574,6 +583,9 @@ console.log("✓ AI quota and Telegram subscription tables are explicitly scoped
 const opportunityDesignHome = read("index.html");
 for (const feature of [
   '<title>Yoshlar-Ishi — Imkoniyatdan natijagacha</title>',
+  'id="qo-shimcha-vositalar"',
+  "Qo‘shimcha vositalar",
+  "Bu vositalar asosiy davlat imkoniyatlari katalogidan alohida.",
   "Imkoniyatni top.",
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
   "Imkoniyatlar katalogi ↗",

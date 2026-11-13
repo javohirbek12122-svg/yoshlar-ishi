@@ -49,6 +49,7 @@ jobs:
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
           grep -Fqi "Imkoniyatni top." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current opportunity-first headline is missing."; exit 1; }
+          grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
           grep -Fqi "IMKONIYAT · ARIZA · ISHTIROK · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
           grep -Fqi 'href="./imkoniyatlar.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the opportunity catalogue route."; exit 1; }
           grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
@@ -90,7 +91,10 @@ jobs:
           grep -Fqi "function saveJourney()" /tmp/yoshlar-opportunities.html || { echo "::error::Youth opportunity progress-saving workflow is missing."; exit 1; }
           grep -Fqi "opportunity_journey_events?select=" /tmp/yoshlar-opportunities.html || { echo "::error::Private journey event history is missing."; exit 1; }
           grep -Fqi 'id="journeyTimeline"' /tmp/yoshlar-opportunities.html || { echo "::error::Journey event timeline UI is missing."; exit 1; }
+          grep -Fqi "availability_status" /tmp/yoshlar-opportunities.html || { echo "::error::Opportunity application status model is missing."; exit 1; }
+          grep -Fqi "Ochiq qabul" /tmp/yoshlar-opportunities.html || { echo "::error::Opportunity status labels are missing."; exit 1; }
           grep -Fqi 'id="page-youth-programs"' /tmp/yoshlar-admin.html || { echo "::error::Admin panel is missing youth-programme management."; exit 1; }
+          grep -Fqi 'id="programAvailabilityStatus"' /tmp/yoshlar-admin.html || { echo "::error::Admin application-status selector is missing."; exit 1; }
           grep -Fqi "function saveYouthProgram(ev)" /tmp/yoshlar-admin.html || { echo "::error::Admin panel cannot manage youth programmes."; exit 1; }
           grep -Fqi "function scoresFor(stage,goal,sector,source)" /tmp/yoshlar-startup.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/privacy.html" -o /tmp/yoshlar-privacy.html

@@ -154,3 +154,15 @@ The canonical Vercel project has a verified production alias, but the last recor
 ## Opportunity journey event history
 
 The authenticated user's private journey timeline is stored in `public.opportunity_journey_events`. Row Level Security restricts reads and inserts to the owner of the linked `opportunity_journeys` row. The log records journey start, preparation saves, and user-entered status changes; it is not a government case-management feed and does not independently verify an external application decision.
+
+
+## Explicit application status (2026-11-13)
+
+The public catalogue does not treat the `active` flag as an open application. A separate `availability_status` distinguishes:
+- `open`: an official call states an application window;
+- `permanent`: a standing public-service route exists, but each support type still has eligibility and approval conditions;
+- `upcoming`: announced for a later period, without a confirmed current application window;
+- `unverified`: the current intake, eligibility or submission channel needs confirmation;
+- `closed`: the official application window has ended.
+
+The administrator selects this status independently of whether the card is visible. If the official announcement does not provide a real application form or channel, `application_url` stays empty and the public page links to the source article instead. The catalogue is intentionally not padded with unverified aggregator links.
