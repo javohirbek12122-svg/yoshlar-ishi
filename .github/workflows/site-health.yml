@@ -54,6 +54,8 @@ jobs:
           grep -Fqi -- '--navy:#123255' /tmp/yoshlar-site.css || { echo "::error::The live homepage stylesheet does not contain the current navy design tokens."; exit 1; }
           grep -Fqi '.compact-fold' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing its accessible collapsible-panel styles."; exit 1; }
           grep -Fqi '#backToTop.is-visible' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the scroll-to-top control styles."; exit 1; }
+          grep -Fqi '.showcase-empty-art' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the real-project portfolio empty-state styles."; exit 1; }
+          grep -Fqi '.detail-btn' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the dynamic team interest button styles."; exit 1; }
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
           grep -Fqi "Imkoniyatni top." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current opportunity-first headline is missing."; exit 1; }
           grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
@@ -87,6 +89,7 @@ jobs:
           grep -Fqi 'href="./shared-theme.css"' /tmp/yoshlar-services.html || { echo "::error::The live service directory is missing the shared visual theme."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/shared-theme.css" -o /tmp/yoshlar-shared-theme.css
           grep -Fqi -- '--blue:#15558a' /tmp/yoshlar-shared-theme.css || { echo "::error::The live shared theme does not contain the current brand palette."; exit 1; }
+          grep -Fqi '.navlinks{' /tmp/yoshlar-shared-theme.css || { echo "::error::The live shared theme is missing the personal cabinet navigation styles."; exit 1; }
           grep -qi "Idorani toifasiga qarab toping" /tmp/yoshlar-services.html
           grep -qi "media-card" /tmp/yoshlar-services.html
           grep -Fqi 'https://gov.uz/oz/all_ministry/15' /tmp/yoshlar-services.html
