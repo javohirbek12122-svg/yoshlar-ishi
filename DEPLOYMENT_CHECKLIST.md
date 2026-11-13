@@ -4,16 +4,16 @@ This checklist separates code readiness from account credentials and production 
 
 ## 1. Resolve the Vercel project and deploy permissions
 
-The Vercel account currently lists two similarly named projects:
-- **`yoshlar-ishi`** — empty project with no deployment or assigned domain.
-- **`yoshlar-ishi-site`** — has an existing READY production deployment and the domain `https://yoshlar-ishi-site.vercel.app`, but the available Vercel connection could not read the deployment page or create a fresh production deployment (403 permission errors). The older deployment’s source commit is `364c0d7a69df70bbdcab5c9d5922f136d493eb45`, not the current `main` commit.
+The connected Vercel team (`javohir-s-projects-04fa6668`) currently exposes only the unrelated `svguzbekistan-strategyhu` project. Searching for `yoshlar-ishi` / `yoshlar-ishi-site` returned no matching project, inspecting `yoshlar-ishi-site` returned 404, and creating a Git-linked `yoshlar-ishi-site` project was rejected with **403 Forbidden** (no create permission).
 
-**Recommended:** keep `yoshlar-ishi-site` as the canonical site so you do not create another empty project/domain by accident.
+The health-check URL `https://yoshlar-ishi-site.vercel.app` did respond in the last run, but that run still checked for the previous startup-led homepage, so it is not evidence that the current `main` commit is deployed. A responding URL or an old READY deployment does **not** prove the current `main` commit is live.
 
-1. Open [Vercel Git settings for `yoshlar-ishi-site`](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings/git) and confirm that the repository is `javohirbek12122-svg/yoshlar-ishi` and the production branch is `main`.
-2. Open [Vercel project settings](https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site/settings). Confirm the project ID is `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA` before using it in automation.
-3. Restore Git-based production deployment, or authorize the Vercel connection to access this project and create production deployments. Do not create a third project unless you intentionally want to migrate to a new canonical domain.
-4. After a new deployment, check that its Git SHA matches the latest successful GitHub Quality Checks run. A Vercel project with an old READY deployment does **not** prove the current `main` commit is live.
+**Recommended:** connect `javohirbek12122-svg/yoshlar-ishi` to the intended Vercel project from an account with project-creation or project-admin permission. Do not use the unrelated Parkent E‑Market project or reuse an unverified project ID.
+
+1. Open the intended Vercel team and locate or create the canonical `yoshlar-ishi-site` project.
+2. Connect its Git repository to `javohirbek12122-svg/yoshlar-ishi` and set production branch to `main`.
+3. Verify owner/team, project ID and production domain in Vercel before configuring CI. A project ID recorded in older setup notes is not confirmed by the current Vercel connection.
+4. After a new deployment, verify its Git SHA against the latest successful GitHub Quality Checks run.
 
 ### Alternative: GitHub Actions CLI deployment
 
@@ -45,7 +45,7 @@ After Vercel shows a real production domain:
 
 ## 3. Enable automatic website and portal monitoring
 
-The live-site health check defaults to `https://yoshlar-ishi-site.vercel.app`, so it runs without an extra variable. Set repository variable `SITE_URL` only if you later change the canonical domain. It now checks feature-specific markers for server-side initiative submission, community forms, team matching filters, admin moderation, the official-directory page, privacy notice and account page. A reachable HTTP 200 response with missing markers is reported as a stale deployment, not a healthy current release. The check covers:
+The live-site health check currently uses `https://yoshlar-ishi-site.vercel.app` as a temporary known endpoint, not as a verified deployment of current code. Set repository variable `SITE_URL` to the actual canonical domain after connecting Vercel. It checks the opportunity-first homepage identity, five-stage route, private journey event timeline, server-side initiative submission, community forms, team matching filters, admin moderation, the official directory, privacy notice and account page. A reachable HTTP 200 response with missing markers is reported as a stale deployment, not a healthy current release. The check covers:
 - [Site health check](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/site-health.yml) every six hours and automatically after public-page/config changes (homepage, admin route, privacy notice, manifest and icon).
 - [Official portal availability monitor](https://github.com/javohirbek12122-svg/yoshlar-ishi/actions/workflows/official-portal-health.yml) daily. In addition to central government indexes, it reads every active `official_portal_integrations` record from public Supabase and checks distinct portal URLs, source/guide URLs, catalogue card images and the gallery-image URLs. The run summary includes status, response time, reachable count, suspected broken links, server errors, bot/rate-limit responses and timeouts.
 - A 403/429, timeout or 5xx response is not proof the site is permanently unavailable. The monitor flags uncertain results for manual review instead of treating them as a confirmed outage.

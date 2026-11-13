@@ -36,9 +36,9 @@ jobs:
               echo ""
               echo "Quality checks passed, but no build/deploy was performed."
               echo "Missing one or more required GitHub Actions values: secret VERCEL_TOKEN, variable VERCEL_ORG_ID, or variable VERCEL_PROJECT_ID."
-              echo "Use the verified canonical project yoshlar-ishi-site; do not deploy to the empty project named yoshlar-ishi."
+              echo "No Yoshlar-Ishi project is currently visible in the connected Vercel team. First connect this GitHub repository to the intended Vercel project and verify its owner/team, then configure these values."
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::notice::Optional Vercel CLI deploy skipped. The repository is connected to the Vercel Git integration, which deploys pushes to main automatically."
+            echo "::notice::No verified Vercel Git project connection is currently available. A push to main must not be treated as a production deployment until the project is connected and the deployed commit is verified."
             echo "::notice::Live deployment health is checked separately by the Yoshlar-Ishi Live Site Health workflow."
             exit 0
           fi

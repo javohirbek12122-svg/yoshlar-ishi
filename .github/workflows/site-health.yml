@@ -48,9 +48,11 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
-          grep -Fqi "G‘oya bilan to‘xtama." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current full-bleed hero headline is missing."; exit 1; }
+          grep -Fqi "Imkoniyatni top." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current opportunity-first headline is missing."; exit 1; }
+          grep -Fqi "IMKONIYAT · ARIZA · ISHTIROK · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
+          grep -Fqi 'href="./imkoniyatlar.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the opportunity catalogue route."; exit 1; }
           grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
-          grep -Fqi "Full-bleed, borderless startup hero" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: full-bleed borderless hero styling is missing."; exit 1; }
+          grep -Fqi "Opportunity-first, full-width hero styling" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-first homepage styling is missing."; exit 1; }
           grep -Fqi 'id="afzalliklar"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: benefits section is missing."; exit 1; }
           grep -Fqi 'class="platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: feature proof strip is missing."; exit 1; }
           grep -Fqi 'class="showcase-empty"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: portfolio-first showcase state is missing."; exit 1; }
@@ -86,6 +88,8 @@ jobs:
           grep -Fqi "Arizaga tayyor bo‘ling." /tmp/yoshlar-opportunities.html || { echo "::error::Youth opportunity navigator is missing its application-preparation headline."; exit 1; }
           grep -Fqi "youth_opportunity_programs?select=" /tmp/yoshlar-opportunities.html || { echo "::error::Youth opportunity navigator is not connected to the Supabase programme catalogue."; exit 1; }
           grep -Fqi "function saveJourney()" /tmp/yoshlar-opportunities.html || { echo "::error::Youth opportunity progress-saving workflow is missing."; exit 1; }
+          grep -Fqi "opportunity_journey_events?select=" /tmp/yoshlar-opportunities.html || { echo "::error::Private journey event history is missing."; exit 1; }
+          grep -Fqi 'id="journeyTimeline"' /tmp/yoshlar-opportunities.html || { echo "::error::Journey event timeline UI is missing."; exit 1; }
           grep -Fqi 'id="page-youth-programs"' /tmp/yoshlar-admin.html || { echo "::error::Admin panel is missing youth-programme management."; exit 1; }
           grep -Fqi "function saveYouthProgram(ev)" /tmp/yoshlar-admin.html || { echo "::error::Admin panel cannot manage youth programmes."; exit 1; }
           grep -Fqi "function scoresFor(stage,goal,sector,source)" /tmp/yoshlar-startup.html
