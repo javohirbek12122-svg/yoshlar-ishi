@@ -597,8 +597,10 @@ console.log("✓ AI quota and Telegram subscription tables are explicitly scoped
 
 
 const opportunityDesignHome = read("index.html");
+const opportunityStyles = read("site.css");
 for (const feature of [
   '<title>Yoshlar-Ishi — Imkoniyatdan natijagacha</title>',
+  '<link rel="stylesheet" href="./site.css">',
   'id="qo-shimcha-vositalar"',
   "Qo‘shimcha vositalar",
   "Bu vositalar asosiy davlat imkoniyatlari katalogidan alohida.",
@@ -606,7 +608,6 @@ for (const feature of [
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
   "Imkoniyatlar",
   "href=\"./imkoniyatlar.html#savedJourneys\"",
-  "Imkoniyatni top.",
   'class="hero-expanded-copy"',
   'class="hero-focus"',
   'id="afzalliklar"',
@@ -619,21 +620,34 @@ for (const feature of [
   'id="top-tashabbuslar"',
   'id="ai-yordamchi"',
   'id="ariza-holati"',
-  'content="#101317"',
-  "--uc-acid:#d7ff66",
-  "Opportunity-first, full-width hero styling",
-  "width:100%;",
-  "border:0!important;",
-  "class=\"hero-storyline\"",
+  'class="hero-storyline"',
+  'Loyiha va hamjamiyat vositalari',
+  'Bu forma davlat idorasiga ariza yubormaydi.',
+  'Yuborgan tashabbus holati',
 ]) {
-  assert.ok(opportunityDesignHome.includes(feature), `Opportunity-first homepage redesign missing: ${feature}`);
+  assert.ok(opportunityDesignHome.includes(feature), `Opportunity-first homepage marker missing: ${feature}`);
 }
-assert.match(opportunityDesignHome, /prefers-reduced-motion/);
-assert.match(opportunityDesignHome, /@media\(max-width:600px\)/);
-assert.ok(opportunityDesignHome.includes(".hero.wrap:after{display:none!important;"), "Full-width hero must not draw a decorative grid frame");
-assert.match(opportunityDesignHome, /softGlow\(width\*/, "Animated background should use diffuse light rather than grid/orbit lines");
-assert.ok(opportunityDesignHome.includes(".hero-storyline{border:0!important;"), "Hero journey strip must remain borderless");
-console.log("✓ opportunity-first full-width hero, expanded messaging, diffuse animated background, proof strip, benefits and responsive breakpoints are present");
+for (const feature of [
+  '--navy:#123255',
+  '--blue:#15558a',
+  '.hero.wrap{position:relative',
+  '.nav{position:sticky',
+  '.hero-storyline{',
+  '@media(max-width:680px)',
+  'prefers-reduced-motion:reduce',
+  '.mobile-nav-panel',
+  '.benefit-grid',
+  '.steps',
+  '.additional-tools',
+]) {
+  assert.ok(opportunityStyles.includes(feature), `Consolidated homepage design rule missing: ${feature}`);
+}
+assert.match(opportunityStyles, /@media\(max-width:900px\)/);
+assert.match(opportunityStyles, /@media\(max-width:680px\)/);
+assert.match(opportunityStyles, /prefers-reduced-motion:reduce/);
+assert.ok(!opportunityDesignHome.includes('#101317') && !opportunityDesignHome.includes('--uc-acid:#d7ff66'), "Superseded dark lime design tokens must not remain embedded in homepage markup");
+assert.match(opportunityDesignHome, /function softGlow\(/, "Animated background source remains in the homepage JavaScript");
+console.log("✓ opportunity-first homepage uses one consolidated navy/blue design system, sticky navigation, accessible mobile menu and reduced-motion layouts");
 
 const serviceDesign = read("davlat-xizmatlari.html");
 const accountDesign = read("kabinet.html");
@@ -690,8 +704,8 @@ assert.match(compactHome, /ctx\.globalCompositeOperation="screen"/);
 assert.doesNotMatch(compactHome, /function traceFlow\(/, "Atmospheric background must not draw a fixed route line");
 assert.doesNotMatch(compactHome, /ctx\.ellipse\(/, "Atmospheric background must not draw orbital border rings");
 assert.doesNotMatch(compactHome, /lineDashOffset/, "Atmospheric background must not draw a dashed border path");
-assert.match(compactHome, /position:sticky/);
-assert.match(compactHome, /overflow-x:auto/);
+assert.match(read("site.css"), /position:sticky/);
+assert.match(read("site.css"), /flex-wrap:wrap/);
 assert.match(compactHome, /if\(reduced\)\{render\(0\);return;\}/);
 assert.match(compactHome, /Tashabbus formasi tayyorgarligi/);
 assert.match(compactHome, /grant yoki davlat tanlovi bahosi emas/);
