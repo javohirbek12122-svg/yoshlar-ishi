@@ -9,6 +9,8 @@ on:
     paths:
       - ".github/workflows/site-health.yml"
       - "index.html"
+      - "site.css"
+      - "shared-theme.css"
       - "admin.html"
       - "privacy.html"
       - "robots.txt"
@@ -47,6 +49,9 @@ jobs:
           BASE_URL="${SITE_URL%/}"
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
+          grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
+          grep -Fqi -- '--navy:#123255' /tmp/yoshlar-site.css || { echo "::error::The live homepage stylesheet does not contain the current navy design tokens."; exit 1; }
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
           grep -Fqi "Imkoniyatni top." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current opportunity-first headline is missing."; exit 1; }
           grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
@@ -72,6 +77,9 @@ jobs:
           grep -Fqi 'id="page-team"' /tmp/yoshlar-admin.html
           grep -Fqi 'id="page-showcase"' /tmp/yoshlar-admin.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html
+          grep -Fqi 'href="./shared-theme.css"' /tmp/yoshlar-services.html || { echo "::error::The live service directory is missing the shared visual theme."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/shared-theme.css" -o /tmp/yoshlar-shared-theme.css
+          grep -Fqi -- '--blue:#15558a' /tmp/yoshlar-shared-theme.css || { echo "::error::The live shared theme does not contain the current brand palette."; exit 1; }
           grep -qi "Idorani toifasiga qarab toping" /tmp/yoshlar-services.html
           grep -qi "media-card" /tmp/yoshlar-services.html
           grep -Fqi 'https://gov.uz/oz/all_ministry/15' /tmp/yoshlar-services.html
