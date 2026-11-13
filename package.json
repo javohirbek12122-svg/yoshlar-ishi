@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "Yoshlar tashabbuslari va imkoniyatlar platformasi",
   "scripts": {
-    "check": "node scripts/check-site.mjs"
+    "check": "node scripts/check-site.mjs",
+    "check:mobile": "node scripts/check-mobile.mjs"
   }
 }
