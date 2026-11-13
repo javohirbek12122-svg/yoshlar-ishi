@@ -1,6 +1,6 @@
 # Yoshlar-Ishi
 
-Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, partnerships, and discovering opportunities.
+Yoshlar-Ishi is an independent Uzbek-language platform that helps young people discover state opportunities and public services, understand eligibility and application steps, prepare documents, participate through official channels, and track follow-up outcomes.
 
 ## Stack
 - Responsive static HTML/CSS/JavaScript frontend (no build command)
@@ -8,13 +8,17 @@ Yoshlar-Ishi is an independent Uzbek-language platform for youth initiatives, pa
 - Vercel static deployment
 - Secure owner dashboard in `admin.html`
 - Illustrated searchable service portal at `davlat-xizmatlari.html`
-- Actionable youth programme navigator at `imkoniyatlar.html` with eligibility guidance, document/step checklists, application-draft builder, and account-owned progress tracking
+- Core youth opportunity navigator at `imkoniyatlar.html`: eligibility guidance, document/step checklists, application-draft builder, account-owned progress tracking, and a private chronological event history
 - Email magic-link personal cabinet at `kabinet.html`
 - Stage-based startup navigator at `startap-yoli.html`, with adaptive readiness checks and Supabase-powered opportunity scoring
 - Server-side AI review and Telegram webhook/notification Edge Functions
 - Moderated team matching and admin-curated initiative showcase
 
-## Startup and founder journey
+## Core purpose: opportunity-to-outcome journey
+
+The platform is organised around five connected stages: discover a relevant public opportunity or service; check eligibility and participation requirements; prepare documents and an application draft; apply or participate through the responsible organisation's official channel; and record the response, outcome, and next action. Yoshlar-Ishi is independent and does not impersonate a state body, guarantee eligibility, submit government applications, or claim automatic access to external government status data. The saved journey history records changes entered by the account holder.
+
+## Additional startup and founder tools
 
 The dedicated startap-yoli.html page converts startup-program discovery into a practical flow: select one of five stages, work through a stage-specific self-check, and rank active opportunities by stage, need, sector, source type, and search query. It uses the public opportunity catalog with reviewed fallback links for UzCombinator, IT Park Uzbekistan, Startup Uzbekistan, IT Park Ventures, Innoyouth, and other sources. Match scores are explainable ranking hints, not probabilities or an eligibility decision. The page is independent and is not an official IT Park or UzCombinator application portal.
 
@@ -146,3 +150,7 @@ The canonical Vercel project has a verified production alias, but the last recor
 - Before a broad public launch, add server-side rate limiting / bot protection, a privacy notice tailored to the operator, and a tested support contact.
 - No admin-side user management, automatic email notifications, native certificate issuance, grant guarantee, or authenticated official government API/SSO integration is included. The public portal catalogue provides outbound links only.
 - Yoshlar-Ishi is not an official government platform. Verify eligibility and deadlines at the source website.
+
+## Opportunity journey event history
+
+The authenticated user's private journey timeline is stored in `public.opportunity_journey_events`. Row Level Security restricts reads and inserts to the owner of the linked `opportunity_journeys` row. The log records journey start, preparation saves, and user-entered status changes; it is not a government case-management feed and does not independently verify an external application decision.

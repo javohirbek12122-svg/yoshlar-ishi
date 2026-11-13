@@ -30,6 +30,17 @@
 .footer{padding:25px 0 35px;border-top:1px solid var(--line);color:#718497;font-size:10px}.footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media(max-width:900px){.finder{grid-template-columns:1fr 1fr}.finder .btn{grid-column:1/-1}.detail-shell{grid-template-columns:1fr}.side-sticky{position:static}}
 @media(max-width:650px){.wrap{width:min(100% - 28px,1160px)}.nav{align-items:flex-start;flex-direction:column}.navlinks{gap:10px 15px}.hero{padding:35px 0}.flowbar{grid-template-columns:repeat(2,1fr);margin-top:12px}.flowstep:last-child{grid-column:1/-1}.section{padding:25px 0}.section-head{display:block}.section-head p{margin-top:8px}.finder{grid-template-columns:1fr}.finder .btn{grid-column:auto}.program-grid{grid-template-columns:1fr}.program-facts{grid-template-columns:1fr 1fr 1fr}.panel{padding:14px}}
+
+.journey-history{margin-top:18px;padding:22px}
+.journey-history .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:14px}
+.journey-history .section-head h3{font:800 20px Manrope,sans-serif;margin:7px 0 0}
+.journey-history .section-head p{max-width:440px;margin:0;color:var(--muted);font-size:11px}
+.journey-timeline{display:grid;gap:9px}
+.journey-event{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:#fbfdff}
+.journey-event time{font-size:10px;color:var(--muted);font-weight:700}
+.journey-event strong{display:block;font-size:12px}
+.journey-event p{margin:3px 0 0;color:var(--muted);font-size:11px}
+@media(max-width:620px){.journey-history{padding:15px}.journey-history .section-head{display:block}.journey-event{grid-template-columns:1fr;gap:4px}}
 </style>
 </head>
 <body>
@@ -86,6 +97,10 @@
    <p class="smallnote">Arizani faqat dastur egasining rasmiy portali yoki belgilangan kanali orqali yuboring.</p>
   </aside>
  </div>
+ <section class="panel journey-history" aria-labelledby="journeyHistoryTitle">
+  <div class="section-head"><div><div class="eyebrow">Shaxsiy faoliyat tarixi</div><h3 id="journeyHistoryTitle">Jarayon bo‘yicha hodisalar</h3></div><p>Holat o‘zgarishlari va saqlangan tayyorgarlik qadamlari vaqt bo‘yicha qayd etiladi.</p></div>
+  <div id="journeyTimeline" class="journey-timeline" aria-live="polite"><div class="muted">Imkoniyat tanlangandan keyin tarix shu yerda ko‘rsatiladi.</div></div>
+ </section>
 </div></section>
 <section class="section"><div class="wrap">
  <div class="section-head"><div><div class="eyebrow">Mening jarayonlarim</div><h2>Boshlagan ishlaringiz</h2></div><p>Saqlangan tayyorgarlik, hujjatlar va ariza qoralamalari shaxsiy hisobingiz bilan bog‘lanadi.</p></div>
@@ -174,6 +189,15 @@ async function openProgram(slug){
  let row=null;
  if(user){try{const rows=await api("opportunity_journeys?select=*&program_slug=eq."+encodeURIComponent(p.slug)+"&limit=1");row=rows&&rows[0]||null}catch(e){setNotice("saveNotice","Saqlangan jarayonni yuklab bo‘lmadi: "+e.message,true)}}
  hydrateDetail(p,row);
+ await loadJourneyTimeline(row&&row.id||null);
+}
+async function loadJourneyTimeline(journeyId){
+ const el=$("journeyTimeline");if(!el)return;
+ if(!user||!journeyId){el.innerHTML='<div class="muted">Bu jarayon tarixi shaxsiy hisob bilan bog‘lanadi. Tarixni ko‘rish va saqlash uchun email orqali kiring.</div>';return}
+ try{
+  const rows=await api("opportunity_journey_events?select=id,event_type,from_status,to_status,title,details,created_at&journey_id=eq."+encodeURIComponent(journeyId)+"&order=created_at.desc&limit=30");
+  el.innerHTML=rows&&rows.length?rows.map(x=>'<article class="journey-event"><time>'+esc(new Date(x.created_at).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"}))+'</time><div><strong>'+esc(x.title)+'</strong><p>'+esc(x.details||"")+'</p></div></article>').join(""):'<div class="muted">Hozircha hodisa qayd etilmagan. Jarayonni birinchi marta saqlaganingizdan keyin tarix shakllanadi.</div>';
+ }catch(e){el.innerHTML='<div class="muted">Jarayon tarixini yuklab bo‘lmadi: '+esc(e.message)+'</div>'}
 }
 function renderSaved(rows){
  $("savedJourneys").innerHTML=rows&&rows.length?rows.map(r=>'<div class="saved-item"><div><strong>'+esc(r.program_title)+'</strong><small>'+esc(statusLabels[r.status]||r.status)+' · '+esc(new Date(r.updated_at).toLocaleDateString("uz-UZ"))+'</small></div><button type="button" class="btn secondary" data-resume="'+esc(r.program_slug)+'">Davom ettirish ↗</button></div>').join(""):'<div class="muted">Hozircha saqlangan jarayon yo‘q. Katalogdan dastur tanlab, tayyorgarlikni boshlang.</div>';
@@ -188,13 +212,25 @@ async function saveJourney(){
  if(!selected)return;
  if(!user){setNotice("saveNotice","Jarayonni hisobingizda saqlash uchun avval shaxsiy kabinetga kiring.",true);return}
  const c=collectChecks(),draft={situation:$("draftSituation").value.trim(),support:$("draftSupport").value.trim(),result:$("draftResult").value.trim(),amount:$("draftAmount").value.trim(),extra:$("draftExtra").value.trim()};
+ const previousStatus=journey&&journey.status||null;
  const status=$("journeyStatus").value;
  const body={updated_at:new Date().toISOString(),user_id:user.id,program_slug:selected.slug,program_title:selected.title,status:status,completed_steps:c.steps,document_checks:c.docs,application_draft:draft,next_action:status==="submitted"||status==="waiting"?"Rasmiy portalda ariza holatini tekshiring":"Bajarilmagan qadamlar va hujjatlarni yakunlang.",external_reference:$("externalReference").value.trim(),submitted_at:status==="submitted"||status==="waiting"?(journey&&journey.submitted_at?journey.submitted_at:new Date().toISOString()):null};
  try{
   if(journey&&journey.id){await api("opportunity_journeys?id=eq."+encodeURIComponent(journey.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(body)})}
   else{const rows=await api("opportunity_journeys?select=*",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(body)});journey=rows&&rows[0]||null}
   if(!journey||!journey.id){const rows=await api("opportunity_journeys?select=*&program_slug=eq."+encodeURIComponent(selected.slug)+"&limit=1");journey=rows&&rows[0]||null}
-  setNotice("saveNotice","Tayyorgarlik jarayoni hisobingizga saqlandi.",false);await loadSaved();
+  if(!journey||!journey.id)throw new Error("Saqlangan jarayon ID topilmadi.");
+  const eventType=!previousStatus?"journey_started":previousStatus===status?"progress_updated":"status_changed";
+  const eventTitle=!previousStatus?"Imkoniyat bo‘yicha jarayon boshlandi":previousStatus===status?"Tayyorgarlik qadamlari yangilandi":"Jarayon holati yangilandi";
+  const eventDetails=!previousStatus?"Siz ushbu imkoniyat bo‘yicha tayyorgarlikni boshladingiz.":previousStatus===status?"Qadamlar, hujjatlar yoki ariza qoralamasi qayta saqlandi.":(statusLabels[previousStatus]||previousStatus)+" → "+(statusLabels[status]||status);
+  let historyWarning="";
+  try{
+   await api("opportunity_journey_events",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({journey_id:journey.id,user_id:user.id,event_type:eventType,from_status:previousStatus,to_status:status,title:eventTitle,details:eventDetails})});
+  }catch(historyError){historyWarning=historyError.message}
+  journey.status=status;journey.updated_at=body.updated_at;
+  await loadJourneyTimeline(journey.id);
+  setNotice("saveNotice",historyWarning?"Jarayon saqlandi, ammo hodisalar tarixini yozib bo‘lmadi: "+historyWarning:"Jarayon va hodisa tarixi hisobingizga saqlandi.",!!historyWarning);
+  await loadSaved();
  }catch(e){setNotice("saveNotice","Saqlab bo‘lmadi: "+e.message,true)}
 }
 async function loadPrograms(){
