@@ -305,6 +305,11 @@ for (const feature of ["opportunity_journey_events", "journey_started", "progres
 }
 console.log("✓ youth opportunity schema, owner-scoped progress and private chronological event history are reproducible");
 
+const opportunityStatusMigration = read("supabase/migrations/20261113193000_verified_opportunity_status_and_2026_contest.sql");
+for (const feature of ["availability_status", "'open'", "'permanent'", "'upcoming'", "'unverified'", "'closed'", "inson-huquqlari-innovatsion-tanlov-2026", "2026-yil 15-noyabrgacha"]) {
+  assert.ok(opportunityStatusMigration.includes(feature), "Verified catalogue status migration missing: " + feature);
+}
+console.log("✓ youth catalogue availability states and the dated 2026 national contest are reproducible");
 const migrationFiles = fs.readdirSync(path.join(root, "supabase/migrations"));
 assert.ok(migrationFiles.length >= 6, "Migration history files are incomplete");
 const dashboardMigration = read("supabase/migrations/20261028152132_owner_dashboard_and_secure_tracking.sql");
@@ -588,8 +593,8 @@ for (const feature of [
   "Bu vositalar asosiy davlat imkoniyatlari katalogidan alohida.",
   "Imkoniyatni top.",
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
-  "Imkoniyatlar katalogi ↗",
-  "Mening jarayonlarim",
+  "Imkoniyatlar",
+  "href=\"./imkoniyatlar.html#savedJourneys\"",
   "Imkoniyatni top.",
   'class="hero-expanded-copy"',
   'class="hero-focus"',
