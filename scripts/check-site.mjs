@@ -813,6 +813,9 @@ for (const file of ["index.html","imkoniyatlar.html","davlat-xizmatlari.html","k
 const mobileWorkflow=read(".github/workflows/quality.yml");
 assert.match(mobileWorkflow,/playwright install --with-deps chromium/);
 assert.match(mobileWorkflow,/npm run check:mobile/);
+assert.equal(JSON.parse(read("package.json")).devDependencies?.playwright,"1.65.0");
+assert.match(liveHealthWorkflow,/MOBILE_BASE_URL:/);
+assert.match(liveHealthWorkflow,/npm run check:mobile/);
 execFileSync(process.execPath,["--check","scripts/check-mobile.mjs"],{stdio:"pipe"});
 console.log("✓ mobile resilience CSS is loaded across all pages and Playwright regression tests are wired into CI");
 

@@ -11,6 +11,8 @@ on:
       - "index.html"
       - "site.css"
       - "mobile-guard.css"
+      - "scripts/check-mobile.mjs"
+      - "package.json"
       - "shared-theme.css"
       - "admin.html"
       - "privacy.html"
@@ -128,3 +130,15 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
           grep -q "<svg" /tmp/yoshlar-icon.svg
           echo "Health check passed for the current Yoshlar-Ishi feature set at $BASE_URL"
+      - name: Set up Node.js for production mobile tests
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+      - name: Install pinned Playwright dependency
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium for production mobile tests
+        run: npx playwright install --with-deps chromium
+      - name: Test the live production domain at mobile and tablet widths
+        env:
+          MOBILE_BASE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
+        run: npm run check:mobile

@@ -2,9 +2,12 @@
   "name": "yoshlar-ishi",
   "private": true,
   "version": "0.1.0",
-  "description": "Yoshlar tashabbuslari va imkoniyatlar platformasi",
+  "description": "Yoshlar imkoniyatlari va davlat xizmatlari platformasi",
   "scripts": {
     "check": "node scripts/check-site.mjs",
     "check:mobile": "node scripts/check-mobile.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.65.0"
   }
 }

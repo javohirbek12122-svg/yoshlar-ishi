@@ -6,7 +6,8 @@ import { chromium } from "playwright";
 
 const root=process.cwd();
 const types={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"text/javascript; charset=utf-8",".json":"application/json; charset=utf-8",".webmanifest":"application/manifest+json",".svg":"image/svg+xml",".png":"image/png",".jpg":"image/jpeg",".webp":"image/webp"};
-const server=http.createServer((req,res)=>{
+const remoteBase=(process.env.MOBILE_BASE_URL||"").trim().replace(/\\/+$/,"");
+const server=remoteBase?null:http.createServer((req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url||"/","http://127.0.0.1").pathname);
   const rel=pathname==="/"?"index.html":pathname.replace(/^\/+/,"");
@@ -19,10 +20,10 @@ const server=http.createServer((req,res)=>{
   fs.createReadStream(file).pipe(res);
  }catch{res.writeHead(400).end()}
 });
-await new Promise((resolve,reject)=>{server.once("error",reject);server.listen(0,"127.0.0.1",resolve)});
-const addr=server.address();
-assert.ok(addr&&typeof addr==="object","Mobile test server did not start");
-const origin="http://127.0.0.1:"+addr.port;
+if(server)await new Promise((resolve,reject)=>{server.once("error",reject);server.listen(0,"127.0.0.1",resolve)});
+const addr=server?.address();
+assert.ok(remoteBase||(addr&&typeof addr==="object"),"Mobile test server did not start");
+const origin=remoteBase||("http://127.0.0.1:"+addr.port);
 const pages=[
  ["/index.html","Bosh sahifa"],
  ["/imkoniyatlar.html","Imkoniyatlar"],
@@ -89,8 +90,8 @@ try{
  for(const e of localFailures)fail("Local asset",e);
  if(failures.length){console.error("MOBILE CHECK FAILED");for(const f of failures)console.error("- "+f);process.exitCode=1}
  else{
-  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 5 widths)");
+  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 5 widths) on "+(remoteBase?"production: "+origin:"local source"));
   console.log("✓ no horizontal overflow, uncaught JavaScript errors or broken local assets");
   console.log("✓ touch targets, iOS input zoom, mobile menu and key filters checked");
  }
-}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve))}
+}finally{if(browser)await browser.close();if(server)await new Promise(resolve=>server.close(resolve))}
