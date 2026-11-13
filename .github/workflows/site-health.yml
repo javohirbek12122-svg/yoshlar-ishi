@@ -52,10 +52,17 @@ jobs:
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
           grep -Fqi -- '--navy:#123255' /tmp/yoshlar-site.css || { echo "::error::The live homepage stylesheet does not contain the current navy design tokens."; exit 1; }
+          grep -Fqi '.compact-fold' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing its accessible collapsible-panel styles."; exit 1; }
+          grep -Fqi '#backToTop.is-visible' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the scroll-to-top control styles."; exit 1; }
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
           grep -Fqi "Imkoniyatni top." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: current opportunity-first headline is missing."; exit 1; }
           grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
           grep -Fqi "IMKONIYAT · ARIZA · ISHTIROK · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
+          grep -Fqi 'Bu forma davlat idorasiga ariza yubormaydi.' /tmp/yoshlar-home.html || { echo "::error::The live initiative form is unclear about not submitting to a government agency."; exit 1; }
+          grep -Fqi 'Yuborgan tashabbus holati' /tmp/yoshlar-home.html || { echo "::error::The live homepage does not distinguish internal initiative tracking."; exit 1; }
+          grep -Fqi 'Yoshlar-Ishi platformasi bergan ichki kuzatuv kodini kiriting.' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the internal tracking-code explanation."; exit 1; }
+          grep -Fqi 'document.body.style.zoom=String(fontScale)' /tmp/yoshlar-home.html || { echo "::error::The live accessibility font-size controls are outdated."; exit 1; }
+          grep -Fqi 'Loyiha va hamjamiyat vositalarini ko‘rish' /tmp/yoshlar-home.html || { echo "::error::The live secondary-tools fold label is outdated."; exit 1; }
           grep -Fqi 'href="./imkoniyatlar.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the opportunity catalogue route."; exit 1; }
           grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
           grep -Fqi 'class="hero-storyline"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: five-stage journey strip is missing."; exit 1; }
@@ -100,6 +107,7 @@ jobs:
           grep -Fqi "opportunity_journey_events?select=" /tmp/yoshlar-opportunities.html || { echo "::error::Private journey event history is missing."; exit 1; }
           grep -Fqi 'id="journeyTimeline"' /tmp/yoshlar-opportunities.html || { echo "::error::Journey event timeline UI is missing."; exit 1; }
           grep -Fqi "availability_status" /tmp/yoshlar-opportunities.html || { echo "::error::Opportunity application status model is missing."; exit 1; }
+          grep -Fqi 'minAge===null?maxAge+" yoshgacha"' /tmp/yoshlar-opportunities.html || { echo "::error::The opportunity catalogue age range labels are outdated."; exit 1; }
           grep -Fqi "Ochiq qabul" /tmp/yoshlar-opportunities.html || { echo "::error::Opportunity status labels are missing."; exit 1; }
           grep -Fqi 'id="page-youth-programs"' /tmp/yoshlar-admin.html || { echo "::error::Admin panel is missing youth-programme management."; exit 1; }
           grep -Fqi 'id="programAvailabilityStatus"' /tmp/yoshlar-admin.html || { echo "::error::Admin application-status selector is missing."; exit 1; }
