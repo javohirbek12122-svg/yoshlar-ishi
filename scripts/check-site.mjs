@@ -788,14 +788,18 @@ for (const feature of [
 }
 const laboratoryModule = laboratory.match(/<script type="module">([\s\S]*?)<\/script>/i)?.[1];
 assert.ok(laboratoryModule, "Virtual lab module script missing");
+assert.match(laboratoryModule,/nuclearBtn\.addEventListener\("click",startNuclear\)/,"Nuclear demo button must be wired only after it is created");
+assert.doesNotMatch(laboratoryModule,/\$\("runNuclear"\)\.addEventListener/,"Do not attach handlers before the dynamic nuclear button exists");
 const parseableLabModule = laboratoryModule.replace(/^import .*?;\s*/gm, "");
 new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" });
 console.log("✓ 3D virtual laboratory, six learning models, module syntax and account-scoped result storage are present");
 
 const mobileGuard = read("mobile-guard.css");
-for (const feature of ["--yi-mobile-tap-size:44px","overflow-x:clip","font-size:16px!important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
+for (const feature of ["--yi-mobile-tap-size:44px","font-size:16px!important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
   assert.ok(mobileGuard.includes(feature), "Mobile resilience rule missing: " + feature);
 }
+assert.doesNotMatch(mobileGuard,/overflow-x:\s*clip/i,"Mobile CSS must not hide horizontal overflow instead of fixing it");
+assert.match(mobileGuard,/@media\(max-width:900px\)/,"Touch controls must be usable on tablets as well as phones");
 for (const file of ["index.html","imkoniyatlar.html","davlat-xizmatlari.html","kabinet.html","admin.html","startap-yoli.html","laboratoriya.html","privacy.html","physics-lab/index.html"]) {
   const html = read(file);
   const mobilePath = file === "physics-lab/index.html" ? "../mobile-guard.css" : "./mobile-guard.css";

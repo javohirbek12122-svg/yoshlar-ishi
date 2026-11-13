@@ -1,7 +1,7 @@
 /* Additive mobile reliability rules for all Yoshlar-Ishi pages. */
 :root{--yi-mobile-tap-size:44px;--yi-safe-bottom:env(safe-area-inset-bottom,0px);--yi-safe-top:env(safe-area-inset-top,0px)}
-html{width:100%;max-width:100%;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:80px}
-body{width:100%;min-width:320px;max-width:100%;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+html{width:100%;max-width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:80px}
+body{width:100%;min-width:320px;max-width:100%;-webkit-tap-highlight-color:transparent}
 *,*::before,*::after{box-sizing:border-box}
 img,video,canvas,svg,iframe{max-width:100%}
 input,select,textarea,button{max-width:100%;min-width:0}
@@ -29,6 +29,12 @@ button,summary,a,input,select,textarea{touch-action:manipulation}
  .content,.topbar,.page,.panel,.panelbody,.panelhead{min-width:0;max-width:100%}
  .formsgrid,.detail-shell,.community-layout,.readiness,.ai-review-card{min-width:0}
  .filters,.topactions,.actions,.draft-actions{min-width:0;flex-wrap:wrap}
+}
+@media(max-width:900px){
+ :where(button,.btn,.button,input[type=submit],input[type=button],select,summary,a.btn,a.button){min-height:44px!important}
+ :where(input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea){min-height:44px!important;font-size:16px!important;line-height:1.4}
+ .a11y button{min-width:44px!important;min-height:44px!important}
+ .hero .btn,.finder .btn{min-height:44px!important}
 }
 @media(max-width:700px){
  html{scroll-padding-top:68px}

@@ -207,12 +207,13 @@ async function init3d(){
  }catch(e){$("loading").textContent="3D muhitni yuklab bo‘lmadi. WebGL qo‘llab-quvvatlanishini va internet aloqasini tekshiring.";console.error(e)}
 }
 function startNuclear(){if(!activeObjects.core)return;activeObjects.core.position.set(0,1.5,0);nucleusBalls.forEach(p=>p.mesh.position.copy(p.base));activeObjects.halo.material.opacity=.12;elapsed=0;nucleusStart=0;nucleusRunning=true;running=true;$("hudState").textContent="KONSEPTUAL BO‘LINISH";$("saveStatus").textContent="Model qayta ishga tushirildi."}
-$("runNuclear").addEventListener("click",startNuclear);
+
 $("resetBtn").addEventListener("click",()=>{buildSimulation();running=true;$("playBtn").textContent="Ⅱ Pauza";$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":"MODEL ISHLAYAPTI"});
 $("playBtn").addEventListener("click",()=>{running=!running;$("playBtn").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";$("hudState").textContent=running?"MODEL ISHLAYAPTI":"PAUZA"});
 document.querySelectorAll(".mode-btn").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
 const nuclearBtn=document.createElement("button");nuclearBtn.id="runNuclear";nuclearBtn.className="scene-btn primary";nuclearBtn.type="button";nuclearBtn.textContent="⚛ Bo‘linish modelini ko‘rish";nuclearBtn.hidden=true;$("scene-head-placeholder");
 document.querySelector(".scene-actions").appendChild(nuclearBtn);
+nuclearBtn.addEventListener("click",startNuclear);
 function fmtDate(v){return new Date(v).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"})}
 async function authRequest(path,opts={}){const h={apikey:apiKey,Authorization:"Bearer "+(token||apiKey),"Content-Type":"application/json",...(opts.headers||{})};const res=await fetch(apiBase+path,{...opts,headers:h});if(!res.ok){const body=await res.text();throw new Error("Server so‘rovi ("+res.status+"): "+body.slice(0,170))}if(res.status===204)return null;return res.json()}
 async function refreshSession(){if(!apiBase||!apiKey)return false;if(!token)return false;try{const r=await fetch(apiBase+"/auth/v1/user",{headers:{apikey:apiKey,Authorization:"Bearer "+token}});if(r.ok){currentUser=await r.json();sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}if(refreshToken){try{const r=await fetch(apiBase+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:apiKey,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});if(r.ok){const d=await r.json();token=d.access_token;refreshToken=d.refresh_token;currentUser=d.user;sessionStorage.setItem("yi_user_token",token);sessionStorage.setItem("yi_user_refresh",refreshToken);sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}}return false}

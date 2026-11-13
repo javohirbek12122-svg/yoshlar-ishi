@@ -45,6 +45,11 @@ try{
   for(const item of pages){
    const page=await context.newPage(),errors=[];
    page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",m=>{
+    if(m.type()!=="error")return;
+    const text=m.text();
+    if(!/Failed to load resource|net::ERR_|ERR_BLOCKED_BY_CLIENT/i.test(text))errors.push("console.error: "+text);
+   });
    page.on("requestfailed",r=>{if(r.url().startsWith(origin))localFailures.push(item[1]+" "+r.url())});
    page.on("response",r=>{if(r.url().startsWith(origin)&&r.status()>=400)localFailures.push(item[1]+" HTTP "+r.status()+" "+r.url())});
    try{
@@ -62,7 +67,7 @@ try{
     if(m.root>width+1||m.rootScroll>width+1||m.bodyScroll>width+1)fail(item[1]+" "+width,"horizontal overflow root="+m.root+" scroll="+m.rootScroll+" body="+m.bodyScroll);
     for(const c of m.controls){
      if(c.h<43)fail(item[1]+" "+width,"touch target "+c.h+"px: "+c.tag+" "+c.text);
-     if(width<=700&&["input","select","textarea"].includes(c.tag)&&!["checkbox","radio","hidden"].includes(c.type)&&parseFloat(c.font)<16)fail(item[1]+" "+width,"iOS input zoom risk "+c.font+"px: "+c.text);
+     if(width<=900&&["input","select","textarea"].includes(c.tag)&&!["checkbox","radio","hidden"].includes(c.type)&&parseFloat(c.font)<16)fail(item[1]+" "+width,"iOS input zoom risk "+c.font+"px: "+c.text);
     }
     if(errors.length)fail(item[1]+" "+width,"uncaught JS: "+errors.join(" | "));
     if(item[0]==="/index.html"&&width<=700){
@@ -71,6 +76,11 @@ try{
     }
     if(item[0]==="/imkoniyatlar.html"&&width===390){await page.locator("#queryFilter").fill("Yoshlar daftari");await page.locator("#filterButton").click()}
     if(item[0]==="/davlat-xizmatlari.html"&&width===390)await page.locator("#portalSearch").fill("Yoshlar");
+    if(item[0]==="/laboratoriya.html"&&width===390){
+     await page.locator('.mode-btn[data-mode="nuclear"]').click();
+     await page.locator("#runNuclear").waitFor({state:"visible",timeout:8000});
+     await page.locator("#runNuclear").click();
+    }
    }catch(e){fail(item[1]+" "+width,e.message||String(e))}
    finally{await page.close()}
   }
