@@ -10,10 +10,15 @@
   let helpDialog = null;
 
   if ("serviceWorker" in navigator && window.isSecureContext) {
-    window.addEventListener("load", () => {
+    const registerWorker = () => {
       navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
         .catch((error) => console.warn("Yoshlar-Ishi offline support could not start:", error));
-    }, { once: true });
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", registerWorker, { once: true });
+    } else {
+      registerWorker();
+    }
   }
 
   function addStyles() {
@@ -70,7 +75,9 @@
     close.setAttribute("aria-label", "Yopish");
     close.addEventListener("click", () => { helpDialog.hidden = true; });
     card.appendChild(close);
-    card.appendChild(createElement("h2", "Yoshlar-Ishi ilovasini o‘rnating"));
+    const heading = createElement("h2", "Yoshlar-Ishi ilovasini o‘rnating");
+    heading.id = "yi-install-help-title";
+    card.appendChild(heading);
     const intro = createElement("p", isIOS
       ? "iPhone yoki iPad’da saytni bosh ekranga mustaqil ilova ko‘rinishida qo‘shishingiz mumkin."
       : "Android qurilmada saytni bosh ekranga o‘rnatib, alohida oyna orqali ochishingiz mumkin.");
