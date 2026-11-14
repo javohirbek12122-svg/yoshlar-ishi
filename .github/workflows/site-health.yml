@@ -22,6 +22,17 @@ on:
       - "privacy.html"
       - "robots.txt"
       - "manifest.webmanifest"
+      - "admin-manifest.webmanifest"
+      - "service-worker.js"
+      - "pwa.js"
+      - "offline.html"
+      - "icon-192.png"
+      - "icon-512.png"
+      - "apple-touch-icon.png"
+      - "vercel.json"
+      - "scripts/check-pwa.mjs"
+      - "scripts/check-government-pilot.mjs"
+      - "government-pilot/**"
       - "icon.svg"
       - "davlat-xizmatlari.html"
       - "kabinet.html"
@@ -144,6 +155,25 @@ jobs:
           grep -qi "Maxfiylik" /tmp/yoshlar-privacy.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json
           node -e "JSON.parse(require('fs').readFileSync('/tmp/yoshlar-manifest.json','utf8'))"
+          grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
+          grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
+          grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
+          grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/pwa.js" -o /tmp/yoshlar-pwa.js
+          grep -Fq 'beforeinstallprompt' /tmp/yoshlar-pwa.js
+          grep -Fq 'Add to Home Screen' /tmp/yoshlar-pwa.js
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/offline.html" -o /tmp/yoshlar-offline.html
+          grep -Fq 'Hozir internet aloqasi yo‘q' /tmp/yoshlar-offline.html
+          for ICON in icon-192.png icon-512.png apple-touch-icon.png; do
+            curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/$ICON" -o "/tmp/$ICON"
+            file "/tmp/$ICON" | grep -Fq 'PNG image data' || { echo "::error::$ICON is not a valid PNG image."; exit 1; }
+          done
+          ADMIN_HEADERS="$(curl --fail --silent --show-error --location --head --max-time 30 "$BASE_URL/admin.html" | tr -d '\r')"
+          CABINET_HEADERS="$(curl --fail --silent --show-error --location --head --max-time 30 "$BASE_URL/kabinet.html" | tr -d '\r')"
+          grep -Eiq 'cache-control:.*no-store' <<< "$ADMIN_HEADERS" || { echo "::error::Admin HTML must be no-store."; exit 1; }
+          grep -Eiq 'cache-control:.*no-store' <<< "$CABINET_HEADERS" || { echo "::error::Personal cabinet HTML must be no-store."; exit 1; }
+          grep -Eiq 'x-content-type-options: nosniff' <<< "$ADMIN_HEADERS" || { echo "::error::Security headers are not present on the live site."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
           grep -q "<svg" /tmp/yoshlar-icon.svg
           echo "Health check passed for the current Yoshlar-Ishi feature set at $BASE_URL"
@@ -162,4 +192,4 @@ jobs:
       - name: Test the live production domain at mobile, tablet and desktop widths
         env:
           MOBILE_BASE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
-        run: npm run check:contrast && npm run check:mobile
+        run: npm run check:contrast && npm run check:pwa && npm run check:government && npm run check:mobile
