@@ -176,3 +176,17 @@ Boshlash uchun: [Davlat pilotiga tayyorgarlik xulosasi](./government-pilot/READM
 Rasmiy taqdimot xati loyihasi: [Konsepsiya va pilot so‘rovi](./government-pilot/01_CONCEPT_NOTE_UZ.md).
 
 **Muhim:** joriy Supabase loyiha regioni ap-south-1; AI kaliti yoqilsa, g‘oya matni Groq’ga uzatilishi mumkin; Telegram yoqilsa, chat metadata ishlanadi. Tegishli huquqiy, cross-border, hosting va xavfsizlik tasdiqlari olinmaguncha bu muhitga davlat yoki maxfiy fuqarolik ma’lumotlari joylanmaydi.
+
+ 
+## Telefon ilovasi (PWA)
+
+Yoshlar-Ishi Android va iPhone’da brauzer orqali bosh ekranga o‘rnatiladigan Progressive Web App (PWA) sifatida tayyorlangan. Bu hozircha Play Store/App Store’dan yuklanadigan alohida native APK/IPA ilova emas.
+
+- **Android:** Chrome’da saytni oching → ⋮ menyu → Install app / Add to Home screen.
+- **iPhone/iPad:** Safari’da saytni oching → Share / Ulashish → Add to Home Screen → Open as Web App → Add.
+- **Offline:** oldin ochilgan ayrim ochiq sahifalar qurilmada saqlangan bo‘lsa ochilishi mumkin. Forma yuborish, davlat portali, AI, shaxsiy kabinet va admin amallari internet talab qiladi.
+- **Maxfiylik:** service worker /admin.html va /kabinet.html sahifalarini oldindan keshlamaydi; server ushbu sahifalarga no-store javob sarlavhasini beradi.
+
+PWA manifesti, raster ikonalar, service worker, offline fallback va install banner: manifest.webmanifest, pwa.js, service-worker.js, offline.html.
+
+Sinov buyruqlari: npm run check:pwa va npm run check:mobile. Haqiqiy iPhone/Android qurilmalarida o‘rnatish va yangilanish sinovi production relizdan oldin alohida bajarilishi kerak.
