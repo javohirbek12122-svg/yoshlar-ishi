@@ -111,7 +111,7 @@ try{
       };
      });
      const rgbToLuminance=color=>{
-      const parts=color.match(/[\\d.]+/g);
+      const parts=color.match(/[\d.]+/g);
       if(!parts||parts.length<3)throw new Error("Unexpected computed color: "+color);
       const c=parts.slice(0,3).map(v=>Number(v)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));
       return .2126*c[0]+.7152*c[1]+.0722*c[2];
