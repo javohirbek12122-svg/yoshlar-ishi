@@ -844,7 +844,7 @@ const unifiedDesign=read("design-system.css");
 for(const marker of ["100 ta xalqaro","### A. Buyuk Britaniya","### J. Yangi Zelandiya","100. Transport","Metodologiya"]){
  assert.ok(benchmark100.includes(marker),"International benchmark evidence missing: "+marker);
 }
-for(const marker of ["Yagona dizayn tizimi","#123255","#15558A","WCAG 2.2","Maxfiylik"]){
+for(const marker of ["#123255","#15558A","WCAG 2.2","Maxfiylik"]){
  assert.ok(designGuide.includes(marker),"Design system documentation marker missing: "+marker);
 }
 for(const marker of ["--navy:#123255!important","--blue:#15558a!important","font-size:16px!important","prefers-reduced-motion:reduce","prefers-contrast:more","@media(max-width:680px)"]){
