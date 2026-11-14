@@ -16,6 +16,7 @@ const required = [
   "DESIGN_BENCHMARK_100.md",
   "DESIGN_SYSTEM.md",
   "design-system.css",
+  "scripts/check-contrast.mjs",
   "startap-yoli.html",
   "laboratoriya.html",
   "admin.html",
@@ -851,6 +852,8 @@ for(const marker of ["--navy:#123255!important","--blue:#15558a!important","font
  assert.ok(unifiedDesign.includes(marker),"Unified visual rule missing: "+marker);
 }
 console.log("✓ 100 international service examples and the unified design system are documented and wired through the shared stylesheet");
+assert.equal(JSON.parse(read("package.json")).scripts?.["check:contrast"],"node scripts/check-contrast.mjs");
+execFileSync(process.execPath,["scripts/check-contrast.mjs"],{stdio:"inherit"});
 
 for (const feature of ["--yi-mobile-tap-size:44px","font-size:16px!important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
   assert.ok(mobileGuard.includes(feature), "Mobile resilience rule missing: " + feature);

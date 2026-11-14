@@ -1,6 +1,6 @@
 # Yoshlar-Ishi — yagona dizayn tizimi
 
-**Versiya:** 1.0 · **Sana:** 14-noyabr 2026
+**Versiya:** 1.1 · **Sana:** 14-noyabr 2026
 
 ## Mahsulot pozitsiyasi
 
@@ -14,11 +14,11 @@ Yoshlar-Ishi davlat organi emas; yoshlar uchun mustaqil xizmat va imkoniyat navi
 | Blue | #15558A | Havola va asosiy tugma |
 | Blue soft | #EAF3FB | Ikkinchi darajali sirt |
 | Ink | #152336 | Asosiy matn |
-| Muted | #62758A | Yordamchi matn |
+| Muted | #53677B | Yordamchi matn; och fonlarda kamida 4.5:1 |
 | Paper | #F5F8FB | Sahifa foni |
 | Surface | #FFFFFF | Karta va forma |
 | Green | #176B51 | Ijobiy holat |
-| Amber | #9B671E | Ogohlantirish |
+| Amber | #8A5814 | Ogohlantirish matni; amber fonida kamida 4.5:1 |
 | Red | #A13D3D | Xato va xavf |
 
 ## Tipografiya va ritm
@@ -51,7 +51,9 @@ Yoshlar-Ishi davlat organi emas; yoshlar uchun mustaqil xizmat va imkoniyat navi
 - prefers-reduced-motion animatsiyalarni kamaytiradi.
 - Klaviatura fokusi ko‘rinadi; kontrast faqat rangga tayanmaydi.
 - Formalar semantik label va aniq, tuzatiladigan xato xabariga ega.
-- WCAG 2.2 AA mosligi alohida accessibility test bilan baholanadi; 44px target loyiha qulaylik maqsadi.
+- Oddiy matn uchun WCAG AA 4.5:1 kontrast, muhim grafik/fokus indikatorlari uchun kamida 3:1 tekshiriladi.
+- `npm run check:contrast` palitra, placeholder, yordamchi izoh, warning matni va fokus indikatorlarini avtomatik hisoblaydi.
+- 44px target loyiha qulaylik maqsadi; WCAG minimal talabi sifatida ko‘rsatilmaydi.
 
 ## Ishonch va maxfiylik
 

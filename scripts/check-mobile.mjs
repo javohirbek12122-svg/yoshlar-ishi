@@ -98,6 +98,30 @@ try{
      if(await page.locator("#saTaskList .sa-task").count()!==0)fail(item[1]+" "+width,"local application tracker did not remove the task");
     }
 
+
+    if(item[0]==="/davlat-xizmatlari.html"&&width===390){
+     const colors=await page.evaluate(()=>{
+      const input=document.querySelector("#saDraftAgency");
+      const helper=document.querySelector(".sa-head p");
+      const proof=document.querySelector(".sa-proof small");
+      return {
+       placeholder:getComputedStyle(input,"::placeholder").color,
+       helper:getComputedStyle(helper).color,
+       proof:getComputedStyle(proof).color
+      };
+     });
+     const rgbToLuminance=color=>{
+      const parts=color.match(/[\\d.]+/g);
+      if(!parts||parts.length<3)throw new Error("Unexpected computed color: "+color);
+      const c=parts.slice(0,3).map(v=>Number(v)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));
+      return .2126*c[0]+.7152*c[1]+.0722*c[2];
+     };
+     const ratio=(fg,bg)=>{const a=rgbToLuminance(fg),b=rgbToLuminance(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
+     for(const [name,color,bg] of [["placeholder",colors.placeholder,"rgb(255, 255, 255)"],["helper text",colors.helper,"rgb(241, 245, 248)"],["source note",colors.proof,"rgb(255, 255, 255)"]]){
+      if(ratio(color,bg)<4.5)fail(item[1]+" "+width,name+" contrast is below 4.5:1 ("+color+")");
+     }
+    }
+
     if(item[0]==="/laboratoriya.html"&&width===390){
      await page.locator('.mode-btn[data-mode="nuclear"]').click();
      await page.locator("#runNuclear").waitFor({state:"visible",timeout:8000});

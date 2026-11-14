@@ -1,7 +1,7 @@
-/* Yoshlar-Ishi unified public design system v1.0.
+/* Yoshlar-Ishi unified public design system v1.1.
    Informed by GOV.UK, GC Design System, SGDS, Australian DSS, NZ standards and WCAG 2.2.
    Presentation only: service and authentication logic remains unchanged. */
-:root{color-scheme:light;--navy:#123255!important;--blue:#15558a!important;--blue-strong:#0f426d!important;--blue-soft:#eaf3fb!important;--ink:#152336!important;--muted:#62758a!important;--line:#dce5ed!important;--paper:#f5f8fb!important;--surface:#fff!important;--surface-soft:#f8fbfd!important;--green:#176b51!important;--green-soft:#e8f5ef!important;--gold:#9b671e!important;--gold-soft:#fff5e5!important;--red:#a13d3d!important;--shadow:0 14px 36px rgba(18,50,85,.07)!important;--radius:12px!important;--yi-focus:#9b671e}
+:root{color-scheme:light;--navy:#123255!important;--blue:#15558a!important;--blue-strong:#0f426d!important;--blue-soft:#eaf3fb!important;--ink:#152336!important;--muted:#53677b!important;--line:#dce5ed!important;--paper:#f5f8fb!important;--surface:#fff!important;--surface-soft:#f8fbfd!important;--green:#176b51!important;--green-soft:#e8f5ef!important;--gold:#8a5814!important;--gold-soft:#fff5e5!important;--red:#a13d3d!important;--shadow:0 14px 36px rgba(18,50,85,.07)!important;--radius:12px!important;--yi-focus:#9b671e}
 html{scroll-behavior:smooth;scroll-padding-top:100px}
 body{background:var(--paper)!important;color:var(--ink)!important;font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif!important;line-height:1.65}
 h1,h2,h3,h4{font-family:Manrope,"DM Sans",system-ui,sans-serif}
@@ -37,7 +37,7 @@ header.wrap.nav .links a:hover,header.wrap.nav .navlinks a:hover,header.wrap.nav
 input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.control,.sa-control{font-family:"DM Sans",system-ui,sans-serif!important;font-size:16px!important;line-height:1.45;min-height:48px;border:1px solid #c8d6e2!important;border-radius:8px!important;background:#fff!important;color:#152336!important}
 textarea,.sa-textarea{min-height:104px}
 input:not([type=checkbox]):not([type=radio]):not([type=hidden]):focus,select:focus,textarea:focus,.control:focus,.sa-control:focus{border-color:#3d84b4!important;box-shadow:0 0 0 3px rgba(38,119,174,.18)!important;outline:none!important}
-input::placeholder,textarea::placeholder{color:#718396;opacity:1}
+input::placeholder,textarea::placeholder{color:var(--muted)!important;opacity:1}
 .field label,.sa-field label{font-size:12px!important;font-weight:800;color:#31485e!important}
 
 /* Cards, text hierarchy and vertical rhythm */
@@ -54,7 +54,7 @@ input::placeholder,textarea::placeholder{color:#718396;opacity:1}
 .notice,.officialnote,.disclaimer,.directory-disclaimer{background:#eef5fa!important;border-left-color:#337cae!important;color:#3f5b72!important}
 .notice.error,.status.error{background:#fff1ef!important;border-color:#bd5549!important;color:#913d36!important}
 .success,.status.success{color:#176b51!important}
-.empty,.community-empty,.showcase-empty{border-color:#c8d6e2!important;background:#fff!important;color:#607387!important}
+.empty,.community-empty,.showcase-empty{border-color:#c8d6e2!important;background:#fff!important;color:var(--muted)!important}
 
 /* Legacy secondary heroes use the same institutional navy as the homepage. */
 .hero:not(.wrap){background:linear-gradient(115deg,#123255 0%,#15517e 100%)!important;color:#fff!important;border-color:#123255!important}
@@ -121,14 +121,14 @@ body .footer .legal{border-color:#ffffff30!important;color:#b8ccdc!important}
 /* Cross-portal assistance center */
 .state-assist{background:#f1f5f8!important;border-block:1px solid #dce5ed!important}
 .state-assist .sa-head h2{color:#123255!important}
-.state-assist .sa-head p{color:#5f7184!important;font-size:13px!important}
+.state-assist .sa-head p{color:var(--muted)!important;font-size:13px!important}
 .sa-proof,.sa-panel{background:#fff!important;border-color:#dce5ed!important;border-radius:12px!important}
 .sa-proof{color:#566c80!important}
 .sa-proof strong{color:#173b5e!important}
-.sa-proof small{color:#718396!important}
+.sa-proof small{color:var(--muted)!important}
 .sa-number{background:#eaf3fb!important;color:#15558a!important}
 .sa-panel h3{color:#173b5e!important}
-.sa-panel-head p,.sa-fine,.sa-muted,.sa-status{color:#66798b!important}
+.sa-panel-head p,.sa-fine,.sa-muted,.sa-status{color:var(--muted)!important}
 .sa-btn{background:#15558a!important;border-color:#15558a!important;color:#fff!important;border-radius:8px!important}
 .sa-btn:hover{background:#0f426d!important}
 .sa-btn-light{background:#fff!important;color:#15558a!important;border-color:#c8d6e2!important}

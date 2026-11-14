@@ -15,6 +15,7 @@ on:
       - "DESIGN_BENCHMARK_100.md"
       - "DESIGN_SYSTEM.md"
       - "scripts/check-mobile.mjs"
+      - "scripts/check-contrast.mjs"
       - "package.json"
       - "shared-theme.css"
       - "admin.html"
@@ -62,6 +63,10 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/design-system.css" -o /tmp/yoshlar-design-system.css
           grep -Fqi -- '--navy:#123255' /tmp/yoshlar-design-system.css || { echo "::error::The live design system is missing the institutional navy token."; exit 1; }
           grep -Fqi '.sa-panel' /tmp/yoshlar-design-system.css || { echo "::error::The live design system is missing the state-service assistance component rules."; exit 1; }
+          grep -Fqi -- '--muted:#53677b' /tmp/yoshlar-design-system.css || { echo "::error::The live design system's muted text token failed the revised WCAG contrast target."; exit 1; }
+          grep -Fqi -- '--gold:#8a5814' /tmp/yoshlar-design-system.css || { echo "::error::The live warning text token is outdated."; exit 1; }
+          grep -Fqi 'input::placeholder,textarea::placeholder{color:var(--muted)!important' /tmp/yoshlar-design-system.css || { echo "::error::The live placeholders are not using the AA contrast token."; exit 1; }
+
 
           grep -Fqi -- "--yi-mobile-tap-size:44px" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the 44px mobile touch-target rules."; exit 1; }
           grep -Fqi "@media(max-width:900px)" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the phone/tablet responsive rules."; exit 1; }
@@ -157,4 +162,4 @@ jobs:
       - name: Test the live production domain at mobile, tablet and desktop widths
         env:
           MOBILE_BASE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
-        run: npm run check:mobile
+        run: npm run check:contrast && npm run check:mobile
