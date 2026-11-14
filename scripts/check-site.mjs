@@ -13,6 +13,9 @@ const required = [
   "shared-theme.css",
   "sitemap.xml",
   "BENCHMARK_NOTES.md",
+  "DESIGN_BENCHMARK_100.md",
+  "DESIGN_SYSTEM.md",
+  "design-system.css",
   "startap-yoli.html",
   "laboratoriya.html",
   "admin.html",
@@ -833,6 +836,22 @@ new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" 
 console.log("✓ 3D virtual laboratory, six learning models, module syntax and account-scoped result storage are present");
 
 const mobileGuard = read("mobile-guard.css");
+
+assert.match(mobileGuard,/^@import url\("\.\/design-system\.css"\);/,"Every page must receive the unified design system through the shared mobile stylesheet");
+const benchmark100=read("DESIGN_BENCHMARK_100.md");
+const designGuide=read("DESIGN_SYSTEM.md");
+const unifiedDesign=read("design-system.css");
+for(const marker of ["100 ta xalqaro","### A. Buyuk Britaniya","### J. Yangi Zelandiya","100. Transport","Metodologiya"]){
+ assert.ok(benchmark100.includes(marker),"International benchmark evidence missing: "+marker);
+}
+for(const marker of ["Yagona dizayn tizimi","#123255","#15558A","WCAG 2.2","Maxfiylik"]){
+ assert.ok(designGuide.includes(marker),"Design system documentation marker missing: "+marker);
+}
+for(const marker of ["--navy:#123255!important","--blue:#15558a!important","font-size:16px!important","prefers-reduced-motion:reduce","prefers-contrast:more","@media(max-width:680px)"]){
+ assert.ok(unifiedDesign.includes(marker),"Unified visual rule missing: "+marker);
+}
+console.log("✓ 100 international service examples and the unified design system are documented and wired through the shared stylesheet");
+
 for (const feature of ["--yi-mobile-tap-size:44px","font-size:16px!important","env(safe-area-inset-bottom","overscroll-behavior-x:contain","prefers-reduced-motion"]) {
   assert.ok(mobileGuard.includes(feature), "Mobile resilience rule missing: " + feature);
 }

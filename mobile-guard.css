@@ -1,3 +1,4 @@
+@import url("./design-system.css");
 /* Additive mobile reliability rules for all Yoshlar-Ishi pages. */
 :root{--yi-mobile-tap-size:44px;--yi-safe-bottom:env(safe-area-inset-bottom,0px);--yi-safe-top:env(safe-area-inset-top,0px)}
 html{width:100%;max-width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:80px}
