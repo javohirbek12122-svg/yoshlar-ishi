@@ -77,6 +77,27 @@ try{
     }
     if(item[0]==="/imkoniyatlar.html"&&width===390){await page.locator("#queryFilter").fill("Yoshlar daftari");await page.locator("#filterButton").click()}
     if(item[0]==="/davlat-xizmatlari.html"&&width===390)await page.locator("#portalSearch").fill("Yoshlar");
+
+    if(item[0]==="/davlat-xizmatlari.html"&&width===390){
+     await page.locator("#saGoal").selectOption("education");
+     await page.locator("#saAge").selectOption("minor");
+     await page.locator("#saStatus").selectOption("technikum");
+     await page.locator("#saGeneratePlan").click();
+     await page.locator("#saPlanResult .sa-steps li").first().waitFor({state:"visible",timeout:5000});
+     if(!(await page.locator("#saPlanResult").innerText()).includes("MyEdu"))fail(item[1]+" "+width,"cross-portal education plan was not generated");
+     if(await page.locator("#saChecklist input[type=checkbox]").count()<3)fail(item[1]+" "+width,"document readiness checklist was not generated");
+     await page.locator("#saDraftAgency").fill("Tuman hokimligi");
+     await page.locator("#saDraftIssue").fill("Xizmat bo‘yicha javob kechikdi.");
+     await page.locator("#saDraftRequest").fill("Murojaat holatini o‘rganib, yozma javob berishingizni so‘rayman.");
+     await page.locator("#saGenerateDraft").click();
+     if(!(await page.locator("#saDraftOutput").inputValue()).includes("Murojaat turi"))fail(item[1]+" "+width,"appeal draft was not generated");
+     await page.locator("#saTaskName").fill("Test arizasi");
+     await page.locator("#saTaskForm button[type=submit]").click();
+     if(await page.locator("#saTaskList .sa-task").count()!==1)fail(item[1]+" "+width,"local application tracker did not save the task");
+     await page.locator("#saTaskList .sa-task-delete").click();
+     if(await page.locator("#saTaskList .sa-task").count()!==0)fail(item[1]+" "+width,"local application tracker did not remove the task");
+    }
+
     if(item[0]==="/laboratoriya.html"&&width===390){
      await page.locator('.mode-btn[data-mode="nuclear"]').click();
      await page.locator("#runNuclear").waitFor({state:"visible",timeout:8000});

@@ -123,6 +123,10 @@ jobs:
           grep -Fqi 'id="programAvailabilityStatus"' /tmp/yoshlar-admin.html || { echo "::error::Admin application-status selector is missing."; exit 1; }
           grep -Fqi "function saveYouthProgram(ev)" /tmp/yoshlar-admin.html || { echo "::error::Admin panel cannot manage youth programmes."; exit 1; }
           grep -Fqi "function scoresFor(stage,goal,sector,source)" /tmp/yoshlar-startup.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/state-service-assistant.js" -o /tmp/yoshlar-service-helper.js
+          grep -Fq "var routes=" /tmp/yoshlar-service-helper.js || { echo "::error::Cross-portal service helper script is missing."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/state-service-assistant.css" -o /tmp/yoshlar-service-helper.css
+          grep -Fq ".state-assist" /tmp/yoshlar-service-helper.css || { echo "::error::Cross-portal service helper styles are missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/privacy.html" -o /tmp/yoshlar-privacy.html
           grep -qi "Maxfiylik" /tmp/yoshlar-privacy.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/manifest.webmanifest" -o /tmp/yoshlar-manifest.json

@@ -123,13 +123,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 </style>
 <link rel="stylesheet" href="./shared-theme.css">
+  <link rel="stylesheet" href="./state-service-assistant.css">
   <link rel="stylesheet" href="./mobile-guard.css">
 </head>
 <body>
 <div class="topbar"><div class="wrap"><span>YOSHLAR-ISHI · ELEKTRON DAVLAT XIZMATLARI BO‘YICHA TUSHUNTIRUVCHI KATALOG</span><span class="independent">Mustaqil platforma · davlat organi emas</span></div></div>
 <header class="wrap nav">
  <a class="brand" href="./index.html"><span class="logo">YI</span>Yoshlar-Ishi</a>
- <nav class="links" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a href="./imkoniyatlar.html">Imkoniyatlar</a><a class="active" href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="#tashkilotlar">Idoralar katalogi</a><a href="#yo‘lko‘rsatkich">Xizmat tanlagich</a><a href="./kabinet.html">Shaxsiy kabinet</a></nav>
+ <nav class="links" aria-label="Asosiy navigatsiya"><a href="./index.html">Bosh sahifa</a><a href="./imkoniyatlar.html">Imkoniyatlar</a><a class="active" href="./davlat-xizmatlari.html">Davlat xizmatlari</a><a href="#tashkilotlar">Idoralar katalogi</a><a href="#yo‘lko‘rsatkich">Xizmat tanlagich</a><a href="#amaliy-yordam">Yordam markazi</a><a href="./kabinet.html">Shaxsiy kabinet</a></nav>
  <a class="button" href="./imkoniyatlar.html">Imkoniyatlarni ko‘rish ↗</a>
 </header>
 <main>
@@ -140,7 +141,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
    <div class="eyebrow">Rasmiy manbalar · tushunarli yo‘riqnoma</div>
    <h1>Davlat xizmatini izlash osonroq bo‘lsin.</h1>
    <p>Davlat portallari, xizmatlar, huquqiy manbalar, stipendiyalar, ish o‘rinlari va yoshlar imkoniyatlarini bitta joyda toping. Har bir bo‘limda xizmat nima uchun kerakligi, kimga mosligi va qayerdan boshlash kerakligi tushuntiriladi.</p>
-   <div class="hero-actions"><a class="button" href="#katalog">Katalogni ko‘rish ↓</a><a class="button ghost" href="#yo‘lko‘rsatkich">Menga kerak xizmatni topish</a></div>
+   <div class="hero-actions"><a class="button" href="#katalog">Katalogni ko‘rish ↓</a><a class="button ghost" href="#yo‘lko‘rsatkich">Menga kerak xizmatni topish</a><a class="button ghost" href="#amaliy-yordam">Amaliy yordam markazi ↗</a></div>
    <div class="hero-note">Rasmiy ariza, OneID kirishi va to‘lovlar faqat tegishli davlat portalida bajariladi. Yoshlar-Ishi davlat tizimlariga ulangan deb da’vo qilmaydi.</div>
   </div>
   <div class="visual-collage" aria-label="Davlat portallari va elektron xizmatlar tasvirlari">
@@ -164,6 +165,89 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   <div id="recommendationResult" class="recommendation" aria-live="polite"><strong>Tavsiya tayyorlanmoqda…</strong><p>Manbalar yuklangach, eng mos xizmatlar ko‘rsatiladi.</p></div>
  </div>
 </div></section>
+
+<section class="section state-assist" id="amaliy-yordam" aria-labelledby="saHeading">
+ <div class="wrap">
+  <div class="sa-head">
+   <div>
+    <div class="eyebrow">Davlat xizmatlari · amaliy yordam markazi</div>
+    <h2 id="saHeading">Davlat xizmati bo‘yicha keyingi qadamingiz aniq bo‘lsin.</h2>
+    <p>Turli davlat portallaridagi jarayonlarni bir-biriga bog‘lab, qayerdan boshlash, nimalarni tayyorlash va qaysi rasmiy manbaga murojaat qilishni ko‘rsating. Bu modul davlat idoralarining o‘rnini bosmaydi.</p>
+   </div>
+   <div class="sa-proof"><strong>Yangi imkoniyat</strong><span>Bir masala uchun bir nechta portalni bosqichma-bosqich bog‘laydigan mustaqil navigator</span><small>Manbalar tekshirilgan sana: 14-noyabr 2026</small></div>
+  </div>
+
+  <div class="sa-layout">
+   <section class="sa-panel" aria-labelledby="saPlanTitle">
+    <div class="sa-panel-head"><span class="sa-number">01</span><div><h3 id="saPlanTitle">Maqsadingizni tanlang</h3><p>Shaxsiy raqam, pasport yoki parol kiritish talab qilinmaydi.</p></div></div>
+    <div class="sa-fields">
+     <div class="sa-field"><label for="saGoal">Qaysi masalani hal qilmoqchisiz?</label>
+      <select id="saGoal" class="sa-control">
+       <option value="education">Ta’lim, stipendiya yoki kontrakt</option>
+       <option value="youth">Yoshlar dasturi, grant yoki startap</option>
+       <option value="job">Ish, vakansiya yoki amaliyot</option>
+       <option value="tax">Soliq, keshbek yoki to‘lov</option>
+       <option value="appeal">Murojaat, shikoyat yoki e’tiroz</option>
+       <option value="identity">OneID, shaxsiy ma’lumot yoki davlat xizmati</option>
+       <option value="social">Ijtimoiy yordam yoki nafaqa</option>
+       <option value="business">Biznesni boshlash yoki litsenziya</option>
+      </select>
+     </div>
+     <div class="sa-field-grid">
+      <div class="sa-field"><label for="saAge">Yosh toifasi</label><select id="saAge" class="sa-control"><option value="unknown">Hozircha ko‘rsatmayman</option><option value="minor">14–17 yosh</option><option value="adult">18 yosh va undan katta</option></select></div>
+      <div class="sa-field"><label for="saStatus">Hozirgi holatingiz</label><select id="saStatus" class="sa-control"><option value="unknown">Tanlanmagan</option><option value="school">Maktab o‘quvchisi</option><option value="technikum">Texnikum / kasbiy ta’lim</option><option value="university">OTM talabasi</option><option value="job">Ish qidiryapman</option><option value="working">Ishlayman</option><option value="business">Tadbirkorman</option></select></div>
+     </div>
+     <button class="sa-btn" id="saGeneratePlan" type="button">Menga mos yo‘l xaritasini tuzish <span aria-hidden="true">→</span></button>
+     <p class="sa-fine">Tavsiya — yo‘l-yo‘riq. Yosh, hudud, qabul muddati va xizmatga haqli ekaningiz bo‘yicha yakuniy qaror faqat rasmiy idora tomonidan belgilanadi.</p>
+    </div>
+   </section>
+
+   <section class="sa-panel sa-plan-panel" aria-labelledby="saResultTitle">
+    <div class="sa-panel-head"><span class="sa-number">02</span><div><h3 id="saResultTitle">Sizning yo‘l xaritangiz</h3><p>Tanlangan maqsad bo‘yicha amaliy ketma-ketlik.</p></div></div>
+    <div id="saPlanResult" class="sa-plan-result" aria-live="polite">
+     <div class="sa-empty"><span aria-hidden="true">⌖</span><strong>Avval maqsadingizni tanlang</strong><p>“Yo‘l xaritasini tuzish” tugmasini bosing. Portal havolalari va bajariladigan qadamlar shu yerda chiqadi.</p></div>
+    </div>
+   </section>
+
+   <section class="sa-panel" aria-labelledby="saChecklistTitle">
+    <div class="sa-panel-head"><span class="sa-number">03</span><div><h3 id="saChecklistTitle">Arizadan oldin tekshiring</h3><p>Kerakli ma’lumotlarni oldindan tayyorlash uchun belgilab boring.</p></div></div>
+    <div id="saChecklist" class="sa-checklist" aria-live="polite"><p class="sa-muted">Yo‘l xaritasini tuzganingizdan keyin masalangizga mos tekshiruv ro‘yxati paydo bo‘ladi.</p></div>
+   </section>
+
+   <section class="sa-panel" aria-labelledby="saDraftTitle">
+    <div class="sa-panel-head"><span class="sa-number">04</span><div><h3 id="saDraftTitle">Murojaat matnini tayyorlang</h3><p>Ariza, taklif yoki shikoyat uchun tartibli qoralama yarating.</p></div></div>
+    <div class="sa-field"><label for="saDraftType">Murojaat turi</label><select id="saDraftType" class="sa-control"><option value="Ariza">Ariza</option><option value="Shikoyat">Shikoyat</option><option value="Taklif">Taklif</option><option value="Javob yuzasidan e’tiroz">Javob yuzasidan e’tiroz</option></select></div>
+    <div class="sa-field"><label for="saDraftAgency">Qaysi idora yoki tashkilotga?</label><input id="saDraftAgency" class="sa-control" maxlength="140" placeholder="Masalan: tuman hokimligi"></div>
+    <div class="sa-field"><label for="saDraftIssue">Vaziyatni aniq bayon qiling</label><textarea id="saDraftIssue" class="sa-control sa-textarea" maxlength="1800" rows="3" placeholder="Nima bo‘ldi, qachon va qayerda? Shaxsiy identifikatorlarni yozmang."></textarea></div>
+    <div class="sa-field"><label for="saDraftRequest">Idoradan qanday natija so‘rayapsiz?</label><textarea id="saDraftRequest" class="sa-control sa-textarea" maxlength="900" rows="2" placeholder="Masalan: holatni o‘rganish va yozma javob berish..."></textarea></div>
+    <div class="sa-actions"><button class="sa-btn" id="saGenerateDraft" type="button">Qoralama yaratish</button><button class="sa-btn sa-btn-light" id="saCopyDraft" type="button" hidden>Matnni nusxalash</button></div>
+    <p class="sa-status" id="saDraftStatus" aria-live="polite">Bu qoralama rasmiy ariza emas va avtomatik yuborilmaydi.</p>
+    <textarea id="saDraftOutput" class="sa-control sa-output" rows="9" readonly hidden aria-label="Tayyor murojaat qoralamasi"></textarea>
+   </section>
+
+   <section class="sa-panel" aria-labelledby="saTrackerTitle">
+    <div class="sa-panel-head"><span class="sa-number">05</span><div><h3 id="saTrackerTitle">Mening ishlarim kuzatuv daftari</h3><p>Bir nechta portalga yuborgan arizalaringizni bitta ro‘yxatda eslab boring.</p></div></div>
+    <form id="saTaskForm" class="sa-task-form">
+     <div class="sa-field"><label for="saTaskName">Ish yoki ariza nomi</label><input id="saTaskName" class="sa-control" required maxlength="90" placeholder="Masalan: ta’lim krediti arizasi"></div>
+     <div class="sa-field-grid">
+      <div class="sa-field"><label for="saTaskPortal">Qaysi portal?</label><select id="saTaskPortal" class="sa-control"><option value="my.gov.uz">my.gov.uz</option><option value="my.edu.uz">my.edu.uz</option><option value="my.soliq.uz / Soliq">my.soliq.uz / Soliq</option><option value="PM.gov.uz">PM.gov.uz</option><option value="Murojaat.gov.uz">Murojaat.gov.uz</option><option value="OneID / eGov">OneID / eGov</option><option value="Boshqa rasmiy portal">Boshqa rasmiy portal</option></select></div>
+      <div class="sa-field"><label for="saTaskDeadline">Eslab qolish sanasi (ixtiyoriy)</label><input id="saTaskDeadline" class="sa-control" type="date"></div>
+     </div>
+     <div class="sa-field"><label for="saTaskStatus">Holati</label><select id="saTaskStatus" class="sa-control"><option>Hujjat tayyorlanyapti</option><option>Ariza yuborildi</option><option>Javob kutilmoqda</option><option>Yakunlandi</option></select></div>
+     <button class="sa-btn" type="submit">Ro‘yxatga qo‘shish +</button>
+    </form>
+    <div id="saTaskList" class="sa-task-list" aria-live="polite"><p class="sa-muted">Hozircha saqlangan ish yo‘q.</p></div>
+    <p class="sa-fine">Ro‘yxat faqat shu qurilma va brauzer xotirasida saqlanadi. Bu push/SMS eslatma emas. Umumiy qurilmada ishlasangiz, maxfiy ma’lumot yozmang va ish tugagach o‘chirib tashlang.</p>
+   </section>
+
+   <aside class="sa-security" aria-label="Raqamli xavfsizlik ogohlantirishi">
+    <div class="sa-security-icon" aria-hidden="true">!</div>
+    <div><strong>Raqamli xavfsizlik: parol va maxfiy kodlarni bu yerga kiritmang.</strong><p>Yoshlar-Ishi hech qachon JSHSHIR, pasport/ID karta rasmi, bank karta raqami, OneID paroli, SMS-kod yoki E-IMZO PIN-kodini so‘ramaydi. Bunday ma’lumot kerak bo‘lsa, faqat manzil satrida rasmiy domen turgan davlat portalining o‘zida kiriting.</p></div>
+   </aside>
+  </div>
+ </div>
+</section>
+
 <section class="section" id="katalog" style="padding-top:10px"><div class="wrap">
  <div class="section-head"><div><div class="eyebrow">Tizimlashtirilgan katalog</div><h2>Portal va xizmatlarni o‘rganing</h2></div><p>Portal nomi, vazifasi, foydalanuvchi turi va kategoriya bo‘yicha izlang. Batafsil kartada rasm, bajarish bosqichlari, talab qilinishi mumkin bo‘lgan hujjatlar va manbalar mavjud.</p></div>
  <div class="search-panel"><div class="field"><label for="portalSearch">Portal yoki xizmat nomi</label><input id="portalSearch" class="control" type="search" placeholder="Masalan: stipendiya, ariza, LEX.UZ..."></div><div class="field"><label for="categorySelect">Kategoriya</label><select class="control" id="categorySelect"><option value="all">Barcha yo‘nalishlar</option><option value="public_services">Davlat xizmatlari</option><option value="government">Hukumat va idoralar</option><option value="youth">Yoshlar</option><option value="education">Ta’lim</option><option value="employment">Bandlik va ish</option><option value="legal">Huquqiy ma’lumot</option><option value="appeals">Murojaatlar</option><option value="business">Biznes</option><option value="open_budget">Budjet</option><option value="open_data">Ochiq ma’lumotlar</option></select></div><div class="field"><label for="audienceFilter">Kimga mo‘ljallangan?</label><select class="control" id="audienceFilter"><option value="all">Barchaga</option><option value="student">Abituriyent/talaba</option><option value="youth">Yoshlar</option><option value="business">Tadbirkor</option><option value="jobseeker">Ish qidiruvchi</option><option value="researcher">Tadqiqotchi</option></select></div></div>
@@ -328,4 +412,5 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDialog()});
 load();
 })();
 </script>
+<script src="./state-service-assistant.js"></script>
 </body></html>

@@ -655,6 +655,40 @@ assert.ok(opportunityDesignHome.includes("document.body.style.zoom=String(fontSc
 console.log("✓ opportunity-first homepage uses one consolidated navy/blue design system, sticky navigation, accessible mobile menu and reduced-motion layouts");
 
 const serviceDesign = read("davlat-xizmatlari.html");
+
+const stateAssistant = read("state-service-assistant.js");
+const stateAssistantCss = read("state-service-assistant.css");
+for (const marker of [
+  'id="amaliy-yordam"',
+  'id="saGeneratePlan"',
+  'id="saChecklist"',
+  'id="saGenerateDraft"',
+  'id="saTaskForm"',
+  'id="saTaskList"',
+  'state-service-assistant.css',
+  'state-service-assistant.js',
+  'Yordam markazi',
+]) {
+  assert.ok(serviceDesign.includes(marker), "Cross-portal service helper UI marker missing: " + marker);
+}
+for (const feature of [
+  'my.edu.uz', 'my.gov.uz', 'my.soliq.uz', 'PM.gov.uz',
+  'Murojaat.gov.uz', 'OneID', 'ARGOS', 'Birdarcha',
+  'localStorage', '14–18 yosh', 'SMS-kod',
+  'ariza', 'shikoyat', 'Yoshlar-Ishi grant ajratmaydi'
+]) {
+  assert.ok(stateAssistant.includes(feature), "Cross-portal helper capability missing: " + feature);
+}
+for (const feature of [
+  '.state-assist', '.sa-layout', '.sa-panel', '.sa-control',
+  'min-height:48px', '@media(max-width:680px)',
+  'prefers-reduced-motion:reduce'
+]) {
+  assert.ok(stateAssistantCss.includes(feature), "Cross-portal helper responsive rule missing: " + feature);
+}
+new vm.Script(stateAssistant, { filename: "state-service-assistant.js" });
+console.log("✓ cross-portal service navigator, document checklist, appeal drafter and local case tracker are wired and syntax-checked");
+
 const accountDesign = read("kabinet.html");
 const adminDesign = read("admin.html");
 assert.match(serviceDesign, /Yoshlar-Ishi shared startup palette/);
