@@ -46,6 +46,10 @@ button,a,input,select{ -webkit-tap-highlight-color:transparent}button:focus-visi
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
   <link rel="stylesheet" href="../mobile-guard.css">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head><body>
 <div class="top"><div class="wrap"><span><strong>VIRTUAL PHYSICS LAB</strong> / INTERACTIVE SCIENCE</span><span>INDEPENDENT 3D LEARNING ENVIRONMENT</span></div></div>
 <header class="wrap nav"><a class="brand" href="#"><span class="logo">PH</span>Physics Lab <span style="font-size:10px;color:#818779">/ 3D</span></a><nav class="navlinks"><a href="#lab">Simulyator</a><a href="#theory">Nazariya</a><a href="#history">Tajriba tarixi</a></nav></header>
@@ -228,4 +232,5 @@ $("clearHistory").addEventListener("click",()=>{if(!saved().length)return;if(con
 document.addEventListener("keydown",e=>{if(e.target.matches("input,select,textarea")||e.altKey||e.ctrlKey||e.metaKey)return;if(e.code==="Space"){e.preventDefault();$("play").click()}if(e.key.toLowerCase()==="r")$("reset").click()});
 init();renderHistory();
 })();
-</script></body></html>
+</script><script src="/pwa.js" defer></script>
+</body></html>
