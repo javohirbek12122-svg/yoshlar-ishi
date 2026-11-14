@@ -166,3 +166,13 @@ The public catalogue does not treat the `active` flag as an open application. A 
 - `closed`: the official application window has ended.
 
 The administrator selects this status independently of whether the card is visible. If the official announcement does not provide a real application form or channel, `application_url` stays empty and the public page links to the source article instead. The catalogue is intentionally not padded with unverified aggregator links.
+
+
+## Davlat tashkiloti bilan pilotga tayyorgarlik
+
+Loyiha bo‘yicha konsepsiya, normativ manbalar matritsasi, target arxitektura, ma’lumotlar oqimi, xavfsizlik bo‘shliqlari va 90 kunlik no-production pilot reja government-pilot/ papkasida tayyorlangan. Bu hujjatlar davlat tasdig‘i yoki production ruxsati emas; hozirgi MVP’ning real cheklovlarini ochiq ko‘rsatadi.
+
+Boshlash uchun: [Davlat pilotiga tayyorgarlik xulosasi](./government-pilot/README.md).  
+Rasmiy taqdimot xati loyihasi: [Konsepsiya va pilot so‘rovi](./government-pilot/01_CONCEPT_NOTE_UZ.md).
+
+**Muhim:** joriy Supabase loyiha regioni ap-south-1; AI kaliti yoqilsa, g‘oya matni Groq’ga uzatilishi mumkin; Telegram yoqilsa, chat metadata ishlanadi. Tegishli huquqiy, cross-border, hosting va xavfsizlik tasdiqlari olinmaguncha bu muhitga davlat yoki maxfiy fuqarolik ma’lumotlari joylanmaydi.
