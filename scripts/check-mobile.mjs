@@ -16,7 +16,7 @@ const server=remoteBase?null:http.createServer((req,res)=>{
   let file=target;
   if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,"index.html");
   if(!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404).end("Not found");return}
-  res.writeHead(200,{"Content-Type":types[path.extname(file)]||"application/octet-stream","Cache-Control":"no-store"});
+  res.writeHead(200,{"Content-Type":types[path.extname(file)]||"application/octet-stream","Cache-Control":rel==="service-worker.js"?"no-cache, no-store, must-revalidate":"no-cache"});
   fs.createReadStream(file).pipe(res);
  }catch{res.writeHead(400).end()}
 });
@@ -132,11 +132,55 @@ try{
   }
   await context.close();
  }
+
+ try{
+  const androidContext=await browser.newContext({
+   viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,
+   userAgent:"Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36"
+  });
+  const androidPage=await androidContext.newPage();
+  await androidPage.goto(origin+"/index.html",{waitUntil:"domcontentloaded",timeout:25000});
+  await androidPage.locator("#yi-install-banner").waitFor({state:"visible",timeout:8000});
+  await androidPage.waitForLoadState("load",{timeout:12000}).catch(()=>{});
+  await androidPage.evaluate(async()=>{const registration=await navigator.serviceWorker.ready;if(!registration.active)throw new Error("Service worker is not active");});
+  await androidPage.waitForFunction(()=>Boolean(navigator.serviceWorker.controller),null,{timeout:12000});
+  await androidPage.evaluate(()=>{
+   const event=new Event("beforeinstallprompt",{cancelable:true});
+   Object.defineProperty(event,"prompt",{value:async()=>{window.__yiInstallPromptCalled=true;}});
+   Object.defineProperty(event,"userChoice",{value:Promise.resolve({outcome:"accepted"})});
+   window.dispatchEvent(event);
+  });
+  await androidPage.locator("#yi-install-banner button:not(.yi-pwa-close)").click();
+  const promptCalled=await androidPage.evaluate(()=>window.__yiInstallPromptCalled===true);
+  if(!promptCalled)fail("PWA Android","beforeinstallprompt did not invoke the browser install flow");
+  await androidContext.setOffline(true);
+  await androidPage.goto(origin+"/index.html",{waitUntil:"domcontentloaded",timeout:15000});
+  const cachedHome=await androidPage.locator("body").innerText();
+  if(!cachedHome.includes("Yoshlar-Ishi"))fail("PWA offline","cached public home page did not load");
+  await androidPage.goto(origin+"/kabinet.html",{waitUntil:"domcontentloaded",timeout:15000});
+  const privateOffline=await androidPage.locator("body").innerText();
+  if(!privateOffline.includes("Hozir internet aloqasi yo‘q"))fail("PWA privacy","personal cabinet was not replaced by the safe offline page");
+  await androidContext.close();
+
+  const iosContext=await browser.newContext({
+   viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,
+   userAgent:"Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Mobile/15E148 Safari/604.1"
+  });
+  const iosPage=await iosContext.newPage();
+  await iosPage.goto(origin+"/index.html",{waitUntil:"domcontentloaded",timeout:25000});
+  await iosPage.locator("#yi-install-banner").waitFor({state:"visible",timeout:8000});
+  await iosPage.locator("#yi-install-banner button:not(.yi-pwa-close)").click();
+  const iosHelp=await iosPage.locator("#yi-install-help").innerText();
+  if(!iosHelp.includes("Safari")||!iosHelp.includes("Add to Home Screen"))fail("PWA iOS","Safari Add to Home Screen instructions are missing");
+  await iosContext.close();
+ }catch(error){fail("PWA install/offline tests",error.message||String(error))}
+
  for(const e of localFailures)fail("Local asset",e);
  if(failures.length){console.error("MOBILE CHECK FAILED");for(const f of failures)console.error("- "+f);process.exitCode=1}
  else{
   console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 7 widths) on "+(remoteBase?"production: "+origin:"local source"));
   console.log("✓ no horizontal overflow, uncaught JavaScript errors or broken local assets");
   console.log("✓ touch targets, iOS input zoom, mobile menu and key filters checked");
+  console.log("✓ Android install prompt, iPhone Safari instructions, offline home page and private-page cache exclusion checked");
  }
 }finally{if(browser)await browser.close();if(server)await new Promise(resolve=>server.close(resolve))}
