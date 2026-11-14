@@ -137,6 +137,60 @@
     document.body.appendChild(banner);
   }
 
+
+  function initMobileExperience() {
+    const path = window.location.pathname;
+    const navItems = [
+      { href: "/index.html", label: "Bosh sahifa", icon: "⌂", match: ["/", "/index.html"] },
+      { href: "/imkoniyatlar.html", label: "Imkoniyatlar", icon: "✳", match: ["/imkoniyatlar.html", "/startap-yoli.html"] },
+      { href: "/davlat-xizmatlari.html", label: "Xizmatlar", icon: "▤", match: ["/davlat-xizmatlari.html"] },
+      { href: "/kabinet.html", label: "Jarayonlar", icon: "◷", match: ["/kabinet.html"] }
+    ];
+    if (!document.querySelector(".yi-mobile-dock")) {
+      const dock = createElement("nav");
+      dock.className = "yi-mobile-dock";
+      dock.setAttribute("aria-label", "Telefon navigatsiyasi");
+      navItems.forEach((item) => {
+        const link = createElement("a");
+        link.href = item.href;
+        link.className = item.match.includes(path) || (path === "/" && item.href === "/index.html") ? "is-active" : "";
+        if (link.className) link.setAttribute("aria-current", "page");
+        const glyph = createElement("span", item.icon, "yi-dock-icon");
+        glyph.setAttribute("aria-hidden", "true");
+        const label = createElement("span", item.label, "yi-dock-label");
+        link.append(glyph, label);
+        dock.appendChild(link);
+      });
+      document.body.appendChild(dock);
+    }
+    const ribbon = document.querySelector(".service-ribbon .wrap");
+    if (ribbon && !document.getElementById("yi-services-more")) {
+      const more = createElement("button", "Yana xizmatlar", "yi-services-more");
+      more.id = "yi-services-more";
+      more.type = "button";
+      more.setAttribute("aria-expanded", "false");
+      more.setAttribute("aria-controls", "xizmatlar");
+      const icon = createElement("span", "+", "yi-more-icon");
+      more.appendChild(icon);
+      more.addEventListener("click", () => {
+        const expanded = ribbon.classList.toggle("yi-services-expanded");
+        more.setAttribute("aria-expanded", String(expanded));
+        more.firstChild.textContent = expanded ? "Kamroq ko‘rsatish" : "Yana xizmatlar";
+        icon.textContent = expanded ? "−" : "+";
+      });
+      ribbon.appendChild(more);
+    }
+    const mobileMenu = document.querySelector(".mobile-nav");
+    if (mobileMenu) {
+      mobileMenu.addEventListener("click", (event) => {
+        const link = event.target.closest("a");
+        if (link) mobileMenu.open = false;
+      });
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMobileExperience, { once: true });
+  else initMobileExperience();
+
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     installPrompt = event;
