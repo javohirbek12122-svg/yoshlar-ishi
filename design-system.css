@@ -34,9 +34,9 @@ header.wrap.nav .links a:hover,header.wrap.nav .navlinks a:hover,header.wrap.nav
 .hero .btn:hover{background:#eaf3fb!important;color:#123255!important}
 
 /* Form controls */
-input,select,textarea,.control,.sa-control{font-family:"DM Sans",system-ui,sans-serif!important;font-size:16px!important;line-height:1.45;min-height:48px;border:1px solid #c8d6e2!important;border-radius:8px!important;background:#fff!important;color:#152336!important}
+input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea,.control,.sa-control{font-family:"DM Sans",system-ui,sans-serif!important;font-size:16px!important;line-height:1.45;min-height:48px;border:1px solid #c8d6e2!important;border-radius:8px!important;background:#fff!important;color:#152336!important}
 textarea,.sa-textarea{min-height:104px}
-input:focus,select:focus,textarea:focus,.control:focus,.sa-control:focus{border-color:#3d84b4!important;box-shadow:0 0 0 3px rgba(38,119,174,.18)!important;outline:none!important}
+input:not([type=checkbox]):not([type=radio]):not([type=hidden]):focus,select:focus,textarea:focus,.control:focus,.sa-control:focus{border-color:#3d84b4!important;box-shadow:0 0 0 3px rgba(38,119,174,.18)!important;outline:none!important}
 input::placeholder,textarea::placeholder{color:#718396;opacity:1}
 .field label,.sa-field label{font-size:12px!important;font-weight:800;color:#31485e!important}
 
@@ -55,6 +55,12 @@ input::placeholder,textarea::placeholder{color:#718396;opacity:1}
 .notice.error,.status.error{background:#fff1ef!important;border-color:#bd5549!important;color:#913d36!important}
 .success,.status.success{color:#176b51!important}
 .empty,.community-empty,.showcase-empty{border-color:#c8d6e2!important;background:#fff!important;color:#607387!important}
+
+/* Legacy secondary heroes use the same institutional navy as the homepage. */
+.hero:not(.wrap){background:linear-gradient(115deg,#123255 0%,#15517e 100%)!important;color:#fff!important;border-color:#123255!important}
+.hero:not(.wrap) .eyebrow{color:#c2dced!important}
+.hero:not(.wrap) h1,.hero:not(.wrap) h2{color:#fff!important}
+.hero:not(.wrap) p{color:#d5e5f1!important}
 
 /* Homepage: retain existing illustration, improve hierarchy and reduce excess height */
 .hero.wrap{min-height:0;padding:clamp(42px,5.2vw,70px) max(22px,calc((100% - 1200px)/2)) 28px;background:linear-gradient(112deg,#102d4b 0%,#123d63 58%,#15517e 100%)!important}
@@ -139,7 +145,7 @@ body .footer .legal{border-color:#ffffff30!important;color:#b8ccdc!important}
 .detail-label,.match{background:#eaf3fb!important;color:#245775!important}
 .progress span,.ready-meter span,.ready-fill{background:#2878ac!important}
 .score-number,.score-box strong{color:#173b5e!important}
-.source-chip,.chip{min-height:40px!important;border-radius:7px!important}
+.source-chip,.chip,.filter-chip{min-height:44px!important;border-radius:7px!important}
 .result-card h4,.initiative-card h3{color:#173b5e!important}
 .result-actions a,.source-chip:hover{color:#15558a!important}
 .cta-band,.partner{background:#123255!important;color:#fff!important}
