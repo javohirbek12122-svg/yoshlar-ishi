@@ -35,7 +35,7 @@ const pages=[
  ["/privacy.html","Maxfiylik"],
  ["/physics-lab/","Physics Lab"]
 ];
-const widths=[320,360,390,430,768];
+const widths=[320,360,390,430,768,1024,1440];
 const failures=[],localFailures=[];
 const fail=(label,message)=>failures.push(label+": "+message);
 let browser;
@@ -67,7 +67,7 @@ try{
     if(!m.meta.includes("width=device-width"))fail(item[1]+" "+width,"viewport meta missing");
     if(m.root>width+1||m.rootScroll>width+1||m.bodyScroll>width+1)fail(item[1]+" "+width,"horizontal overflow root="+m.root+" scroll="+m.rootScroll+" body="+m.bodyScroll);
     for(const c of m.controls){
-     if(c.h<43)fail(item[1]+" "+width,"touch target "+c.h+"px: "+c.tag+" "+c.text);
+     if(width<=900&&c.h<43)fail(item[1]+" "+width,"touch target "+c.h+"px: "+c.tag+" "+c.text);
      if(width<=900&&["input","select","textarea"].includes(c.tag)&&!["checkbox","radio","hidden"].includes(c.type)&&parseFloat(c.font)<16)fail(item[1]+" "+width,"iOS input zoom risk "+c.font+"px: "+c.text);
     }
     if(errors.length)fail(item[1]+" "+width,"uncaught JS: "+errors.join(" | "));
@@ -111,7 +111,7 @@ try{
  for(const e of localFailures)fail("Local asset",e);
  if(failures.length){console.error("MOBILE CHECK FAILED");for(const f of failures)console.error("- "+f);process.exitCode=1}
  else{
-  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 5 widths) on "+(remoteBase?"production: "+origin:"local source"));
+  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 7 widths) on "+(remoteBase?"production: "+origin:"local source"));
   console.log("✓ no horizontal overflow, uncaught JavaScript errors or broken local assets");
   console.log("✓ touch targets, iOS input zoom, mobile menu and key filters checked");
  }

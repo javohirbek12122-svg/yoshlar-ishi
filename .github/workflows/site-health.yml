@@ -11,6 +11,9 @@ on:
       - "index.html"
       - "site.css"
       - "mobile-guard.css"
+      - "design-system.css"
+      - "DESIGN_BENCHMARK_100.md"
+      - "DESIGN_SYSTEM.md"
       - "scripts/check-mobile.mjs"
       - "package.json"
       - "shared-theme.css"
@@ -55,6 +58,11 @@ jobs:
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/mobile-guard.css" -o /tmp/yoshlar-mobile-guard.css
+          grep -Fqi 'design-system.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The live shared mobile stylesheet is not importing the unified design system."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/design-system.css" -o /tmp/yoshlar-design-system.css
+          grep -Fqi -- '--navy:#123255' /tmp/yoshlar-design-system.css || { echo "::error::The live design system is missing the institutional navy token."; exit 1; }
+          grep -Fqi '.sa-panel' /tmp/yoshlar-design-system.css || { echo "::error::The live design system is missing the state-service assistance component rules."; exit 1; }
+
           grep -Fqi -- "--yi-mobile-tap-size:44px" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the 44px mobile touch-target rules."; exit 1; }
           grep -Fqi "@media(max-width:900px)" /tmp/yoshlar-mobile-guard.css || { echo "::error::The live site is missing the phone/tablet responsive rules."; exit 1; }
           if grep -Eqi "overflow-x:[[:space:]]*clip" /tmp/yoshlar-mobile-guard.css; then echo "::error::The live mobile stylesheet hides horizontal overflow instead of fixing layout."; exit 1; fi
@@ -146,7 +154,7 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Install Chromium for production mobile tests
         run: npx playwright install --with-deps chromium
-      - name: Test the live production domain at mobile and tablet widths
+      - name: Test the live production domain at mobile, tablet and desktop widths
         env:
           MOBILE_BASE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
         run: npm run check:mobile
