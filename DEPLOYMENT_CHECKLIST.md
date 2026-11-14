@@ -75,3 +75,17 @@ Current official portal entries are external links, not authenticated integratio
 - Exact non-sensitive test evidence.
 
 Do not store OneID passwords, session cookies, service-role keys, or private government-system credentials in frontend code. Keep any needed secret in a server-side secret store and use a server-side integration only after the institution authorizes it.
+
+
+## 6. Android/iPhone PWA install va offline tekshiruvi
+
+- [ ] HTTPS production domenida manifest.webmanifest 192×192 va 512×512 PNG ikonalarini qaytaradi.
+- [ ] Android Chrome’da Install app yoki Add to Home screen oqimi haqiqiy telefonda sinovdan o‘tadi.
+- [ ] iPhone Safari’da Share → Add to Home Screen → Open as Web App oqimi sinovdan o‘tadi.
+- [ ] O‘rnatilgan ilova standalone oynada ochiladi va to‘g‘ri ikonani ko‘rsatadi.
+- [ ] Yangi service worker versiyasi eski versiyani to‘g‘ri almashtiradi; update’dan keyin sahifa buzilmaydi.
+- [ ] Internet uzilganda offline sahifa ko‘rsatiladi; keshlangan public sahifa ochiladi.
+- [ ] Admin va shaxsiy kabinet offline keshdan qaytarilmaydi; server javoblarida private, no-store mavjud.
+- [ ] Offline vaqtda yuborilmagan forma “yuborildi” deb ko‘rsatilmaydi.
+- [ ] Push notification faqat alohida rozilik, server-side subscription boshqaruvi va huquqiy ko‘rib chiqishdan keyin yoqiladi.
+- [ ] Native Android/iOS ilovasi (APK/IPA, Play Store/App Store) talab qilinsa, PWA’dan alohida loyiha va signing/release jarayoni rejalashtiriladi.
