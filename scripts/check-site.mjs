@@ -17,6 +17,22 @@ const required = [
   "DESIGN_SYSTEM.md",
   "design-system.css",
   "scripts/check-contrast.mjs",
+  "scripts/check-pwa.mjs",
+  "scripts/check-government-pilot.mjs",
+  "vercel.json",
+  "service-worker.js",
+  "pwa.js",
+  "offline.html",
+  "icon-192.png",
+  "icon-512.png",
+  "apple-touch-icon.png",
+  "government-pilot/README.md",
+  "government-pilot/01_CONCEPT_NOTE_UZ.md",
+  "government-pilot/02_COMPLIANCE_MATRIX_UZ.md",
+  "government-pilot/03_ARCHITECTURE_AND_DATA_UZ.md",
+  "government-pilot/04_SECURITY_GAP_REGISTER_UZ.md",
+  "government-pilot/05_PILOT_PLAN_UZ.md",
+  "government-pilot/06_GOVERNANCE_AND_OPERATIONS_UZ.md",
   "startap-yoli.html",
   "laboratoriya.html",
   "admin.html",
@@ -875,5 +891,8 @@ assert.match(liveHealthWorkflow,/MOBILE_BASE_URL:/);
 assert.match(liveHealthWorkflow,/npm run check:mobile/);
 execFileSync(process.execPath,["--check","scripts/check-mobile.mjs"],{stdio:"pipe"});
 console.log("✓ mobile resilience CSS is loaded across all pages and Playwright regression tests are wired into CI");
+
+execFileSync(process.execPath, ["scripts/check-pwa.mjs"], { stdio: "inherit" });
+execFileSync(process.execPath, ["scripts/check-government-pilot.mjs"], { stdio: "inherit" });
 
 console.log("\nYoshlar-Ishi checks passed.");
