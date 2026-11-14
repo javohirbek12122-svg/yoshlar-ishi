@@ -6,7 +6,8 @@
   "scripts": {
     "check": "node scripts/check-site.mjs",
     "check:mobile": "node scripts/check-mobile.mjs",
-    "check:contrast": "node scripts/check-contrast.mjs"
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:government": "node scripts/check-government-pilot.mjs"
   },
   "devDependencies": {
     "playwright": "1.65.0"
