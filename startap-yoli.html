@@ -12,6 +12,7 @@
 <meta property="og:url" content="https://yoshlar-ishi-site.vercel.app/startap-yoli.html">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <title>Startap yo‘li — Yoshlar-Ishi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -23,6 +24,8 @@
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 </style>
   <link rel="stylesheet" href="./mobile-guard.css">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
 <div class="topbar"><div class="wrap"><span>YOSHLAR-ISHI / STARTAP YO‘LI · G‘OYA → SINOV → O‘SISH</span><span class="independent">MUSTAQIL PLATFORMА · DAVLAT ORGANI EMAS</span></div></div>
@@ -259,5 +262,6 @@ $("resetFilters").addEventListener("click",()=>{$("goalFilter").value="all";$("s
 renderStage();loadSources();
 })();
 </script>
+<script src="/pwa.js" defer></script>
 </body>
 </html>
