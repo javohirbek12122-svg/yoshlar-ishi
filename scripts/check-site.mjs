@@ -292,7 +292,7 @@ console.log("✓ Vercel checklist matches the discovered project IDs, current de
 for (const file of ["manifest.webmanifest", "admin-manifest.webmanifest"]) {
   const data = JSON.parse(read(file));
   assert.ok(data.name && data.start_url && data.icons?.length, `${file} is incomplete`);
-  assert.equal(data.icons[0].src, "/icon.svg");
+  assert.ok(data.icons.some((icon) => icon.src === "/icon-192.png" || icon.src === "/icon-512.png"), `${file} must use a supported raster install icon`);
   console.log(`✓ ${file}: valid JSON web-app manifest`);
 }
 const icon = read("icon.svg");
