@@ -113,7 +113,7 @@ jobs:
           grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
           grep -Fqi 'assets/yoshlar-people.webp' /tmp/yoshlar-home.html /tmp/yoshlar-homepage-experience.js || { echo "::error::The live homepage is missing its youth foreground image."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/assets/yoshlar-people.webp" -o /tmp/yoshlar-people.webp
-          file /tmp/yoshlar-people.webp | grep -Eqi 'Web/P image|WebP image' || { echo "::error::The live youth hero image is not a valid WebP asset."; exit 1; }
+          head -c 12 /tmp/yoshlar-people.webp | grep -aFq 'WEBP' || { echo "::error::The live youth hero image is not a valid WebP asset."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/opportunity-page-filters.js" -o /tmp/yoshlar-opportunity-filters.js
           grep -Fqi 'categoryFilter' /tmp/yoshlar-opportunity-filters.js || { echo "::error::The quick-access catalogue filters are missing."; exit 1; }
           grep -Fqi 'class="hero-storyline yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The hero benefit ribbon is not rendered."; exit 1; }
