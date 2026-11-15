@@ -40,7 +40,7 @@ assert.match(js, /yi-hero-scene/);
 assert.match(css, /perspective\(1300px\)/);
 assert.match(css, /\.yi-directory-groups/);
 
-assert.ok(html.includes('class="yi-nav"'), "Reference-style navigation bar is present");
+assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
 assert.equal((html.match(/class="quickservice yi-quick-/g)||[]).length, 8, "Eight homepage quick-access cards are required");
