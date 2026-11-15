@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v5";
+const CACHE_NAME = "yi-pwa-v6";
 const PRECACHE_URLS = [
   "/index.html",
   "/offline.html",
@@ -14,6 +14,8 @@ const PRECACHE_URLS = [
   "/mobile-guard.css",
   "/homepage-experience.css",
   "/homepage-experience.js",
+  "/assets/yoshlar-people.webp",
+  "/opportunity-page-filters.js",
   "/state-service-assistant.css",
   "/state-service-assistant.js",
   "/config.js",

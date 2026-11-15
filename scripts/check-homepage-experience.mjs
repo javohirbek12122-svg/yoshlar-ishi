@@ -41,4 +41,13 @@ assert.match(js, /images\.unsplash\.com/);
 assert.match(css, /images\.pexels\.com/);
 assert.match(css, /perspective\(1300px\)/);
 assert.match(css, /\.yi-directory-groups/);
+
+assert.ok(html.includes('class="yi-nav"'), "Reference-style navigation bar is present");
+assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
+assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
+assert.equal((html.match(/class="quickservice yi-quick-/g)||[]).length, 8, "Eight homepage quick-access cards are required");
+assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
+assert.ok(js.includes("assets/yoshlar-people.webp"), "Hero uses the cropped reference youth image");
+assert.ok(worker.includes('"/assets/yoshlar-people.webp"'));
+
 console.log("✓ homepage modular panels, preserved interactive modules, page shortcuts, JavaScript syntax, and responsive styles");
