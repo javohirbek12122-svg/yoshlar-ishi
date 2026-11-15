@@ -60,6 +60,7 @@ assert.ok(precache.includes("/offline.html"), "PWA must precache its custom offl
 assert.ok(precache.includes("/index.html"), "PWA must precache its home page");
 assert.ok(precache.includes("/homepage-experience.css"), "PWA must precache the new homepage stylesheet");
 assert.ok(precache.includes("/homepage-experience.js"), "PWA must precache the new homepage controller");
+assert.match(worker, /CACHE_NAME = "yi-pwa-v5"/, "The redesigned homepage must activate a fresh PWA cache");
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
 assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html"\]\)/);
