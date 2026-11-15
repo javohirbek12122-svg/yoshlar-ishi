@@ -29,7 +29,7 @@ function createHeroPreview(art){
   '<div class="yi-scene-float yi-scene-status"><span class="yi-scene-dot"></span><span>Yoshlar hamjamiyati</span></div>'+
   '<div class="yi-scene-float yi-scene-caption-card"><span class="yi-scene-float-icon">✦</span><span><strong>Yangi imkoniyatlar sari birga!</strong><small>Ta’lim · Ish · Startap · Grant</small></span></div>'+
   '<div class="yi-ai-helper-card"><div class="yi-ai-card-top"><span class="yi-ai-avatar">✧</span><span><strong>AI yordamchisi</strong><small><i></i> Online</small></span></div><p>G‘oyangizni baholaymizmi?</p><a href="#ai-yordamchi">Boshlash <span aria-hidden="true">➜</span></a></div>'+
-  '<div class="yi-scene-spark yi-spark-a" aria-hidden="true">✦</div><div class="yi-scene-spark yi-spark-b" aria-hidden="true">✧</div>'+
+  '<div class="art-sticker yi-scene-flow-label" aria-hidden="true"><span>IMKONIYAT</span><span>→</span><span>NATIJA</span></div><div class="yi-scene-spark yi-spark-a" aria-hidden="true">✦</div><div class="yi-scene-spark yi-spark-b" aria-hidden="true">✧</div>'+
  '</div>';
 }
 function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
