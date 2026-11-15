@@ -114,11 +114,13 @@
     var stack=document.createElement("div");stack.className="yi-home-accordion-stack";
     var openAll=document.createElement("button");openAll.type="button";openAll.className="yi-accordion-global";
     openAll.textContent="Barcha bo‘limlarni ochish +";openAll.setAttribute("aria-expanded","false");
-    var overview=createAccordion("platform",GROUPS[0].title,GROUPS[0].description,GROUPS[0].sections,false);
-    var services=createAccordion("government",GROUPS[1].title,GROUPS[1].description,GROUPS[1].sections,false);
 
+    // Insert the new containers before moving their reference sections out of <main>.
     sectionParent.insertBefore(launcher,overviewSection);
     sectionParent.insertBefore(stack,overviewSection);
+
+    var overview=createAccordion("platform",GROUPS[0].title,GROUPS[0].description,GROUPS[0].sections,false);
+    var services=createAccordion("government",GROUPS[1].title,GROUPS[1].description,GROUPS[1].sections,false);
     launcher.appendChild(heading);heading.appendChild(openAll);
     stack.appendChild(overview);stack.appendChild(services);stack.appendChild(toolsDetails);
 
