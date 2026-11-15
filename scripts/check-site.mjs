@@ -259,7 +259,7 @@ for (const marker of [
   'class="hero-expanded-copy"',
   'class="hero-storyline"',
   'id="afzalliklar"',
-  'class="platform-proof"',
+  'class="platform-proof yi-platform-proof"',
   'class="showcase-empty"',
 ]) {
   assert.ok(liveHealthWorkflow.includes(marker), `Live health check is missing new design freshness marker: ${marker}`);
@@ -638,7 +638,7 @@ for (const feature of [
   'class="platform-proof"',
   'class="benefit-grid"',
   'class="hero-note"',
-  'class="art-sticker"',
+  'id="yiSearchToggle"',
   'class="showcase-empty"',
   'id="jamoadoshlar"',
   'id="top-tashabbuslar"',
@@ -737,7 +737,7 @@ for (const feature of [
   'id="ambientCanvas"',
   'class="hero-storyline"',
   'class="hero-story-step"',
-  '<span>IMKONIYAT</span><span>→</span><span>NATIJA</span>',
+  'data-flow-label="IMKONIYAT · ARIZA · ISHTIROK · NATIJA"',
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
   'id="readingProgress"',
   'id="draftReadiness"',
