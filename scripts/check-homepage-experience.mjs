@@ -32,7 +32,7 @@ assert.doesNotMatch(css, /overflow-x:\s*clip/i);
 assert.ok(worker.includes('"/homepage-experience.css"'));
 assert.ok(worker.includes('"/homepage-experience.js"'));
 
-assert.ok(html.includes('id="yi-site-directory"'), "A structured page directory must be present beneath the homepage");
+assert.ok(html.includes('class="yi-site-directory wrap"') && html.includes('id="site-pages"'), "A structured page directory must be present beneath the homepage");
 for (const route of ["./imkoniyatlar.html","./davlat-xizmatlari.html","./startap-yoli.html","./laboratoriya.html","./kabinet.html","./privacy.html"]) {
   assert.ok(html.includes('href="' + route + '"'), "The page directory is missing " + route);
 }
