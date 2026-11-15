@@ -88,7 +88,7 @@
     if(!main||!hero||!art||!serviceRibbon||!overviewSection||!servicesSection||!toolsDetails||!toolsContent)return;
     if(!required.every(function(id){return !!byId(id);}))return;
     if(overviewSection.parentElement!==main||servicesSection.parentElement!==main)return;
-    if(!required.slice(2).every(function(id){return toolsContent.contains(byId(id));}))return;
+    if(!required.slice(3).every(function(id){return toolsContent.contains(byId(id));}))return;
 
     var eyebrow=hero.querySelector(".eyebrow");
     if(eyebrow&&!hero.querySelector(".yi-hero-kicker")){

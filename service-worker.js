@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v3";
+const CACHE_NAME = "yi-pwa-v4";
 const PRECACHE_URLS = [
   "/index.html",
   "/offline.html",

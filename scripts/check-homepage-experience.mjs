@@ -22,6 +22,7 @@ assert.match(js, /NESTED_GROUPS/);
 assert.match(js, /addEventListener\("click"/);
 assert.match(js, /parentDetails\.open\s*=\s*true/);
 assert.match(js, /createHeroPreview/);
+assert.match(js, /required\\.slice\\(3\\)\\.every/);
 assert.match(css, /\.yi-home-accordion/);
 assert.match(css, /@media\(max-width:760px\)/);
 assert.doesNotMatch(css, /overflow-x:\s*clip/i);
