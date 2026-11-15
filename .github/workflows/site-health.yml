@@ -71,6 +71,13 @@ jobs:
           esac
           BASE_URL="${SITE_URL%/}"
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
+          # Wait briefly for the Vercel Git integration to finish the new production build.
+          for attempt in $(seq 1 16); do
+            if grep -Fq 'yi-quick-panel' /tmp/yoshlar-home.html && grep -Fq 'yi-hero-ribbon' /tmp/yoshlar-home.html; then break; fi
+            if [ "$attempt" -eq 16 ]; then echo "::error::The redesigned homepage has not reached the production alias yet."; exit 1; fi
+            sleep 5
+            curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
+          done
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css

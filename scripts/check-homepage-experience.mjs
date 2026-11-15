@@ -23,8 +23,8 @@ assert.match(js, /addEventListener\("click"/);
 assert.match(js, /fold\.open\s*=\s*true/);
 assert.match(js, /createHeroPreview/);
 assert.match(js, /required\.slice\(3\)\.every/);
-assert.ok(js.indexOf('sectionParent.insertBefore(launcher,overviewSection);') < js.indexOf('var overview=createAccordion'), "New homepage containers must be inserted before their source sections are moved");
-assert.ok(js.indexOf('sectionParent.insertBefore(stack,overviewSection);') < js.indexOf('var overview=createAccordion'), "Accordion stack must exist before createAccordion moves source sections");
+assert.ok(js.indexOf('sectionParent.insertBefore(launcher,overview);') < js.indexOf('const first=createAccordion'), "New homepage containers must be inserted before their source sections are moved");
+assert.ok(js.indexOf('sectionParent.insertBefore(stack,overview);') < js.indexOf('const first=createAccordion'), "Accordion stack must exist before createAccordion moves source sections");
 
 assert.match(css, /\.yi-home-accordion/);
 assert.match(css, /@media\(max-width:760px\)/);
