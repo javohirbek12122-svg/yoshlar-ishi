@@ -635,7 +635,7 @@ for (const feature of [
   'class="hero-expanded-copy"',
   'class="hero-focus"',
   'id="afzalliklar"',
-  'class="platform-proof"',
+  'class="platform-proof yi-platform-proof"',
   'class="benefit-grid"',
   'class="hero-note"',
   'id="yiSearchToggle"',
@@ -733,6 +733,7 @@ console.log("✓ service directory, personal cabinet and admin panel share the v
 
 
 const compactHome = read("index.html");
+const homepageRuntime = read("homepage-experience.js");
 for (const feature of [
   'id="ambientCanvas"',
   'class="hero-storyline"',
@@ -760,6 +761,7 @@ assert.match(compactHome, /scrollIntoView\(/);
 assert.match(compactHome, /IntersectionObserver/);
 assert.match(compactHome, /new ResizeObserver/);
 assert.match(compactHome, /function softGlow\(/);
+assert.ok(homepageRuntime.includes('<span>IMKONIYAT</span><span>→</span><span>NATIJA</span>'), "The 3D hero image retains its opportunity-to-outcome visual marker");
 assert.match(compactHome, /ctx\.createRadialGradient/);
 assert.match(compactHome, /ctx\.globalCompositeOperation="screen"/);
 assert.doesNotMatch(compactHome, /function traceFlow\(/, "Atmospheric background must not draw a fixed route line");

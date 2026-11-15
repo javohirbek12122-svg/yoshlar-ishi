@@ -13,6 +13,8 @@ on:
       - "mobile-guard.css"
       - "homepage-experience.css"
       - "homepage-experience.js"
+      - "assets/yoshlar-people.webp"
+      - "opportunity-page-filters.js"
       - "scripts/check-homepage-experience.mjs"
       - "design-system.css"
       - "DESIGN_BENCHMARK_100.md"
@@ -105,9 +107,19 @@ jobs:
           grep -Fqi 'Loyiha va hamjamiyat vositalarini ko‘rish' /tmp/yoshlar-home.html || { echo "::error::The live secondary-tools fold label is outdated."; exit 1; }
           grep -Fqi 'href="./imkoniyatlar.html"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the opportunity catalogue route."; exit 1; }
           grep -Fqi 'class="hero-expanded-copy"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: expanded hero messaging is missing."; exit 1; }
-          grep -Fqi 'class="hero-storyline"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: five-stage journey strip is missing."; exit 1; }
+          grep -Fqi 'class="yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its four-direction benefit ribbon."; exit 1; }
+          grep -Fqi 'class="yi-quick-panel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the quick-access panel."; exit 1; }
+          grep -Fqi 'id="yiSearchPanel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its working search panel."; exit 1; }
+          grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
+          grep -Fqi 'assets/yoshlar-people.webp' /tmp/yoshlar-home.html /tmp/yoshlar-homepage-experience.js || { echo "::error::The live homepage is missing its youth foreground image."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/assets/yoshlar-people.webp" -o /tmp/yoshlar-people.webp
+          file /tmp/yoshlar-people.webp | grep -Eqi 'Web/P image|WebP image' || { echo "::error::The live youth hero image is not a valid WebP asset."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/opportunity-page-filters.js" -o /tmp/yoshlar-opportunity-filters.js
+          grep -Fqi 'categoryFilter' /tmp/yoshlar-opportunity-filters.js || { echo "::error::The quick-access catalogue filters are missing."; exit 1; }
+          grep -Fqi 'class="hero-storyline yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The hero benefit ribbon is not rendered."; exit 1; }
+          grep -Fqi 'class="quickservice yi-quick-global"' /tmp/yoshlar-home.html || { echo "::error::The international quick-access card is missing."; exit 1; }
           grep -Fqi 'id="afzalliklar"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: benefits section is missing."; exit 1; }
-          grep -Fqi 'class="platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: feature proof strip is missing."; exit 1; }
+          grep -Fqi 'class="platform-proof yi-platform-proof"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its translucent platform-proof strip."; exit 1; }
           grep -Fqi 'class="showcase-empty"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: portfolio-first showcase state is missing."; exit 1; }
           grep -Fqi 'action:"initiative_submit"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: server-side initiative submission marker is missing."; exit 1; }
           grep -Fqi '/functions/v1/community-submit' /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: secure community endpoint is missing."; exit 1; }
