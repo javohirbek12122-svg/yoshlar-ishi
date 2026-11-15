@@ -42,7 +42,7 @@ body .service-ribbon .quickicon{display:grid;place-items:center;flex:0 0 34px;wi
 .yi-home-sections-eyebrow{display:block;margin-bottom:6px;color:#39749e;font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
 .yi-home-sections-head h2{margin:0;color:#173b5b;font:800 clamp(23px,3vw,31px)/1.15 Manrope,sans-serif;letter-spacing:-.045em}
 .yi-home-sections-head p{max-width:490px;margin:0;color:#687d90;font-size:11px;line-height:1.65}
-.yi-accordion-global{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:46px;padding:10px 13px;border:1px solid #bfd1e0;border-radius:7px;background:#fff;color:#174b76;font-size:10px;font-weight:900;white-space:nowrap;cursor:pointer}
+.yi-accordion-global{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;border:1px solid #bfd1e0;border-radius:7px;background:#fff;color:#174b76;font-size:10px;font-weight:900;white-space:nowrap;cursor:pointer}
 .yi-accordion-global:hover{border-color:#6f9fc4;background:#f7fbff}
 .yi-home-accordion{margin:10px 0;border:1px solid #d9e4ed;border-radius:11px;background:#fff;box-shadow:0 8px 24px rgba(15,52,83,.045);overflow:hidden;scroll-margin-top:22px}
 .yi-home-accordion>summary{display:flex;align-items:center;gap:14px;min-height:76px;padding:14px 17px;list-style:none;cursor:pointer}
