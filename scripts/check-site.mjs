@@ -257,7 +257,7 @@ assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
   "Imkoniyatni top.",
   'class="hero-expanded-copy"',
-  'class="hero-storyline"',
+  'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
   'class="platform-proof yi-platform-proof"',
   'class="showcase-empty"',
@@ -644,7 +644,7 @@ for (const feature of [
   'id="top-tashabbuslar"',
   'id="ai-yordamchi"',
   'id="ariza-holati"',
-  'class="hero-storyline"',
+  'class="hero-storyline yi-hero-ribbon"',
   'Loyiha va hamjamiyat vositalari',
   'Bu forma davlat idorasiga ariza yubormaydi.',
   'Yuborgan tashabbus holati',
@@ -736,7 +736,7 @@ const compactHome = read("index.html");
 const homepageRuntime = read("homepage-experience.js");
 for (const feature of [
   'id="ambientCanvas"',
-  'class="hero-storyline"',
+  'class="hero-storyline yi-hero-ribbon"',
   'class="hero-story-step"',
   'data-flow-label="IMKONIYAT · ARIZA · ISHTIROK · NATIJA"',
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
