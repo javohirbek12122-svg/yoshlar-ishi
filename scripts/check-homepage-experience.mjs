@@ -31,4 +31,14 @@ assert.match(css, /@media\(max-width:760px\)/);
 assert.doesNotMatch(css, /overflow-x:\s*clip/i);
 assert.ok(worker.includes('"/homepage-experience.css"'));
 assert.ok(worker.includes('"/homepage-experience.js"'));
+
+assert.ok(html.includes('id="yi-site-directory"'), "A structured page directory must be present beneath the homepage");
+for (const route of ["./imkoniyatlar.html","./davlat-xizmatlari.html","./startap-yoli.html","./laboratoriya.html","./kabinet.html","./privacy.html"]) {
+  assert.ok(html.includes('href="' + route + '"'), "The page directory is missing " + route);
+}
+assert.match(js, /yi-hero-scene/);
+assert.match(js, /images\.unsplash\.com/);
+assert.match(css, /images\.pexels\.com/);
+assert.match(css, /perspective\(1300px\)/);
+assert.match(css, /\.yi-directory-groups/);
 console.log("✓ homepage modular panels, preserved interactive modules, page shortcuts, JavaScript syntax, and responsive styles");

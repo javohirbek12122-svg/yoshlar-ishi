@@ -38,33 +38,19 @@
     details.appendChild(summary);details.appendChild(content);return details;
   }
   function createHeroPreview(art){
-    if(!art||art.querySelector(".yi-browser-preview"))return;
+    if(!art||art.querySelector(".yi-hero-scene"))return;
     art.classList.add("yi-hero-visual");
-    art.setAttribute("aria-label","Yoshlar-Ishi platformasining vizual namunasi");
+    art.setAttribute("aria-label","Yoshlar jamoasi va ta’lim muhitining 3D ko‘rinishdagi tasviri");
     art.innerHTML=
-      '<div class="yi-browser-preview">'+
-        '<div class="yi-browser-bar">'+
-          '<div class="yi-browser-brand"><span class="yi-browser-logo">YI</span><span>Yoshlar-Ishi</span></div>'+
-          '<nav class="yi-browser-nav" aria-hidden="true"><span>Imkoniyatlar</span><span>Ta’lim</span><span>Ish</span><span>Loyihalar</span></nav>'+
-          '<a class="yi-browser-signin" href="./imkoniyatlar.html">Kirish ↗</a>'+
+      '<div class="yi-hero-scene">'+
+        '<div class="yi-scene-glow yi-scene-glow-one" aria-hidden="true"></div>'+
+        '<div class="yi-scene-glow yi-scene-glow-two" aria-hidden="true"></div>'+
+        '<div class="yi-scene-photo-frame">'+
+          '<img class="yi-scene-people" src="https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=webp&q=84&w=1600" alt="Universitetda noutbuk atrofida birgalikda loyiha ustida ishlayotgan yoshlar" fetchpriority="high" decoding="async">'+
         '</div>'+
-        '<div class="yi-browser-content">'+
-          '<div class="yi-browser-copy">'+
-            '<small>YOSHLAR UCHUN RAQAMLI PLATFORMA</small>'+
-            '<h3>Bilim, ish va rivojlanish imkoniyatlari bir joyda.</h3>'+
-            '<p>Mos imkoniyatni toping, talablarni tushuning va keyingi qadamingizni rejalashtiring.</p>'+
-            '<a class="yi-browser-cta" href="./imkoniyatlar.html">Platformaga kirish <span aria-hidden="true">↗</span></a>'+
-            '<div class="yi-browser-badges"><span>Ta’lim</span><span>Kasb</span><span>Grant</span><span>Startap</span></div>'+
-          '</div>'+
-          '<div class="yi-browser-visual" aria-hidden="true">'+
-            '<span class="yi-browser-orb"></span>'+
-            '<div class="yi-preview-card"><b>01 · Imkoniyat</b><span>Dastur va xizmatlarni topish</span></div>'+
-            '<div class="yi-preview-card"><b>02 · Tayyorgarlik</b><span>Talab va hujjatlarni ko‘rish</span></div>'+
-            '<div class="yi-preview-card"><b>03 · Ishtirok</b><span>Keyingi qadamni qayd etish</span></div>'+
-            '<div class="yi-preview-card"><b>04 · Natija</b><span>Jarayonni kuzatish</span></div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="yi-browser-footer"><span>yoshlar-ishi-site.vercel.app</span><a href="https://yoshlar-ishi-site.vercel.app/" target="_blank" rel="noopener noreferrer">Saytni ochish ↗</a></div>'+
+        '<div class="yi-scene-float yi-scene-float-top"><span class="yi-scene-dot"></span><span>Yoshlar hamkorligi</span></div>'+
+        '<div class="yi-scene-float yi-scene-float-bottom"><span class="yi-scene-float-icon">✦</span><span><strong>Imkoniyatdan natijagacha</strong><small>Ta’lim · Kasb · Startap · Grant</small></span></div>'+
+        '<div class="yi-scene-caption" aria-hidden="true">Birgalikda o‘rganamiz. Birgalikda rivojlanamiz.</div>'+
       '</div>';
   }
   function addQuickLink(container,href,icon,title,description){
