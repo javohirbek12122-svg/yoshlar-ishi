@@ -20,7 +20,7 @@ for (const page of ["./startap-yoli.html","./laboratoriya.html","./kabinet.html"
 }
 assert.match(js, /NESTED_GROUPS/);
 assert.match(js, /addEventListener\("click"/);
-assert.match(js, /parentDetails\.open\s*=\s*true/);
+assert.match(js, /fold\.open\s*=\s*true/);
 assert.match(js, /createHeroPreview/);
 assert.match(js, /required\.slice\(3\)\.every/);
 assert.ok(js.indexOf('sectionParent.insertBefore(launcher,overviewSection);') < js.indexOf('var overview=createAccordion'), "New homepage containers must be inserted before their source sections are moved");
