@@ -19,7 +19,7 @@ for (const page of ["./startap-yoli.html","./laboratoriya.html","./kabinet.html"
 }
 assert.match(js, /NESTED_GROUPS/);
 assert.match(js, /addEventListener\("click"/);
-assert.match(js, /parentDetails\.open = true/);
+assert.match(js, /parentDetails\.open\s*=\s*true/);
 assert.match(js, /createHeroPreview/);
 assert.match(css, /\.yi-home-accordion/);
 assert.match(css, /@media\(max-width:760px\)/);
