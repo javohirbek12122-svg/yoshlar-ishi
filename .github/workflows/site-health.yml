@@ -11,6 +11,9 @@ on:
       - "index.html"
       - "site.css"
       - "mobile-guard.css"
+      - "homepage-experience.css"
+      - "homepage-experience.js"
+      - "scripts/check-homepage-experience.mjs"
       - "design-system.css"
       - "DESIGN_BENCHMARK_100.md"
       - "DESIGN_SYSTEM.md"
@@ -70,6 +73,10 @@ jobs:
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/mobile-guard.css" -o /tmp/yoshlar-mobile-guard.css
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/homepage-experience.css" -o /tmp/yoshlar-homepage-experience.css
+          grep -Fqi ".yi-home-accordion" /tmp/yoshlar-homepage-experience.css || { echo "::error::The live homepage is missing the new expandable section styles."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/homepage-experience.js" -o /tmp/yoshlar-homepage-experience.js
+          grep -Fqi "NESTED_GROUPS" /tmp/yoshlar-homepage-experience.js || { echo "::error::The live homepage is missing the modular interaction controller."; exit 1; }
           grep -Fqi 'design-system.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The live shared mobile stylesheet is not importing the unified design system."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/design-system.css" -o /tmp/yoshlar-design-system.css
           grep -Fqi -- '--navy:#123255' /tmp/yoshlar-design-system.css || { echo "::error::The live design system is missing the institutional navy token."; exit 1; }
