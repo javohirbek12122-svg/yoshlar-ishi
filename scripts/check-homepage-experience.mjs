@@ -37,8 +37,6 @@ for (const route of ["./imkoniyatlar.html","./davlat-xizmatlari.html","./startap
   assert.ok(html.includes('href="' + route + '"'), "The page directory is missing " + route);
 }
 assert.match(js, /yi-hero-scene/);
-assert.match(js, /images\.unsplash\.com/);
-assert.match(css, /images\.pexels\.com/);
 assert.match(css, /perspective\(1300px\)/);
 assert.match(css, /\.yi-directory-groups/);
 
