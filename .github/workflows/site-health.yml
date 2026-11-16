@@ -85,7 +85,7 @@ jobs:
             curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           done
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/biletlar.html" -o /tmp/yoshlar-biletlar.html
-          grep -Fqi "50 ta mustaqil loyiha" /tmp/yoshlar-biletlar.html || { echo "::error::The ticket catalogue is not available."; exit 1; }
+          grep -Fqi "50 ta amaliy va startap bileti" /tmp/yoshlar-biletlar.html || { echo "::error::The ticket catalogue is not available."; exit 1; }
           for asset in biletlar.css biletlar-data.js biletlar-app.js; do curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/$asset" -o "/tmp/$asset"; done
           for i in $(seq 1 50); do id=$(printf "%03d" "$i"); curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/biletlar/$id.html" -o /tmp/bilet-page.html; grep -Fq "data-ticket=\"$id\"" /tmp/bilet-page.html || { echo "::error::Ticket page $id returned mismatched content."; exit 1; }; done
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
