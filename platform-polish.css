@@ -723,6 +723,11 @@ body:has(.bf-shell) footer.wrap{width:min(1240px,calc(100% - 40px))}
 }
 @media(max-width:380px){
   body .yi-brand-text small{display:none}
+  body .yi-nav-actions{gap:2px}
+  body .yi-nav-icon{width:29px;height:34px}
+  body .yi-drawer-toggle{padding-inline:7px}
+  body .yi-drawer-toggle-label{display:none}
+  body .yi-accessibility>summary{width:30px;min-width:30px;padding:0;justify-content:center}
   body .yi-nav-actions .yi-nav-icon{width:31px;height:31px}
   body .yi-official-card{gap:5px;padding:6px}
   body .yi-official-logo-frame,body .yi-agency-logo-frame,body .yi-ustoz-logo-frame{width:32px;height:32px;flex-basis:32px}
