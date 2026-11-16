@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v9";
+const CACHE_NAME = "yi-pwa-v10";
 const PRECACHE_URLS = [
   "/index.html",
   "/offline.html",
@@ -59,7 +59,7 @@ async function cacheExternalImage(request) {
   const cache = await caches.open(CACHE_NAME);
   const cached = await cache.match(request);
   const refresh = fetch(request).then(async (response) => {
-    if (response && (response.type === "opaque" || (response.type === "basic" && response.ok))) {
+    if (response && (response.type === "opaque" || response.ok)) {
       try { await cache.put(request, response.clone()); } catch { /* keep the network response */ }
     }
     return response;

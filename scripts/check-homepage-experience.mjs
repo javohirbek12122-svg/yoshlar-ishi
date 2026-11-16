@@ -59,7 +59,7 @@ assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.i
 assert.ok(js.includes("https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500"), "Hero uses a verified Unsplash youth photo");
 assert.ok(css.includes("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800"), "Hero uses a separate verified campus background image");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v9"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v10"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(html.includes("Unsplash — fon") && html.includes("Unsplash — oldingi qatlam"), "Both image credits must be visible");

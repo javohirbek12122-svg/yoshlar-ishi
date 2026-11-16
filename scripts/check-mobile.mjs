@@ -148,14 +148,22 @@ try{
   const heroCacheReady=await androidPage.waitForFunction(async()=>{
    const image=document.querySelector(".yi-scene-people");
    if(!image||!image.complete||image.naturalWidth<10)return false;
-   const cache=await caches.open("yi-pwa-v8");
+   const cache=await caches.open("yi-pwa-v10");
    const urls=(await cache.keys()).map(request=>request.url);
    return urls.some(url=>url.includes("photo-1758270705518-b61b40527e76")) &&
           urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f")) &&
           urls.some(url=>url.includes("yoshlar-ishlari-agentligi-logo-F57CDC969D")) &&
           urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
   },null,{timeout:20000}).then(()=>true).catch(()=>false);
-  if(!heroCacheReady)fail("PWA hero images","foreground and background Unsplash images were not both cached");
+  if(!heroCacheReady){
+   const diagnostics=await androidPage.evaluate(async()=>{
+    const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
+    const cache=await caches.open("yi-pwa-v10");
+    const keys=(await cache.keys()).map(x=>x.url);
+    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|seeklogo|uzreport/.test(x))});
+   });
+   fail("PWA hero/logo images","images were not all cached: "+diagnostics);
+  }
   await androidPage.evaluate(()=>{
    const event=new Event("beforeinstallprompt",{cancelable:true});
    Object.defineProperty(event,"prompt",{value:async()=>{window.__yiInstallPromptCalled=true;}});
