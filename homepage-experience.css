@@ -539,3 +539,79 @@ body.yi-dark-mode{background:#0e1a2c;color:#e4edf8}body.yi-dark-mode .yi-nav,bod
 .yi-scene-flow-label{position:absolute;z-index:5;right:4%;bottom:10px;display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(255,255,255,.75);border-radius:999px;background:rgba(241,248,255,.9);color:#173d68;font-size:8px;font-weight:900;box-shadow:0 10px 25px rgba(0,20,50,.2);backdrop-filter:blur(12px)}
 .yi-scene-flow-label span:nth-child(2){font-size:13px;color:#0d65c5}
 @media(max-width:680px){.yi-scene-flow-label{right:3%;bottom:3px;padding:6px 9px;font-size:7px}}
+
+/* Official youth resources — institutional, restrained, and responsive */
+.yi-official-resources{
+ grid-column:1/-1;position:relative;z-index:5;width:min(100%,920px);
+ display:flex;align-items:center;gap:18px;margin:0 0 2px;
+}
+.yi-official-heading{
+ display:flex;align-items:center;gap:9px;flex:0 0 auto;
+ color:rgba(231,243,255,.78);font:800 8px/1.35 Manrope,sans-serif;
+ letter-spacing:.14em;max-width:130px;
+}
+.yi-official-heading-line{display:block;width:3px;height:27px;border-radius:9px;background:#80d66b}
+.yi-official-links{
+ display:flex;align-items:center;gap:0;min-height:75px;flex:1;min-width:0;
+ padding:8px 12px;border:1px solid rgba(255,255,255,.8);border-radius:15px;
+ background:linear-gradient(110deg,rgba(255,255,255,.97),rgba(239,247,255,.94));
+ box-shadow:0 12px 30px rgba(0,19,53,.17);backdrop-filter:blur(16px);
+}
+.yi-official-link{
+ display:flex;align-items:center;gap:12px;min-width:0;flex:1;
+ padding:5px 10px;border-radius:10px;color:#16375d;text-decoration:none;
+ transition:background .18s ease,transform .18s ease;
+}
+.yi-official-link:hover{background:#edf5ff;transform:translateY(-1px);text-decoration:none}
+.yi-official-link:focus-visible{outline:3px solid #8dbbff;outline-offset:2px}
+.yi-official-logo-frame{
+ display:grid;place-items:center;flex:0 0 auto;overflow:hidden;
+ border:1px solid #e5edf5;background:#fff;
+}
+.yi-agency-logo-frame{width:146px;height:48px;padding:3px 6px;border-radius:8px}
+.yi-ustoz-logo-frame{width:48px;height:48px;border-radius:11px}
+.yi-official-logo{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.yi-agency-logo{width:100%;height:100%}
+.yi-ustoz-logo{width:100%;height:100%;object-fit:cover}
+.yi-official-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
+.yi-official-copy strong{color:#173b68;font:800 10px/1.35 Manrope,sans-serif}
+.yi-official-copy small{color:#6b7f96;font-size:8px;line-height:1.4}
+.yi-official-external{margin-left:auto;flex:0 0 auto;color:#1764b4;font-size:16px;font-weight:900}
+.yi-official-divider{width:1px;height:38px;flex:0 0 1px;background:#dce6f1}
+body.yi-dark-mode .yi-official-links{border-color:#365274;background:linear-gradient(110deg,rgba(237,245,255,.96),rgba(226,239,251,.94))}
+body.yi-dark-mode .yi-official-copy strong{color:#173b68}
+@media(max-width:920px){
+ .yi-official-resources{width:100%;gap:12px;margin-bottom:4px}
+ .yi-official-heading{max-width:100px;font-size:7px}
+ .yi-official-links{min-height:68px;padding:7px}
+ .yi-official-link{gap:8px;padding:5px 7px}
+ .yi-agency-logo-frame{width:105px;height:41px}
+ .yi-ustoz-logo-frame{width:41px;height:41px}
+ .yi-official-copy strong{font-size:9px}
+ .yi-official-copy small{font-size:7px}
+}
+@media(max-width:680px){
+ .hero.wrap{row-gap:8px}
+ .yi-official-resources{display:block;margin:0 0 5px}
+ .yi-official-heading{max-width:none;margin:0 0 7px;font-size:7px;letter-spacing:.13em}
+ .yi-official-heading-line{width:2px;height:13px}
+ .yi-official-links{width:100%;min-height:66px;padding:6px;border-radius:12px}
+ .yi-official-link{gap:7px;padding:5px 4px}
+ .yi-agency-logo-frame{width:75px;height:35px;padding:2px 4px;border-radius:6px}
+ .yi-ustoz-logo-frame{width:35px;height:35px;border-radius:8px}
+ .yi-official-copy{gap:3px}
+ .yi-official-copy strong{font-size:8px;line-height:1.25}
+ .yi-official-copy small{font-size:6.5px;line-height:1.2}
+ .yi-official-external{font-size:12px}
+ .yi-official-divider{height:31px}
+}
+@media(max-width:380px){
+ .yi-official-links{min-height:60px;padding:5px}
+ .yi-official-link{gap:5px;padding:4px 3px}
+ .yi-agency-logo-frame{width:62px;height:31px}
+ .yi-ustoz-logo-frame{width:31px;height:31px}
+ .yi-official-copy strong{font-size:7px}
+ .yi-official-copy small{font-size:6px}
+ .yi-official-external{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.yi-official-link{transition:none}}

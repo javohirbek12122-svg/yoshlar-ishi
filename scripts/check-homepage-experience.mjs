@@ -44,6 +44,11 @@ assert.match(js, /yi-hero-scene/);
 assert.match(css, /perspective\(1300px\)/);
 assert.match(css, /\.yi-directory-groups/);
 
+assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"'), "Agency logo must open the official agency site safely");
+assert.ok(html.includes('href="https://www.ustoz.ai/uz" target="_blank" rel="noopener noreferrer"'), "Ustoz AI logo must open its official site safely");
+assert.ok(html.includes('https://seeklogo.com/images/Y/yoshlar-ishlari-agentligi-logo-F57CDC969D-seeklogo.com.png') && html.includes('https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg'), "Both official-source logo images must be present");
+assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun rasmiy manbalar"'), "Hero must present an accessible official resources strip");
+assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");

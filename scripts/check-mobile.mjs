@@ -151,7 +151,9 @@ try{
    const cache=await caches.open("yi-pwa-v8");
    const urls=(await cache.keys()).map(request=>request.url);
    return urls.some(url=>url.includes("photo-1758270705518-b61b40527e76")) &&
-          urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f"));
+          urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f")) &&
+          urls.some(url=>url.includes("yoshlar-ishlari-agentligi-logo-F57CDC969D")) &&
+          urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
   },null,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady)fail("PWA hero images","foreground and background Unsplash images were not both cached");
   await androidPage.evaluate(()=>{
@@ -169,6 +171,9 @@ try{
   if(!cachedHome.includes("Yoshlar-Ishi"))fail("PWA offline","cached public home page did not load");
   const offlineHeroWidth=await androidPage.locator(".yi-scene-people").evaluate(el=>el.naturalWidth).catch(()=>0);
   if(offlineHeroWidth<10)fail("PWA offline images","cached youth foreground photo did not render offline");
+  const offlineAgencyLogo=await androidPage.locator(".yi-agency-logo").evaluate(el=>el.naturalWidth).catch(()=>0);
+  const offlineUstozLogo=await androidPage.locator(".yi-ustoz-logo").evaluate(el=>el.naturalWidth).catch(()=>0);
+  if(offlineAgencyLogo<10||offlineUstozLogo<10)fail("PWA offline official logos","cached agency and Ustoz AI logos did not render offline");
   await androidPage.goto(origin+"/kabinet.html",{waitUntil:"domcontentloaded",timeout:15000});
   const privateOffline=await androidPage.locator("body").innerText();
   if(!privateOffline.includes("Hozir internet aloqasi yo‘q"))fail("PWA privacy","personal cabinet was not replaced by the safe offline page");
