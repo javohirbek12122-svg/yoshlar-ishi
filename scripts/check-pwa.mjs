@@ -38,6 +38,10 @@ for (const page of publicPages) {
   assert.match(html, /apple-touch-icon\.png/, page + " must expose the iOS home-screen icon");
   assert.match(html, /pwa\.js/, page + " must load install guidance and service-worker registration");
   assert.match(html, /viewport-fit=cover/, page + " must support safe-area insets");
+  if (page !== "physics-lab/index.html") {
+    assert.match(html, /platform-polish\.css/, page + " must load the shared responsive design layer");
+  }
+
 }
 const admin = read("admin.html");
 assert.doesNotMatch(admin, /<script[^>]+pwa\.js/i, "Admin panel must not show the public app-install banner");
@@ -56,6 +60,7 @@ assert.match(worker, /url\.origin !== self\.location\.origin/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /https:\/\/images\.unsplash\.com/);
 assert.match(worker, /https:\/\/uzchess\.uz/);
+assert.match(worker, /https:\/\/uzreport\.news/, "Ustoz AI logo origin must be cache-allowlisted");
 assert.match(worker, /https:\/\/static\.tildacdn\.com/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.match(worker, /response\.type === "opaque"/);
