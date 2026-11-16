@@ -261,6 +261,8 @@ body .yi-nav .yi-cabinet-link{
 
 /* Homepage hero composition */
 body .hero.wrap{
+  position:relative;
+  isolation:isolate;
   display:grid;
   grid-template-columns:minmax(0,1.04fr) minmax(320px,.96fr);
   align-items:center;
