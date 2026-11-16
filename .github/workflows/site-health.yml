@@ -9,6 +9,7 @@ on:
     paths:
       - ".github/workflows/site-health.yml"
       - "index.html"
+      - "platform-polish.css"
       - "biletlar.html"
       - "biletlar/**"
       - "biletlar-app.js"
@@ -91,6 +92,8 @@ jobs:
           grep -qi "Yoshlar-Ishi" /tmp/yoshlar-home.html
           grep -Fqi 'href="./site.css"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the consolidated design stylesheet link."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/site.css" -o /tmp/yoshlar-site.css
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/platform-polish.css" -o /tmp/yoshlar-platform-polish.css
+          grep -Fq "yi-official-logo" /tmp/yoshlar-platform-polish.css || { echo "::error::The shared platform layout stylesheet is missing logo normalization."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/mobile-guard.css" -o /tmp/yoshlar-mobile-guard.css
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/homepage-experience.css" -o /tmp/yoshlar-homepage-experience.css
           grep -Fqi ".yi-home-accordion" /tmp/yoshlar-homepage-experience.css || { echo "::error::The live homepage is missing the new expandable section styles."; exit 1; }
