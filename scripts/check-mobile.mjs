@@ -72,8 +72,20 @@ try{
     }
     if(errors.length)fail(item[1]+" "+width,"uncaught JS: "+errors.join(" | "));
     if(item[0]==="/index.html"&&width<=700){
-     const menu=page.locator(".mobile-nav>summary");
-     if(await menu.count()){await menu.first().click();if(!(await page.locator(".mobile-nav").first().evaluate(e=>e.open)))fail(item[1]+" "+width,"mobile menu did not open")}
+     const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
+     if(await toggle.count()!==1)fail(item[1]+" "+width,"three-line drawer trigger is missing");
+     else{
+      await toggle.click();
+      await page.waitForFunction(()=>document.querySelector("#yiSideDrawer")?.getAttribute("aria-hidden")==="false",{},{timeout:4000}).catch(()=>fail(item[1]+" "+width,"side drawer did not open"));
+      if(await toggle.getAttribute("aria-expanded")!=="true")fail(item[1]+" "+width,"drawer trigger did not update aria-expanded");
+      if(await drawer.locator('a[href="./imkoniyatlar.html"]').count()===0)fail(item[1]+" "+width,"drawer links are missing");
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(()=>document.querySelector("#yiSideDrawer")?.hidden===true,null,{timeout:4000}).catch(()=>fail(item[1]+" "+width,"Escape did not close the drawer"));
+      if(await toggle.getAttribute("aria-expanded")!=="false")fail(item[1]+" "+width,"drawer trigger remained expanded after close");
+      await toggle.click();
+      await close.click();
+      await page.waitForFunction(()=>document.querySelector("#yiSideDrawer")?.hidden===true,null,{timeout:4000}).catch(()=>fail(item[1]+" "+width,"close button did not close the drawer"));
+     }
     }
     if(item[0]==="/imkoniyatlar.html"&&width===390){await page.locator("#queryFilter").fill("Yoshlar daftari");await page.locator("#filterButton").click()}
     if(item[0]==="/davlat-xizmatlari.html"&&width===390)await page.locator("#portalSearch").fill("Yoshlar");
@@ -148,19 +160,19 @@ try{
   const heroCacheReady=await androidPage.waitForFunction(async()=>{
    const image=document.querySelector(".yi-scene-people");
    if(!image||!image.complete||image.naturalWidth<10)return false;
-   const cache=await caches.open("yi-pwa-v10");
+   const cache=await caches.open("yi-pwa-v11");
    const urls=(await cache.keys()).map(request=>request.url);
    return urls.some(url=>url.includes("photo-1758270705518-b61b40527e76")) &&
           urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f")) &&
-          urls.some(url=>url.includes("yoshlar-ishlari-agentligi-logo-F57CDC969D")) &&
-          urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
+          urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
+          urls.some(url=>url.includes("Screenshot_2023-12-0"));
   },null,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady){
    const diagnostics=await androidPage.evaluate(async()=>{
     const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
-    const cache=await caches.open("yi-pwa-v10");
+    const cache=await caches.open("yi-pwa-v11");
     const keys=(await cache.keys()).map(x=>x.url);
-    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|seeklogo|uzreport/.test(x))});
+    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|static\.tildacdn/.test(x))});
    });
    fail("PWA hero/logo images","images were not all cached: "+diagnostics);
   }
