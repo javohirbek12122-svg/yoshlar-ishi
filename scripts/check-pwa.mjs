@@ -68,6 +68,12 @@ assert.ok(precache.includes("/homepage-experience.css"), "PWA must precache the 
 assert.ok(precache.includes("/homepage-experience.js"), "PWA must precache the new homepage controller");
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
+assert.ok(precache.includes("/biletlar.html"), "Bilet catalogue must be precached");
+assert.ok(precache.includes("/biletlar-app.js") && precache.includes("/biletlar-data.js") && precache.includes("/biletlar.css"), "Bilet app assets must be precached");
+for (let i = 1; i <= 50; i++) {
+  const id = String(i).padStart(3, "0");
+  assert.ok(precache.includes(`/biletlar/${id}.html`), `Ticket ${id} must be precached`);
+}
 assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html"\]\)/);
 assert.match(worker, /url\.search/);
 assert.match(worker, /Cache-Control/);
@@ -90,7 +96,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v11"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v12"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");
