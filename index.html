@@ -76,7 +76,7 @@
 .yi-mobile-nav[open]>summary .yi-hamburger-lines i:first-child{transform:translateY(7px) rotate(45deg)}
 .yi-mobile-nav[open]>summary .yi-hamburger-lines i:nth-child(2){opacity:0}
 .yi-mobile-nav[open]>summary .yi-hamburger-lines i:last-child{transform:translateY(-7px) rotate(-45deg)}
-.yi-mobile-nav[open]::before{content:"";position:fixed;z-index:9997;inset:0;background:rgba(5,22,43,.56);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.yi-drawer-backdrop{display:none}.yi-mobile-nav[open] .yi-drawer-backdrop{display:block;position:fixed;z-index:9997;inset:0;width:100vw;height:100vh;height:100dvh;padding:0;border:0;border-radius:0;background:rgba(5,22,43,.56);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);cursor:pointer}
 .yi-mobile-nav-panel{position:fixed!important;z-index:9998!important;top:0!important;right:0!important;bottom:0!important;left:auto!important;width:min(390px,calc(100vw - 18px));max-width:calc(100vw - 18px);height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;display:grid;align-content:start;gap:16px;padding:20px 18px calc(24px + env(safe-area-inset-bottom,0px));border:0;border-left:1px solid #dbe6f1;border-radius:23px 0 0 23px;background:linear-gradient(160deg,#fff 0%,#f7faff 100%);box-shadow:-20px 0 55px rgba(0,17,44,.22);transform:translateX(105%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .24s ease,opacity .2s ease,visibility .2s ease}
 .yi-mobile-nav[open] .yi-mobile-nav-panel{transform:translateX(0);opacity:1;visibility:visible;pointer-events:auto}
 .yi-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #e7eef6}
@@ -113,7 +113,11 @@ body.yi-drawer-active{overflow:hidden}
 @media(max-width:920px){
  .yi-mobile-nav{display:block;position:relative;flex:0 0 auto}
  .yi-nav{gap:10px}
- .yi-official-resources{width:100%;gap:10px}
+ .yi-official-resources{width:100%;align-items:stretch;flex-direction:column;gap:8px;margin-bottom:0}
+ .yi-official-heading{max-width:none}
+ .yi-official-heading-line{width:24px;height:2px}
+ .yi-official-links{display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+ .yi-official-divider{display:none}
 }
 @media(max-width:760px){
  .yi-official-resources{align-items:stretch;flex-direction:column;gap:8px;margin-bottom:0}
@@ -223,7 +227,8 @@ body.yi-drawer-active{overflow:hidden}
     <span class="yi-hamburger-lines" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="yi-hamburger-label">Menyu</span>
   </summary>
-  <nav id="yi-mobile-nav-panel" class="mobile-nav-panel yi-mobile-nav-panel" aria-label="Yon navigatsiya">
+  <button class="yi-drawer-backdrop" type="button" aria-label="Navigatsiyani yopish"></button>
+  <nav id="yi-mobile-nav-panel" role="dialog" aria-modal="true" aria-labelledby="yi-drawer-title" class="mobile-nav-panel yi-mobile-nav-panel" aria-label="Yon navigatsiya">
     <div class="yi-drawer-head">
       <div class="yi-drawer-brand">
         <span class="yi-drawer-brand-mark" aria-hidden="true">
@@ -242,7 +247,7 @@ body.yi-drawer-active{overflow:hidden}
 
     <div class="yi-drawer-intro">
       <span class="yi-drawer-kicker">PLATFORMA NAVIGATORI</span>
-      <h2>Kerakli bo‘limni tanlang.</h2>
+      <h2 id="yi-drawer-title">Kerakli bo‘limni tanlang.</h2>
       <p>Imkoniyatni toping, tayyorlaning va keyingi qadamingizni belgilang.</p>
     </div>
 
@@ -909,7 +914,8 @@ if(!reduced&&"IntersectionObserver" in window){
   const summary=nav.querySelector(":scope > summary");
   const panel=nav.querySelector(".yi-mobile-nav-panel");
   const close=nav.querySelector(".yi-drawer-close");
-  if(!summary||!panel||!close||nav.dataset.drawerReady==="true")return;
+  const backdrop=nav.querySelector(".yi-drawer-backdrop");
+  if(!summary||!panel||!close||!backdrop||nav.dataset.drawerReady==="true")return;
   nav.dataset.drawerReady="true";
   const focusable=()=>Array.from(panel.querySelectorAll('a[href],button:not([disabled]),[tabindex="0"]')).filter(el=>el.getClientRects().length>0);
   const setOpen=open=>{
@@ -926,6 +932,7 @@ if(!reduced&&"IntersectionObserver" in window){
    if(open)window.requestAnimationFrame(()=>close.focus());
   });
   close.addEventListener("click",()=>setOpen(false));
+  backdrop.addEventListener("click",()=>setOpen(false));
   panel.addEventListener("click",event=>{
    const link=event.target.closest("a[href]");
    if(link){setOpen(false);}
