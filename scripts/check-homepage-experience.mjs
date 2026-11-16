@@ -45,7 +45,12 @@ assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
 assert.equal((html.match(/class="quickservice yi-quick-/g)||[]).length, 8, "Eight homepage quick-access cards are required");
 assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
-assert.ok(js.includes("assets/yoshlar-people.webp"), "Hero uses the cropped reference youth image");
-assert.ok(worker.includes('"/assets/yoshlar-people.webp"'));
+
+
+assert.ok(js.includes("https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500"), "Hero uses a verified Unsplash youth photo");
+assert.ok(css.includes("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800"), "Hero uses a separate verified campus background image");
+assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
+assert.match(worker, /CACHE_NAME = "yi-pwa-v7"/);
+assert.ok(html.includes("Unsplash — fon") && html.includes("Unsplash — oldingi qatlam"), "Both image credits must be visible");
 
 console.log("✓ homepage modular panels, preserved interactive modules, page shortcuts, JavaScript syntax, and responsive styles");

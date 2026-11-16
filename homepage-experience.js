@@ -25,7 +25,7 @@ function createHeroPreview(art){
  art.innerHTML=
  '<div class="yi-hero-scene">'+
   '<div class="yi-scene-orbit yi-scene-orbit-one" aria-hidden="true"></div><div class="yi-scene-orbit yi-scene-orbit-two" aria-hidden="true"></div>'+
-  '<div class="yi-scene-photo-frame"><img class="yi-scene-people" src="./assets/yoshlar-people.webp" alt="Yoshlar jamoasi: ta’lim, texnologiya va hamkorlik ustida ishlayotgan talabalar" fetchpriority="high" decoding="async"></div>'+
+  '<div class="yi-scene-photo-frame"><img class="yi-scene-people" src="https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500" alt="Yoshlar jamoasi: ta’lim, texnologiya va hamkorlik ustida ishlayotgan talabalar" fetchpriority="high" decoding="async"></div>'+
   '<div class="yi-scene-float yi-scene-status"><span class="yi-scene-dot"></span><span>Yoshlar hamjamiyati</span></div>'+
   '<div class="yi-scene-float yi-scene-caption-card"><span class="yi-scene-float-icon">✦</span><span><strong>Yangi imkoniyatlar sari birga!</strong><small>Ta’lim · Ish · Startap · Grant</small></span></div>'+
   '<div class="yi-ai-helper-card"><div class="yi-ai-card-top"><span class="yi-ai-avatar">✧</span><span><strong>AI yordamchisi</strong><small><i></i> Online</small></span></div><p>G‘oyangizni baholaymizmi?</p><a href="#ai-yordamchi">Boshlash <span aria-hidden="true">➜</span></a></div>'+
