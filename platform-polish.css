@@ -376,6 +376,13 @@ body .yi-official-card-copy strong{
   overflow-wrap:anywhere;
 }
 body .yi-official-card-copy small{color:#627a8e;font-size:8px;line-height:1.35}
+body .yi-drawer-brand-icon{
+  display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;
+  overflow:hidden;border:1px solid #dce6ef;border-radius:8px;background:#fff;
+}
+body .yi-drawer-brand-icon img{display:block;width:100%;height:100%;padding:2px;object-fit:contain}
+body .yi-drawer-ustoz-icon{padding:0;border-color:#171b28;background:#171b28}
+body .yi-drawer-ustoz-icon img{padding:0}
 body .yi-official-open{
   position:static;
   flex:0 0 22px;
