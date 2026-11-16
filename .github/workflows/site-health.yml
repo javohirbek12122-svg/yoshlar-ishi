@@ -185,6 +185,8 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v8";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: offline image cache v8 has not reached this domain."; exit 1; }
+          grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/pwa.js" -o /tmp/yoshlar-pwa.js
