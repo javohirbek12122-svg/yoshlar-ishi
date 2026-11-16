@@ -9,6 +9,11 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
+  "biletlar.html",
+  "biletlar.css",
+  "biletlar-app.js",
+  "biletlar-data.js",
+  "scripts/check-biletlar.mjs",
   "site.css",
   "shared-theme.css",
   "sitemap.xml",
