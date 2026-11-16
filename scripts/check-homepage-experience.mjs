@@ -46,20 +46,27 @@ assert.match(css, /\.yi-directory-groups/);
 
 assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"'), "Agency logo must open the official agency site safely");
 assert.ok(html.includes('href="https://www.ustoz.ai/uz" target="_blank" rel="noopener noreferrer"'), "Ustoz AI logo must open its official site safely");
-assert.ok(html.includes('https://seeklogo.com/images/Y/yoshlar-ishlari-agentligi-logo-F57CDC969D-seeklogo.com.png') && html.includes('https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg'), "Both official-source logo images must be present");
-assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun rasmiy manbalar"'), "Hero must present an accessible official resources strip");
+assert.ok(html.includes('https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png') && html.includes('https://static.tildacdn.com/tild3335-6336-4336-a334-316232343666/Screenshot_2023-12-0.png'), "Both updated official platform logo assets must be present");
+assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun rasmiy platformalar"'), "Hero must present an accessible official resource strip");
+assert.ok(html.includes('class="yi-official-card yi-official-agency"') && html.includes('class="yi-official-card yi-official-ustoz"'), "Official platform links must use the separated card layout");
 assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
-assert.equal((html.match(/class="quickservice yi-quick-/g)||[]).length, 8, "Eight homepage quick-access cards are required");
+assert.ok(html.includes('id="yiDrawerToggle"') && html.includes('id="yiSideDrawer"') && html.includes('id="yiDrawerBackdrop"'), "Three-line navigation must provide a trigger, modal drawer and backdrop");
+assert.ok(html.includes('role="dialog" aria-modal="true" aria-labelledby="yiDrawerTitle"'), "Side drawer must expose an accessible modal dialog");
+assert.ok(js.includes("function setupDrawer()") && js.includes('setupSearch();setupTheme();setupDrawer();'), "Side drawer controller must initialize with homepage controls");
+assert.ok(css.includes(".yi-side-drawer") && css.includes(".yi-drawer-backdrop"), "Side drawer needs responsive panel and backdrop styles");
+assert.equal((html.match(/class="quickservice yi-quick-[^"]*yi-quick-card/g)||[]).length, 8, "Eight redesigned homepage quick-access cards are required");
+assert.ok(html.includes('class="yi-quick-card-top"') && html.includes('class="yi-quick-card-bottom"'), "Quick-access cards must include the new icon and action hierarchy");
+assert.ok(html.includes('class="yi-partner-tags"') && html.includes('id="partnerForm"'), "Partnership themes and the working partnership form must remain present");
 assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
 
 
 assert.ok(js.includes("https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500"), "Hero uses a verified Unsplash youth photo");
 assert.ok(css.includes("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800"), "Hero uses a separate verified campus background image");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v10"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v11"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(html.includes("Unsplash — fon") && html.includes("Unsplash — oldingi qatlam"), "Both image credits must be visible");
