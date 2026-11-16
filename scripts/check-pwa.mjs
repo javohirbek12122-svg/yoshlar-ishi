@@ -53,6 +53,10 @@ for (const marker of [
 const worker = read("service-worker.js");
 assert.match(worker, /request\.method !== "GET"/);
 assert.match(worker, /url\.origin !== self\.location\.origin/);
+assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
+assert.match(worker, /https:\/\/images\.unsplash\.com/);
+assert.match(worker, /function cacheExternalImage\(request\)/);
+assert.match(worker, /response\.type === "opaque"/);
 assert.match(worker, /request\.mode === "navigate"/);
 assert.match(worker, /networkFirstNavigation/);
 const precache = worker.match(/const PRECACHE_URLS = \[([\s\S]*?)\];/)?.[1] || "";
@@ -84,7 +88,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v7"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v8"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

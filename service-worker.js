@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v7";
+const CACHE_NAME = "yi-pwa-v8";
 const PRECACHE_URLS = [
   "/index.html",
   "/offline.html",
@@ -26,6 +26,7 @@ const PRECACHE_URLS = [
   "/apple-touch-icon.png"
 ];
 const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html"]);
+const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
@@ -50,6 +51,25 @@ async function cachePublicResponse(request, response) {
   const cacheControl = (response.headers.get("Cache-Control") || "").toLowerCase();
   if (cacheControl.includes("no-store") || cacheControl.includes("private")) return;
   await (await caches.open(CACHE_NAME)).put(request, response.clone());
+}
+
+// Cache only public, read-only Unsplash images. Opaque CORS responses are accepted
+// because the host allow-list is fixed and no API/auth requests use this path.
+async function cacheExternalImage(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  const refresh = fetch(request).then(async (response) => {
+    if (response && (response.type === "opaque" || (response.type === "basic" && response.ok))) {
+      try { await cache.put(request, response.clone()); } catch { /* keep the network response */ }
+    }
+    return response;
+  });
+  if (cached) {
+    refresh.catch(() => {});
+    return cached;
+  }
+  try { return await refresh; }
+  catch { return new Response("", { status: 504, statusText: "Offline" }); }
 }
 
 async function networkFirstNavigation(request, url) {
@@ -88,7 +108,12 @@ self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET") return;
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin) {
+    if (request.destination === "image" && CACHEABLE_EXTERNAL_IMAGE_ORIGINS.has(url.origin)) {
+      event.respondWith(cacheExternalImage(request));
+    }
+    return;
+  }
   if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) return;
   if (request.mode === "navigate") {
     event.respondWith(networkFirstNavigation(request, url));

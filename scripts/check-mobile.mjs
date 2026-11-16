@@ -144,6 +144,16 @@ try{
   await androidPage.waitForLoadState("load",{timeout:12000}).catch(()=>{});
   await androidPage.evaluate(async()=>{const registration=await navigator.serviceWorker.ready;if(!registration.active)throw new Error("Service worker is not active");});
   await androidPage.waitForFunction(()=>Boolean(navigator.serviceWorker.controller),null,{timeout:12000});
+  await androidPage.reload({waitUntil:"load",timeout:25000});
+  const heroCacheReady=await androidPage.waitForFunction(async()=>{
+   const image=document.querySelector(".yi-scene-people");
+   if(!image||!image.complete||image.naturalWidth<10)return false;
+   const cache=await caches.open("yi-pwa-v8");
+   const urls=(await cache.keys()).map(request=>request.url);
+   return urls.some(url=>url.includes("photo-1758270705518-b61b40527e76")) &&
+          urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f"));
+  },null,{timeout:20000}).then(()=>true).catch(()=>false);
+  if(!heroCacheReady)fail("PWA hero images","foreground and background Unsplash images were not both cached");
   await androidPage.evaluate(()=>{
    const event=new Event("beforeinstallprompt",{cancelable:true});
    Object.defineProperty(event,"prompt",{value:async()=>{window.__yiInstallPromptCalled=true;}});
@@ -157,6 +167,8 @@ try{
   await androidPage.goto(origin+"/index.html",{waitUntil:"domcontentloaded",timeout:15000});
   const cachedHome=await androidPage.locator("body").innerText();
   if(!cachedHome.includes("Yoshlar-Ishi"))fail("PWA offline","cached public home page did not load");
+  const offlineHeroWidth=await androidPage.locator(".yi-scene-people").evaluate(el=>el.naturalWidth).catch(()=>0);
+  if(offlineHeroWidth<10)fail("PWA offline images","cached youth foreground photo did not render offline");
   await androidPage.goto(origin+"/kabinet.html",{waitUntil:"domcontentloaded",timeout:15000});
   const privateOffline=await androidPage.locator("body").innerText();
   if(!privateOffline.includes("Hozir internet aloqasi yo‘q"))fail("PWA privacy","personal cabinet was not replaced by the safe offline page");
