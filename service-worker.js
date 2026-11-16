@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v12";
+const CACHE_NAME = "yi-pwa-v13";
 const PRECACHE_URLS = [
   "/index.html",
   "/biletlar.html",
