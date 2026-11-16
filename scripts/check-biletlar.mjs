@@ -24,7 +24,7 @@ for (const ticket of tickets) {
   assert.ok(Array.isArray(ticket.steps) && ticket.steps.length >= 3, "Ticket " + ticket.id + " needs implementation requirements");
   assert.ok(ticket.test, "Ticket " + ticket.id + " needs an acceptance example");
 }
-const startupIds = tickets.filter((ticket) => ticket.startup).map((ticket) => ticket.id).sort();
+const startupIds = Array.from(tickets).filter((ticket) => ticket.startup).map((ticket) => ticket.id).sort();
 assert.deepEqual(startupIds, ["002","008","009","014","016","026","027","029","030","033","034","048"]);
 assert.equal(startupIds.length, 12, "There must be 12 detailed startup tickets");
 for (const id of ids) {
