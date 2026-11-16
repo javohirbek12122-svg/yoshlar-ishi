@@ -74,6 +74,20 @@ function setupTheme(){
  try{set(localStorage.getItem(key)==="dark");}catch{set(false);}
  button.addEventListener("click",()=>{const dark=!document.body.classList.contains("yi-dark-mode");set(dark);try{localStorage.setItem(key,dark?"dark":"light");}catch{}});
 }
+
+function setupDrawer(){
+ const toggle=$("yiDrawerToggle"),drawer=$("yiSideDrawer"),backdrop=$("yiDrawerBackdrop"),close=$("yiDrawerClose"),search=$("yiDrawerSearch");
+ if(!toggle||!drawer||!backdrop||!close)return;
+ let previousFocus=null,closingTimer=0;
+ const focusable=()=>Array.from(drawer.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(el=>!el.hidden&&el.getAttribute("aria-hidden")!=="true");
+ function open(){if(!drawer.hidden)return;previousFocus=document.activeElement;window.clearTimeout(closingTimer);backdrop.hidden=false;drawer.hidden=false;drawer.setAttribute("aria-hidden","false");toggle.setAttribute("aria-expanded","true");toggle.setAttribute("aria-label","Navigatsiya menyusini yopish");document.body.classList.add("yi-drawer-open");requestAnimationFrame(()=>{backdrop.classList.add("is-open");drawer.classList.add("is-open");close.focus();});}
+ function shut(restore=true){if(drawer.hidden)return;drawer.classList.remove("is-open");backdrop.classList.remove("is-open");drawer.setAttribute("aria-hidden","true");toggle.setAttribute("aria-expanded","false");toggle.setAttribute("aria-label","Navigatsiya menyusini ochish");document.body.classList.remove("yi-drawer-open");closingTimer=window.setTimeout(()=>{drawer.hidden=true;backdrop.hidden=true;},250);if(restore&&previousFocus&&typeof previousFocus.focus==="function")previousFocus.focus();}
+ toggle.addEventListener("click",()=>drawer.hidden?open():shut());close.addEventListener("click",()=>shut());backdrop.addEventListener("click",()=>shut());
+ drawer.addEventListener("click",event=>{if(event.target.closest("a[href]"))shut(false);});
+ search?.addEventListener("click",()=>{shut(false);window.setTimeout(()=>$("yiSearchToggle")?.click(),90);});
+ document.addEventListener("keydown",event=>{if(drawer.hidden)return;if(event.key==="Escape"){event.preventDefault();shut();return;}if(event.key!=="Tab")return;const items=focusable();if(!items.length){event.preventDefault();close.focus();return;}const first=items[0],last=items[items.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}});
+}
+
 function init(){
  const main=document.querySelector("main"),hero=document.querySelector(".hero"),art=hero&&hero.querySelector(".art"),overview=$("afzalliklar"),services=$("rasmiy-xizmatlar"),tools=$("qo-shimcha-vositalar"),toolsContent=tools&&tools.querySelector(".additional-tools-content");
  const required=["afzalliklar","jarayon","rasmiy-xizmatlar","imkoniyatlar","imkoniyatlar-yakun","jamoadoshlar","top-tashabbuslar","tashabbus","hamkorlik"];
@@ -89,7 +103,7 @@ function init(){
   openAll.addEventListener("click",()=>{const panels=Array.from(stack.children).filter(node=>node.tagName==="DETAILS"),open=openAll.getAttribute("aria-expanded")!=="true";panels.forEach(panel=>panel.open=open);openAll.setAttribute("aria-expanded",open?"true":"false");openAll.textContent=open?"Barcha bo‘limlarni yopish −":"Barcha bo‘limlarni ochish +";});
   document.addEventListener("click",event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const id=(link.getAttribute("href")||"").slice(1);const target=$(decodeURIComponent(id));if(!target)return;let fold=target.closest("details");while(fold){fold.open=true;fold=fold.parentElement&&fold.parentElement.closest("details");}},true);
  }else if(art)createHeroPreview(art);
- setupSearch();setupTheme();
+ setupSearch();setupTheme();setupDrawer();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
