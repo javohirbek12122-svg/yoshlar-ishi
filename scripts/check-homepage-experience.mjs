@@ -54,6 +54,7 @@ assert.match(polish, /body \.yi-platform-proof\s*\{[\s\S]*?margin:18px auto 0/);
 assert.match(polish, /body \.yi-nav\s*\{[\s\S]*?margin:12px auto 0/);
 assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun rasmiy platformalar"'), "Hero must present an accessible official resource strip");
 assert.ok(html.includes('class="yi-official-card yi-official-agency"') && html.includes('class="yi-official-card yi-official-ustoz"'), "Official platform links must use the separated card layout");
+assert.ok(html.includes("yi-drawer-brand-icon") && html.includes("yi-drawer-ustoz-icon"), "The side navigation must use the same official brand logos as the hero strip");
 assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
