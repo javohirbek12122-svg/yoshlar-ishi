@@ -25,3 +25,52 @@
 @media(max-width:900px){.bf-ticket-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-overview{grid-template-columns:1fr}.bf-detail-layout{grid-template-columns:minmax(0,1fr)}.bf-side-column{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-filters{grid-template-columns:1fr 1fr}.bf-catalog-hero{min-height:320px}}
 @media(max-width:620px){.bf-shell{width:calc(100% - 24px);padding-top:12px}.bf-catalog-hero{grid-template-columns:1fr;gap:18px;padding:23px;border-radius:18px}.bf-catalog-orbit{width:190px;justify-self:center}.bf-hero-stats{gap:19px}.bf-rule-grid{grid-template-columns:1fr}.bf-overview{padding:34px 2px 17px}.bf-filters{grid-template-columns:1fr}.bf-ticket-grid{grid-template-columns:1fr}.bf-ticket-card{min-height:150px}.bf-section-title{align-items:start;flex-direction:column}.bf-detail-hero{grid-template-columns:1fr;padding:22px;border-radius:17px}.bf-detail-side{grid-template-columns:repeat(3,minmax(0,1fr))}.bf-detail-side div{padding:9px}.bf-detail-side b{font-size:11px}.bf-form-grid{grid-template-columns:1fr}.bf-wide{grid-column:auto}.bf-side-column{grid-template-columns:1fr}.bf-list-cards{grid-template-columns:1fr}.bf-plan-grid{grid-template-columns:1fr}.bf-kanban{grid-template-columns:1fr}.bf-slot-grid,.bf-stock-grid,.bf-timer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bf-cross-layout{grid-template-columns:1fr}.bf-crossword{grid-template-columns:repeat(8,minmax(0,1fr));width:100%}.bf-crossword input,.bf-cross-empty{width:100%;height:auto;aspect-ratio:1;font-size:13px}.bf-pager{align-items:flex-start;flex-direction:column}.bf-pager a,.bf-pager span{max-width:100%}.bf-game-meta{flex-direction:column}.bf-ratio-grid{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){.bf-ticket-card{transition:none}}
+
+
+/* Shared top bar and brand sizing for every independent ticket page. */
+body:has(.bf-shell) header.wrap.nav{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:min(1240px,calc(100% - 40px));
+  min-height:62px;
+  margin:12px auto 0;
+  padding:8px 14px;
+  border:1px solid #dbe5ed;
+  border-radius:14px;
+  background:rgba(255,255,255,.97);
+  box-shadow:0 7px 22px rgba(18,50,85,.06);
+}
+body:has(.bf-shell) header.wrap.nav .brand{
+  display:flex;align-items:center;gap:9px;
+  color:#123255;font:800 15px/1.2 Manrope,"DM Sans",sans-serif;
+}
+body:has(.bf-shell) header.wrap.nav .logo{
+  display:grid;place-items:center;flex:0 0 36px;
+  width:36px;height:36px;border:1px solid #dce7f0;
+  border-radius:10px;background:#eef5fa;color:#123255;font:900 11px Manrope;
+}
+body:has(.bf-shell) header.wrap.nav .links{display:flex;align-items:center;gap:5px}
+body:has(.bf-shell) header.wrap.nav .links a{
+  display:inline-flex;align-items:center;min-height:40px;
+  padding:7px 10px;border-radius:8px;color:#405c73;
+  font-size:10px;font-weight:800;white-space:nowrap;
+}
+body:has(.bf-shell) header.wrap.nav .links a:hover{background:#edf4fa;color:#124d7b;text-decoration:none}
+body:has(.bf-shell) header.wrap.nav>.btn{min-height:40px;border-radius:8px;font-size:10px}
+@media(max-width:680px){
+  body:has(.bf-shell) header.wrap.nav{
+    width:calc(100% - 22px);min-height:56px;gap:7px;
+    margin-top:8px;padding:7px 9px;border-radius:11px;
+  }
+  body:has(.bf-shell) header.wrap.nav .brand{font-size:12px}
+  body:has(.bf-shell) header.wrap.nav .logo{width:32px;height:32px;flex-basis:32px}
+  body:has(.bf-shell) header.wrap.nav .links{
+    order:3;flex:1 1 100%;gap:2px;min-width:0;overflow-x:auto;
+    overflow-y:hidden;scrollbar-width:thin;
+  }
+  body:has(.bf-shell) header.wrap.nav .links a{flex:0 0 auto;min-height:36px;padding:6px 8px;font-size:9px}
+  body:has(.bf-shell) header.wrap.nav>.btn{margin-left:auto;min-height:36px;padding:6px 8px;font-size:9px}
+}
