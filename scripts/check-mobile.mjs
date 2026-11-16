@@ -34,6 +34,15 @@ const pages=[
  ["/laboratoriya.html","Virtual laboratoriya"],
  ["/privacy.html","Maxfiylik"],
  ["/physics-lab/","Physics Lab"]
+ ["/biletlar.html","50 ta bilet katalogi"],
+ ["/biletlar/001.html","Bilet 001 — test"],
+ ["/biletlar/025.html","Bilet 025 — rasm va nisbat"],
+ ["/biletlar/027.html","Bilet 027 — savdo savati"],
+ ["/biletlar/035.html","Bilet 035 — taymerlar"],
+ ["/biletlar/044.html","Bilet 044 — CSV jadvali"],
+ ["/biletlar/048.html","Bilet 048 — navbat band qilish"],
+ ["/biletlar/049.html","Bilet 049 — xotira o‘yini"],
+ ["/biletlar/050.html","Bilet 050 — krossvord"]
 ];
 const widths=[320,360,390,430,768,1024,1440];
 const failures=[],localFailures=[];
