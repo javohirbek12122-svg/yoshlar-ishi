@@ -118,13 +118,17 @@ jobs:
           grep -Fqi 'class="yi-official-resources"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the official resource logos."; exit 1; }
           grep -Fqi 'href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"' /tmp/yoshlar-home.html || { echo "::error::The Youth Affairs Agency official link is missing or unsafe."; exit 1; }
           grep -Fqi 'href="https://www.ustoz.ai/uz" target="_blank" rel="noopener noreferrer"' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI official link is missing or unsafe."; exit 1; }
-          grep -Fqi 'https://seeklogo.com/images/Y/yoshlar-ishlari-agentligi-logo-F57CDC969D-seeklogo.com.png' /tmp/yoshlar-home.html || { echo "::error::The Agency logo asset is missing."; exit 1; }
-          grep -Fqi 'https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI logo asset is missing."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://seeklogo.com/images/Y/yoshlar-ishlari-agentligi-logo-F57CDC969D-seeklogo.com.png' -o /tmp/yi-agency-logo.png
-          head -c 8 /tmp/yi-agency-logo.png | od -An -tx1 | grep -qi '89 50 4e 47 0d 0a 1a 0a' || { echo "::error::The agency logo asset is not a valid PNG."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg' -o /tmp/yi-ustoz-logo.jpg
-          head -c 3 /tmp/yi-ustoz-logo.jpg | od -An -tx1 | grep -qi 'ff d8 ff' || { echo "::error::The Ustoz AI logo asset is not a valid JPEG."; exit 1; }
+          grep -Fqi 'https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png' /tmp/yoshlar-home.html || { echo "::error::The Agency logo asset is missing."; exit 1; }
+          grep -Fqi 'https://static.tildacdn.com/tild3335-6336-4336-a334-316232343666/Screenshot_2023-12-0.png' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI logo asset is missing."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png' -o /tmp/yi-agency-logo.png
+          file --mime-type /tmp/yi-agency-logo.png | grep -Eq 'image/(png|jpeg|webp)' || { echo "::error::The agency logo asset is not a supported image."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://static.tildacdn.com/tild3335-6336-4336-a334-316232343666/Screenshot_2023-12-0.png' -o /tmp/yi-ustoz-logo.jpg
+          file --mime-type /tmp/yi-ustoz-logo.jpg | grep -Eq 'image/(png|jpeg|webp)' || { echo "::error::The Ustoz AI logo asset is not a supported image."; exit 1; }
           grep -Fqi 'class="yi-quick-panel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the quick-access panel."; exit 1; }
+          grep -Fqi 'id="yiDrawerToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its three-line navigation trigger."; exit 1; }
+          grep -Fqi 'id="yiSideDrawer"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its side drawer."; exit 1; }
+          grep -Fqi 'class="yi-quick-card-top"' /tmp/yoshlar-home.html || { echo "::error::The redesigned quick-access cards are missing."; exit 1; }
+          grep -Fqi 'class="yi-partner-tags"' /tmp/yoshlar-home.html || { echo "::error::The partnership section is missing its contribution themes."; exit 1; }
           grep -Fqi 'id="yiSearchPanel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its working search panel."; exit 1; }
           grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
           grep -Fqi 'images.unsplash.com/photo-1758270705518-b61b40527e76' /tmp/yoshlar-homepage-experience.js || { echo "::error::The live homepage is missing its licensed Unsplash youth foreground image."; exit 1; }
@@ -194,7 +198,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v10";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: offline image/logo cache v10 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v11";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v11 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
