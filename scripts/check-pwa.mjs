@@ -29,7 +29,7 @@ assert.deepEqual(sizeOf("icon-512.png"), [512, 512]);
 assert.deepEqual(sizeOf("apple-touch-icon.png"), [180, 180]);
 
 const publicPages = [
-  "index.html", "biletlar.html", "imkoniyatlar.html", "davlat-xizmatlari.html", "kabinet.html", "hamjamiyat.html",
+  "index.html", "biletlar.html", "assessment.html", "imkoniyatlar.html", "davlat-xizmatlari.html", "kabinet.html", "hamjamiyat.html",
   "startap-yoli.html", "laboratoriya.html", "physics-lab/index.html", "privacy.html"
 ];
 for (const page of publicPages) {
@@ -69,6 +69,7 @@ assert.match(worker, /networkFirstNavigation/);
 const precache = worker.match(/const PRECACHE_URLS = \[([\s\S]*?)\];/)?.[1] || "";
 assert.ok(precache.includes("/offline.html"), "PWA must precache its custom offline screen");
 assert.ok(precache.includes("/index.html"), "PWA must precache its home page");
+for (const asset of ["/assessment.html","/assessment.css","/assessment-bank.js","/assessment.js"]) assert.ok(precache.includes(asset), "Assessment asset must be precached: " + asset);
 assert.ok(precache.includes("/homepage-experience.css"), "PWA must precache the homepage interaction stylesheet");
 assert.ok(precache.includes("/platform-polish.css"), "PWA must precache the final unified layout stylesheet");
     assert.ok(precache.includes("/reference-home.css"), "PWA must precache the reference-led homepage stylesheet");
@@ -105,7 +106,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v19"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v20"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");
