@@ -262,7 +262,7 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "YANGI IMKONIYATLAR SARI!",
+  "kelajagingiz uchun",
   'class="hero-expanded-copy"',
   'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
@@ -635,7 +635,7 @@ for (const feature of [
   'id="qo-shimcha-vositalar"',
   "Qo‘shimcha vositalar",
   "Bu vositalar asosiy davlat imkoniyatlari katalogidan alohida.",
-  "Imkoniyatni top.",
+  "YANGI IMKONIYATLAR SARI!",
   "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
   "Imkoniyatlar",
   "href=\"./imkoniyatlar.html#savedJourneys\"",

@@ -139,10 +139,10 @@ jobs:
           grep -Fqi 'href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"' /tmp/yoshlar-home.html || { echo "::error::The Youth Affairs Agency official link is missing or unsafe."; exit 1; }
           grep -Fqi 'href="https://www.ustoz.ai/uz" target="_blank" rel="noopener noreferrer"' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI official link is missing or unsafe."; exit 1; }
           grep -Fqi 'https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png' /tmp/yoshlar-home.html || { echo "::error::The Agency logo asset is missing."; exit 1; }
-          grep -Fqi 'https://static.tildacdn.com/tild3335-6336-4336-a334-316232343666/Screenshot_2023-12-0.png' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI logo asset is missing."; exit 1; }
+          grep -Fqi 'https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg' /tmp/yoshlar-home.html || { echo "::error::The Ustoz AI logo asset is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png' -o /tmp/yi-agency-logo.png
           file --mime-type /tmp/yi-agency-logo.png | grep -Eq 'image/(png|jpeg|webp)' || { echo "::error::The agency logo asset is not a supported image."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://static.tildacdn.com/tild3335-6336-4336-a334-316232343666/Screenshot_2023-12-0.png' -o /tmp/yi-ustoz-logo.jpg
+          curl --fail --silent --show-error --location --max-time 30 'https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg' -o /tmp/yi-ustoz-logo.jpg
           file --mime-type /tmp/yi-ustoz-logo.jpg | grep -Eq 'image/(png|jpeg|webp)' || { echo "::error::The Ustoz AI logo asset is not a supported image."; exit 1; }
           grep -Fqi 'class="yi-quick-panel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the quick-access panel."; exit 1; }
           grep -Fqi 'id="yiDrawerToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its three-line navigation trigger."; exit 1; }
