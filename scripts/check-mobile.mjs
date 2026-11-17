@@ -171,8 +171,8 @@ try{
    if(!image||!image.complete||image.naturalWidth<10)return false;
    const cache=await caches.open("yi-pwa-v16");
    const urls=(await cache.keys()).map(request=>request.url);
-   return urls.some(url=>url.includes("milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30")) &&
-          urls.some(url=>url.includes("caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH")) &&
+   return urls.some(url=>url.includes("uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9")) &&
+          urls.some(url=>url.includes("res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql")) &&
           urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
           urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
   },null,{timeout:20000}).then(()=>true).catch(()=>false);
@@ -181,7 +181,7 @@ try{
     const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
     const cache=await caches.open("yi-pwa-v16");
     const keys=(await cache.keys()).map(x=>x.url);
-    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport|milliygvardiya|caspianpost/.test(x))});
+    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport|cloudinary/.test(x))});
    });
    fail("PWA hero/logo images","images were not all cached: "+diagnostics);
   }

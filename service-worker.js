@@ -82,7 +82,7 @@ const PRECACHE_URLS = [
   "/apple-touch-icon.png"
 ];
 const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html"]);
-const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://milliygvardiya.uz", "https://caspianpost.com"]);
+const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://uzreport.news", "https://res.cloudinary.com"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {

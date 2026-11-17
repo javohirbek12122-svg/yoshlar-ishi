@@ -75,12 +75,12 @@ assert.ok(html.includes('class="yi-partner-tags"') && html.includes('id="partner
 assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
 
 
-assert.ok(js.includes("https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500"), "Hero uses a verified Unsplash youth photo");
-assert.ok(css.includes("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800"), "Hero uses a separate verified campus background image");
+assert.ok(js.includes("https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg") && js.includes("https://uzreport.news/society/soldiers-swear-oath-of-allegiance-to-motherland"), "Hero uses a sourced youth ceremony photograph with a visible credit");
+assert.ok(css.includes("https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg") && js.includes("https://www.tourhq.com/tours/2067/full-day-city-tour-in-tashkent"), "Hero uses a separately credited Tashkent Independence Square background");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
 assert.match(worker, /CACHE_NAME = "yi-pwa-v16"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
-assert.ok(html.includes("Unsplash — fon") && html.includes("Unsplash — oldingi qatlam"), "Both image credits must be visible");
+assert.ok(js.includes("yi-scene-photo-credit") && js.includes("Yoshlar surati: UzReport") && js.includes("Toshkent manzarasi: Mustaqillik maydoni"), "Both existing photo sources must be credited in the hero");
 
 console.log("✓ homepage modular panels, preserved interactive modules, page shortcuts, JavaScript syntax, and responsive styles");

@@ -151,12 +151,12 @@ jobs:
           grep -Fqi 'class="yi-partner-tags"' /tmp/yoshlar-home.html || { echo "::error::The partnership section is missing its contribution themes."; exit 1; }
           grep -Fqi 'id="yiSearchPanel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its working search panel."; exit 1; }
           grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
-          grep -Fqi 'milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30.jpg' /tmp/yoshlar-homepage-experience.js || { echo "::error::The official youth photograph is missing."; exit 1; }
-          grep -Fqi 'caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH' /tmp/yoshlar-reference-home.css || { echo "::error::The Tashkent Independence Square background is missing."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30.jpg' -o /tmp/yoshlar-hero-foreground.jpg
-          file --mime-type /tmp/yoshlar-hero-foreground.jpg | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The official youth image is not a supported image."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH.webp' -o /tmp/yoshlar-hero-background.webp
-          file --mime-type /tmp/yoshlar-hero-background.webp | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The Tashkent plaza background is not a supported image."; exit 1; }
+          grep -Fqi 'https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg' /tmp/yoshlar-homepage-experience.js || { echo "::error::The UzReport youth ceremony image is missing."; exit 1; }
+          grep -Fqi 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' /tmp/yoshlar-reference-home.css || { echo "::error::The Tashkent Independence Square background is missing."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg' -o /tmp/yoshlar-hero-foreground.jpg
+          file --mime-type /tmp/yoshlar-hero-foreground.jpg | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The UzReport youth ceremony image is not a supported image."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' -o /tmp/yoshlar-hero-background.jpg
+          file --mime-type /tmp/yoshlar-hero-background.jpg | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The Tashkent plaza background is not a supported image."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/opportunity-page-filters.js" -o /tmp/yoshlar-opportunity-filters.js
           grep -Fqi 'categoryFilter' /tmp/yoshlar-opportunity-filters.js || { echo "::error::The quick-access catalogue filters are missing."; exit 1; }
           grep -Fqi 'class="hero-storyline yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The hero benefit ribbon is not rendered."; exit 1; }
