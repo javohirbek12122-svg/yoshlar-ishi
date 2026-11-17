@@ -7,6 +7,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
 const html = read("index.html");
 const js = read("homepage-experience.js");
 const css = read("homepage-experience.css");
+const refcss = read("reference-home.css");
 const polish = read("platform-polish.css");
 const worker = read("service-worker.js");
 const staticMarkup = html.split(/<script\b/i)[0];
@@ -76,7 +77,7 @@ assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.i
 
 
 assert.ok(js.includes("https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg") && js.includes("https://uzreport.news/society/soldiers-swear-oath-of-allegiance-to-motherland"), "Hero uses a sourced youth ceremony photograph with a visible credit");
-assert.ok(css.includes("https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg") && js.includes("https://www.tourhq.com/tours/2067/full-day-city-tour-in-tashkent"), "Hero uses a separately credited Tashkent Independence Square background");
+assert.ok(refcss.includes("https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg") && js.includes("https://www.tourhq.com/tours/2067/full-day-city-tour-in-tashkent"), "Hero uses a separately credited Tashkent Independence Square background");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
 assert.match(worker, /CACHE_NAME = "yi-pwa-v16"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
