@@ -5,6 +5,9 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 const root=process.cwd();
+const serviceWorkerSource=fs.readFileSync(path.join(root,"service-worker.js"),"utf8");
+const pwaCacheName=serviceWorkerSource.match(/const\s+CACHE_NAME\s*=\s*["']([^"']+)["']/)?.[1];
+assert.ok(pwaCacheName,"Could not detect the current PWA cache name from service-worker.js");
 const types={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"text/javascript; charset=utf-8",".json":"application/json; charset=utf-8",".webmanifest":"application/manifest+json",".svg":"image/svg+xml",".png":"image/png",".jpg":"image/jpeg",".webp":"image/webp"};
 const remoteBase=(process.env.MOBILE_BASE_URL||"").trim().replace(/\/+$/,"");
 const server=remoteBase?null:http.createServer((req,res)=>{
@@ -26,6 +29,7 @@ assert.ok(remoteBase||(addr&&typeof addr==="object"),"Mobile test server did not
 const origin=remoteBase||("http://127.0.0.1:"+addr.port);
 const pages=[
  ["/index.html","Bosh sahifa"],
+ ["/assessment.html","Bilim sinovlari"],
  ["/imkoniyatlar.html","Imkoniyatlar"],
  ["/davlat-xizmatlari.html","Davlat xizmatlari"],
  ["/kabinet.html","Shaxsiy kabinet"],
@@ -81,6 +85,11 @@ try{
      if(width<=900&&["input","select","textarea"].includes(c.tag)&&!["checkbox","radio","hidden"].includes(c.type)&&parseFloat(c.font)<16)fail(item[1]+" "+width,"iOS input zoom risk "+c.font+"px: "+c.text);
     }
     if(errors.length)fail(item[1]+" "+width,"uncaught JS: "+errors.join(" | "));
+    if(item[0]==="/assessment.html"&&width===390){
+     if(!(await page.locator(".yi-assessment-hero h1").innerText()).includes("Bilimingizni sinang"))fail(item[1]+" "+width,"assessment hero heading is missing");
+     if(!(await page.locator(".yi-assessment-partner").innerText()).includes("hozir yakunlangan testlar"))fail(item[1]+" "+width,"partner notice does not explain that completed test results will also be considered");
+     if(await page.locator("#yiAuthGate a.button").count()!==2)fail(item[1]+" "+width,"assessment sign-in and registration links are missing");
+    }
     if(item[0]==="/index.html"&&width<=700){
      const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
      if(await toggle.count()!==1)fail(item[1]+" "+width,"three-line drawer trigger is missing");
@@ -167,23 +176,29 @@ try{
   await androidPage.evaluate(async()=>{const registration=await navigator.serviceWorker.ready;if(!registration.active)throw new Error("Service worker is not active");});
   await androidPage.waitForFunction(()=>Boolean(navigator.serviceWorker.controller),null,{timeout:12000});
   await androidPage.reload({waitUntil:"load",timeout:25000});
-  const heroCacheReady=await androidPage.waitForFunction(async()=>{
+  const assessmentCacheReady=await androidPage.evaluate(async(cacheName)=>{
+   const cache=await caches.open(cacheName);
+   const urls=(await cache.keys()).map(request=>request.url);
+   return ["assessment.html","assessment.css","assessment-bank.js","assessment.js"].every(asset=>urls.some(url=>url.endsWith("/"+asset)));
+  },pwaCacheName);
+  if(!assessmentCacheReady)fail("PWA assessment cache","assessment page and its local assets are not all precached");
+  const heroCacheReady=await androidPage.waitForFunction(async(cacheName)=>{
    const image=document.querySelector(".yi-scene-people");
    if(!image||!image.complete||image.naturalWidth<10)return false;
-   const cache=await caches.open("yi-pwa-v16");
+   const cache=await caches.open(cacheName);
    const urls=(await cache.keys()).map(request=>request.url);
    return urls.some(url=>url.includes("uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9")) &&
           urls.some(url=>url.includes("res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql")) &&
           urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
           urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
-  },null,{timeout:20000}).then(()=>true).catch(()=>false);
+  },pwaCacheName,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady){
-   const diagnostics=await androidPage.evaluate(async()=>{
+   const diagnostics=await androidPage.evaluate(async(cacheName)=>{
     const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
-    const cache=await caches.open("yi-pwa-v16");
+    const cache=await caches.open(cacheName);
     const keys=(await cache.keys()).map(x=>x.url);
     return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport|cloudinary/.test(x))});
-   });
+   },pwaCacheName);
    fail("PWA hero/logo images","images were not all cached: "+diagnostics);
   }
   await androidPage.evaluate(()=>{
@@ -204,6 +219,9 @@ try{
   const offlineAgencyLogo=await androidPage.locator(".yi-agency-logo").evaluate(el=>el.naturalWidth).catch(()=>0);
   const offlineUstozLogo=await androidPage.locator(".yi-ustoz-logo").evaluate(el=>el.naturalWidth).catch(()=>0);
   if(offlineAgencyLogo<10||offlineUstozLogo<10)fail("PWA offline official logos","cached agency and Ustoz AI logos did not render offline");
+  await androidPage.goto(origin+"/assessment.html",{waitUntil:"domcontentloaded",timeout:15000});
+  const offlineAssessment=await androidPage.locator("body").innerText();
+  if(!offlineAssessment.includes("Bilimingizni sinang")||!offlineAssessment.includes("SOON"))fail("PWA offline assessment","cached assessment page did not open offline");
   await androidPage.goto(origin+"/kabinet.html",{waitUntil:"domcontentloaded",timeout:15000});
   const privateOffline=await androidPage.locator("body").innerText();
   if(!privateOffline.includes("Hozir internet aloqasi yo‘q"))fail("PWA privacy","personal cabinet was not replaced by the safe offline page");
@@ -225,7 +243,7 @@ try{
  for(const e of localFailures)fail("Local asset",e);
  if(failures.length){console.error("MOBILE CHECK FAILED");for(const f of failures)console.error("- "+f);process.exitCode=1}
  else{
-  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed (9 pages × 7 widths) on "+(remoteBase?"production: "+origin:"local source"));
+  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed ("+pages.length+" pages × "+widths.length+" widths) on "+(remoteBase?"production: "+origin:"local source"));
   console.log("✓ no horizontal overflow, uncaught JavaScript errors or broken local assets");
   console.log("✓ touch targets, iOS input zoom, mobile menu and key filters checked");
   console.log("✓ Android install prompt, iPhone Safari instructions, offline home page and private-page cache exclusion checked");
