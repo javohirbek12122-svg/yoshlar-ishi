@@ -203,7 +203,7 @@ jobs:
           grep -Fqi 'post_type:postType' /tmp/yoshlar-community.js || { echo "::error::Post categories are not stored in Supabase."; exit 1; }
           grep -Fqi 'record_member_daily_visit' /tmp/yoshlar-community.js || { echo "::error::Daily activity tracking is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/hamjamiyat.css" -o /tmp/yoshlar-community.css
-          grep -Fqi '.hp-side-drawer' /tmp/yoshlar-community.css || { echo "::error::Community drawer styles are missing."; exit 1; }
+          grep -Fqi '.hp-drawer' /tmp/yoshlar-community.css || { echo "::error::Community drawer styles are missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/startap-yoli.html" -o /tmp/yoshlar-startup.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/laboratoriya.html" -o /tmp/yoshlar-lab.html
           grep -q "Fizikani kuzatma. <span" /tmp/yoshlar-lab.html
