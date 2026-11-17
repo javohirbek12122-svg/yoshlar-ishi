@@ -222,7 +222,7 @@ const memberCss = read("hamjamiyat.css");
 const memberJs = read("hamjamiyat.js");
 for (const marker of ['id="hpAuthGate"','id="hpAuthForm"','id="hpGoogleLogin"','id="hpTabProfile"','id="hpTabActivity"','id="hpTabSettings"','id="hpCvForm"','id="hpPortfolioForm"','id="hpPostType"','id="hpFeedType"']) assert.ok(memberHtml.includes(marker),"Member UI is missing " + marker);
 for (const category of ["project","achievement","question","collaboration","team","learning","event","volunteer","opportunity","resource"]) assert.ok(memberHtml.includes('value="' + category + '"'),"Member post category missing: " + category);
-for (const marker of ["signInWithPassword","signUp","signInWithOAuth","member_profiles","member_posts","member_portfolio_items","member_activity_events","record_member_daily_visit","member-cv","createSignedUrl","post_type:postType"]) assert.ok(memberJs.includes(marker),"Supabase member workflow missing " + marker);
+for (const marker of ["signInWithPassword","signUp","signInWithOAuth","member_profiles","member_posts","member_portfolio_items","member_activity_events","record_member_daily_visit","member-cv","createSignedUrl","post_type:postType","save_my_member_privacy"]) assert.ok(memberJs.includes(marker),"Supabase member workflow missing " + marker);
 assert.match(memberJs,/async function loadActivity\(/);
 assert.match(memberJs,/function drawChart\(/);
 assert.match(memberJs,/function openDrawer\(/);
