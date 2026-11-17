@@ -46,6 +46,9 @@ const required = [
   "davlat-xizmatlari.html",
   "imkoniyatlar.html",
   "kabinet.html",
+  "hamjamiyat.html",
+  "hamjamiyat.css",
+  "hamjamiyat.js",
   "INTEGRATIONS_SETUP.md",
   "privacy.html",
   "robots.txt",
@@ -213,6 +216,20 @@ assert.match(admin, /token\?grant_type=password/);
 assert.match(admin, /authorize\?provider=google/);
 assert.doesNotMatch(admin, /create_user:true/);
 console.log("✓ Parkent-style admin OTP/password/Google gate uses a server-side allowlist RPC and prevents self-signup");
+const memberHtml = read("hamjamiyat.html");
+const memberCss = read("hamjamiyat.css");
+const memberJs = read("hamjamiyat.js");
+for (const marker of ['id="hpAuthGate"','id="hpAuthForm"','id="hpGoogleLogin"','id="hpTabProfile"','id="hpTabActivity"','id="hpTabSettings"','id="hpCvForm"','id="hpPortfolioForm"','id="hpPostType"','id="hpFeedType"']) assert.ok(memberHtml.includes(marker),"Member UI is missing " + marker);
+for (const category of ["project","achievement","question","collaboration","team","learning","event","volunteer","opportunity","resource"]) assert.ok(memberHtml.includes('value="' + category + '"'),"Member post category missing: " + category);
+for (const marker of ["signInWithPassword","signUp","signInWithOAuth","member_profiles","member_posts","member_portfolio_items","member_activity_events","record_member_daily_visit","member-cv","createSignedUrl","post_type:postType"]) assert.ok(memberJs.includes(marker),"Supabase member workflow missing " + marker);
+assert.match(memberJs,/async function loadActivity\(/);
+assert.match(memberJs,/function drawChart\(/);
+assert.match(memberJs,/function openDrawer\(/);
+assert.match(memberJs,/function closeDrawer\(/);
+assert.match(memberCss,/\.hp-side-drawer/);
+assert.doesNotMatch(memberJs,/service_role|SUPABASE_SERVICE_ROLE_KEY|client_secret/i);
+new vm.Script(memberJs.replace(/^import .*?;\\s*/gm,""), { filename: "hamjamiyat.js" });
+console.log("✓ member authentication, private profiles/CV, portfolio, ten post categories, activity charts and drawer syntax validated");
 console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
 for (const feature of [
   'data-page="youth-programs"',
