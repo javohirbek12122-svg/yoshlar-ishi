@@ -9,9 +9,9 @@ const supabase=createClient(base,key,{auth:{persistSession:true,autoRefreshToken
 const $=id=>document.getElementById(id);
 const state={user:null,profile:null,cvAsset:null,tab:"feed",feed:[],directory:[],portfolio:[],activity:[],range:"week",commentOpen:new Set(),publicProfile:null};
 const copy={
- profile_updated:"Profil yangilandi",post_created:"Yangi post joylandi",post_liked:"Postga layk bosildi",post_unliked:"Post layki olib tashlandi",comment_created:"Izoh yozildi",portfolio_added:"Portfolio ishi qo‘shildi",journey_progress:"Imkoniyat jarayoni yangilandi",lab_completed:"Laboratoriya mashqi yakunlandi",initiative_submitted:"Tashabbus yuborildi",daily_visit:"Platformaga tashrif"
+ profile_updated:"Profil yangilandi",post_created:"Yangi post joylandi",post_liked:"Postga layk bosildi",post_unliked:"Post layki olib tashlandi",comment_created:"Izoh yozildi",portfolio_added:"Portfolio ishi qo‘shildi",journey_progress:"Imkoniyat jarayoni yangilandi",lab_completed:"Laboratoriya mashqi yakunlandi",initiative_submitted:"Tashabbus yuborildi",assessment_completed:"Bilim sinovi yakunlandi",daily_visit:"Platformaga tashrif"
 };
-const icons={profile_updated:"♙",post_created:"▤",post_liked:"♡",post_unliked:"♡",comment_created:"▤",portfolio_added:"▣",journey_progress:"↗",lab_completed:"◈",initiative_submitted:"▣",daily_visit:"•"};
+const icons={profile_updated:"♙",post_created:"▤",post_liked:"♡",post_unliked:"♡",comment_created:"▤",portfolio_added:"▣",journey_progress:"↗",lab_completed:"◈",initiative_submitted:"▣",assessment_completed:"▣",daily_visit:"•"};
 const PROFILE_FIELDS="user_id,slug,display_name,headline,bio,avatar_url,city,district,website_url,linkedin_url,github_url,skills,interests,education,experience,achievements,visibility,show_in_directory,created_at,updated_at";
 const postTypeLabels={project:"Loyiha va natija",achievement:"Yutuq yoki sertifikat",question:"Savol va maslahat",collaboration:"Hamkorlik taklifi",team:"Jamoa izlash",learning:"Ta’lim va o‘rganish",event:"Tadbir va uchrashuv",volunteer:"Ko‘ngillilik",opportunity:"Imkoniyat va tanlov",resource:"Foydali resurs"};
 const postTypeLabel=value=>postTypeLabels[value]||postTypeLabels.project;
