@@ -1394,8 +1394,8 @@ window.YI_ASSESSMENT_BANK = {
       "id": "V03",
       "track": "vocational",
       "subject": "Raqamli savodxonlik",
-      "domain": "Qo‘llash",
-      "competency": "Raqamli savodxonlik bo‘yicha bilimni amaliy vaziyatda qo‘llash ko‘nikmasi.",
+      "domain": "Tahlil",
+      "competency": "Raqamli savodxonlik bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.",
       "prompt": "Topib olingan USB fleshkani kompyuterga ulash kerak bo‘lsa, xavfsizlik uchun nima qilasiz?",
       "options": [
         {
@@ -1576,25 +1576,25 @@ window.YI_ASSESSMENT_BANK = {
       "id": "V10",
       "track": "vocational",
       "subject": "Dasturlash asoslari",
-      "domain": "Tushunish",
-      "competency": "Dasturlash asoslari bo‘yicha asosiy tushuncha va qoidalarni tushuntirish ko‘nikmasi.",
-      "prompt": "Algoritmning eng to‘g‘ri ta’rifi qaysi?",
+      "domain": "Tahlil",
+      "competency": "Dasturlash asoslari bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.",
+      "prompt": "Dasturdagi siklning tugash sharti hech qachon bajarilmayapti va jarayon cheksiz davom etmoqda. Qaysi algoritmik talab buzilgan?",
       "options": [
         {
           "key": "A",
-          "text": "Faqat dasturlash tilining nomi"
+          "text": "Har bir qadamning aniq yozilishi"
         },
         {
           "key": "B",
-          "text": "Muammoni hal qilish uchun tartiblangan va chekli amallar ketma-ketligi"
+          "text": "Algoritm chekli qadamda yakunlanishi"
         },
         {
           "key": "C",
-          "text": "Kompyuter qurilmasining bir turi"
+          "text": "Kirish ma’lumotlarining mavjud bo‘lishi"
         },
         {
           "key": "D",
-          "text": "Faqat matematik formula"
+          "text": "Amallar ketma-ketligining yozilishi"
         }
       ]
     },
@@ -1732,25 +1732,25 @@ window.YI_ASSESSMENT_BANK = {
       "id": "V16",
       "track": "vocational",
       "subject": "Tadbirkorlik va loyiha boshqaruvi",
-      "domain": "Qo‘llash",
-      "competency": "Tadbirkorlik va loyiha boshqaruvi bo‘yicha bilimni amaliy vaziyatda qo‘llash ko‘nikmasi.",
-      "prompt": "Yangi xizmat yaratishdan oldin qaysi ish eng to‘g‘ri boshlang‘ich qadam hisoblanadi?",
+      "domain": "Tahlil",
+      "competency": "Tadbirkorlik va loyiha boshqaruvi bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.",
+      "prompt": "Jamoa yangi xizmat yaratmoqchi. G‘oyani tasdiqlashdan oldin qaysi ma’lumotlarni tahlil qilish eng muhim?",
       "options": [
         {
           "key": "A",
-          "text": "Maqsadli foydalanuvchi va uning muammosini aniqlash"
+          "text": "Maqsadli foydalanuvchilar, ularning muammosi va mavjud yechimlar haqidagi dalillarni"
         },
         {
           "key": "B",
-          "text": "Darhol qimmat reklama sotib olish"
+          "text": "Faqat logotip ranglarini"
         },
         {
           "key": "C",
-          "text": "Jamoaga vazifasiz xodim olish"
+          "text": "Faqat ofis ijarasi narxini"
         },
         {
           "key": "D",
-          "text": "Narxni raqibdan tasodifiy belgilash"
+          "text": "Raqobatchilarni o‘rganmasdan reklama budjetini"
         }
       ]
     },
