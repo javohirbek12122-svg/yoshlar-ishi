@@ -170,6 +170,9 @@ jobs:
           grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
           grep -Fqi 'https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg' /tmp/yoshlar-homepage-experience.js || { echo "::error::The supplied homepage banner is missing from the live JavaScript."; exit 1; }
           grep -Fqi 'class="yi-hero-banner"' /tmp/yoshlar-homepage-experience.js || { echo "::error::The supplied banner image element is missing."; exit 1; }
+          grep -Fqi 'yiHeroImageModal' /tmp/yoshlar-homepage-experience.js || { echo "::error::The accessible image viewer is missing."; exit 1; }
+          grep -Fqi 'function setupHeroExperience' /tmp/yoshlar-homepage-experience.js || { echo "::error::The interactive hero controller is missing."; exit 1; }
+          grep -Fqi '.yi-hero-casing' /tmp/yoshlar-reference-home.css || { echo "::error::The cinematic 3D hero frame styles are missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg' -o /tmp/yoshlar-hero-banner.jpg
           file --mime-type /tmp/yoshlar-hero-banner.jpg | grep -Eq 'image/jpeg' || { echo "::error::The supplied hero banner is not a valid JPEG image."; exit 1; }
           grep -Fqi 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' /tmp/yoshlar-reference-home.css || { echo "::error::The Tashkent reference styling is missing."; exit 1; }
@@ -249,7 +252,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v21";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v22";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }

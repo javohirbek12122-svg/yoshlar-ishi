@@ -93,6 +93,22 @@ try{
      if(await page.locator("#yiAuthGate a.button").count()!==2)fail(item[1]+" "+width,"assessment sign-in and registration links are missing");
     }
     if(item[0]==="/index.html"&&width<=700){
+     const banner=page.locator(".yi-hero-banner");
+     if(await banner.count()!==1)fail(item[1]+" "+width,"the original homepage banner is missing or duplicated");
+     else{
+      await banner.waitFor({state:"visible",timeout:5000});
+      const naturalWidth=await banner.evaluate(el=>el.naturalWidth);
+      if(naturalWidth!==1280)fail(item[1]+" "+width,"the supplied original banner did not load at its native 1280px width");
+      await page.locator(".yi-hero-image-button").click();
+      const heroModal=page.locator("#yiHeroImageModal");
+      if(await heroModal.getAttribute("aria-hidden")!=="false"||!(await heroModal.isVisible()))fail(item[1]+" "+width,"tap-to-expand image viewer did not open accessibly");
+      if(!(await page.locator(".yi-hero-modal-close").evaluate(el=>el===document.activeElement)))fail(item[1]+" "+width,"image viewer did not move keyboard focus to its close control");
+      await page.locator(".yi-hero-modal-close").click();
+      if(await heroModal.getAttribute("aria-hidden")!=="true")fail(item[1]+" "+width,"image viewer close control did not restore hidden state");
+      await page.locator(".yi-hero-expand").click();
+      await page.keyboard.press("Escape");
+      if(await heroModal.getAttribute("aria-hidden")!=="true")fail(item[1]+" "+width,"Escape did not close the expanded banner viewer");
+     }
      const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
      if(await toggle.count()!==1)fail(item[1]+" "+width,"three-line drawer trigger is missing");
      else{

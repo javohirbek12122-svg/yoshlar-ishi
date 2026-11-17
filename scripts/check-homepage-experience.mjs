@@ -43,8 +43,16 @@ for (const route of ["./imkoniyatlar.html","./davlat-xizmatlari.html","./startap
   assert.ok(html.includes('href="' + route + '"'), "The page directory is missing " + route);
 }
 assert.match(js, /yi-hero-banner/);
-assert.match(css, /\.yi-hero-banner[\s\S]*?object-fit:\s*contain/);
-assert.match(css, /aspect-ratio:\s*16\/9/);
+assert.match(js, /function setupHeroExperience\(art\)/);
+assert.match(js, /aria-modal=\"true\"/);
+assert.match(js, /Escape/);
+assert.match(js, /pointermove/);
+assert.match(js, /prefers-reduced-motion/);
+assert.match(refcss, /\.yi-hero-banner[\s\S]*?object-fit:\s*contain/);
+assert.match(refcss, /\.yi-hero-casing[\s\S]*?preserve-3d/);
+assert.match(refcss, /\.yi-hero-modal[\s\S]*?position:fixed/);
+assert.match(refcss, /@media\(prefers-reduced-motion:reduce\)/);
+assert.match(refcss, /aspect-ratio:\s*16\/9/);
 assert.match(css, /\.yi-directory-groups/);
 
 assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"'), "Agency logo must open the official agency site safely");
@@ -81,7 +89,7 @@ assert.ok(js.includes("setupSearch") && js.includes("setupTheme") && js.includes
 
 assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v21"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v22"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(worker.includes("https://d2ol7oe51mr4n9.cloudfront.net"), "The supplied hero image host must be cache-allowlisted for offline use");
