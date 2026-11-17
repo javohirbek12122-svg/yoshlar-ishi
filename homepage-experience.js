@@ -46,7 +46,8 @@ function setupSearch(){
   {title:"AI g‘oya tahlili",description:"G‘oyaning tayyorgarligini tahlil qilish",href:"#ai-yordamchi",keywords:"sun'iy intellekt ai goya tahlil bahola"},
   {title:"Xalqaro imkoniyatlar",description:"Xalqaro dastur va tanlovlarni qidirish",href:"./imkoniyatlar.html?query=xalqaro",keywords:"xalqaro xorij chet el almashinuv exchange"},
   {title:"Shaxsiy kabinet",description:"Saqlangan jarayonlar va shaxsiy ma’lumotlar",href:"./kabinet.html",keywords:"kabinet hisob profil ariza jarayon"},
-  {title:"3D laboratoriya",description:"Interaktiv tajribalar va fizik modellar",href:"./laboratoriya.html",keywords:"laboratoriya 3d fizika tajriba"}
+  {title:"3D laboratoriya",description:"Interaktiv tajribalar va fizik modellar",href:"./laboratoriya.html",keywords:"laboratoriya 3d fizika tajriba"},
+  {title:"Bilim sinovlari",description:"Gumanitar, tabiiy va kasbiy fanlar bo‘yicha 25 savolli testlar",href:"./assessment.html",keywords:"test bilim sinov baholash gumanitar tabiiy kasbiy fanlar ball"}
  ];
  const sections=Array.from(document.querySelectorAll("main section[id]")).map(section=>{const h=section.querySelector("h1,h2,h3");return{title:h?h.textContent.trim():section.id,description:(section.innerText||"").replace(/\s+/g," ").slice(0,130),href:"#"+section.id,keywords:section.innerText||""};});
  const index=pages.concat(sections);
