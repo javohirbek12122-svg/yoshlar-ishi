@@ -57,6 +57,10 @@ assert.ok(home.includes('href="./assessment.html"') && home.includes("yi-assessm
 const community = read("hamjamiyat.js");
 assert.ok(community.includes('assessment_completed:"Bilim sinovi yakunlandi"'), "Member activity must include completed assessments");
 
+const privacy = read("privacy.html");
+assert.ok(privacy.includes("Bilim sinovlari bo‘limida"), "Privacy notice must explain assessment data storage");
+assert.ok(privacy.includes("test natijalari tashqi markaz yoki tashkilotga hozir yuborilmaydi"), "Privacy notice must clarify that partner sharing is not active");
+
 const worker = read("service-worker.js");
 for (const asset of ["/assessment.html", "/assessment.css", "/assessment-bank.js", "/assessment.js"]) {
   assert.ok(worker.includes('"' + asset + '"'), "PWA cache missing " + asset);
