@@ -799,7 +799,7 @@ assert.match(compactHome, /scrollIntoView\(/);
 assert.match(compactHome, /IntersectionObserver/);
 assert.match(compactHome, /new ResizeObserver/);
 assert.match(compactHome, /function softGlow\(/);
-assert.ok(homepageRuntime.includes('<span>IMKONIYAT</span><span>→</span><span>NATIJA</span>'), "The 3D hero image retains its opportunity-to-outcome visual marker");
+assert.ok(homepageRuntime.includes('class="yi-hero-banner"') && homepageRuntime.includes('https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg'), "The homepage uses the exact user-supplied banner image");
 assert.match(compactHome, /ctx\.createRadialGradient/);
 assert.match(compactHome, /ctx\.globalCompositeOperation="screen"/);
 assert.doesNotMatch(compactHome, /function traceFlow\(/, "Atmospheric background must not draw a fixed route line");

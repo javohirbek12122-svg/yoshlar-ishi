@@ -42,8 +42,9 @@ assert.ok(html.includes('class="yi-site-directory wrap"') && html.includes('id="
 for (const route of ["./imkoniyatlar.html","./davlat-xizmatlari.html","./startap-yoli.html","./laboratoriya.html","./kabinet.html","./privacy.html"]) {
   assert.ok(html.includes('href="' + route + '"'), "The page directory is missing " + route);
 }
-assert.match(js, /yi-hero-scene/);
-assert.match(css, /perspective\(1300px\)/);
+assert.match(js, /yi-hero-banner/);
+assert.match(css, /\.yi-hero-banner[\s\S]*?object-fit:\s*contain/);
+assert.match(css, /aspect-ratio:\s*16\/9/);
 assert.match(css, /\.yi-directory-groups/);
 
 assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"'), "Agency logo must open the official agency site safely");
@@ -78,12 +79,11 @@ assert.ok(html.includes('class="yi-partner-tags"') && html.includes('id="partner
 assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
 
 
-assert.ok(js.includes("https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg") && js.includes("https://uzreport.news/society/soldiers-swear-oath-of-allegiance-to-motherland"), "Hero uses a sourced youth ceremony photograph with a visible credit");
-assert.ok(refcss.includes("https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg") && js.includes("https://www.tourhq.com/tours/2067/full-day-city-tour-in-tashkent"), "Hero uses a separately credited Tashkent Independence Square background");
+assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v20"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v21"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
-assert.ok(js.includes("yi-scene-photo-credit") && js.includes("Yoshlar surati: UzReport") && js.includes("Toshkent manzarasi: Mustaqillik maydoni"), "Both existing photo sources must be credited in the hero");
+assert.ok(worker.includes("https://d2ol7oe51mr4n9.cloudfront.net"), "The supplied hero image host must be cache-allowlisted for offline use");
 
 console.log("✓ homepage modular panels, preserved interactive modules, page shortcuts, JavaScript syntax, and responsive styles");

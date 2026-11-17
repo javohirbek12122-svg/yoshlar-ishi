@@ -185,21 +185,21 @@ try{
   },pwaCacheName);
   if(!assessmentCacheReady)fail("PWA assessment cache","assessment page and its local assets are not all precached");
   const heroCacheReady=await androidPage.waitForFunction(async(cacheName)=>{
-   const image=document.querySelector(".yi-scene-people");
+   const image=document.querySelector(".yi-hero-banner");
    if(!image||!image.complete||image.naturalWidth<10)return false;
    const cache=await caches.open(cacheName);
    const urls=(await cache.keys()).map(request=>request.url);
-   return urls.some(url=>url.includes("uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9")) &&
+   return urls.some(url=>url.includes("d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg")) &&
           urls.some(url=>url.includes("res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql")) &&
           urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
           urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
   },pwaCacheName,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady){
    const diagnostics=await androidPage.evaluate(async(cacheName)=>{
-    const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
+    const images=[...document.querySelectorAll(".yi-hero-banner,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
     const cache=await caches.open(cacheName);
     const keys=(await cache.keys()).map(x=>x.url);
-    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport|cloudinary/.test(x))});
+    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport|cloudinary|d2ol7oe51mr4n9/.test(x))});
    },pwaCacheName);
    fail("PWA hero/logo images","images were not all cached: "+diagnostics);
   }
@@ -216,7 +216,7 @@ try{
   await androidPage.goto(origin+"/index.html",{waitUntil:"domcontentloaded",timeout:15000});
   const cachedHome=await androidPage.locator("body").innerText();
   if(!cachedHome.includes("Yoshlar-Ishi"))fail("PWA offline","cached public home page did not load");
-  const offlineHeroWidth=await androidPage.locator(".yi-scene-people").evaluate(el=>el.naturalWidth).catch(()=>0);
+  const offlineHeroWidth=await androidPage.locator(".yi-hero-banner").evaluate(el=>el.naturalWidth).catch(()=>0);
   if(offlineHeroWidth<10)fail("PWA offline images","cached youth foreground photo did not render offline");
   const offlineAgencyLogo=await androidPage.locator(".yi-agency-logo").evaluate(el=>el.naturalWidth).catch(()=>0);
   const offlineUstozLogo=await androidPage.locator(".yi-ustoz-logo").evaluate(el=>el.naturalWidth).catch(()=>0);

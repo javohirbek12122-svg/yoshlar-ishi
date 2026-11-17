@@ -61,6 +61,7 @@ assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /https:\/\/images\.unsplash\.com/);
 assert.match(worker, /https:\/\/uzchess\.uz/);
 assert.match(worker, /https:\/\/uzreport\.news/, "Ustoz AI logo origin must be cache-allowlisted");
+assert.match(worker, /https:\/\/d2ol7oe51mr4n9\.cloudfront\.net/, "The supplied homepage hero image origin must be cache-allowlisted");
 assert.match(worker, /https:\/\/static\.tildacdn\.com/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.match(worker, /response\.type === "opaque"/);
@@ -106,7 +107,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v20"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v21"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");
