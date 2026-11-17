@@ -82,7 +82,7 @@ for (let i = 1; i <= 50; i++) {
   assert.ok(precache.includes(`/biletlar/${id}.html`), `Ticket ${id} must be precached`);
 }
 assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html", "\/hamjamiyat\.html"\]\)/);
-const communityPrecache = worker.match(/const PRECACHE_URLS = \\[([\\s\\S]*?)\\];/)?.[1] || "";\nassert.ok(!communityPrecache.includes('"/hamjamiyat.html"'), "Authenticated community page must not be precached");
+const communityPrecache = worker.split("const PRECACHE_URLS = [")[1]?.split("];")[0] || ""; assert.ok(!communityPrecache.includes('"/hamjamiyat.html"'), "Authenticated community page must not be precached");
 assert.match(worker, /url\.search/);
 assert.match(worker, /Cache-Control/);
 
