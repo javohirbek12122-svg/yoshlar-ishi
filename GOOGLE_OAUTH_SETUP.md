@@ -38,8 +38,8 @@ Authentication → URL Configuration:
 
 - Site URL: `https://yoshlar-ishi-site.vercel.app`
 - Redirect allow list:
-  - `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html`
-  - `https://yoshlar-ishi-site.vercel.app/admin.html`
+  - `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html*` (kirish, ro‘yxatdan o‘tish va parol tiklash callback parametrlari uchun)
+  - `https://yoshlar-ishi-site.vercel.app/admin.html*` (Google admin callback parametrlari uchun)
 
 Agar Vercel production domeni o‘zgarsa, Google origin, Supabase Site URL va redirect allow list ham mos ravishda yangilanadi.
 

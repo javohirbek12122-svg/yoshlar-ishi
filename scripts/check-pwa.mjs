@@ -29,7 +29,7 @@ assert.deepEqual(sizeOf("icon-512.png"), [512, 512]);
 assert.deepEqual(sizeOf("apple-touch-icon.png"), [180, 180]);
 
 const publicPages = [
-  "index.html", "biletlar.html", "imkoniyatlar.html", "davlat-xizmatlari.html", "kabinet.html",
+  "index.html", "biletlar.html", "imkoniyatlar.html", "davlat-xizmatlari.html", "kabinet.html", "hamjamiyat.html",
   "startap-yoli.html", "laboratoriya.html", "physics-lab/index.html", "privacy.html"
 ];
 for (const page of publicPages) {
