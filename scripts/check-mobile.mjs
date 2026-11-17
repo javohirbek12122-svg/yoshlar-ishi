@@ -29,6 +29,7 @@ const pages=[
  ["/imkoniyatlar.html","Imkoniyatlar"],
  ["/davlat-xizmatlari.html","Davlat xizmatlari"],
  ["/kabinet.html","Shaxsiy kabinet"],
+ ["/hamjamiyat.html","Hamjamiyat"],
  ["/admin.html","Admin panel"],
  ["/startap-yoli.html","Startap yo‘li"],
  ["/laboratoriya.html","Virtual laboratoriya"],
