@@ -1,9 +1,13 @@
-const CACHE_NAME = "yi-pwa-v19";
+const CACHE_NAME = "yi-pwa-v20";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",
   "/hamjamiyat.js",
   "/biletlar.html",
+  "/assessment.html",
+  "/assessment.css",
+  "/assessment-bank.js",
+  "/assessment.js",
   "/biletlar.css",
   "/biletlar-app.js",
   "/biletlar-data.js",
