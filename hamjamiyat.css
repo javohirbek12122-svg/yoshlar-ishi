@@ -199,3 +199,10 @@ body.hp-dark .hp-topline{background:#071522}
 body.hp-dark .hp-footer{border-color:#294157;color:#9eafbd}
 body.hp-dark .hp-auth-footnote,body.hp-dark .hp-profile-completion,body.hp-dark .hp-file-drop,body.hp-dark .hp-current-file{background:#1d364b;color:#b9cad7;border-color:#37556d}
 [hidden]{display:none!important}
+
+.hp-feed-tools select,.hp-composer-actions select{min-height:42px;border:1px solid var(--hp-line);border-radius:10px;background:var(--hp-card);color:var(--hp-ink);padding:9px 12px;font-size:10px;font-weight:700;max-width:100%}
+.hp-post-visibility{display:inline-flex;align-items:center;max-width:180px;padding:5px 8px;border-radius:999px;background:#edf4f8;color:#345d79;font-size:8px;font-weight:800;line-height:1.3}
+.hp-post-card[data-post-type="question"] .hp-post-visibility{background:#fff2dc;color:#875a17}
+.hp-post-card[data-post-type="collaboration"] .hp-post-visibility,.hp-post-card[data-post-type="team"] .hp-post-visibility{background:#e9f5ee;color:#286849}
+.hp-post-card[data-post-type="achievement"] .hp-post-visibility{background:#f2ebfb;color:#694493}
+@media(max-width:600px){.hp-composer-actions select{width:100%;min-height:44px}.hp-feed-tools select{width:100%;min-height:44px}.hp-feed-tools{grid-template-columns:1fr}.hp-icon-button,.hp-menu-button,.hp-avatar-button,.hp-signout-button{height:44px}.hp-icon-button{width:44px}.hp-menu-button{width:44px}}
