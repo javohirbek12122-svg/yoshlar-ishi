@@ -58,6 +58,11 @@ on:
       - "scripts/check-site.mjs"
       - "laboratoriya.html"
       - "config.js"
+      - "assessment.html"
+      - "assessment.css"
+      - "assessment.js"
+      - "assessment-bank.js"
+      - "scripts/check-assessment.mjs"
 
 permissions:
   contents: read
@@ -89,6 +94,13 @@ jobs:
             sleep 5
             curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           done
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/assessment.html" -o /tmp/yoshlar-assessment.html
+          grep -Fqi "Bilim sinovlari" /tmp/yoshlar-assessment.html || { echo "::error::The competency assessment page is missing."; exit 1; }
+          grep -Fqi "SOON" /tmp/yoshlar-assessment.html || { echo "::error::The partnership review announcement is missing."; exit 1; }
+          grep -Fqi "Gumanitar fanlar" /tmp/yoshlar-assessment.html || { echo "::error::The humanities test track is missing."; exit 1; }
+          for asset in assessment.css assessment-bank.js assessment.js; do curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/$asset" -o "/tmp/$asset"; done
+          grep -Fqi "vocational" /tmp/assessment-bank.js || { echo "::error::The vocational question bank is missing."; exit 1; }
+          grep -Fqi "submit_assessment_attempt" /tmp/assessment.js || { echo "::error::The secure assessment scoring client is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/biletlar.html" -o /tmp/yoshlar-biletlar.html
           grep -Fqi "50 ta amaliy va startap bileti" /tmp/yoshlar-biletlar.html || { echo "::error::The ticket catalogue is not available."; exit 1; }
           for asset in biletlar.css biletlar-data.js biletlar-app.js; do curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/$asset" -o "/tmp/$asset"; done
@@ -234,7 +246,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v18";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v20";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
