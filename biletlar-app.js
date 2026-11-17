@@ -165,7 +165,7 @@ function detail(t){
  var savedDraft=restoreDraftFields(t);
  bind(t);
  restoreDraftResult(t.level==="B"?savedDraft:null);
- if(t.level==="B"){var mount=$("#engineMount");mount.addEventListener("input",draftSnapshot);mount.addEventListener("change",draftSnapshot);draftSnapshot()}
+ if(t.level==="B"){var mount=$("#engineMount");if(mount){mount.addEventListener("input",draftSnapshot);mount.addEventListener("change",draftSnapshot);draftSnapshot()}}
  timerMain(t);
 }
 function init(){if(!Array.isArray(DATA)||DATA.length!==50){root.innerHTML="<h1>Biletlar ma’lumoti yuklanmadi.</h1><p>Sahifani yangilang yoki administratorga xabar bering.</p>";return}var id=document.body.getAttribute("data-ticket");if(!id){var p=new URLSearchParams(location.search);id=p.get("bilet")}var t=id?DATA.find(function(x){return x.id===id}):null;if(id){if(t)detail(t);else root.innerHTML='<section class="bf-invalid"><h1>Bilet topilmadi</h1><a href="/biletlar.html">Katalogga qaytish</a></section>'}else catalog()}
