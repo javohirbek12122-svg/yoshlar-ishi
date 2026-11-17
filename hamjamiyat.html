@@ -122,6 +122,7 @@
             <div class="hp-composer-head"><span class="hp-my-avatar" id="hpComposerAvatar">YI</span><div><b id="hpComposerName">Sizning postingiz</b><small>Hamjamiyat bilan bo‘lishing</small></div></div>
             <textarea id="hpPostBody" maxlength="3000" rows="3" placeholder="Nima ustida ishlayapsiz? Qanday natijaga erishdingiz?"></textarea>
             <div class="hp-composer-actions">
+              <select id="hpPostType" aria-label="Post maqsadi"><option value="project">Loyiha va natija</option><option value="achievement">Yutuq yoki sertifikat</option><option value="question">Savol va maslahat</option><option value="collaboration">Hamkorlik taklifi</option><option value="team">Jamoa izlash</option><option value="learning">Ta’lim va o‘rganish</option><option value="event">Tadbir va uchrashuv</option><option value="volunteer">Ko‘ngillilik</option><option value="opportunity">Imkoniyat va tanlov</option><option value="resource">Foydali resurs</option></select>
               <label class="hp-file-button">▧ Rasm qo‘shish<input id="hpPostImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden></label>
               <span id="hpPostFileHint">6 tagacha rasm · JPG, PNG yoki WebP</span>
               <select id="hpPostVisibility" aria-label="Post ko‘rinishi"><option value="members">Hamjamiyatga ochiq</option><option value="only_me">Faqat men ko‘raman</option></select>
@@ -129,7 +130,7 @@
             </div>
             <p class="hp-inline-message" id="hpPostMessage" role="status"></p>
           </form>
-          <div class="hp-feed-tools"><label class="hp-search-box"><span>⌕</span><input type="search" id="hpFeedSearch" placeholder="Postlar, loyihalar va ko‘nikmalar bo‘yicha qidirish"></label><button class="hp-outline-button" type="button" id="hpFeedRefresh">Yangilash</button></div>
+          <div class="hp-feed-tools"><label class="hp-search-box"><span>⌕</span><input type="search" id="hpFeedSearch" placeholder="Postlar, loyihalar va ko‘nikmalar bo‘yicha qidirish"></label><select id="hpFeedType" aria-label="Post maqsadi bo‘yicha filtrlash"><option value="all">Barcha yo‘nalishlar</option><option value="project">Loyiha va natija</option><option value="achievement">Yutuq yoki sertifikat</option><option value="question">Savol va maslahat</option><option value="collaboration">Hamkorlik taklifi</option><option value="team">Jamoa izlash</option><option value="learning">Ta’lim va o‘rganish</option><option value="event">Tadbir va uchrashuv</option><option value="volunteer">Ko‘ngillilik</option><option value="opportunity">Imkoniyat va tanlov</option><option value="resource">Foydali resurs</option></select><button class="hp-outline-button" type="button" id="hpFeedRefresh">Yangilash</button></div>
           <div class="hp-feed-list" id="hpFeedList"><div class="hp-loading"><span></span> Lenta yuklanmoqda…</div></div>
         </section>
 
