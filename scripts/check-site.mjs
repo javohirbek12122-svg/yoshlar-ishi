@@ -226,7 +226,7 @@ assert.match(memberJs,/async function loadActivity\(/);
 assert.match(memberJs,/function drawChart\(/);
 assert.match(memberJs,/function openDrawer\(/);
 assert.match(memberJs,/function closeDrawer\(/);
-assert.match(memberCss,/\.hp-side-drawer/);
+assert.match(memberCss,/\.hp-drawer/);
 assert.doesNotMatch(memberJs,/service_role|SUPABASE_SERVICE_ROLE_KEY|client_secret/i);
 new vm.Script(memberJs.replace(/^import .*?;\\s*/gm,""), { filename: "hamjamiyat.js" });
 console.log("✓ member authentication, private profiles/CV, portfolio, ten post categories, activity charts and drawer syntax validated");
