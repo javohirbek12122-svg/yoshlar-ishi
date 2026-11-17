@@ -76,7 +76,7 @@ assert.ok(css.includes(".yi-side-drawer") && css.includes(".yi-drawer-backdrop")
 assert.equal((html.match(/class="quickservice yi-quick-[^"]*yi-quick-card/g)||[]).length, 8, "Eight redesigned homepage quick-access cards are required");
 assert.ok(html.includes('class="yi-quick-card-top"') && html.includes('class="yi-quick-card-bottom"'), "Quick-access cards must include the new icon and action hierarchy");
 assert.ok(html.includes('class="yi-partner-tags"') && html.includes('id="partnerForm"'), "Partnership themes and the working partnership form must remain present");
-assert.ok(js.includes("yi-ai-helper-card") && js.includes("setupSearch") && js.includes("setupTheme"));
+assert.ok(js.includes("setupSearch") && js.includes("setupTheme") && js.includes("setupDrawer"), "Homepage search, theme and drawer controls remain initialized alongside the supplied static banner");
 
 
 assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
