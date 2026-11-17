@@ -75,6 +75,7 @@ assert.ok(precache.includes("/platform-polish.css"), "PWA must precache the fina
 assert.ok(precache.includes("/homepage-experience.js"), "PWA must precache the new homepage controller");
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
+assert.ok(!precache.includes("/hamjamiyat.html"), "Member community page must never be precached");
 assert.ok(precache.includes("/biletlar.html"), "Bilet catalogue must be precached");
 assert.ok(precache.includes("/biletlar-app.js") && precache.includes("/biletlar-data.js") && precache.includes("/biletlar.css"), "Bilet app assets must be precached");
 for (let i = 1; i <= 50; i++) {
@@ -99,11 +100,12 @@ assert.equal(common?.get("referrer-policy"), "strict-origin-when-cross-origin");
 assert.equal(common?.get("x-frame-options"), "DENY");
 assert.equal(rules.get("/admin.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
 assert.equal(rules.get("/kabinet.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
+assert.equal(rules.get("/hamjamiyat.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
 assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, no-store, must-revalidate");
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v16"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v18"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");
