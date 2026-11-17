@@ -29,7 +29,7 @@ Add:
 |---|---|---|
 | `VERCEL_TOKEN` | Repository **secret** | Create a Vercel access token in your own Vercel account and paste it directly into GitHub, not into ChatGPT or a repository file. |
 | `VERCEL_ORG_ID` | Repository variable | `team_PiDVgH5WveQEWukqlgkctSEW` if the selected project belongs to this team; otherwise use the actual owning team ID. |
-| `VERCEL_PROJECT_ID` | Repository variable | `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA` if deploying to `yoshlar-ishi-site`; verify it in the project’s Settings → General first. |
+| `VERCEL_PROJECT_ID` | Repository variable | Copy the Project ID from the confirmed `yoshlar-ishi-site` project’s Settings → General. **Do not use the old candidate ID `prj_g1287qBjDT6pQbMWdG1oyWtYjrIA`: it returned 404 in the connected Vercel account and is unverified.** |
 
 Then choose **Run workflow**. The workflow re-checks source, builds production output, deploys, and smoke-tests public pages. If credentials are absent or invalid, inspect the workflow summary; never treat successful static tests alone as production success.
 
