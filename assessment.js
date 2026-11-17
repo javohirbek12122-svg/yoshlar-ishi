@@ -150,10 +150,12 @@ async function submitTest(auto=false){
   await loadResults();
   $("yiResultPanel").scrollIntoView({behavior:"smooth",block:"start"});
  }catch(error){
+  state.submitting=false;
   setNotice(errorText(error),true);
-  if(state.remaining>0){state.submitting=false;startClock();}
+  if(state.remaining>0){startClock();}
  }finally{
-  $("yiSubmit").disabled=false;$("yiSubmit").textContent="Testni yakunlash";
+  $("yiSubmit").disabled=false;
+  $("yiSubmit").textContent=state.remaining<=0?"Natijani qayta yuborish":"Testni yakunlash";
  }
 }
 function renderResult(result){
