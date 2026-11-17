@@ -262,7 +262,7 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "Imkoniyatni top.",
+  "YANGI IMKONIYATLAR SARI!",
   'class="hero-expanded-copy"',
   'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
@@ -630,7 +630,7 @@ console.log("✓ AI quota and Telegram subscription tables are explicitly scoped
 const opportunityDesignHome = read("index.html");
 const opportunityStyles = read("site.css");
 for (const feature of [
-  '<title>Yoshlar-Ishi — Imkoniyatdan natijagacha</title>',
+  '<title>Yoshlar-Ishi — kelajagingiz uchun birinchi qadam!</title>',
   '<link rel="stylesheet" href="./site.css">',
   'id="qo-shimcha-vositalar"',
   "Qo‘shimcha vositalar",
