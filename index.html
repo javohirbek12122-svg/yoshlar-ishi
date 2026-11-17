@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#123255"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Yoshlar-Ishi"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><meta name="description" content="Yoshlar-Ishi — yoshlar uchun davlat imkoniyatlari va xizmatlarini topish, talablarni tushunish, arizaga tayyorlanish, amaliy ishtirok va natijalarni kuzatishga yordam beruvchi mustaqil platforma."><meta property="og:title" content="Yoshlar-Ishi — Imkoniyatdan natijagacha"><meta property="og:description" content="Davlat imkoniyatini topish, moslikni tekshirish, arizaga tayyorlanish va keyingi jarayonlarni kuzatish uchun mustaqil platforma."><meta property="og:type" content="website">
-<title>Yoshlar-Ishi — Imkoniyatdan natijagacha</title>
+<title>Yoshlar-Ishi — kelajagingiz uchun birinchi qadam!</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link rel="preconnect" href="https://uzreport.news" crossorigin>
@@ -43,10 +43,16 @@
 </style>
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="./platform-polish.css">
+<link rel="stylesheet" href="./reference-home.css">
 </head>
 <body>
 <div id="readingProgress" aria-hidden="true"></div>
 <header class="wrap nav yi-nav" aria-label="Yoshlar-Ishi navigatsiyasi">
+  <a class="yi-agency-brand" href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer" aria-label="Yoshlar ishlari agentligining rasmiy sayti">
+    <img src="https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png" alt="Yoshlar ishlari agentligi logotipi" width="48" height="48" decoding="async">
+    <span><strong>YOSHLAR ISHLARI</strong><small>AGENTLIGI</small></span>
+  </a>
+  <span class="yi-brand-divider" aria-hidden="true"></span>
   <a class="brand yi-brand" href="./index.html" aria-label="Yoshlar-Ishi bosh sahifa">
     <span class="yi-brand-mark" aria-hidden="true"><svg viewBox="0 0 44 44">
       <path d="M22 36V18" fill="none" stroke="#1557b8" stroke-width="3.3" stroke-linecap="round"/>
@@ -59,26 +65,12 @@
   </a>
   <nav class="links yi-main-links" aria-label="Asosiy navigatsiya">
     <a class="yi-nav-home" href="./index.html#top"><span aria-hidden="true">⌂</span> Bosh sahifa</a>
-    <details class="yi-nav-dropdown"><summary>Loyihalar <span aria-hidden="true">⌄</span></summary><div class="yi-nav-menu">
-      <a href="./startap-yoli.html"><strong>Startap yo‘li</strong><small>G‘oyadan sinov va rivojlanishgacha</small></a>
-      <a href="./biletlar.html"><strong>50 ta amaliy va startap bileti</strong><small>Interaktiv loyiha va topshiriqlar</small></a>
-      <a href="#ai-yordamchi"><strong>AI g‘oya tahlili</strong><small>G‘oyaning tayyorgarligini tekshirish</small></a>
-      <a href="./laboratoriya.html"><strong>3D laboratoriya</strong><small>Interaktiv ilmiy tajribalar</small></a>
-    </div></details>
-    <details class="yi-nav-dropdown"><summary>Davlat xizmatlari <span aria-hidden="true">⌄</span></summary><div class="yi-nav-menu">
-      <a href="./davlat-xizmatlari.html"><strong>Xizmatlar navigatori</strong><small>Rasmiy manbalar va qadamlar</small></a>
-      <a href="./imkoniyatlar.html"><strong>Imkoniyatlar katalogi</strong><small>Grant, ta’lim, ish va dasturlar</small></a>
-      <a href="https://my.gov.uz/uz" target="_blank" rel="noopener noreferrer"><strong>my.gov.uz ↗</strong><small>Yagona interaktiv davlat xizmatlari</small></a>
-    </div></details>
-    <details class="yi-nav-dropdown"><summary>Tashabbuslar <span aria-hidden="true">⌄</span></summary><div class="yi-nav-menu">
-      <a href="#top-tashabbuslar"><strong>Ochiq tashabbuslar</strong><small>Ommaga e’lon qilingan loyihalar</small></a>
-      <a href="#tashabbus"><strong>Tashabbus yuborish</strong><small>O‘z g‘oyangizni taqdim eting</small></a>
-    </div></details>
-    <details class="yi-nav-dropdown"><summary>Hamjamiyat <span aria-hidden="true">⌄</span></summary><div class="yi-nav-menu">
-      <a href="#jamoadoshlar"><strong>Jamoa topish</strong><small>Hamfikr va sheriklar</small></a>
-      <a href="#hamkorlik"><strong>Mentor va hamkorlar</strong><small>Hamkorlik takliflari</small></a>
-    </div></details>
-    <a href="#afzalliklar">Biz haqimizda</a>
+    <a href="./imkoniyatlar.html">Imkoniyatlar</a>
+    <a href="./davlat-xizmatlari.html">Davlat xizmatlari</a>
+    <a href="./startap-yoli.html">Startaplar</a>
+    <a href="./laboratoriya.html">3D laboratoriya</a>
+    <a href="#hamkorlik">Hamkorlik</a>
+    <a href="./biletlar.html">Biletlar</a>
   </nav>
   <div class="yi-nav-actions">
     <button type="button" id="yiSearchToggle" class="yi-nav-icon" aria-label="Saytdan qidirish" aria-expanded="false">⌕</button>
@@ -91,7 +83,8 @@
         <button type="button" id="contrastToggle" aria-label="Yuqori kontrastni yoqish">◐</button>
       </div>
     </details>
-    <a class="btn nav-apply yi-cabinet-link" href="./kabinet.html"><span aria-hidden="true">♙</span> Shaxsiy kabinet</a>
+    <a class="btn nav-apply yi-cabinet-link" href="./kabinet.html#loginForm"><span aria-hidden="true">♙</span> Kirish</a>
+    <a class="yi-register-link" href="./kabinet.html#loginForm">Ro‘yxatdan o‘tish <span aria-hidden="true">→</span></a>
   </div>
 </header>
 <button type="button" id="yiDrawerBackdrop" class="yi-drawer-backdrop" aria-label="Navigatsiya menyusini yopish" hidden></button>
@@ -114,7 +107,7 @@
 </div><main id="top">
 <section class="wrap hero" data-flow-label="IMKONIYAT · ARIZA · ISHTIROK · NATIJA">
 <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas><div class="yi-official-resources" aria-label="Yoshlar uchun rasmiy platformalar">
- <div class="yi-official-intro"><span class="yi-official-kicker"><i aria-hidden="true"></i> RASMIY MANBALAR</span><h2>Yoshlar uchun muhim platformalar</h2><p>Davlat xizmatlari va zamonaviy ta’limga bevosita yo‘l.</p></div>
+ <div class="yi-official-intro"><span class="yi-official-kicker"><i aria-hidden="true"></i> ISHONCHLI MANBALAR</span><h2>Foydali rasmiy platformalar</h2><p>Yoshlar siyosati va zamonaviy ta’limga bevosita yo‘l.</p></div>
  <div class="yi-official-links">
   <a class="yi-official-card yi-official-agency" href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer" aria-label="Yoshlar ishlari agentligining rasmiy saytini yangi oynada ochish">
    <span class="yi-official-logo-frame yi-agency-logo-frame"><img class="yi-official-logo yi-agency-logo" src="https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png" referrerpolicy="no-referrer" alt="Yoshlar ishlari agentligi logotipi" width="136" height="84" loading="eager" decoding="async" fetchpriority="high"></span>
@@ -127,18 +120,19 @@
  </div>
 </div>
 <div class="hero-copy">
- <div class="eyebrow">Imkoniyatni top. O‘ZBEKISTON YOSHLARI UCHUN RAQAMLI PLATFORMA</div>
- <h1>Yoshlar uchun<br><em>katta imkoniyatlar!</em></h1>
- <p class="hero-lede">Yoshlar-Ishi — bilim, ish, tashabbus va rivojlanish imkoniyatlarini bir joyga jamlaydigan mustaqil raqamli platforma.</p>
- <p class="hero-expanded-copy">Kerakli imkoniyatni toping, talablarni tushuning, hujjatlarga tayyorlaning va keyingi qadamingizni aniq belgilang.</p>
+ <div class="eyebrow">★ YANGI IMKONIYATLAR SARI!</div>
+ <h1>Yoshlar-Ishi —<br><em>kelajagingiz uchun<br>birinchi qadam!</em></h1>
+ <p class="hero-lede">Davlat imkoniyatlari, ta’lim, startaplar va ko‘plab foydali xizmatlar — endi bitta platformada.</p>
+ <p class="hero-expanded-copy">O‘zingizga mos imkoniyatni toping, talablarni tushuning, hujjatlarni tayyorlang va keyingi qadamingizni aniq belgilang.</p>
  <div class="hero-focus" aria-label="Platformaning uchta asosiy vazifasi">
   <div><span>01</span><strong>Ta’lim va rivojlanish</strong><small>Kurs · stipendiya · grant</small></div>
   <div><span>02</span><strong>Ish va tadbirkorlik</strong><small>Kasb · loyiha · startap</small></div>
   <div><span>03</span><strong>Hamjamiyatga qo‘shiling</strong><small>Jamoa · mentor · tashabbus</small></div>
  </div>
- <div class="actions"><a class="btn" href="#afzalliklar">Loyiha haqida <span aria-hidden="true">▶</span></a><a class="btn alt" href="./imkoniyatlar.html">Boshlash <span aria-hidden="true">➜</span></a><a class="btn alt" href="./biletlar.html">50 ta amaliy bilet ↗</a></div>
+ <div class="actions"><a class="btn" href="./imkoniyatlar.html"><span aria-hidden="true">🚀</span> Imkoniyatlarni ko‘rish <span aria-hidden="true">→</span></a><a class="btn alt" href="./davlat-xizmatlari.html">Davlat xizmatlari <span aria-hidden="true">↗</span></a></div>
  <div class="hero-note"><span class="hero-note-mark">↗</span><span>Yoshlar-Ishi davlat organi emas. U rasmiy manbalarni tushuntiradi va yo‘naltiradi; davlatga ariza faqat tegishli rasmiy portal yoki belgilangan kanal orqali yuboriladi.</span></div>
 </div><div class="art"><div class="arttop"><span>YI / IMKONIYAT YO‘LI</span><span>AMALIY JARAYON · 01–05</span></div><div class="sun"></div><div class="project"><small>YOSHLAR UCHUN YO‘L XARITASI</small><h3>Davlat imkoniyatidan amaliy natijagacha</h3><span class="pill">Moslikni tekshirish</span><span class="pill">Hujjat tayyorlash</span><span class="pill">Holatni kuzatish</span><div class="project-progress"><div><span>Jarayon bosqichi</span><strong>01 <i>/ 05</i></strong></div><div class="progress-track"><span></span></div><div class="progress-labels"><span>Topish</span><span>Moslik</span><span>Ariza</span><span>Ishtirok</span><span>Natija</span></div></div></div><div class="art-sticker"><span>IMKONIYAT</span><span>→</span><span>NATIJA</span></div></div>
+<div class="yi-hero-quote" aria-label="Yangi O‘zbekiston — bizning kelajagimiz">“Yangi O‘zbekiston —<br>bizning kelajagimiz!”</div>
 <div class="hero-storyline yi-hero-ribbon" aria-label="Platformaning to‘rtta asosiy yo‘nalishi">
  <a class="hero-story-step" href="./imkoniyatlar.html"><span class="yi-ribbon-icon">▥</span><span><strong>Rivojlanish imkoniyatlari</strong><small>Ta’lim va kasb</small></span></a>
  <a class="hero-story-step" href="./davlat-xizmatlari.html"><span class="yi-ribbon-icon">▤</span><span><strong>Davlat xizmatlari</strong><small>Bir joyda</small></span></a>
@@ -147,15 +141,7 @@
 </div>
 </section>
 
-<section class="platform-proof yi-platform-proof" aria-label="Yoshlar-Ishi platformasi imkoniyatlari">
- <div class="wrap proof-grid">
-  <div class="proof-intro"><span class="eyebrow">Bitta platformada</span><strong>Imkoniyatdan<br>amaliy qadamgacha.</strong></div>
-  <div class="proof-item"><strong>01</strong><span>Ta’lim va<br>rivojlanish</span></div>
-  <div class="proof-item"><strong>02</strong><span>Ish va<br>bandlik</span></div>
-  <div class="proof-item"><strong>03</strong><span>Startap va<br>tashabbus</span></div>
-  <div class="proof-item"><strong>04</strong><span>Jamoa va<br>hamkorlik</span></div>
- </div>
-</section>
+
 <section class="service-ribbon" id="xizmatlar"><div class="wrap"><div class="yi-quick-panel">
  <div class="yi-quick-heading"><div class="yi-quick-heading-copy"><span class="yi-quick-kicker">BIR BOSISHDA KERAKLI YO‘NALISH</span><h2>Tezkor kirish</h2><p>Eng ko‘p kerak bo‘ladigan imkoniyatlar va xizmatlar.</p></div><a class="yi-quick-all" href="./imkoniyatlar.html">Barcha imkoniyatlar <span aria-hidden="true">↗</span></a></div>
  <div class="yi-quick-grid">
@@ -168,6 +154,15 @@
   <a class="quickservice yi-quick-guides yi-quick-card" href="#jarayon"><span class="yi-quick-card-top"><span class="yi-quick-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M9 7h23l7 7v27H9zM32 7v8h7M16 22h16M16 29h16M16 36h10"/></svg></span><i>07</i></span><span class="yi-quick-copy"><strong>Yo‘riqnomalar</strong><small>Qadam-baqadam tushuntirishlar</small></span><span class="yi-quick-card-bottom"><span>Bo‘limni ochish</span><b>↗</b></span></a>
   <a class="quickservice yi-quick-global yi-quick-card" href="./imkoniyatlar.html?query=xalqaro"><span class="yi-quick-card-top"><span class="yi-quick-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19"/><path d="M5 24h38M24 5c6 6 8 12 8 19s-2 13-8 19c-6-6-8-12-8-19s2-13 8-19Z"/></svg></span><i>08</i></span><span class="yi-quick-copy"><strong>Xalqaro imkoniyatlar</strong><small>Almashinuv, grant va dasturlar</small></span><span class="yi-quick-card-bottom"><span>Bo‘limni ochish</span><b>↗</b></span></a>
  </div></div></div></section>
+<section class="platform-proof yi-platform-proof" aria-label="Yoshlar-Ishi platformasi imkoniyatlari">
+ <div class="wrap proof-grid">
+  <div class="proof-intro"><span class="eyebrow">Yoshlar uchun</span><strong>Biz bilan imkoniyatlar<br>yanada yaqin!</strong></div>
+  <div class="proof-item"><strong>01</strong><span>Ta’lim va<br>rivojlanish</span></div>
+  <div class="proof-item"><strong>02</strong><span>Ish va<br>bandlik</span></div>
+  <div class="proof-item"><strong>03</strong><span>Startap va<br>tashabbus</span></div>
+  <div class="proof-item"><strong>04</strong><span>Jamoa va<br>hamkorlik</span></div>
+ </div>
+</section>
 
 <section class="section benefits-section" id="afzalliklar"><div class="wrap"><div class="head"><div><div class="eyebrow">Platformaning asosiy vazifasi</div><h2>Ma’lumotdan amaliy harakatgacha.</h2></div><p>Yoshlar uchun mavjud imkoniyatlar ko‘p, lekin talablar, hujjatlar va murojaat tartibi turlicha. Yoshlar-Ishi shu yo‘lni tushunarli va izchil qiladi.</p></div><div class="benefit-grid"><article class="benefit-card benefit-featured"><div class="benefit-index">01 / IMKONIYAT QIDIRISH</div><div class="benefit-icon">⌕</div><h3>O‘zingizga mos imkoniyatni toping</h3><p>Davlat dasturlari, ijtimoiy yordam, ta’lim, stipendiya, kasb, ish va tadbirkorlik imkoniyatlarini yo‘nalish bo‘yicha izlang.</p><a href="./imkoniyatlar.html">Katalogni ochish ↗</a></article><article class="benefit-card"><div class="benefit-index">02 / TALAB VA MOSLIK</div><div class="benefit-icon">✓</div><h3>Shartlarni oldindan tushuning</h3><p>Yosh chegarasi, ishtirokchilar toifasi, zarur mezonlar va istisnolarni rasmiy manbalar bilan solishtiring.</p><a href="./imkoniyatlar.html">Moslikni tekshirish ↗</a></article><article class="benefit-card"><div class="benefit-index">03 / ARIZA VA ISHTIROK</div><div class="benefit-icon">↗</div><h3>Hujjat va arizaga tayyorlaning</h3><p>Qadamlar ro‘yxatini belgilang, kerakli hujjatlarni tayyorlang va ariza matnining qoralamasini tuzing.</p><a href="./imkoniyatlar.html">Yo‘l xaritasini ochish ↗</a></article><article class="benefit-card"><div class="benefit-index">04 / NATIJA VA KUZATUV</div><div class="benefit-icon">◷</div><h3>Keyingi holatlarni qayd eting</h3><p>Ariza yuborilganini, javob kutilayotganini, qaror yoki ishtirok natijasini hamda keyingi harakatni shaxsiy hisobingizda saqlang.</p><a href="./imkoniyatlar.html#savedJourneys">Jarayonlarimni ko‘rish ↗</a></article></div><div class="benefit-foot"><span><i></i> Mustaqil platforma · Davlat qarori, grant yoki xizmat natijasini kafolatlamaydi.</span><a href="./privacy.html">Ma’lumotlar qanday ishlatiladi? ↗</a></div></div></section>
 

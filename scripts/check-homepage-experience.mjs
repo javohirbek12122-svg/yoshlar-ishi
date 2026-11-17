@@ -49,6 +49,12 @@ assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="n
 assert.ok(html.includes('href="https://www.ustoz.ai/uz" target="_blank" rel="noopener noreferrer"'), "Ustoz AI logo must open its official site safely");
 assert.ok(html.includes('https://uzchess.uz/images/partners/6/photo6fe378ad750c9351681f39aca9de5c32.png') && html.includes('https://uzreport.news/fotobank/image/2cbf2330eea2f444c4bf454a6b8f69e6.jpeg'), "Verified agency and Ustoz AI logo assets must be present");
 assert.ok(html.includes('href="./platform-polish.css"'), "Homepage must load the final shared design layer after the legacy styles");
+assert.ok(html.includes('href="./reference-home.css"') && html.indexOf('href="./reference-home.css"') > html.indexOf('href="./platform-polish.css"'), "Reference homepage skin must load after existing styles");
+assert.ok(html.includes('class="yi-agency-brand"') && html.includes('href="https://gov.uz/oz/yoshlar"'), "Agency logo must open the official agency website");
+assert.ok(html.includes('class="yi-register-link"') && html.includes('href="./kabinet.html#loginForm"'), "Registration must route to the existing OTP form");
+assert.ok(html.includes('class="yi-hero-quote"') && html.includes('Imkoniyatlarni ko‘rish'), "Reference hero and primary CTA must exist");
+assert.ok(worker.includes('"/reference-home.css"'), "PWA must precache the new homepage skin");
+
 assert.match(polish, /yi-official-logo[\s\S]*?object-fit:contain/);
 assert.match(polish, /body \.yi-platform-proof\s*\{[\s\S]*?margin:18px auto 0/);
 assert.match(polish, /body \.yi-nav\s*\{[\s\S]*?margin:12px auto 0/);

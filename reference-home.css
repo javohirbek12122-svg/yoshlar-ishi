@@ -1,0 +1,191 @@
+/* Yoshlar-Ishi reference-led homepage. Visual-only overrides; existing controllers and forms remain. */
+:root{--yi-ref-navy:#061d4b;--yi-ref-blue:#075fe8;--yi-ref-ink:#122653;--yi-ref-muted:#657695}
+html{scroll-padding-top:96px}body{background:#edf4ff;color:var(--yi-ref-ink)}
+body .yi-nav{position:sticky;top:8px;z-index:95;width:min(1570px,calc(100% - 36px));min-height:70px;margin:8px auto -80px;padding:7px 14px 7px 16px;border:1px solid #ffffff38;border-radius:18px;background:rgba(4,24,68,.90);box-shadow:0 15px 42px #0211363d;backdrop-filter:blur(18px) saturate(150%)}
+body .yi-agency-brand{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:125px;color:#fff;text-decoration:none}
+body .yi-agency-brand img{display:block;width:40px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 6px #0003)}
+body .yi-agency-brand span{display:flex;flex-direction:column;gap:2px;line-height:1.08}
+body .yi-agency-brand strong{font:800 9px/1.15 Manrope,sans-serif;letter-spacing:.04em;color:#fff}
+body .yi-agency-brand small{font:700 8px/1.1 Manrope,sans-serif;letter-spacing:.12em;color:#c9ddff}
+body .yi-brand-divider{width:1px;height:36px;flex:0 0 1px;background:#ffffff7a}
+body .yi-brand{min-width:150px;gap:8px;color:#fff;text-decoration:none}
+body .yi-brand-mark{width:42px;height:42px;flex-basis:42px;border-radius:50%;background:linear-gradient(145deg,#f8ffff,#dcefff);box-shadow:0 0 0 1px #ffffff3d}
+body .yi-brand-text strong{font-size:16px;color:#fff}body .yi-brand-text small{font-size:8px;color:#cfdef9}
+body .yi-main-links{gap:clamp(3px,.65vw,10px);font-size:10px}
+body .yi-main-links>a{padding:10px 9px;border-radius:999px;color:#edf5ff!important;font-size:10px;font-weight:800;white-space:nowrap}
+body .yi-main-links>a:hover{background:#ffffff22;color:#fff!important;text-decoration:none}
+body .yi-main-links>.yi-nav-home{background:linear-gradient(135deg,#126eea,#0645b7);box-shadow:0 7px 18px #004bc847}
+body .yi-nav-actions{gap:6px;flex:0 0 auto}
+body .yi-nav-icon{width:37px;height:37px;border:0;border-radius:50%;background:transparent;color:#fff;font-size:21px}
+body .yi-nav-icon:hover{background:#ffffff22}
+body .yi-accessibility>summary{border-color:#ffffff42;background:#ffffff14;color:#fff}
+body .yi-accessibility .a11y{background:#fff;border:1px solid #d9e5f3;border-radius:10px;padding:5px;box-shadow:0 15px 40px #0003}
+body .yi-accessibility .a11y button{min-width:36px;min-height:36px}
+body .yi-drawer-toggle{display:none;border-color:#ffffff52;background:#ffffff14;color:#fff}
+body .yi-cabinet-link{min-height:39px;padding:9px 15px;border:1px solid #ffffffad;border-radius:999px;background:transparent;color:#fff;box-shadow:none;font-size:10px}
+body .yi-cabinet-link:hover{background:#ffffff22;color:#fff}
+body .yi-register-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:9px 14px;border:1px solid #3187ff;border-radius:999px;background:linear-gradient(135deg,#1681ff,#064fe0);color:#fff;box-shadow:0 9px 24px #0046cd4d;font-size:10px;font-weight:900;white-space:nowrap;text-decoration:none}
+body .yi-register-link:hover{background:linear-gradient(135deg,#3392ff,#0756e5);color:#fff;text-decoration:none}
+body .yi-search-panel{position:fixed;top:90px;left:50%;z-index:120;transform:translateX(-50%);padding:18px;border:1px solid #dce8f6;border-radius:17px;background:#fff;box-shadow:0 24px 65px #04184047}
+body .hero.wrap{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,.91fr) minmax(0,1.09fr);grid-template-rows:minmax(440px,1fr) auto;grid-template-areas:"copy art" "resources resources";align-items:center;gap:12px clamp(24px,3vw,52px);width:100%;max-width:none;min-height:735px;margin:0;padding:126px max(22px,calc((100% - 1510px)/2)) 17px;overflow:hidden;border-radius:0;background:#082b70;color:#fff}
+body .hero.wrap:before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;background:radial-gradient(ellipse at 71% 23%,#4caeff6b,transparent 34%),radial-gradient(ellipse at 9% 75%,#1061dd4d,transparent 39%),linear-gradient(130deg,#041943,#063b91 57%,#0b63c9)}
+body .hero.wrap:after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,#03133af2 0%,#042259d6 35%,#05357e66 66%,#05377d3d 100%),linear-gradient(180deg,#04184519 0%,#0416430d 54%,#0317478f 100%),url("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800") center 43%/cover no-repeat}
+body .hero .ambient-canvas{z-index:0;opacity:.20}
+body .hero-copy{grid-area:copy;z-index:2;width:100%;max-width:690px;padding:12px 0 8px}
+body .hero .eyebrow{display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:6px 13px;border:1px solid #79beff70;border-radius:999px;background:linear-gradient(110deg,#0e67ebb8,#0846ad8f);color:#f4f9ff;font-size:10px;font-weight:900;letter-spacing:.01em;box-shadow:0 8px 24px #0039ab38}
+body .hero .eyebrow:before{display:none}
+body .hero h1{max-width:720px;margin:15px 0 16px;color:#fff;font:800 clamp(43px,5.55vw,79px)/.99 Manrope,sans-serif;letter-spacing:-.075em;text-wrap:balance}
+body .hero h1 em{background:linear-gradient(95deg,#fff 0%,#d7eaff 47%,#63b9ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+body .hero .hero-lede{max-width:570px;margin:0 0 7px;color:#f2f7ff;font-size:clamp(15px,1.35vw,19px);line-height:1.55;font-weight:600}
+body .hero .hero-expanded-copy{max-width:570px;color:#d3e5ff;font-size:12px;line-height:1.75}
+body .hero .hero-focus{display:none!important}
+body .hero .actions{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:22px 0 14px}
+body .hero .actions .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:12px 19px;border:1px solid #2388ff;border-radius:999px;background:linear-gradient(135deg,#1595ff,#0753e8);color:#fff;box-shadow:0 10px 26px #0055e15c;font-size:12px;font-weight:900}
+body .hero .actions .btn:hover{background:linear-gradient(135deg,#42aaff,#0965f6);color:#fff;transform:translateY(-2px)}
+body .hero .actions .btn.alt{min-height:48px;border-color:#ffffff87;background:#081d483d;color:#fff;box-shadow:none}
+body .hero .actions .btn.alt:hover{background:#ffffff22;border-color:#fff}
+body .hero .hero-note{max-width:600px;margin-top:13px;padding:8px 11px;border:1px solid #dbedff33;border-radius:10px;background:#01113154;color:#d9e9ff;font-size:9px;line-height:1.6;backdrop-filter:blur(8px)}
+body .hero .hero-note-mark{background:#ffffff24;color:#fff}
+body .hero .art.yi-hero-visual{grid-area:art;position:relative;z-index:2;align-self:end;width:100%;max-width:790px;min-height:500px;margin:0 auto;padding:0;overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none}
+body .hero .art.yi-hero-visual:before{display:none}
+body .yi-hero-scene{position:relative;isolation:isolate;min-height:510px;width:100%;perspective:1500px}
+body .yi-hero-scene:before{content:"";position:absolute;z-index:0;top:4%;right:7%;width:65%;height:45%;border-radius:4px;background:linear-gradient(180deg,#fff 0 31%,#e72d48 31% 34%,#fff 34% 65%,#18a56b 65%);opacity:.23;filter:drop-shadow(0 16px 24px #0003);transform:perspective(900px) rotateY(-15deg) rotateZ(4deg);pointer-events:none}
+body .yi-scene-photo-frame{position:absolute;z-index:1;top:27px;right:1%;width:98%;height:430px;overflow:hidden;border:1px solid #ffffff61;border-radius:25px;background:linear-gradient(145deg,#d9ecff,#fff);box-shadow:0 35px 85px #010c2a78,0 9px 25px #010c2a40;transform:perspective(1500px) rotateY(-5deg) rotateX(2deg) translateZ(30px)}
+body .yi-scene-photo-frame:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#041b4805 52%,#03153c59 100%),linear-gradient(115deg,#ffffff2b,transparent 46%)}
+body .yi-scene-people{display:block;width:100%;height:100%;object-fit:cover;object-position:center 46%;filter:saturate(1.1) contrast(1.03)}
+body .yi-scene-float{border:1px solid #ffffffb8;border-radius:14px;box-shadow:0 18px 38px #01123147}
+body .yi-scene-status{top:13px;left:0}body .yi-scene-caption-card{left:1%;bottom:23px}
+body .yi-ai-helper-card{right:-5px;top:62%;z-index:5}body .yi-scene-flow-label{bottom:3px;right:2%}
+body .yi-hero-quote{position:absolute;z-index:3;top:114px;right:max(28px,calc((100% - 1510px)/2));max-width:220px;color:#f4f8ff;font:italic 700 18px/1.2 Georgia,serif;text-align:right;text-shadow:0 3px 14px #0007;transform:rotate(-3deg)}
+body .yi-official-resources{grid-area:resources;position:relative;z-index:4;display:grid;grid-template-columns:minmax(190px,.7fr) minmax(0,2.3fr);align-items:center;gap:18px;width:100%;max-width:1510px;min-height:88px;margin:0 auto;padding:10px 19px;border:1px solid #ffffffdf;border-radius:19px;background:#f6fafff0;box-shadow:0 17px 42px #000f36;backdrop-filter:blur(18px)}
+body .yi-official-intro{min-width:0}
+body .yi-official-kicker{display:flex;align-items:center;gap:7px;color:#27679d;font-size:8px;font-weight:900;letter-spacing:.12em}
+body .yi-official-kicker i{width:7px;height:7px;border-radius:50%;background:#19a66b;box-shadow:0 0 0 4px #19a66b1f}
+body .yi-official-intro h2{margin:5px 0 3px;color:#16365f;font:800 15px/1.18 Manrope,sans-serif;letter-spacing:-.04em}
+body .yi-official-intro p{margin:0;color:#687d99;font-size:9px;line-height:1.4}
+body .yi-official-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+body .yi-official-card{display:flex;align-items:center;gap:12px;min-width:0;min-height:64px;padding:8px 13px;border:0;border-left:1px solid #cbd9ea;border-radius:0;background:transparent;color:#17365e;box-shadow:none;text-decoration:none}
+body .yi-official-card:hover{background:#edf5ff;transform:none;text-decoration:none}
+body .yi-official-logo-frame,body .yi-agency-logo-frame,body .yi-ustoz-logo-frame{display:grid;place-items:center;flex:0 0 52px;width:52px;height:52px;padding:3px;border:0;border-radius:11px;background:#fff}
+body .yi-official-logo{max-width:100%;max-height:100%;object-fit:contain}
+body .yi-official-card-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+body .yi-official-type{color:#6d829c;font-size:7px;font-weight:900;letter-spacing:.10em}
+body .yi-official-card-copy strong{color:#15365f;font:800 12px/1.25 Manrope,sans-serif}
+body .yi-official-card-copy small{color:#70839b;font-size:9px;line-height:1.4}
+body .yi-official-open{margin-left:auto;color:#1566c5;font-size:16px}
+body .yi-hero-ribbon{display:none!important}
+body .platform-proof.yi-platform-proof{position:relative;z-index:1;width:100%;margin:10px auto 0;padding:0;background:transparent}
+body .yi-platform-proof .proof-grid{width:min(1510px,calc(100% - 44px));grid-template-columns:minmax(240px,1.3fr) repeat(4,minmax(0,1fr));gap:10px;padding:14px 16px;border:0;border-radius:18px;background:linear-gradient(115deg,#fff 0%,#f7faff 60%,#e7f2ff 100%);box-shadow:0 13px 35px #12377217}
+body .yi-platform-proof .proof-intro{padding:8px 12px}
+body .yi-platform-proof .proof-intro .eyebrow{color:#1769c3;font-size:8px}
+body .yi-platform-proof .proof-intro strong{color:#152f66;font:800 21px/1.15 Manrope,sans-serif;letter-spacing:-.055em}
+body .yi-platform-proof .proof-item{display:flex;align-items:center;justify-content:flex-start;gap:11px;min-height:74px;padding:12px;border:1px solid #e1eafa;border-radius:14px;background:#ffffffdf;box-shadow:0 7px 18px #1841870b}
+body .yi-platform-proof .proof-item strong{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border-radius:11px;background:#e6f1ff;color:#1260c9;font:900 14px Manrope,sans-serif}
+body .yi-platform-proof .proof-item span{color:#233c70;font:800 10px/1.45 Manrope,sans-serif}
+body .service-ribbon{padding:17px 0 12px!important;background:transparent!important}
+body .service-ribbon>.wrap{display:block!important;width:min(1510px,calc(100% - 44px))}
+body .yi-quick-panel{display:grid;grid-template-columns:minmax(170px,.82fr) repeat(8,minmax(0,1fr));gap:0;align-items:stretch;padding:13px;border:1px solid #e1eafa;border-radius:19px;background:linear-gradient(120deg,#fff,#f5f9ff);box-shadow:0 13px 35px #12377214}
+body .yi-quick-heading{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:9px;min-width:0;padding:10px 15px;border-right:1px solid #bfcfe5}
+body .yi-quick-kicker{color:#3072b2;font-size:7px;font-weight:900;letter-spacing:.12em}
+body .yi-quick-heading h2{margin:0;color:#152f66;font:800 20px/1.1 Manrope,sans-serif;letter-spacing:-.05em}
+body .yi-quick-heading p{margin:0;color:#71819a;font-size:9px;line-height:1.45}
+body .yi-quick-all{display:inline-flex;align-items:center;gap:6px;margin-top:3px;color:#0e5bcc;font-size:9px;font-weight:900}
+body .yi-quick-grid{display:contents}
+body .yi-quick-grid .yi-quick-card{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:7px;min-width:0;min-height:125px;margin:0 4px;padding:11px 7px;border:1px solid #e4ecf8;border-radius:14px;background:#fff;color:#142e64;text-align:center;text-decoration:none;box-shadow:0 5px 15px #0e3d8a0b;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+body .yi-quick-grid .yi-quick-card:hover{transform:translateY(-4px);border-color:#9bc2f6;box-shadow:0 13px 24px #0e4cab1f;text-decoration:none}
+body .yi-quick-card-top{display:flex;flex-direction:column;align-items:center;gap:2px}
+body .yi-quick-icon{display:grid;place-items:center;width:44px;height:42px;border-radius:13px;background:linear-gradient(145deg,#edf5ff,#dcecff);color:#0864e5}
+body .yi-quick-icon svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+body .yi-quick-card-top>i{display:none}
+body .yi-quick-copy{display:grid;gap:4px;min-width:0}
+body .yi-quick-copy strong{color:#132c62;font:800 9px/1.3 Manrope,sans-serif}
+body .yi-quick-copy small{color:#71829c;font-size:7px;line-height:1.35}
+body .yi-quick-card-bottom{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding-top:5px;border-top:1px solid #edf2fa;color:#2166bd;font-size:7px;font-weight:900}
+body .yi-quick-card-bottom b{font-size:11px}
+body .yi-site-directory{width:min(1510px,calc(100% - 44px));margin:26px auto}
+body .yi-directory-card{min-height:68px}
+body .yi-search-panel[hidden]{display:none!important}
+body .yi-side-drawer{z-index:150}body .yi-drawer-backdrop{z-index:149}
+body.yi-dark-mode{background:#08172e;color:#e9f1ff}
+body.yi-dark-mode .yi-official-resources,body.yi-dark-mode .yi-quick-panel,body.yi-dark-mode .yi-platform-proof .proof-grid{border-color:#294365;background:linear-gradient(130deg,#10284a,#132f54);color:#eff5ff}
+body.yi-dark-mode .yi-official-intro h2,body.yi-dark-mode .yi-official-card-copy strong,body.yi-dark-mode .yi-quick-heading h2,body.yi-dark-mode .yi-quick-copy strong,body.yi-dark-mode .yi-platform-proof .proof-intro strong,body.yi-dark-mode .yi-platform-proof .proof-item span{color:#eef5ff}
+body.yi-dark-mode .yi-official-intro p,body.yi-dark-mode .yi-official-card-copy small,body.yi-dark-mode .yi-quick-heading p,body.yi-dark-mode .yi-quick-copy small{color:#b7c9e2}
+body.yi-dark-mode .yi-official-card{border-left-color:#365272}
+body.yi-dark-mode .yi-quick-grid .yi-quick-card,body.yi-dark-mode .yi-platform-proof .proof-item{border-color:#2b4568;background:#152f52}
+body.yi-dark-mode .yi-quick-card-bottom{border-color:#304969;color:#a9caff}
+body.yi-dark-mode .yi-platform-proof .proof-item strong{background:#1e4778;color:#d8eaff}
+@media(max-width:1280px){
+ body .yi-agency-brand{min-width:105px;gap:5px}body .yi-agency-brand img{width:34px;height:38px}
+ body .yi-agency-brand strong,body .yi-agency-brand small{font-size:7px}
+ body .yi-brand{min-width:132px}body .yi-brand-text strong{font-size:14px}body .yi-brand-mark{width:37px;height:37px;flex-basis:37px}
+ body .yi-main-links{gap:0}body .yi-main-links>a{padding:9px 6px;font-size:9px}
+ body .yi-nav-actions{gap:3px}body .yi-register-link{padding-inline:10px;font-size:9px}
+}
+@media(max-width:1080px){
+ body .yi-nav{width:calc(100% - 24px);margin:7px auto -69px;min-height:62px}
+ body .yi-main-links{display:none}body .yi-drawer-toggle{display:inline-flex;align-items:center;gap:7px}
+ body .yi-register-link{display:none}
+ body .yi-agency-brand{min-width:auto}body .yi-agency-brand img{width:35px;height:36px}body .yi-agency-brand span{display:none}
+ body .yi-brand-divider{height:30px}
+ body .hero.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;grid-template-areas:"copy" "art" "resources";min-height:0;padding:115px 22px 17px;gap:12px}
+ body .hero-copy{max-width:830px}body .hero .art.yi-hero-visual{min-height:360px;max-width:700px;justify-self:center}
+ body .yi-hero-scene{min-height:365px}body .yi-scene-photo-frame{top:12px;height:320px;width:94%;right:3%}
+ body .yi-hero-quote{top:104px;right:28px;font-size:14px}
+ body .yi-official-resources{grid-template-columns:1fr;gap:7px;padding:12px}
+ body .yi-official-intro h2{display:inline-block;margin-right:8px}body .yi-official-intro p{display:inline-block}
+ body .yi-official-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body .yi-platform-proof .proof-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body .yi-platform-proof .proof-intro{grid-column:1/-1}
+ body .yi-quick-panel{display:block;padding:15px}
+ body .yi-quick-heading{display:grid;grid-template-columns:1fr auto;border:0;border-bottom:1px solid #dce7f4;padding:4px 4px 12px;margin-bottom:12px}
+ body .yi-quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+ body .yi-quick-grid .yi-quick-card{margin:0;min-height:120px}
+}
+@media(max-width:720px){
+ html{scroll-padding-top:72px}
+ body .yi-nav{width:calc(100% - 18px);min-height:56px;margin:7px auto -64px;padding:5px 7px;border-radius:14px}
+ body .yi-agency-brand img{width:31px;height:33px}body .yi-brand{min-width:0;gap:5px}
+ body .yi-brand-mark{width:32px;height:32px;flex-basis:32px}body .yi-brand-mark svg{width:29px;height:29px}
+ body .yi-brand-text strong{font-size:12px}body .yi-brand-text small{font-size:6px}
+ body .yi-nav-actions{gap:2px}body .yi-nav-icon{width:31px;height:34px;font-size:18px}
+ body .yi-accessibility{display:none}body .yi-drawer-toggle{min-height:35px;padding:5px 8px}
+ body .yi-drawer-toggle-label{font-size:8px}body .yi-cabinet-link{min-height:34px;padding:7px 9px;font-size:8px}
+ body .hero.wrap{width:100%;padding:100px 15px 14px;gap:7px;row-gap:5px}
+ body .hero .eyebrow{min-height:27px;padding:5px 10px;font-size:8px}
+ body .hero h1{font-size:clamp(36px,9.8vw,53px)!important;line-height:1.01;margin:12px 0}
+ body .hero .hero-lede{font-size:13px;line-height:1.5}body .hero .hero-expanded-copy{font-size:10px;line-height:1.6}
+ body .hero .actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:15px 0 10px}
+ body .hero .actions .btn{min-height:44px;width:100%;padding:9px 7px;font-size:9px}
+ body .hero .hero-note{font-size:8px;padding:7px 9px;margin-top:9px}
+ body .hero .art.yi-hero-visual{min-height:265px;max-width:520px}
+ body .yi-hero-scene{min-height:270px}body .yi-scene-photo-frame{top:11px;width:95%;right:2%;height:215px;border-radius:15px}
+ body .yi-scene-status{top:1px;left:0;font-size:8px;padding:7px 9px}
+ body .yi-scene-caption-card{left:0;bottom:5px;max-width:75%;padding:8px 9px}
+ body .yi-scene-float-bottom strong{font-size:9px}body .yi-scene-float-bottom small{font-size:7px}
+ body .yi-ai-helper-card{top:61%;right:0;width:116px;padding:7px;border-radius:10px}
+ body .yi-hero-quote{display:none}
+ body .yi-official-resources{grid-template-columns:1fr;padding:11px;border-radius:14px}
+ body .yi-official-intro h2{display:block;font-size:14px;margin:4px 0 2px}body .yi-official-intro p{display:block;font-size:8px}
+ body .yi-official-links{grid-template-columns:1fr 1fr;gap:6px}
+ body .yi-official-card{min-height:64px;gap:6px;padding:6px;border:0;border-radius:10px;background:#fff}
+ body .yi-official-logo-frame,body .yi-agency-logo-frame,body .yi-ustoz-logo-frame{width:34px;height:34px;flex-basis:34px;padding:1px}
+ body .yi-official-type{font-size:5px}body .yi-official-card-copy strong{font-size:7px;line-height:1.2}
+ body .yi-official-card-copy small,body .yi-official-open{display:none}
+ body .service-ribbon{padding:12px 0 7px!important}body .service-ribbon>.wrap{width:calc(100% - 18px)}
+ body .yi-quick-panel{padding:11px;border-radius:14px}
+ body .yi-quick-heading{grid-template-columns:1fr;gap:5px;padding-bottom:9px}
+ body .yi-quick-heading h2{font-size:19px}body .yi-quick-heading p{font-size:8px}body .yi-quick-all{font-size:8px}
+ body .yi-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ body .yi-quick-grid .yi-quick-card{min-height:106px;padding:9px 7px}
+ body .yi-quick-icon{width:37px;height:36px}body .yi-quick-icon svg{width:25px;height:25px}
+ body .yi-quick-copy strong{font-size:9px}body .yi-quick-copy small{font-size:7px}body .yi-quick-card-bottom{font-size:7px}
+ body .yi-platform-proof{margin-top:8px}
+ body .yi-platform-proof .proof-grid{width:calc(100% - 18px);grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:10px}
+ body .yi-platform-proof .proof-intro{padding:5px}body .yi-platform-proof .proof-intro strong{font-size:18px}
+ body .yi-platform-proof .proof-item{min-height:58px;padding:8px;gap:7px}
+ body .yi-platform-proof .proof-item strong{width:29px;height:29px;flex-basis:29px;font-size:11px}
+ body .yi-platform-proof .proof-item span{font-size:8px}
+ body .yi-site-directory{width:calc(100% - 18px);margin:20px auto;padding:13px}
+ body #hamkorlik .partner{grid-template-columns:1fr}
+}
+@media(max-width:390px){body .yi-brand-text small{display:none}body .yi-drawer-toggle-label{display:none}body .yi-cabinet-link{padding-inline:8px}body .yi-official-card-copy strong{font-size:6.5px}}
+@media(prefers-reduced-motion:reduce){body .yi-quick-grid .yi-quick-card{transition:none!important}body .yi-quick-grid .yi-quick-card:hover{transform:none!important}}

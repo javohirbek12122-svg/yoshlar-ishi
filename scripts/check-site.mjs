@@ -10,6 +10,7 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 const required = [
   "index.html",
   "platform-polish.css",
+  "reference-home.css",
   "biletlar.html",
   "biletlar.css",
   "biletlar-app.js",
