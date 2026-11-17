@@ -228,7 +228,7 @@ assert.match(memberJs,/function openDrawer\(/);
 assert.match(memberJs,/function closeDrawer\(/);
 assert.match(memberCss,/\.hp-drawer/);
 assert.doesNotMatch(memberJs,/service_role|SUPABASE_SERVICE_ROLE_KEY|client_secret/i);
-new vm.Script(memberJs.replace(/^import .*?;\\s*/gm,""), { filename: "hamjamiyat.js" });
+new vm.Script(memberJs.split("\n").filter(line => !line.startsWith("import ")).join("\n"), { filename: "hamjamiyat.js" });
 console.log("✓ member authentication, private profiles/CV, portfolio, ten post categories, activity charts and drawer syntax validated");
 console.log("✓ admin login, allowlist checks, review pages, auto-refresh, CSV export and integration registry are present");
 for (const feature of [
