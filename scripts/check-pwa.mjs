@@ -82,7 +82,7 @@ for (let i = 1; i <= 50; i++) {
   const id = String(i).padStart(3, "0");
   assert.ok(precache.includes(`/biletlar/${id}.html`), `Ticket ${id} must be precached`);
 }
-assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html"\]\)/);
+assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html", "\/hamjamiyat\.html"\]\)/);
 assert.match(worker, /url\.search/);
 assert.match(worker, /Cache-Control/);
 
