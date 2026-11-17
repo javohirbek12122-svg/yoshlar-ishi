@@ -206,3 +206,6 @@ body.hp-dark .hp-auth-footnote,body.hp-dark .hp-profile-completion,body.hp-dark 
 .hp-post-card[data-post-type="collaboration"] .hp-post-visibility,.hp-post-card[data-post-type="team"] .hp-post-visibility{background:#e9f5ee;color:#286849}
 .hp-post-card[data-post-type="achievement"] .hp-post-visibility{background:#f2ebfb;color:#694493}
 @media(max-width:600px){.hp-composer-actions select{width:100%;min-height:44px}.hp-feed-tools select{width:100%;min-height:44px}.hp-feed-tools{grid-template-columns:1fr}.hp-icon-button,.hp-menu-button,.hp-avatar-button,.hp-signout-button{height:44px}.hp-icon-button{width:44px}.hp-menu-button{width:44px}}
+
+@media(max-width:820px){.hp-side-menu button{min-height:44px}}
+@media(max-width:600px){.hp-body input:not([type=checkbox]):not([type=radio]),.hp-body select,.hp-body textarea{font-size:16px;min-height:44px}.hp-body textarea{min-height:100px}.hp-header-actions button{min-height:44px}}
