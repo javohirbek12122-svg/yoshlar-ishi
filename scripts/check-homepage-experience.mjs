@@ -52,7 +52,7 @@ assert.ok(html.includes('https://uzchess.uz/images/partners/6/photo6fe378ad750c9
 assert.ok(html.includes('href="./platform-polish.css"'), "Homepage must load the final shared design layer after the legacy styles");
 assert.ok(html.includes('href="./reference-home.css"') && html.indexOf('href="./reference-home.css"') > html.indexOf('href="./platform-polish.css"'), "Reference homepage skin must load after existing styles");
 assert.ok(html.includes('class="yi-agency-brand"') && html.includes('href="https://gov.uz/oz/yoshlar"'), "Agency logo must open the official agency website");
-assert.ok(html.includes('class="yi-register-link"') && html.includes('href="./hamjamiyat.html?mode=register#register"'), "Registration must route to the existing OTP form");
+assert.ok(html.includes('class="yi-register-link"') && html.includes('href="./hamjamiyat.html?mode=register#hpAuthGate"'), "Registration must route to the existing OTP form");
 assert.ok(html.includes('class="yi-hero-quote"') && html.includes('Imkoniyatlarni ko‘rish'), "Reference hero and primary CTA must exist");
 assert.ok(worker.includes('"/reference-home.css"'), "PWA must precache the new homepage skin");
 
