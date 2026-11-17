@@ -21,7 +21,7 @@ execFileSync(process.execPath, ["--check", "homepage-experience.js"], { stdio: "
 for (const id of ["afzalliklar","jarayon","rasmiy-xizmatlar","imkoniyatlar","imkoniyatlar-yakun","jamoadoshlar","top-tashabbuslar","tashabbus","hamkorlik","initiativeForm","trackForm","partnerForm","teamPostForm","aiIdeaForm","showcaseBoard","opportunityGrid","sourceSearch"]) {
   assert.ok(html.includes('id="' + id + '"'), "Existing homepage feature was removed: " + id);
 }
-for (const page of ["./startap-yoli.html","./laboratoriya.html","./kabinet.html"]) {
+for (const page of ["./startap-yoli.html","./laboratoriya.html","./kabinet.html","./assessment.html"]) {
   assert.ok(js.includes(page), "Homepage quick navigation is missing " + page);
 }
 assert.match(js, /NESTED_GROUPS/);
@@ -64,6 +64,7 @@ assert.ok(html.includes('class="yi-official-card yi-official-agency"') && html.i
 assert.ok(html.includes("yi-drawer-brand-icon") && html.includes("yi-drawer-ustoz-icon"), "The side navigation must use the same official brand logos as the hero strip");
 assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
+assert.ok(html.includes("yi-assessment-announcement") && html.includes("SOON · TEZ KUNDA") && html.includes("./assessment.html"), "Hero must prominently announce the new tests and upcoming partnership review");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
 assert.ok(html.includes('id="yiDrawerToggle"') && html.includes('id="yiSideDrawer"') && html.includes('id="yiDrawerBackdrop"'), "Three-line navigation must provide a trigger, modal drawer and backdrop");
