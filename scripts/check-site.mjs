@@ -50,6 +50,7 @@ const required = [
   "hamjamiyat.css",
   "hamjamiyat.js",
   "INTEGRATIONS_SETUP.md",
+  "GOOGLE_OAUTH_SETUP.md",
   "privacy.html",
   "robots.txt",
   ".github/workflows/site-health.yml",
