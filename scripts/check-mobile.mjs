@@ -11,6 +11,7 @@ const server=remoteBase?null:http.createServer((req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url||"/","http://127.0.0.1").pathname);
   const rel=pathname==="/"?"index.html":pathname.replace(/^\/+/,"");
+ ["/hamjamiyat.html","Hamjamiyat — a’zo kabineti"],
   const target=path.resolve(root,rel);
   if(target!==root&&!target.startsWith(root+path.sep)){res.writeHead(403).end();return}
   let file=target;

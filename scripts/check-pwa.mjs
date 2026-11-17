@@ -81,7 +81,8 @@ for (let i = 1; i <= 50; i++) {
   const id = String(i).padStart(3, "0");
   assert.ok(precache.includes(`/biletlar/${id}.html`), `Ticket ${id} must be precached`);
 }
-assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html"\]\)/);
+assert.match(worker, /PRIVATE_PATHS = new Set\(\["\/admin\.html", "\/kabinet\.html", "\/hamjamiyat\.html"\]\)/);
+const communityPrecache = worker.split("const PRECACHE_URLS = [")[1]?.split("];")[0] || ""; assert.ok(!communityPrecache.includes('"/hamjamiyat.html"'), "Authenticated community page must not be precached");
 assert.match(worker, /url\.search/);
 assert.match(worker, /Cache-Control/);
 
@@ -99,11 +100,12 @@ assert.equal(common?.get("referrer-policy"), "strict-origin-when-cross-origin");
 assert.equal(common?.get("x-frame-options"), "DENY");
 assert.equal(rules.get("/admin.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
 assert.equal(rules.get("/kabinet.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
+assert.equal(rules.get("/hamjamiyat.html")?.get("cache-control"), "private, no-store, max-age=0, must-revalidate");
 assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, no-store, must-revalidate");
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v16"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v18"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

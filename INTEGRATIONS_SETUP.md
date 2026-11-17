@@ -67,7 +67,20 @@ The personal-account `get_my_initiatives()` and `update_my_initiative(...)` func
 
 Hamkorlik murojaatlarining emaili, telefoni, xabari va ichki admin izohi `admin_list_connection_requests()` orqali faqat faol admin ro‘yxatidagi hisobga qaytariladi. Holat/izoh o‘zgartirish `admin_review_connection_request(...)` orqali bajariladi; funksiya admin ruxsatini va avvalgi holatni tekshiradi. Oddiy brauzer sessiyasi bu maydonlarni REST jadvalidan to‘g‘ridan-to‘g‘ri o‘qiy yoki yangilay olmaydi.
 
-## 4. Shaxsiy kabinet
+## 4. Hamjamiyat, profil va shaxsiy kabinet
+
+`/hamjamiyat.html` sahifasi email/parol va Google orqali kirish, ro‘yxatdan o‘tish, a’zo katalogi, postlar, portfolio, CV, maxfiylik hamda faollik grafiklarini birlashtiradi.
+
+- Google OAuth uchun Client ID va Client Secret faqat Yoshlar-Ishi Supabase Dashboard → Authentication → Providers → Google ichida sozlanadi. Ular GitHub yoki frontend kodiga kiritilmaydi.
+- Google Cloud OAuth Authorized JavaScript origin: `https://yoshlar-ishi-site.vercel.app`.
+- Google Cloud Authorized redirect URI: `https://nnodsqnqsqrmzcycrmpr.supabase.co/auth/v1/callback`.
+- Supabase Auth URL Configuration Redirect URLs ro‘yxatiga `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html?tab=feed` va `https://yoshlar-ishi-site.vercel.app/admin.html?admin-google=1` qo‘shiladi.
+- Admin Google kirishi haqiqiy, tasdiqlangan Google identity va `admin_allowlist` orqali server tomonda tekshiriladi. Oddiy Google hisobi admin huquqini olmaydi.
+- Profil va CV private default; foydalanuvchi a’zo katalogiga chiqish va CV’ni ochiq ulashishga alohida rozilik beradi.
+- CV va post rasmlari private Storage bucket’larda turadi, CV esa faqat ruxsat etilgan holatda short-lived signed URL bilan ko‘rsatiladi.
+- Faollik grafiklari `member_activity_events` va kuniga bitta `record_member_daily_visit()` yozuviga asoslanadi; soat/kun/oy Toshkent vaqt zonasida hisoblanadi.
+
+## 5. Shaxsiy kabinet
 
 - Email magic-link orqali kirish; foydalanuvchi paroli saytga saqlanmaydi.
 - Kabinet orqali yuborilgan tashabbus owner_id bilan bog‘lanadi.

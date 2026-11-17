@@ -49,6 +49,10 @@ on:
       - "icon.svg"
       - "davlat-xizmatlari.html"
       - "kabinet.html"
+      - "hamjamiyat.html"
+      - "hamjamiyat.js"
+      - "hamjamiyat.css"
+      - "scripts/check-hamjamiyat.mjs"
       - "startap-yoli.html"
       - "imkoniyatlar.html"
       - "supabase/migrations/**"
@@ -190,6 +194,13 @@ jobs:
           grep -Fqi "URL’lar 2026-yil 29-oktabrda javob berish bo‘yicha tekshirilgan" /tmp/yoshlar-services.html || { echo "::error::The live service guide does not include the current verification caveat."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/kabinet.html" -o /tmp/yoshlar-cabinet.html
           grep -qi "Shaxsiy kabinet" /tmp/yoshlar-cabinet.html
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/hamjamiyat.html" -o /tmp/yoshlar-community.html
+          grep -Fqi 'id="hpAuthForm"' /tmp/yoshlar-community.html || { echo "::error::Community sign-in / registration form is missing."; exit 1; }
+          grep -Fqi 'id="hpGoogleLogin"' /tmp/yoshlar-community.html || { echo "::error::Community Google login is missing."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/hamjamiyat.js" -o /tmp/yoshlar-community.js
+          grep -Fqi 'record_member_daily_visit' /tmp/yoshlar-community.js || { echo "::error::Member daily activity is missing."; exit 1; }
+          grep -Fqi 'member_profiles' /tmp/yoshlar-community.js || { echo "::error::Member profile database connection is missing."; exit 1; }
+          grep -Fqi 'member_posts' /tmp/yoshlar-community.js || { echo "::error::Member feed database connection is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/startap-yoli.html" -o /tmp/yoshlar-startup.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/laboratoriya.html" -o /tmp/yoshlar-lab.html
           grep -q "Fizikani kuzatma. <span" /tmp/yoshlar-lab.html
@@ -220,7 +231,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v16";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v18";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
@@ -235,8 +246,10 @@ jobs:
           done
           ADMIN_HEADERS="$(curl --fail --silent --show-error --location --head --max-time 30 "$BASE_URL/admin.html" | tr -d '\r')"
           CABINET_HEADERS="$(curl --fail --silent --show-error --location --head --max-time 30 "$BASE_URL/kabinet.html" | tr -d '\r')"
+          COMMUNITY_HEADERS="$(curl --fail --silent --show-error --location --head --max-time 30 "$BASE_URL/hamjamiyat.html" | tr -d '\r')"
           grep -Eiq 'cache-control:.*no-store' <<< "$ADMIN_HEADERS" || { echo "::error::Admin HTML must be no-store."; exit 1; }
           grep -Eiq 'cache-control:.*no-store' <<< "$CABINET_HEADERS" || { echo "::error::Personal cabinet HTML must be no-store."; exit 1; }
+          grep -Eiq 'cache-control:.*no-store' <<< "$COMMUNITY_HEADERS" || { echo "::error::Member portal HTML must be no-store."; exit 1; }
           grep -Eiq 'x-content-type-options: nosniff' <<< "$ADMIN_HEADERS" || { echo "::error::Security headers are not present on the live site."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/icon.svg" -o /tmp/yoshlar-icon.svg
           grep -q "<svg" /tmp/yoshlar-icon.svg
