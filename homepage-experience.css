@@ -662,3 +662,18 @@ body.yi-dark-mode .yi-quick-panel{background:#f8fbff;border-color:#dce7f3}
 @media(max-width:920px){.yi-drawer-toggle{min-width:44px;min-height:44px;padding:0 10px}}
 @media(max-width:680px){.yi-drawer-toggle{width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border-radius:50%}.yi-hamburger{gap:4px;width:17px}.yi-hamburger i{width:17px}.yi-drawer-toggle-label{display:none}.yi-side-drawer{width:min(410px,100%);padding-left:17px;padding-right:17px}.yi-drawer-head{min-height:67px}.yi-drawer-nav{padding-top:9px}.yi-drawer-link{min-height:45px}}
 @media(prefers-reduced-motion:reduce){.yi-official-card,.yi-quick-card,.yi-drawer-backdrop,.yi-side-drawer,.yi-drawer-toggle,.yi-hamburger i{transition:none!important}}
+
+/* Visible hero announcement linking knowledge assessment to the platform journey. */
+.yi-assessment-announcement{display:grid;grid-template-columns:1.1fr .9fr;gap:10px;margin:18px 0 0;position:relative;z-index:2}
+.yi-assessment-home-new,.yi-assessment-home-soon{display:flex;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;padding:15px 17px;border:1px solid rgba(221,239,252,.2);border-radius:10px;background:rgba(7,28,49,.58);backdrop-filter:blur(8px)}
+.yi-assessment-home-new{border-left:3px solid #d7ff66}
+.yi-assessment-home-soon{border-left:3px solid #e6b15b;background:rgba(7,28,49,.43)}
+.yi-assessment-home-tag,.yi-assessment-home-kicker,.yi-assessment-home-soon-label{display:inline-flex;align-items:center;gap:6px;margin-right:8px;color:#d7ff66;font-size:8px;font-weight:900;letter-spacing:.12em}
+.yi-assessment-home-kicker{color:#a9cde6}
+.yi-assessment-home-soon-label{color:#f3c879}
+.yi-assessment-home-new strong,.yi-assessment-home-soon strong{display:block;margin-top:8px;color:#fff;font:800 15px/1.3 Manrope,system-ui,sans-serif}
+.yi-assessment-home-new p,.yi-assessment-home-soon p{margin:6px 0 10px;color:#d0dfeb;font-size:10px;line-height:1.65}
+.yi-assessment-home-new a,.yi-assessment-home-soon a{margin-top:auto;color:#d7ff66;font-size:10px;font-weight:900;text-decoration:none}
+.yi-assessment-home-soon a{color:#f3c879}
+.yi-assessment-home-new a:hover,.yi-assessment-home-soon a:hover{text-decoration:underline}
+@media(max-width:760px){.yi-assessment-announcement{grid-template-columns:1fr;gap:8px;margin-top:13px}.yi-assessment-home-new,.yi-assessment-home-soon{padding:13px}.yi-assessment-home-new strong,.yi-assessment-home-soon strong{font-size:13px}.yi-assessment-home-new p,.yi-assessment-home-soon p{font-size:9px}}
