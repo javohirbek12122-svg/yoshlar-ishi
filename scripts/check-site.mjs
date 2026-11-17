@@ -53,6 +53,7 @@ const required = [
   "GOOGLE_OAUTH_SETUP.md",
   "supabase/migrations/20261117154708_member_cv_metadata_atomic_privacy_sync.sql",
   "supabase/migrations/20261117154956_grant_member_privacy_rpc_to_authenticated.sql",
+  "supabase/migrations/20261117155404_member_privacy_rpc_uses_private_assets_only.sql",
   "privacy.html",
   "robots.txt",
   ".github/workflows/site-health.yml",
