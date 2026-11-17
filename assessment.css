@@ -2,7 +2,9 @@
 .yi-assessment-page{background:#f5f8fb;color:#213d56}
 .yi-assessment-topline{background:#123255;color:#dbe9f5;padding:8px 0;font:800 9px/1.2 system-ui,sans-serif;letter-spacing:.14em}
 .yi-assessment-topline .wrap{max-width:1160px}
-.yi-assessment-nav{margin:12px auto 0;min-height:64px;padding:8px 12px;border:1px solid #e1e8ef;border-radius:12px;background:#fff;box-shadow:0 8px 25px rgba(16,52,83,.05)}
+.yi-assessment-nav{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:12px auto 0;min-height:64px;padding:8px 12px;border:1px solid #e1e8ef;border-radius:12px;background:#fff;box-shadow:0 8px 25px rgba(16,52,83,.05)}
+.yi-assessment-nav>.button{flex:0 0 auto;padding:10px 13px;border:0;border-radius:8px;background:#1767a9;color:#fff;font-size:10px;font-weight:800;text-decoration:none;white-space:nowrap}
+.yi-assessment-nav>.button.alt{border:1px solid #d6e0e9;background:#fff;color:#1c527e}
 .yi-assessment-nav .brand{display:flex;align-items:center;gap:9px;color:#173b5b;font-weight:900;text-decoration:none}
 .yi-assessment-nav .logo{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#123255;color:#fff;font-size:11px}
 .yi-assessment-nav .navlinks{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
@@ -31,6 +33,10 @@
 .yi-assessment-standards h2,.yi-assessment-track-heading h2,.yi-assessment-welcome h2{margin:6px 0 0;color:#193f60;font:800 19px/1.2 Manrope,system-ui,sans-serif;letter-spacing:-.03em}
 .yi-assessment-standards>p{margin:0;color:#586f83;font-size:11px;line-height:1.8}
 .yi-assessment-limit{grid-column:1/-1;padding:10px 12px;border-radius:8px;background:#f3f7fa;color:#586e80;font-size:10px;line-height:1.7}
+.yi-assessment-refs{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:#718397;font-size:9px;line-height:1.6}
+.yi-assessment-refs strong{color:#294e6c}
+.yi-assessment-refs a{color:#1767a9;text-decoration:none}
+.yi-assessment-refs a:hover{text-decoration:underline}
 .yi-assessment-limit strong{color:#1d4e74}
 .yi-assessment-auth{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;margin:18px 0;padding:19px;border:1px solid #dbe5ed;border-radius:12px;background:#fff}
 .yi-assessment-auth[hidden],.yi-assessment-page [hidden]{display:none!important}
