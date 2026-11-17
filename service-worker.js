@@ -1,6 +1,8 @@
-const CACHE_NAME = "yi-pwa-v16";
+const CACHE_NAME = "yi-pwa-v17";
 const PRECACHE_URLS = [
   "/index.html",
+  "/hamjamiyat.css",
+  "/hamjamiyat.js",
   "/biletlar.html",
   "/biletlar.css",
   "/biletlar-app.js",
@@ -81,7 +83,7 @@ const PRECACHE_URLS = [
   "/icon-512.png",
   "/apple-touch-icon.png"
 ];
-const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html"]);
+const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html", "/hamjamiyat.html"]);
 const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://uzreport.news", "https://res.cloudinary.com"]);
 
 self.addEventListener("install", (event) => {

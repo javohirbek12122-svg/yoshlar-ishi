@@ -73,6 +73,19 @@
           "type": "image/png"
         }
       ]
+    },
+    {
+      "name": "Yoshlar hamjamiyati",
+      "short_name": "Hamjamiyat",
+      "description": "Yoshlar profillari, postlari va portfolio",
+      "url": "/hamjamiyat.html",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
