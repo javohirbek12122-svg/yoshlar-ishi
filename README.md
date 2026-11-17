@@ -10,6 +10,7 @@ Yoshlar-Ishi is an independent Uzbek-language platform that helps young people d
 - Illustrated searchable service portal at `davlat-xizmatlari.html`
 - Core youth opportunity navigator at `imkoniyatlar.html`: eligibility guidance, document/step checklists, application-draft builder, account-owned progress tracking, and a private chronological event history
 - Email/password + Google OAuth member centre at `hamjamiyat.html`: searchable member profiles, portfolio, private CV uploads, community posts, comments/likes, profile privacy and real daily/weekly/monthly activity charts
+- Google OAuth and admin allowlist setup: `GOOGLE_OAUTH_SETUP.md`
 - Email magic-link personal cabinet at `kabinet.html`
 - Stage-based startup navigator at `startap-yoli.html`, with adaptive readiness checks and Supabase-powered opportunity scoring
 - Server-side AI review and Telegram webhook/notification Edge Functions
