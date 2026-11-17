@@ -707,7 +707,7 @@ body:has(.bf-shell) footer.wrap{width:min(1240px,calc(100% - 40px))}
     padding-bottom:2px;
     scrollbar-width:thin;
   }
-  header.wrap.nav:not(.yi-nav) :where(.links,.navlinks) a{flex:0 0 auto;min-height:44px!important;padding:7px 8px;font-size:9px}
+  header.wrap.nav:not(.yi-nav) :where(.links,.navlinks) a{flex:0 0 auto;min-height:48px!important;height:48px!important;padding:9px 8px;font-size:9px}
   header.wrap.nav:not(.yi-nav)>.btn,
   header.wrap.nav:not(.yi-nav)>.button{margin-left:auto;min-height:44px!important;padding:7px 9px;font-size:9px}
   main>.hero:not(.wrap){
