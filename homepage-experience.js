@@ -20,10 +20,98 @@ function createAccordion(key,title,description,sections,nested){
  const content=document.createElement("div");content.className=nested?"yi-nested-content":"yi-accordion-content";sections.forEach(id=>{const section=$(id);if(section)content.appendChild(section);});details.append(summary,content);return details;
 }
 function createHeroPreview(art){
- if(!art||art.querySelector(".yi-hero-banner"))return;
+ if(!art||art.querySelector(".yi-hero-viewer"))return;
+ const imageUrl="https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg";
+ const imageAlt="O‘zbekiston bayrog‘i oldida kostyum kiygan uch nafar yigit. Yoshlar Ishlari sayti banneri.";
  art.classList.add("yi-hero-visual");
- art.setAttribute("aria-label","Yoshlar-Ishi sayti uchun O‘zbekiston bayrog‘i oldida turgan yoshlar tasvirlangan asosiy banner");
- art.innerHTML='<img class="yi-hero-banner" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg" alt="O‘zbekiston bayrog‘i oldida kostyum kiygan uch nafar yigit. Yoshlar Ishlari sayti banneri." fetchpriority="high" loading="eager" decoding="async" referrerpolicy="no-referrer">';
+ art.setAttribute("aria-label","Yoshlar-Ishi platformasining o‘zgartirilmagan asosiy banneri");
+ art.innerHTML=
+  '<div class="yi-hero-viewer">'+
+   '<div class="yi-hero-ambient" aria-hidden="true"><span class="yi-hero-ambient-ring"></span><span class="yi-hero-ambient-glow"></span></div>'+
+   '<div class="yi-hero-casing">'+
+    '<span class="yi-hero-casing-corner yi-corner-tl" aria-hidden="true"></span><span class="yi-hero-casing-corner yi-corner-tr" aria-hidden="true"></span><span class="yi-hero-casing-corner yi-corner-bl" aria-hidden="true"></span><span class="yi-hero-casing-corner yi-corner-br" aria-hidden="true"></span>'+
+    '<button class="yi-hero-image-button" type="button" aria-label="Yoshlar-Ishi bannerini katta ko‘rish" aria-haspopup="dialog" aria-controls="yiHeroImageModal">'+
+     '<img class="yi-hero-banner" src="'+imageUrl+'" alt="'+imageAlt+'" fetchpriority="high" loading="eager" decoding="async" referrerpolicy="no-referrer">'+
+     '<span class="yi-hero-zoom-hint" aria-hidden="true"><span>⤢</span> Katta ko‘rish</span>'+
+    '</button>'+
+   '</div>'+
+   '<div class="yi-hero-caption">'+
+    '<span class="yi-hero-status"><i aria-hidden="true"></i><span>YOSHLAR ISHI <b>·</b> ASOSIY BANNER</span></span>'+
+    '<span class="yi-hero-original">ASL TASVIR <b>·</b> 1280 × 720</span>'+
+    '<button class="yi-hero-expand" type="button" aria-haspopup="dialog" aria-controls="yiHeroImageModal">To‘liq ko‘rish <span aria-hidden="true">↗</span></button>'+
+   '</div>'+
+   '<div class="yi-hero-image-error" role="status" hidden>Banner yuklanmadi. Internet aloqasini tekshirib, sahifani yangilang.</div>'+
+   '<div class="yi-hero-modal" id="yiHeroImageModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="yiHeroModalTitle" hidden>'+
+    '<div class="yi-hero-modal-panel" tabindex="-1">'+
+     '<div class="yi-hero-modal-head"><span id="yiHeroModalTitle">YOSHLAR ISHI <small>· ASL BANNER</small></span><button class="yi-hero-modal-close" type="button" aria-label="Katta rasm oynasini yopish">×</button></div>'+
+     '<img class="yi-hero-modal-image" src="'+imageUrl+'" alt="'+imageAlt+'" loading="lazy" decoding="async" referrerpolicy="no-referrer">'+
+     '<p>Asl 1280 × 720 tasvir. Rasm tarkibi o‘zgartirilmagan.</p>'+
+    '</div>'+
+   '</div>'+
+  '</div>';
+}
+function setupHeroExperience(art){
+ if(!art||art.dataset.yiHeroExperience==="ready")return;
+ const viewer=art.querySelector(".yi-hero-viewer");
+ const surface=art.querySelector(".yi-hero-casing");
+ const modal=art.querySelector("#yiHeroImageModal");
+ const closeButton=art.querySelector(".yi-hero-modal-close");
+ const openers=Array.from(art.querySelectorAll(".yi-hero-image-button,.yi-hero-expand"));
+ const image=art.querySelector(".yi-hero-banner");
+ const error=art.querySelector(".yi-hero-image-error");
+ if(!viewer||!surface||!modal||!closeButton||!openers.length)return;
+ art.dataset.yiHeroExperience="ready";
+ let activeOpener=null,frame=0,lastPointer=null;
+ const reduced=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)").matches:false;
+ const finePointer=window.matchMedia?window.matchMedia("(hover: hover) and (pointer: fine)").matches:false;
+ const resetTilt=()=>{
+  surface.style.setProperty("--yi-tilt-x","0deg");
+  surface.style.setProperty("--yi-tilt-y","0deg");
+  surface.style.setProperty("--yi-light-x","50%");
+  surface.style.setProperty("--yi-light-y","50%");
+ };
+ const paintTilt=()=>{
+  frame=0;
+  if(!lastPointer)return;
+  const rect=surface.getBoundingClientRect();
+  if(!rect.width||!rect.height)return;
+  const x=Math.max(-.5,Math.min(.5,(lastPointer.x-rect.left)/rect.width-.5));
+  const y=Math.max(-.5,Math.min(.5,(lastPointer.y-rect.top)/rect.height-.5));
+  surface.style.setProperty("--yi-tilt-x",(x*4.2).toFixed(2)+"deg");
+  surface.style.setProperty("--yi-tilt-y",(-y*3.2).toFixed(2)+"deg");
+  surface.style.setProperty("--yi-light-x",((x+.5)*100).toFixed(1)+"%");
+  surface.style.setProperty("--yi-light-y",((y+.5)*100).toFixed(1)+"%");
+ };
+ if(finePointer&&!reduced){
+  surface.addEventListener("pointermove",event=>{
+   if(event.pointerType==="touch")return;
+   lastPointer={x:event.clientX,y:event.clientY};
+   if(!frame)frame=window.requestAnimationFrame(paintTilt);
+  },{passive:true});
+  surface.addEventListener("pointerleave",()=>{lastPointer=null;if(frame)window.cancelAnimationFrame(frame);frame=0;resetTilt();},{passive:true});
+ }
+ if(image){
+  image.addEventListener("error",()=>{if(error)error.hidden=false;viewer.classList.add("is-image-error");});
+  image.addEventListener("load",()=>{if(error)error.hidden=true;viewer.classList.remove("is-image-error");});
+ }
+ const close=()=>{
+  if(modal.hidden)return;
+  modal.hidden=true;modal.setAttribute("aria-hidden","true");
+  document.body.classList.remove("yi-hero-modal-open");
+  if(activeOpener&&activeOpener.isConnected)activeOpener.focus();
+  activeOpener=null;
+ };
+ const open=event=>{
+  activeOpener=event.currentTarget;
+  modal.hidden=false;modal.setAttribute("aria-hidden","false");
+  document.body.classList.add("yi-hero-modal-open");
+  closeButton.focus();
+ };
+ openers.forEach(button=>button.addEventListener("click",open));
+ closeButton.addEventListener("click",close);
+ modal.addEventListener("click",event=>{if(event.target===modal)close();});
+ modal.addEventListener("keydown",event=>{if(event.key==="Escape"){event.preventDefault();close();}});
+ resetTilt();
 }
 function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 function setupSearch(){
@@ -86,7 +174,7 @@ function init(){
  const main=document.querySelector("main"),hero=document.querySelector(".hero"),art=hero&&hero.querySelector(".art"),overview=$("afzalliklar"),services=$("rasmiy-xizmatlar"),tools=$("qo-shimcha-vositalar"),toolsContent=tools&&tools.querySelector(".additional-tools-content");
  const required=["afzalliklar","jarayon","rasmiy-xizmatlar","imkoniyatlar","imkoniyatlar-yakun","jamoadoshlar","top-tashabbuslar","tashabbus","hamkorlik"];
  if(main&&hero&&art&&overview&&services&&tools&&toolsContent&&required.every(id=>!!$(id))&&overview.parentElement===main&&services.parentElement===main&&required.slice(3).every(id=>toolsContent.contains($(id)))){
-  createHeroPreview(art);const sectionParent=overview.parentElement,launcher=document.createElement("section"),stack=document.createElement("div");launcher.className="yi-home-sections wrap";launcher.id="yi-home-sections";stack.className="yi-home-accordion-stack";
+  createHeroPreview(art);setupHeroExperience(art);const sectionParent=overview.parentElement,launcher=document.createElement("section"),stack=document.createElement("div");launcher.className="yi-home-sections wrap";launcher.id="yi-home-sections";stack.className="yi-home-accordion-stack";
   const heading=document.createElement("div");heading.className="yi-home-sections-head";heading.innerHTML='<div><span class="yi-home-sections-eyebrow">Platforma bo‘limlari</span><h2>Kerakli bo‘limni tanlang.</h2></div><p>Har bir bo‘limni alohida oching. Mavjud formalar va yordamchi mexanizmlar o‘z joyida ishlaydi.</p>';
   const openAll=document.createElement("button");openAll.type="button";openAll.className="yi-accordion-global";openAll.textContent="Barcha bo‘limlarni ochish +";openAll.setAttribute("aria-expanded","false");
   sectionParent.insertBefore(launcher,overview);sectionParent.insertBefore(stack,overview);
@@ -96,7 +184,7 @@ function init(){
   const summary=tools.querySelector(":scope > summary");if(summary){const title=summary.querySelector("strong"),desc=summary.querySelector("small");if(title)title.textContent="AI, loyiha va hamjamiyat vositalari";if(desc)desc.textContent="G‘oya tahlili, yo‘riqnomalar, jamoa, tashabbus va hamkorlik.";}
   openAll.addEventListener("click",()=>{const panels=Array.from(stack.children).filter(node=>node.tagName==="DETAILS"),open=openAll.getAttribute("aria-expanded")!=="true";panels.forEach(panel=>panel.open=open);openAll.setAttribute("aria-expanded",open?"true":"false");openAll.textContent=open?"Barcha bo‘limlarni yopish −":"Barcha bo‘limlarni ochish +";});
   document.addEventListener("click",event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const id=(link.getAttribute("href")||"").slice(1);const target=$(decodeURIComponent(id));if(!target)return;let fold=target.closest("details");while(fold){fold.open=true;fold=fold.parentElement&&fold.parentElement.closest("details");}},true);
- }else if(art)createHeroPreview(art);
+ }else if(art){createHeroPreview(art);setupHeroExperience(art);}
  setupSearch();setupTheme();setupDrawer();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
