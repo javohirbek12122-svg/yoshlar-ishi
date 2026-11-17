@@ -20,17 +20,10 @@ function createAccordion(key,title,description,sections,nested){
  const content=document.createElement("div");content.className=nested?"yi-nested-content":"yi-accordion-content";sections.forEach(id=>{const section=$(id);if(section)content.appendChild(section);});details.append(summary,content);return details;
 }
 function createHeroPreview(art){
- if(!art||art.querySelector(".yi-hero-scene"))return;
- art.classList.add("yi-hero-visual");art.setAttribute("aria-label","O‘zbekiston bayrog‘i oldidagi yoshlar va Toshkent Mustaqillik maydoni tasviri");
- art.innerHTML=
- '<div class="yi-hero-scene">'+
-  '<div class="yi-scene-orbit yi-scene-orbit-one" aria-hidden="true"></div><div class="yi-scene-orbit yi-scene-orbit-two" aria-hidden="true"></div>'+
-  '<div class="yi-scene-photo-frame"><img class="yi-scene-people" src="https://uzreport.news/fotobank/image/37315d0b94a64775f318042a4dcc3ac9.jpeg" alt="Toshkentdagi Yangi O‘zbekiston bog‘ida qasamyod marosimida saf tortgan yosh harbiy xizmatchilar" fetchpriority="high" loading="eager" decoding="async"></div><div class="yi-scene-photo-credit"><a href="https://uzreport.news/society/soldiers-swear-oath-of-allegiance-to-motherland" target="_blank" rel="noopener noreferrer">Yoshlar surati: UzReport</a><span aria-hidden="true">·</span><a href="https://www.tourhq.com/tours/2067/full-day-city-tour-in-tashkent" target="_blank" rel="noopener noreferrer">Toshkent manzarasi: Mustaqillik maydoni</a></div>'+
-  '<div class="yi-scene-float yi-scene-status"><span class="yi-scene-dot"></span><span>Yoshlar hamjamiyati</span></div>'+
-  '<div class="yi-scene-float yi-scene-caption-card"><span class="yi-scene-float-icon">✦</span><span><strong>Yangi imkoniyatlar sari birga!</strong><small>Ta’lim · Ish · Startap · Grant</small></span></div>'+
-  '<div class="yi-ai-helper-card"><div class="yi-ai-card-top"><span class="yi-ai-avatar">✧</span><span><strong>AI yordamchisi</strong><small><i></i> Online</small></span></div><p>G‘oyangizni baholaymizmi?</p><a href="#ai-yordamchi">Boshlash <span aria-hidden="true">➜</span></a></div>'+
-  '<div class="art-sticker yi-scene-flow-label" aria-hidden="true"><span>IMKONIYAT</span><span>→</span><span>NATIJA</span></div><div class="yi-scene-spark yi-spark-a" aria-hidden="true">✦</div><div class="yi-scene-spark yi-spark-b" aria-hidden="true">✧</div>'+
- '</div>';
+ if(!art||art.querySelector(".yi-hero-banner"))return;
+ art.classList.add("yi-hero-visual");
+ art.setAttribute("aria-label","Yoshlar-Ishi sayti uchun O‘zbekiston bayrog‘i oldida turgan yoshlar tasvirlangan asosiy banner");
+ art.innerHTML='<img class="yi-hero-banner" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg" alt="O‘zbekiston bayrog‘i oldida kostyum kiygan uch nafar yigit. Yoshlar Ishlari sayti banneri." fetchpriority="high" loading="eager" decoding="async" referrerpolicy="no-referrer">';
 }
 function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
 function setupSearch(){

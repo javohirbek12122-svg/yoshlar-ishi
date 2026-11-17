@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v20";
+const CACHE_NAME = "yi-pwa-v21";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",
@@ -88,7 +88,7 @@ const PRECACHE_URLS = [
   "/apple-touch-icon.png"
 ];
 const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html", "/hamjamiyat.html"]);
-const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com"]);
+const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com", "https://d2ol7oe51mr4n9.cloudfront.net"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
@@ -115,7 +115,7 @@ async function cachePublicResponse(request, response) {
   await (await caches.open(CACHE_NAME)).put(request, response.clone());
 }
 
-// Cache only public, read-only Unsplash images. Opaque CORS responses are accepted
+// Cache only public images from the fixed external image-host allow-list. Opaque CORS responses are accepted
 // because the host allow-list is fixed and no API/auth requests use this path.
 async function cacheExternalImage(request) {
   const cache = await caches.open(CACHE_NAME);
