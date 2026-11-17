@@ -33,7 +33,7 @@ const pages=[
  ["/startap-yoli.html","Startap yo‘li"],
  ["/laboratoriya.html","Virtual laboratoriya"],
  ["/privacy.html","Maxfiylik"],
- ["/physics-lab/","Physics Lab"]
+ ["/physics-lab/","Physics Lab"],
  ["/biletlar.html","50 ta bilet katalogi"],
  ["/biletlar/001.html","Bilet 001 — test"],
  ["/biletlar/025.html","Bilet 025 — rasm va nisbat"],
@@ -169,19 +169,19 @@ try{
   const heroCacheReady=await androidPage.waitForFunction(async()=>{
    const image=document.querySelector(".yi-scene-people");
    if(!image||!image.complete||image.naturalWidth<10)return false;
-   const cache=await caches.open("yi-pwa-v11");
+   const cache=await caches.open("yi-pwa-v15");
    const urls=(await cache.keys()).map(request=>request.url);
    return urls.some(url=>url.includes("photo-1758270705518-b61b40527e76")) &&
           urls.some(url=>url.includes("photo-1758270705317-3ef6142d306f")) &&
           urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
-          urls.some(url=>url.includes("Screenshot_2023-12-0"));
+          urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
   },null,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady){
    const diagnostics=await androidPage.evaluate(async()=>{
     const images=[...document.querySelectorAll(".yi-scene-people,.yi-agency-logo,.yi-ustoz-logo")].map(el=>({src:el.currentSrc,complete:el.complete,naturalWidth:el.naturalWidth}));
-    const cache=await caches.open("yi-pwa-v11");
+    const cache=await caches.open("yi-pwa-v15");
     const keys=(await cache.keys()).map(x=>x.url);
-    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|static\.tildacdn/.test(x))});
+    return JSON.stringify({images,keys:keys.filter(x=>/unsplash|uzchess|uzreport/.test(x))});
    });
    fail("PWA hero/logo images","images were not all cached: "+diagnostics);
   }
