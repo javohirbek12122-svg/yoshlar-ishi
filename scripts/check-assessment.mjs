@@ -47,10 +47,10 @@ execFileSync(process.execPath, ["--check", "--input-type=module"], { input: app,
 
 const migration = read("supabase/migrations/20261117190000_competency_assessment_engine.sql");
 assert.match(migration, /security definer/i);
-assert.match(migration, /auth\\.uid\\(\\)/i);
-assert.match(migration, /revoke all on function public\\.submit_assessment_attempt\\(text,text,jsonb\\) from public,anon,authenticated/i);
-assert.match(migration, /grant execute on function public\\.submit_assessment_attempt\\(text,text,jsonb\\) to authenticated/i);
-assert.doesNotMatch(migration, /grant execute[^;]*\\bto\\s+(anon|public)\\b/i);
+assert.ok(migration.includes("auth.uid()"), "Score RPC must derive the caller with auth.uid()");
+assert.ok(migration.includes("revoke all on function public.submit_assessment_attempt(text,text,jsonb) from public,anon,authenticated"), "Score RPC must not be callable by PUBLIC, anon or authenticated by default");
+assert.ok(migration.includes("grant execute on function public.submit_assessment_attempt(text,text,jsonb) to authenticated"), "Only signed-in users should receive score RPC execution rights");
+assert.doesNotMatch(migration, /grant execute[^;]*\bto\s+(anon|public)\b/i);
 
 const home = read("index.html");
 assert.ok(home.includes('href="./assessment.html"') && home.includes("yi-assessment-announcement"), "Homepage needs a prominent assessment announcement");
