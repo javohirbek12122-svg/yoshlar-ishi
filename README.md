@@ -192,3 +192,15 @@ Yoshlar-Ishi Android va iPhone’da brauzer orqali bosh ekranga o‘rnatiladigan
 PWA manifesti, raster ikonalar, service worker, offline fallback va install banner: manifest.webmanifest, pwa.js, service-worker.js, offline.html.
 
 Sinov buyruqlari: npm run check:pwa va npm run check:mobile. Haqiqiy iPhone/Android qurilmalarida o‘rnatish va yangilanish sinovi production relizdan oldin alohida bajarilishi kerak.
+
+
+## Bilim sinovlari
+
+- `assessment.html` — gumanitar, tabiiy va kasbiy yo‘nalishlarda 25 savoldan iborat alohida test markazi.
+- `assessment-bank.js` — ochiq savollar to‘plami; javob kalitlari ushbu faylda saqlanmaydi.
+- `assessment.js` — foydalanuvchi sessiyasi, test jarayoni, vaqt, javob loyihasi, natija tarixi va fanlar kesimidagi tahlil.
+- `private.assessment_answer_keys` va `submit_assessment_attempt` — javoblarni serverda tekshirish, ball berish va urinishlarni cheklash.
+- Ballar birinchi yakunlangan urinish uchun beriladigan ichki rag‘bat ko‘rsatkichidir. Hamkorlik yoki tashqi a’zolik hali tasdiqlanmagan; rasmiy imtiyoz yoki sertifikat va’da qilinmaydi.
+- Savollar milliy fan mazmuni va xalqaro kompetensiya yondashuvlariga yo‘naltirilgan diagnostik mashqdir; ular rasmiy PISA, CEFR yoki davlat imtihoni hisoblanmaydi.
+
+Sinovlar: `npm run check` (shu jumladan `scripts/check-assessment.mjs`).
