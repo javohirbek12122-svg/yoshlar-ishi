@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#123255">
+<meta name="robots" content="noindex,follow">
+<meta name="description" content="Yoshlar-Ishi hamjamiyati: shaxsiy profil, portfolio, CV, postlar va shaxsiy faollik tahlili.">
+<title>Hamjamiyat va shaxsiy kabinet — Yoshlar-Ishi</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./site.css">
+<link rel="stylesheet" href="./shared-theme.css">
+<link rel="stylesheet" href="./mobile-guard.css">
+<link rel="stylesheet" href="./platform-polish.css">
+<link rel="stylesheet" href="./hamjamiyat.css">
+</head>
+<body class="hp-body">
+<div class="hp-topline"><div class="hp-topline-inner"><span>YOSHLAR-ISHI · HAMJAMIYAT</span><span>Imkoniyat · Hamkorlik · Natija</span></div></div>
+<header class="hp-header">
+  <a class="hp-brand" href="./index.html" aria-label="Yoshlar-Ishi bosh sahifasi"><span class="hp-mark">YI</span><span><b>Yoshlar-Ishi</b><small>Hamjamiyat platformasi</small></span></a>
+  <nav class="hp-desktop-nav" aria-label="Asosiy bo‘limlar">
+    <a href="./index.html">Bosh sahifa</a>
+    <a href="./imkoniyatlar.html">Imkoniyatlar</a>
+    <a href="./startap-yoli.html">Startaplar</a>
+    <a href="./hamjamiyat.html" aria-current="page">Hamjamiyat</a>
+  </nav>
+  <div class="hp-header-actions">
+    <button class="hp-icon-button" id="hpThemeToggle" type="button" aria-label="Tungi ko‘rinishni almashtirish" title="Ko‘rinish">◐</button>
+    <button class="hp-menu-button" id="hpMenuToggle" type="button" aria-label="Yon navigatsiyani ochish" aria-expanded="false" aria-controls="hpDrawer"><span></span><span></span><span></span></button>
+    <button class="hp-avatar-button" id="hpHeaderProfile" type="button" aria-label="Shaxsiy profil" hidden><span id="hpHeaderAvatar">YI</span></button>
+    <button class="hp-signout-button" id="hpHeaderSignOut" type="button" hidden>Chiqish</button>
+  </div>
+</header>
+<div class="hp-drawer-backdrop" id="hpDrawerBackdrop" hidden></div>
+<aside class="hp-drawer" id="hpDrawer" aria-hidden="true" aria-label="Yon navigatsiya">
+  <div class="hp-drawer-head"><div><b>Yoshlar-Ishi</b><small>Platforma navigatsiyasi</small></div><button id="hpDrawerClose" type="button" aria-label="Menyuni yopish">×</button></div>
+  <div class="hp-drawer-section">
+    <span>ASOSIY YO‘NALISHLAR</span>
+    <a href="./index.html"><i>⌂</i><b>Bosh sahifa</b><em>→</em></a>
+    <a href="./imkoniyatlar.html"><i>✧</i><b>Imkoniyatlar katalogi</b><em>→</em></a>
+    <a href="./davlat-xizmatlari.html"><i>▤</i><b>Davlat xizmatlari</b><em>→</em></a>
+    <a href="./startap-yoli.html"><i>↗</i><b>Startap yo‘li</b><em>→</em></a>
+  </div>
+  <div class="hp-drawer-section">
+    <span>HAMJAMIYAT</span>
+    <button type="button" data-open-tab="feed"><i>▤</i><b>Yangiliklar lentasi</b><em>→</em></button>
+    <button type="button" data-open-tab="directory"><i>⌕</i><b>Yoshlarni qidirish</b><em>→</em></button>
+    <button type="button" data-open-tab="profile"><i>♙</i><b>Mening profilim</b><em>→</em></button>
+    <button type="button" data-open-tab="activity"><i>▥</i><b>Faollik statistikasi</b><em>→</em></button>
+    <button type="button" data-open-tab="settings"><i>⚙</i><b>Sozlamalar</b><em>→</em></button>
+  </div>
+  <div class="hp-drawer-section">
+    <span>ARIZA VA BOSHQARUV</span>
+    <a href="./kabinet.html"><i>▣</i><b>Tashabbuslar kabineti</b><em>→</em></a>
+    <a href="./admin.html"><i>◈</i><b>Admin boshqaruv markazi</b><em>→</em></a>
+    <a href="./privacy.html"><i>⌑</i><b>Maxfiylik siyosati</b><em>→</em></a>
+  </div>
+  <p class="hp-drawer-foot">Yoshlar-Ishi — mustaqil imkoniyat va hamkorlik platformasi.</p>
+</aside>
+<main class="hp-main">
+  <section class="hp-auth-shell" id="hpAuthGate">
+    <div class="hp-auth-story">
+      <span class="hp-kicker"><i></i> YOSHLAR HAMJAMIYATI</span>
+      <h1>Yutuqlaringizni ko‘rsating. <span>Hamfikrlarni toping.</span></h1>
+      <p>Profil, portfolio, CV va g‘oyalaringizni bir joyda boshqaring. Boshqa yoshlar bilan tanishing va faoliyatingizni aniq statistikada kuzating.</p>
+      <div class="hp-auth-benefits">
+        <div><b>01</b><span><strong>Shaxsiy profil</strong><small>Ko‘nikmalar, tajriba va yutuqlar</small></span></div>
+        <div><b>02</b><span><strong>Hamjamiyat lentasi</strong><small>Loyiha, rasm va yangiliklar</small></span></div>
+        <div><b>03</b><span><strong>Faollik tahlili</strong><small>Kunlikdan yillik grafiklargacha</small></span></div>
+      </div>
+      <div class="hp-auth-footnote">Hisobingiz Yoshlar-Ishi Supabase bazasida saqlanadi. Email va shaxsiy hujjatlar profilingizda oshkor qilinmaydi.</div>
+    </div>
+    <div class="hp-auth-card" id="hpAuthCard">
+      <div class="hp-auth-card-top"><span class="hp-auth-mark">YI</span><span><b>Shaxsiy hisob</b><small>Yagona kirish markazi</small></span></div>
+      <div class="hp-auth-tabs" role="tablist" aria-label="Kirish turi">
+        <button type="button" class="active" data-auth-mode="login" role="tab" aria-selected="true">Kirish</button>
+        <button type="button" data-auth-mode="register" role="tab" aria-selected="false">Ro‘yxatdan o‘tish</button>
+      </div>
+      <form id="hpAuthForm" novalidate>
+        <div class="hp-field" id="hpNameField" hidden><label for="hpName">Ism va familiya</label><input id="hpName" name="name" autocomplete="name" maxlength="120" placeholder="Masalan, Javohir Mirahmadov"></div>
+        <div class="hp-field"><label for="hpEmail">Elektron pochta</label><input id="hpEmail" name="email" type="email" autocomplete="email" required placeholder="siz@example.com"></div>
+        <div class="hp-field"><label for="hpPassword">Parol</label><div class="hp-password-wrap"><input id="hpPassword" name="password" type="password" autocomplete="current-password" required minlength="10" placeholder="Kamida 10 ta belgi"><button id="hpPasswordToggle" type="button" aria-label="Parolni ko‘rsatish">◉</button></div></div>
+        <div class="hp-field" id="hpConfirmField" hidden><label for="hpConfirm">Parolni takrorlang</label><input id="hpConfirm" type="password" autocomplete="new-password" minlength="10" placeholder="Parolni qayta kiriting"></div>
+        <label class="hp-consent" id="hpConsent" hidden><input id="hpPrivacy" type="checkbox"><span><a href="./privacy.html" target="_blank" rel="noopener">Maxfiylik siyosati</a> bilan tanishdim va roziman.</span></label>
+        <button class="hp-primary-button" id="hpAuthSubmit" type="submit">Kirish <span>→</span></button>
+      </form>
+      <div class="hp-divider"><span>yoki</span></div>
+      <button class="hp-google-button" id="hpGoogleLogin" type="button"><span class="hp-google-g">G</span> Google orqali davom etish</button>
+      <button class="hp-forgot-button" id="hpForgotPassword" type="button">Parolni unutdingizmi?</button>
+      <p class="hp-auth-message" id="hpAuthMessage" role="status" aria-live="polite"></p>
+      <small class="hp-auth-security">🔒 Sessiya himoyalangan. Parolingiz ommaviy profilga chiqarilmaydi.</small>
+    </div>
+  </section>
+
+  <section class="hp-app-shell" id="hpAppShell" hidden>
+    <div class="hp-welcome-row">
+      <div><span class="hp-kicker"><i></i> SHAXSIY ISH MAYDONI</span><h1 id="hpWelcomeTitle">Hamjamiyat markazi</h1><p id="hpWelcomeText">Faoliyatingiz, profilingiz va hamkorliklaringiz bir joyda.</p></div>
+      <button class="hp-outline-button" id="hpRefreshAll" type="button">↻ Yangilash</button>
+    </div>
+    <div class="hp-app-layout">
+      <aside class="hp-side-nav" aria-label="Shaxsiy kabinet bo‘limlari">
+        <div class="hp-side-user"><span class="hp-side-avatar" id="hpSideAvatar">YI</span><span><b id="hpSideName">Yoshlar a’zosi</b><small id="hpSideHeadline">Profilni to‘ldiring</small></span></div>
+        <div class="hp-side-menu">
+          <button class="active" type="button" data-tab="feed"><i>▤</i><span>Lenta</span></button>
+          <button type="button" data-tab="directory"><i>⌕</i><span>A’zolar</span></button>
+          <button type="button" data-tab="profile"><i>♙</i><span>Profil va portfolio</span></button>
+          <button type="button" data-tab="activity"><i>▥</i><span>Faollik</span></button>
+          <button type="button" data-tab="settings"><i>⚙</i><span>Sozlamalar</span></button>
+        </div>
+        <a class="hp-side-link" href="./kabinet.html"><i>▣</i><span>Tashabbuslarim</span><em>↗</em></a>
+        <div class="hp-profile-completion"><div><span>Profil to‘liqligi</span><b id="hpCompletionValue">0%</b></div><div class="hp-progress"><i id="hpCompletionBar"></i></div><small>Ko‘nikma va yutuqlarni qo‘shib boring.</small></div>
+      </aside>
+      <div class="hp-content-column">
+        <section class="hp-tab-panel active" id="hpTabFeed">
+          <div class="hp-section-heading"><div><span class="hp-section-label">HAMJAMIYAT</span><h2>Yangiliklar lentasi</h2><p>Yoshlar loyihalari, natijalari va foydali tajribalar.</p></div><span class="hp-live-pill"><i></i> Jonli ma’lumot</span></div>
+          <form class="hp-composer" id="hpPostForm">
+            <div class="hp-composer-head"><span class="hp-my-avatar" id="hpComposerAvatar">YI</span><div><b id="hpComposerName">Sizning postingiz</b><small>Hamjamiyat bilan bo‘lishing</small></div></div>
+            <textarea id="hpPostBody" maxlength="3000" rows="3" placeholder="Nima ustida ishlayapsiz? Qanday natijaga erishdingiz?"></textarea>
+            <div class="hp-composer-actions">
+              <label class="hp-file-button">▧ Rasm qo‘shish<input id="hpPostImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden></label>
+              <span id="hpPostFileHint">6 tagacha rasm · JPG, PNG yoki WebP</span>
+              <select id="hpPostVisibility" aria-label="Post ko‘rinishi"><option value="members">Hamjamiyatga ochiq</option><option value="only_me">Faqat men ko‘raman</option></select>
+              <button class="hp-primary-button hp-small-button" type="submit" id="hpPostSubmit">Post joylash <span>→</span></button>
+            </div>
+            <p class="hp-inline-message" id="hpPostMessage" role="status"></p>
+          </form>
+          <div class="hp-feed-tools"><label class="hp-search-box"><span>⌕</span><input type="search" id="hpFeedSearch" placeholder="Postlar, loyihalar va ko‘nikmalar bo‘yicha qidirish"></label><button class="hp-outline-button" type="button" id="hpFeedRefresh">Yangilash</button></div>
+          <div class="hp-feed-list" id="hpFeedList"><div class="hp-loading"><span></span> Lenta yuklanmoqda…</div></div>
+        </section>
+
+        <section class="hp-tab-panel" id="hpTabDirectory">
+          <div class="hp-section-heading"><div><span class="hp-section-label">HAMKORLAR</span><h2>Yoshlarni toping</h2><p>Ko‘nikma, hudud yoki mutaxassislik bo‘yicha izlang.</p></div><span class="hp-count-pill" id="hpDirectoryCount">0 profil</span></div>
+          <div class="hp-directory-tools"><label class="hp-search-box"><span>⌕</span><input id="hpDirectorySearch" type="search" placeholder="Ism, ko‘nikma yoki yo‘nalish"></label><select id="hpDirectoryDistrict"><option value="">Barcha hududlar</option><option>Parkent</option><option>Nurafshon</option><option>Toshkent</option><option>Angren</option><option>Olmaliq</option><option>Bekobod</option></select><select id="hpDirectorySkill"><option value="">Barcha ko‘nikmalar</option><option>IT</option><option>Dasturlash</option><option>Dizayn</option><option>Marketing</option><option>Ingliz tili</option><option>Sun’iy intellekt</option></select></div>
+          <div class="hp-member-grid" id="hpDirectoryList"><div class="hp-loading"><span></span> A’zolar yuklanmoqda…</div></div>
+        </section>
+
+        <section class="hp-tab-panel" id="hpTabProfile">
+          <div class="hp-section-heading"><div><span class="hp-section-label">MENING PROFILIM</span><h2>Profil va portfolio</h2><p>O‘zingiz haqingizdagi ma’lumotlarni boshqaring va ishlaringizni namoyish qiling.</p></div><button class="hp-outline-button" id="hpExportProfile" type="button">↓ Profilni eksport qilish</button></div>
+          <div class="hp-profile-summary"><div class="hp-profile-avatar-wrap"><img id="hpProfileAvatar" alt="Profil rasmi" src="./icon-192.png"><label class="hp-avatar-upload">Rasmni almashtirish<input id="hpAvatarInput" type="file" accept="image/jpeg,image/png,image/webp" hidden></label></div><div class="hp-profile-summary-copy"><h3 id="hpProfileDisplayName">Yoshlar a’zosi</h3><p id="hpProfileHeadline">Kasbiy sarlavha qo‘shing</p><span id="hpProfileSlug">Profil havolasi tayyorlanmoqda…</span></div></div>
+          <form class="hp-form-card" id="hpProfileForm">
+            <div class="hp-form-head"><div><b>Asosiy ma’lumotlar</b><small>Profilingizda ko‘rinadigan ma’lumotlar</small></div><span class="hp-private-chip">Email va telefon ommaga ko‘rsatilmaydi</span></div>
+            <div class="hp-form-grid">
+              <label>Ism va familiya<input id="hpDisplayName" maxlength="120" required></label>
+              <label>Kasbiy sarlavha<input id="hpHeadline" maxlength="160" placeholder="Masalan: Frontend dasturchi · Talaba"></label>
+              <label>Shahar<input id="hpCity" maxlength="100" placeholder="Toshkent"></label>
+              <label>Tuman<input id="hpDistrict" maxlength="100" placeholder="Parkent"></label>
+              <label class="hp-field-wide">Qisqacha bio<textarea id="hpBio" maxlength="2400" rows="4" placeholder="O‘zingiz, qiziqishlaringiz va maqsadlaringiz haqida yozing"></textarea></label>
+              <label>Ko‘nikmalar<input id="hpSkills" placeholder="Python, HTML, Ingliz tili"></label>
+              <label>Qiziqishlar<input id="hpInterests" placeholder="AI, startap, diplomatiya"></label>
+              <label>Shaxsiy sayt (https://)<input id="hpWebsite" type="url" placeholder="https://..."></label>
+              <label>GitHub (https://)<input id="hpGithub" type="url" placeholder="https://github.com/..."></label>
+              <label>LinkedIn (https://)<input id="hpLinkedin" type="url" placeholder="https://linkedin.com/in/..."></label>
+              <label class="hp-field-wide">Ta’lim — har qatorda bitta bosqich<textarea id="hpEducation" rows="3" placeholder="Parkent tuman 1-sonli texnikumi — IT dasturlash"></textarea></label>
+              <label class="hp-field-wide">Tajriba va faoliyat — har qatorda bitta yozuv<textarea id="hpExperience" rows="3" placeholder="Loyiha, amaliyot, ko‘ngillilik yoki ish tajribasi"></textarea></label>
+              <label class="hp-field-wide">Yutuqlar va sertifikatlar — har qatorda bittadan<textarea id="hpAchievements" rows="3" placeholder="Olimpiada, tanlov, kurs yoki sertifikat"></textarea></label>
+            </div>
+            <div class="hp-form-actions"><span class="hp-inline-message" id="hpProfileMessage" role="status"></span><button class="hp-primary-button" type="submit" id="hpProfileSave">Profilni saqlash <span>→</span></button></div>
+          </form>
+          <div class="hp-two-panels">
+            <form class="hp-form-card" id="hpCvForm"><div class="hp-form-head"><div><b>CV / Resume</b><small>PDF yoki DOCX · 10 MB gacha</small></div><span class="hp-lock-chip">Nazoratli kirish</span></div><div id="hpCvCurrent" class="hp-current-file">Hozircha CV yuklanmagan.</div><label class="hp-file-drop">CV faylini tanlang<input type="file" id="hpCvInput" accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" hidden><span>PDF, Word yoki TXT · 10 MB gacha</span></label><div class="hp-inline-row"><label class="hp-check"><input id="hpCvPublic" type="checkbox"> Profilim ochiq bo‘lsa, CV’imni ham ko‘rish mumkin</label><button class="hp-primary-button hp-small-button" type="submit" id="hpCvSave">CV’ni yuklash</button></div><p class="hp-inline-message" id="hpCvMessage" role="status"></p></form>
+            <form class="hp-form-card" id="hpPortfolioForm"><div class="hp-form-head"><div><b>Portfolio ishini qo‘shish</b><small>Loyiha, sertifikat yoki natija</small></div><span class="hp-count-pill">6 tagacha rasm</span></div><label>Nomi<input id="hpPortfolioTitle" required minlength="3" maxlength="140" placeholder="Masalan: AI yordamchi prototipi"></label><label>Tavsif<textarea id="hpPortfolioDescription" maxlength="1600" rows="3" placeholder="Vazifa, siz bajargan ish va natija"></textarea></label><div class="hp-form-grid hp-form-grid-two"><label>Toifa<select id="hpPortfolioCategory"><option value="project">Loyiha</option><option value="achievement">Yutuq</option><option value="certificate">Sertifikat</option><option value="experience">Tajriba</option><option value="other">Boshqa</option></select></label><label>Havola (ixtiyoriy)<input id="hpPortfolioUrl" type="url" placeholder="https://..."></label></div><label class="hp-file-drop">Rasmlar<input id="hpPortfolioImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden><span>JPG, PNG yoki WebP · 10 MB har biri</span></label><div class="hp-inline-row"><label class="hp-check"><input id="hpPortfolioPublic" type="checkbox" checked> Profil ochiq bo‘lsa ko‘rsatish</label><button class="hp-primary-button hp-small-button" type="submit" id="hpPortfolioSave">Ishni saqlash</button></div><p class="hp-inline-message" id="hpPortfolioMessage" role="status"></p></form>
+          </div>
+          <div class="hp-section-heading hp-portfolio-heading"><div><span class="hp-section-label">ISHLARIM</span><h2>Portfolio galereyasi</h2></div><span class="hp-count-pill" id="hpPortfolioCount">0 ta ish</span></div>
+          <div class="hp-portfolio-grid" id="hpPortfolioList"><div class="hp-empty">Portfolio hali bo‘sh.</div></div>
+        </section>
+
+        <section class="hp-tab-panel" id="hpTabActivity">
+          <div class="hp-section-heading"><div><span class="hp-section-label">TAHLIL VA RIVOJLANISH</span><h2>Faollik markazi</h2><p>Faqat bazaga qayd etilgan haqiqiy harakatlaringiz grafikda ko‘rsatiladi.</p></div><span class="hp-live-pill"><i></i> Supabase’dan</span></div>
+          <div class="hp-stat-grid">
+            <article><span>Bugungi faollik</span><b id="hpTodayCount">0</b><small>qayd etilgan harakat</small></article>
+            <article><span>7 kunlik faollik</span><b id="hpWeekCount">0</b><small>oxirgi 7 kun</small></article>
+            <article><span>30 kunlik faollik</span><b id="hpMonthCount">0</b><small>oxirgi 30 kun</small></article>
+            <article><span>Ketma-ket faol kunlar</span><b id="hpStreakCount">0</b><small>kunlik tashrif va ishlar</small></article>
+          </div>
+          <div class="hp-chart-card"><div class="hp-chart-top"><div><b id="hpChartTitle">Oxirgi 7 kun</b><small>Faoliyat voqealari soni</small></div><div class="hp-chart-ranges"><button type="button" data-range="day">Kun</button><button class="active" type="button" data-range="week">7 kun</button><button type="button" data-range="month">30 kun</button><button type="button" data-range="year">12 oy</button></div></div><div class="hp-chart-bars" id="hpActivityChart"><div class="hp-empty">Grafik tayyorlanmoqda…</div></div><div class="hp-chart-legend"><span><i></i> Faollik</span><span id="hpChartTotal">Jami: 0</span></div></div>
+          <div class="hp-two-panels hp-activity-bottom"><div class="hp-form-card"><div class="hp-form-head"><div><b>Faollik tarkibi</b><small>Harakat turlari bo‘yicha</small></div></div><div class="hp-breakdown" id="hpActivityBreakdown"></div></div><div class="hp-form-card"><div class="hp-form-head"><div><b>Oxirgi harakatlar</b><small>Vaqt bo‘yicha tartiblangan</small></div></div><div class="hp-activity-list" id="hpActivityList"></div></div></div>
+        </section>
+
+        <section class="hp-tab-panel" id="hpTabSettings">
+          <div class="hp-section-heading"><div><span class="hp-section-label">HISOB NAZORATI</span><h2>Sozlamalar va maxfiylik</h2><p>Profil ko‘rinishi, CV va hisob xavfsizligini boshqaring.</p></div></div>
+          <form class="hp-form-card" id="hpPrivacyForm"><div class="hp-form-head"><div><b>Profil ko‘rinishi</b><small>Kimlar siz haqingizdagi ma’lumotni ko‘ra oladi?</small></div></div><label>Profil kimga ko‘rinsin<select id="hpVisibility"><option value="members">Kirish qilgan hamjamiyat a’zolari</option><option value="private">Faqat o‘zim</option></select></label><label class="hp-check"><input id="hpDiscoverable" type="checkbox"> A’zolar qidiruvida profilim ko‘rinsin</label><label class="hp-check"><input id="hpPublicCv" type="checkbox"> CV’imni profilim ochiq bo‘lsa ko‘rsatish</label><p class="hp-setting-note">Email, telefon, kirish sessiyasi va CV fayli standart holatda ommaga berilmaydi. CV’ni ochiq qilish alohida rozilik bilan amalga oshadi.</p><div class="hp-form-actions"><span class="hp-inline-message" id="hpPrivacyMessage" role="status"></span><button class="hp-primary-button" type="submit">Maxfiylikni saqlash <span>→</span></button></div></form>
+          <form class="hp-form-card" id="hpPasswordForm"><div class="hp-form-head"><div><b>Parolni yangilash</b><small>Kamida 10 belgi, harf va raqam ishlating.</small></div></div><label>Yangi parol<input id="hpNewPassword" type="password" minlength="10" autocomplete="new-password" required placeholder="Yangi parol"></label><label>Parolni takrorlang<input id="hpNewPasswordConfirm" type="password" minlength="10" autocomplete="new-password" required placeholder="Yangi parolni qayta kiriting"></label><div class="hp-form-actions"><span class="hp-inline-message" id="hpPasswordMessage" role="status"></span><button class="hp-primary-button" type="submit">Parolni o‘zgartirish</button></div></form>
+          <div class="hp-form-card hp-danger-zone"><div><b>Hisob va ma’lumotlar</b><small>Ma’lumotlaringiz nusxasini JSON formatda oling yoki hisobdan chiqing.</small></div><div class="hp-inline-row"><button class="hp-outline-button" id="hpExportAll" type="button">Ma’lumotlarimni yuklab olish</button><button class="hp-danger-button" id="hpSignOut" type="button">Hisobdan chiqish</button></div></div>
+        </section>
+
+        <section class="hp-profile-public" id="hpPublicProfile" hidden>
+          <div class="hp-public-back"><button type="button" id="hpBackToDirectory">← A’zolar ro‘yxatiga qaytish</button><span id="hpPublicProfileBadge">HAMJAMIYAT PROFILI</span></div>
+          <div id="hpPublicProfileContent"><div class="hp-loading"><span></span> Profil yuklanmoqda…</div></div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="hp-footer"><span>© 2026 Yoshlar-Ishi</span><span>Mustaqil platforma · <a href="./privacy.html">Maxfiylik</a> · <a href="./index.html">Bosh sahifa</a></span></footer>
+<div class="hp-toast" id="hpToast" role="status" aria-live="polite"></div>
+<script src="./config.js"></script>
+<script type="module" src="./hamjamiyat.js"></script>
+<script src="./pwa.js" defer></script>
+</body>
+</html>
