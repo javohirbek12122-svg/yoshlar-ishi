@@ -9,6 +9,7 @@ Yoshlar-Ishi is an independent Uzbek-language platform that helps young people d
 - Secure owner dashboard in `admin.html`
 - Illustrated searchable service portal at `davlat-xizmatlari.html`
 - Core youth opportunity navigator at `imkoniyatlar.html`: eligibility guidance, document/step checklists, application-draft builder, account-owned progress tracking, and a private chronological event history
+- Email/password + Google OAuth member centre at `hamjamiyat.html`: searchable member profiles, portfolio, private CV uploads, community posts, comments/likes, profile privacy and real daily/weekly/monthly activity charts
 - Email magic-link personal cabinet at `kabinet.html`
 - Stage-based startup navigator at `startap-yoli.html`, with adaptive readiness checks and Supabase-powered opportunity scoring
 - Server-side AI review and Telegram webhook/notification Edge Functions
@@ -185,7 +186,7 @@ Yoshlar-Ishi Android va iPhone’da brauzer orqali bosh ekranga o‘rnatiladigan
 - **Android:** Chrome’da saytni oching → ⋮ menyu → Install app / Add to Home screen.
 - **iPhone/iPad:** Safari’da saytni oching → Share / Ulashish → Add to Home Screen → Open as Web App → Add.
 - **Offline:** oldin ochilgan ayrim ochiq sahifalar qurilmada saqlangan bo‘lsa ochilishi mumkin. Forma yuborish, davlat portali, AI, shaxsiy kabinet va admin amallari internet talab qiladi.
-- **Maxfiylik:** service worker /admin.html va /kabinet.html sahifalarini oldindan keshlamaydi; server ushbu sahifalarga no-store javob sarlavhasini beradi.
+- **Maxfiylik:** service worker /admin.html, /kabinet.html va /hamjamiyat.html sahifalarini oldindan keshlamaydi; server ushbu sahifalarga no-store javob sarlavhasini beradi.
 
 PWA manifesti, raster ikonalar, service worker, offline fallback va install banner: manifest.webmanifest, pwa.js, service-worker.js, offline.html.
 
