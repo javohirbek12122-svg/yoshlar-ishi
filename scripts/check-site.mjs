@@ -232,6 +232,7 @@ assert.match(memberJs,/function closeDrawer\(/);
 assert.match(memberCss,/\.hp-drawer/);
 assert.doesNotMatch(memberJs,/service_role|SUPABASE_SERVICE_ROLE_KEY|client_secret/i);
 assert.doesNotMatch(memberJs,/from\\("member_profiles"\\)\\.select\\("\*"\\)/);
+assert.ok(memberJs.includes('.select(PROFILE_FIELDS)'),"Restricted profile fields must be explicitly selected");
 assert.match(memberJs,/from\\("member_private_assets"\\)\\.select\\("cv_object_path,cv_is_public"\\)/);
 new vm.Script(memberJs.split("\n").filter(line => !line.startsWith("import ")).join("\n"), { filename: "hamjamiyat.js" });
 console.log("✓ member authentication, private profiles/CV, portfolio, ten post categories, activity charts and drawer syntax validated");
