@@ -142,6 +142,23 @@ values
 ('2026.11.17-v1','vocational','V25','Mehnat xavfsizligi va kasbiy etika','Tushunish','Mehnat xavfsizligi va kasbiy etika bo‘yicha asosiy tushuncha va qoidalarni tushuntirish ko‘nikmasi.','B','Shaxsiy ma’lumotlar faqat zarur darajada, qonuniy asos va ruxsat bilan ishlatiladi.')
 on conflict(bank_version,track_id,question_id) do nothing;
 
+-- Keep cognitive-level labels aligned with the final item specifications.
+update private.assessment_answer_keys set domain='Tushunish',
+ competency='Huquq va fuqarolik savodxonligi bo‘yicha asosiy tushuncha va qoidalarni tushuntirish ko‘nikmasi.'
+where bank_version='2026.11.17-v1' and question_id='H18';
+update private.assessment_answer_keys set domain='Tahlil',
+ competency='Huquq va fuqarolik savodxonligi bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.'
+where bank_version='2026.11.17-v1' and question_id='H19';
+update private.assessment_answer_keys set domain='Tahlil',
+ competency='Raqamli savodxonlik bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.'
+where bank_version='2026.11.17-v1' and question_id='V03';
+update private.assessment_answer_keys set domain='Tahlil',
+ competency='Dasturlash asoslari bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.'
+where bank_version='2026.11.17-v1' and question_id='V10';
+update private.assessment_answer_keys set domain='Tahlil',
+ competency='Tadbirkorlik va loyiha boshqaruvi bo‘yicha ma’lumotni tahlil qilish va asoslangan xulosa chiqarish ko‘nikmasi.'
+where bank_version='2026.11.17-v1' and question_id in ('V16','V20');
+
 drop function if exists public.submit_assessment_attempt(uuid,text,text,jsonb);
 create or replace function public.submit_assessment_attempt(
  p_track_id text,
