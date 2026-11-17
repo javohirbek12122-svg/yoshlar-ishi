@@ -65,6 +65,7 @@ assert.ok(html.includes("yi-drawer-brand-icon") && html.includes("yi-drawer-usto
 assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
 assert.ok(html.includes("yi-assessment-announcement") && html.includes("SOON · TEZ KUNDA") && html.includes("./assessment.html"), "Hero must prominently announce the new tests and upcoming partnership review");
+assert.match(css, /\.yi-assessment-announcement\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/i, "Assessment announcement must span the full hero grid");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
 assert.ok(html.includes('id="yiDrawerToggle"') && html.includes('id="yiSideDrawer"') && html.includes('id="yiDrawerBackdrop"'), "Three-line navigation must provide a trigger, modal drawer and backdrop");

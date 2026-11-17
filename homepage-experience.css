@@ -677,3 +677,6 @@ body.yi-dark-mode .yi-quick-panel{background:#f8fbff;border-color:#dce7f3}
 .yi-assessment-home-soon a{color:#f3c879}
 .yi-assessment-home-new a:hover,.yi-assessment-home-soon a:hover{text-decoration:underline}
 @media(max-width:760px){.yi-assessment-announcement{grid-template-columns:1fr;gap:8px;margin-top:13px}.yi-assessment-home-new,.yi-assessment-home-soon{padding:13px}.yi-assessment-home-new strong,.yi-assessment-home-soon strong{font-size:13px}.yi-assessment-home-new p,.yi-assessment-home-soon p{font-size:9px}}
+
+/* Keep the assessment announcement spanning the full institutional hero grid. */
+.yi-assessment-announcement{grid-column:1/-1;width:100%;}

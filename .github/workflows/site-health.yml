@@ -94,6 +94,8 @@ jobs:
             sleep 5
             curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           done
+          grep -Fqi "yi-assessment-announcement" /tmp/yoshlar-home.html || { echo "::error::The homepage hero is missing the new assessment announcement."; exit 1; }
+          grep -Fqi "SOON · TEZ KUNDA" /tmp/yoshlar-home.html || { echo "::error::The homepage hero is missing the upcoming partner-review notice."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/assessment.html" -o /tmp/yoshlar-assessment.html
           grep -Fqi "Bilim sinovlari" /tmp/yoshlar-assessment.html || { echo "::error::The competency assessment page is missing."; exit 1; }
           grep -Fqi "SOON" /tmp/yoshlar-assessment.html || { echo "::error::The partnership review announcement is missing."; exit 1; }
