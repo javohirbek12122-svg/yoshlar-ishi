@@ -5,11 +5,13 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 const root=process.cwd();
-const serviceWorkerSource=fs.readFileSync(path.join(root,"service-worker.js"),"utf8");
-const pwaCacheName=serviceWorkerSource.match(/const\s+CACHE_NAME\s*=\s*["']([^"']+)["']/)?.[1];
-assert.ok(pwaCacheName,"Could not detect the current PWA cache name from service-worker.js");
 const types={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"text/javascript; charset=utf-8",".json":"application/json; charset=utf-8",".webmanifest":"application/manifest+json",".svg":"image/svg+xml",".png":"image/png",".jpg":"image/jpeg",".webp":"image/webp"};
 const remoteBase=(process.env.MOBILE_BASE_URL||"").trim().replace(/\/+$/,"");
+const serviceWorkerResponse=remoteBase?await fetch(remoteBase+"/service-worker.js"):null;
+if(serviceWorkerResponse&&!serviceWorkerResponse.ok)throw new Error("Could not read the production service worker: HTTP "+serviceWorkerResponse.status);
+const serviceWorkerSource=serviceWorkerResponse?await serviceWorkerResponse.text():fs.readFileSync(path.join(root,"service-worker.js"),"utf8");
+const pwaCacheName=serviceWorkerSource.match(/const\s+CACHE_NAME\s*=\s*["']([^"']+)["']/)?.[1];
+assert.ok(pwaCacheName,"Could not detect the active PWA cache name from service-worker.js");
 const server=remoteBase?null:http.createServer((req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url||"/","http://127.0.0.1").pathname);
