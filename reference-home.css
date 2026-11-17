@@ -29,7 +29,7 @@ body .yi-register-link:hover{background:linear-gradient(135deg,#3392ff,#0756e5);
 body .yi-search-panel{position:fixed;top:90px;left:50%;z-index:120;transform:translateX(-50%);padding:18px;border:1px solid #dce8f6;border-radius:17px;background:#fff;box-shadow:0 24px 65px #04184047}
 body .hero.wrap{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,.91fr) minmax(0,1.09fr);grid-template-rows:minmax(440px,1fr) auto;grid-template-areas:"copy art" "resources resources";align-items:center;gap:12px clamp(24px,3vw,52px);width:100%;max-width:none;min-height:735px;margin:0;padding:126px max(22px,calc((100% - 1510px)/2)) 17px;overflow:hidden;border-radius:0;background:#082b70;color:#fff}
 body .hero.wrap:before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;background:radial-gradient(ellipse at 71% 23%,#4caeff6b,transparent 34%),radial-gradient(ellipse at 9% 75%,#1061dd4d,transparent 39%),linear-gradient(130deg,#041943,#063b91 57%,#0b63c9)}
-body .hero.wrap:after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,#03133af2 0%,#042259d6 35%,#05357e66 66%,#05377d3d 100%),linear-gradient(180deg,#04184519 0%,#0416430d 54%,#0317478f 100%),url("https://images.unsplash.com/photo-1758270705317-3ef6142d306f?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1800") center 43%/cover no-repeat}
+body .hero.wrap:after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,#03133af2 0%,#042259d6 35%,#05357e66 66%,#05377d3d 100%),linear-gradient(180deg,#04184519 0%,#0416430d 54%,#0317478f 100%),url("https://caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH.webp") center 43%/cover no-repeat}
 body .hero .ambient-canvas{z-index:0;opacity:.20}
 body .hero-copy{grid-area:copy;z-index:2;width:100%;max-width:690px;padding:12px 0 8px}
 body .hero .eyebrow{display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:6px 13px;border:1px solid #79beff70;border-radius:999px;background:linear-gradient(110deg,#0e67ebb8,#0846ad8f);color:#f4f9ff;font-size:10px;font-weight:900;letter-spacing:.01em;box-shadow:0 8px 24px #0039ab38}
@@ -50,12 +50,15 @@ body .hero .art.yi-hero-visual{grid-area:art;position:relative;z-index:2;align-s
 body .hero .art.yi-hero-visual:before{display:none}
 body .yi-hero-scene{position:relative;isolation:isolate;min-height:510px;width:100%;perspective:1500px}
 body .yi-hero-scene:before{content:"";position:absolute;z-index:0;top:4%;right:7%;width:65%;height:45%;border-radius:4px;background:linear-gradient(180deg,#fff 0 31%,#e72d48 31% 34%,#fff 34% 65%,#18a56b 65%);opacity:.23;filter:drop-shadow(0 16px 24px #0003);transform:perspective(900px) rotateY(-15deg) rotateZ(4deg);pointer-events:none}
-body .yi-scene-photo-frame{position:absolute;z-index:1;top:27px;right:1%;width:98%;height:430px;overflow:hidden;border:1px solid #ffffff61;border-radius:25px;background:linear-gradient(145deg,#d9ecff,#fff);box-shadow:0 35px 85px #010c2a78,0 9px 25px #010c2a40;transform:perspective(1500px) rotateY(-5deg) rotateX(2deg) translateZ(30px)}
+body .yi-scene-photo-frame{position:absolute;z-index:1;top:27px;right:0;width:100%;height:445px;overflow:hidden;border:1px solid #ffffff55;border-radius:22px;background:rgba(3,20,58,.12);box-shadow:0 28px 70px #010c2a66,0 9px 25px #010c2a40;transform:perspective(1500px) rotateY(-4deg) rotateX(1deg) translateZ(30px)}
 body .yi-scene-photo-frame:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#041b4805 52%,#03153c59 100%),linear-gradient(115deg,#ffffff2b,transparent 46%)}
-body .yi-scene-people{display:block;width:100%;height:100%;object-fit:cover;object-position:center 46%;filter:saturate(1.1) contrast(1.03)}
+body .yi-scene-people{display:block;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:saturate(1.08) contrast(1.04)}
+body .yi-scene-photo-credit{position:absolute;z-index:7;right:8px;bottom:6px;display:flex;align-items:center;gap:6px;max-width:calc(100% - 16px);padding:5px 8px;border:1px solid #ffffff52;border-radius:7px;background:#061d4bc7;color:#e6f2ff;font-size:7px;font-weight:700;backdrop-filter:blur(7px)}
+body .yi-scene-photo-credit a{color:#e6f2ff;text-decoration:none}
+body .yi-scene-photo-credit a:hover{color:#fff;text-decoration:underline}
 body .yi-scene-float{border:1px solid #ffffffb8;border-radius:14px;box-shadow:0 18px 38px #01123147}
 body .yi-scene-status{top:13px;left:0}body .yi-scene-caption-card{left:1%;bottom:23px}
-body .yi-ai-helper-card{right:-5px;top:62%;z-index:5}body .yi-scene-flow-label{bottom:3px;right:2%}
+body .yi-ai-helper-card{display:none!important;right:-5px;top:62%;z-index:5}body .yi-scene-flow-label{bottom:3px;right:2%}
 body .yi-hero-quote{position:absolute;z-index:3;top:114px;right:max(28px,calc((100% - 1510px)/2));max-width:220px;color:#f4f8ff;font:italic 700 18px/1.2 Georgia,serif;text-align:right;text-shadow:0 3px 14px #0007;transform:rotate(-3deg)}
 body .yi-official-resources{grid-area:resources;position:relative;z-index:4;display:grid;grid-template-columns:minmax(190px,.7fr) minmax(0,2.3fr);align-items:center;gap:18px;width:100%;max-width:1510px;min-height:88px;margin:0 auto;padding:10px 19px;border:1px solid #ffffffdf;border-radius:19px;background:#f6fafff0;box-shadow:0 17px 42px #000f36;backdrop-filter:blur(18px)}
 body .yi-official-intro{min-width:0}
@@ -129,7 +132,7 @@ body.yi-dark-mode .yi-platform-proof .proof-item strong{background:#1e4778;color
  body .yi-brand-divider{height:30px}
  body .hero.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;grid-template-areas:"copy" "art" "resources";min-height:0;padding:115px 22px 17px;gap:12px}
  body .hero-copy{max-width:830px}body .hero .art.yi-hero-visual{min-height:360px;max-width:700px;justify-self:center}
- body .yi-hero-scene{min-height:365px}body .yi-scene-photo-frame{top:12px;height:320px;width:94%;right:3%}
+ body .yi-hero-scene{min-height:365px}body .yi-scene-photo-frame{top:12px;height:320px;width:98%;right:1%}
  body .yi-hero-quote{top:104px;right:28px;font-size:14px}
  body .yi-official-resources{grid-template-columns:1fr;gap:7px;padding:12px}
  body .yi-official-intro h2{display:inline-block;margin-right:8px}body .yi-official-intro p{display:inline-block}
@@ -146,9 +149,9 @@ body.yi-dark-mode .yi-platform-proof .proof-item strong{background:#1e4778;color
  body .yi-agency-brand img{width:31px;height:33px}body .yi-brand{min-width:0;gap:5px}
  body .yi-brand-mark{width:32px;height:32px;flex-basis:32px}body .yi-brand-mark svg{width:29px;height:29px}
  body .yi-brand-text strong{font-size:12px}body .yi-brand-text small{font-size:6px}
- body .yi-nav-actions{gap:2px}body .yi-nav-icon{width:31px;height:34px;font-size:18px}
- body .yi-accessibility{display:none}body .yi-drawer-toggle{min-height:35px;padding:5px 8px}
- body .yi-drawer-toggle-label{font-size:8px}body .yi-cabinet-link{min-height:34px;padding:7px 9px;font-size:8px}
+ body .yi-nav-actions{gap:2px}body .yi-nav-icon{width:42px;height:44px;min-height:44px;font-size:18px}
+ body .yi-accessibility{display:none}body .yi-drawer-toggle{min-height:44px;padding:5px 8px}
+ body .yi-drawer-toggle-label{font-size:8px}body .yi-cabinet-link{min-height:44px;padding:7px 9px;font-size:8px}
  body .hero.wrap{width:100%;padding:100px 15px 14px;gap:7px;row-gap:5px}
  body .hero .eyebrow{min-height:27px;padding:5px 10px;font-size:8px}
  body .hero h1{font-size:clamp(36px,9.8vw,53px)!important;line-height:1.01;margin:12px 0}
@@ -157,12 +160,12 @@ body.yi-dark-mode .yi-platform-proof .proof-item strong{background:#1e4778;color
  body .hero .actions .btn{min-height:44px;width:100%;padding:9px 7px;font-size:9px}
  body .hero .hero-note{font-size:8px;padding:7px 9px;margin-top:9px}
  body .hero .art.yi-hero-visual{min-height:265px;max-width:520px}
- body .yi-hero-scene{min-height:270px}body .yi-scene-photo-frame{top:11px;width:95%;right:2%;height:215px;border-radius:15px}
+ body .yi-hero-scene{min-height:270px}body .yi-scene-photo-frame{top:11px;width:98%;right:1%;height:215px;border-radius:15px}
  body .yi-scene-status{top:1px;left:0;font-size:8px;padding:7px 9px}
  body .yi-scene-caption-card{left:0;bottom:5px;max-width:75%;padding:8px 9px}
  body .yi-scene-float-bottom strong{font-size:9px}body .yi-scene-float-bottom small{font-size:7px}
  body .yi-ai-helper-card{top:61%;right:0;width:116px;padding:7px;border-radius:10px}
- body .yi-hero-quote{display:none}
+ body .yi-hero-quote{display:none}body .yi-scene-photo-credit{right:6px;bottom:4px;gap:4px;font-size:6px;padding:4px 6px}
  body .yi-official-resources{grid-template-columns:1fr;padding:11px;border-radius:14px}
  body .yi-official-intro h2{display:block;font-size:14px;margin:4px 0 2px}body .yi-official-intro p{display:block;font-size:8px}
  body .yi-official-links{grid-template-columns:1fr 1fr;gap:6px}

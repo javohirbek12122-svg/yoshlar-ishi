@@ -21,11 +21,11 @@ function createAccordion(key,title,description,sections,nested){
 }
 function createHeroPreview(art){
  if(!art||art.querySelector(".yi-hero-scene"))return;
- art.classList.add("yi-hero-visual");art.setAttribute("aria-label","Yoshlar-Ishi uchun oldinga chiqib turgan 3D yoshlar tasviri");
+ art.classList.add("yi-hero-visual");art.setAttribute("aria-label","O‘zbekiston bayrog‘i oldidagi yoshlar va Toshkent Mustaqillik maydoni tasviri");
  art.innerHTML=
  '<div class="yi-hero-scene">'+
   '<div class="yi-scene-orbit yi-scene-orbit-one" aria-hidden="true"></div><div class="yi-scene-orbit yi-scene-orbit-two" aria-hidden="true"></div>'+
-  '<div class="yi-scene-photo-frame"><img class="yi-scene-people" src="https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500" alt="Yoshlar jamoasi: ta’lim, texnologiya va hamkorlik ustida ishlayotgan talabalar" fetchpriority="high" decoding="async"></div>'+
+  '<div class="yi-scene-photo-frame"><img class="yi-scene-people" src="https://milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30.jpg" alt="O‘zbekiston bayrog‘i oldida saf tortgan, qora kostyumdagi yoshlar" fetchpriority="high" loading="eager" decoding="async"></div><div class="yi-scene-photo-credit"><a href="https://milliygvardiya.uz/uz/news/sostojal823" target="_blank" rel="noopener noreferrer">Yoshlar surati: Milliy gvardiya</a><span aria-hidden="true">·</span><a href="https://caspianpost.com/uzbekistan/world-bank-forecasts-steady-economic-growth-for-uzbekistan" target="_blank" rel="noopener noreferrer">Toshkent manzarasi: Mustaqillik maydoni</a></div>'+
   '<div class="yi-scene-float yi-scene-status"><span class="yi-scene-dot"></span><span>Yoshlar hamjamiyati</span></div>'+
   '<div class="yi-scene-float yi-scene-caption-card"><span class="yi-scene-float-icon">✦</span><span><strong>Yangi imkoniyatlar sari birga!</strong><small>Ta’lim · Ish · Startap · Grant</small></span></div>'+
   '<div class="yi-ai-helper-card"><div class="yi-ai-card-top"><span class="yi-ai-avatar">✧</span><span><strong>AI yordamchisi</strong><small><i></i> Online</small></span></div><p>G‘oyangizni baholaymizmi?</p><a href="#ai-yordamchi">Boshlash <span aria-hidden="true">➜</span></a></div>'+

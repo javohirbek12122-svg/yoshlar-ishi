@@ -151,10 +151,12 @@ jobs:
           grep -Fqi 'class="yi-partner-tags"' /tmp/yoshlar-home.html || { echo "::error::The partnership section is missing its contribution themes."; exit 1; }
           grep -Fqi 'id="yiSearchPanel"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing its working search panel."; exit 1; }
           grep -Fqi 'id="yiThemeToggle"' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the theme control."; exit 1; }
-          grep -Fqi 'images.unsplash.com/photo-1758270705518-b61b40527e76' /tmp/yoshlar-homepage-experience.js || { echo "::error::The live homepage is missing its licensed Unsplash youth foreground image."; exit 1; }
-          grep -Fqi 'images.unsplash.com/photo-1758270705317-3ef6142d306f' /tmp/yoshlar-homepage-experience.css || { echo "::error::The live homepage is missing its licensed Unsplash background image."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://images.unsplash.com/photo-1758270705518-b61b40527e76?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=85&w=1500' -o /tmp/yoshlar-hero-foreground.jpg
-          file /tmp/yoshlar-hero-foreground.jpg | grep -Fq 'JPEG image data' || { echo "::error::The Unsplash youth foreground image is not a valid JPEG."; exit 1; }
+          grep -Fqi 'milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30.jpg' /tmp/yoshlar-homepage-experience.js || { echo "::error::The official youth photograph is missing."; exit 1; }
+          grep -Fqi 'caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH' /tmp/yoshlar-reference-home.css || { echo "::error::The Tashkent Independence Square background is missing."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://milliygvardiya.uz/storage/uploads/new/1de4f69f3b17b1c37429be1f9f9a0e30.jpg' -o /tmp/yoshlar-hero-foreground.jpg
+          file --mime-type /tmp/yoshlar-hero-foreground.jpg | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The official youth image is not a supported image."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 'https://caspianpost.com/storage/photos/thumbs/large/T5obsHLNWbTqN6VEdLaHD00mJ3ZbI419wMmxYbWH.webp' -o /tmp/yoshlar-hero-background.webp
+          file --mime-type /tmp/yoshlar-hero-background.webp | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The Tashkent plaza background is not a supported image."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/opportunity-page-filters.js" -o /tmp/yoshlar-opportunity-filters.js
           grep -Fqi 'categoryFilter' /tmp/yoshlar-opportunity-filters.js || { echo "::error::The quick-access catalogue filters are missing."; exit 1; }
           grep -Fqi 'class="hero-storyline yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The hero benefit ribbon is not rendered."; exit 1; }
@@ -218,7 +220,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v15";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v11 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v16";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
