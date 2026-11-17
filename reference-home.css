@@ -449,7 +449,7 @@ body.yi-hero-modal-open{overflow:hidden}
  .yi-hero-banner{border-radius:9px}
  .yi-hero-caption{gap:6px;padding:6px 2px 0;font-size:6.5px;letter-spacing:.055em}
  .yi-hero-original{display:none}
- .yi-hero-expand{min-height:35px;padding:7px 10px;font-size:8px}
+ .yi-hero-expand{min-height:44px;padding:7px 10px;font-size:8px}
  .yi-hero-casing-corner{width:8px;height:8px}
  .yi-hero-modal{padding:8px}
  .yi-hero-modal-panel{max-height:calc(100dvh - 20px);padding:9px;border-radius:12px}
@@ -459,7 +459,7 @@ body.yi-hero-modal-open{overflow:hidden}
 }
 @media(max-width:380px){
  .yi-hero-status{font-size:6px}
- .yi-hero-expand{min-height:34px}
+ .yi-hero-expand{min-height:44px}
 }
 @media(prefers-reduced-motion:reduce){
  .yi-hero-ambient-glow{animation:none}
