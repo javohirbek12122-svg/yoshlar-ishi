@@ -78,7 +78,7 @@ function setPasswordVisibility(inputId,buttonId){
  button.setAttribute("aria-pressed",String(reveal));button.setAttribute("aria-label",reveal?"Parolni yashirish":"Parolni ko‘rsatish");button.textContent=reveal?"◎":"◉";
 }
 function showPasswordRecovery(message=""){
- $("hpAuthTabs").hidden=true;$("hpAuthForm").hidden=true;$("hpGoogleLogin").hidden=true;
+ $("hpAuthTabs").hidden=true;$("hpAuthForm").hidden=true;$("hpGoogleLogin").hidden=true;$("hpGoogleLogin").closest(".hp-google-area").hidden=true;
  $("hpForgotPassword").hidden=true;$("hpResendConfirmation").hidden=true;$("hpDivider").hidden=true;
  $("hpRecoveryForm").hidden=false;say("hpAuthMessage",message||"Yangi parol yarating.");$("hpRecoveryPassword").focus();
 }
@@ -96,7 +96,7 @@ function setAuthMode(mode){
  $("hpPassword").autocomplete=register?"new-password":"current-password";
  $("hpName").required=register;$("hpConfirm").required=register;$("hpPrivacy").required=register;
  $("hpPasswordStrength").hidden=!register;$("hpRecoveryForm").hidden=true;
- $("hpAuthForm").hidden=false;$("hpGoogleLogin").hidden=false;$("hpDivider").hidden=false;
+ $("hpAuthForm").hidden=false;$("hpGoogleLogin").hidden=false;$("hpGoogleLogin").closest(".hp-google-area").hidden=false;$("hpDivider").hidden=false;
  $("hpAuthMessage").textContent="";$("hpAuthMessage").classList.remove("error");
  $("hpAuthForm").dataset.mode=mode;updatePasswordStrength();
  if(register)$("hpName").focus();
