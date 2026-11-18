@@ -460,6 +460,7 @@ for (const feature of [
 assert.match(opportunitiesPage, /opportunity_journeys\?select=\*&program_slug=eq\./);
 console.log("✓ youth opportunity catalogue, explicit application states, age-fit guide, preparation checklist, draft builder and private journey timeline are present");
 
+const index = read("index.html");
 const cabinet = read("kabinet.html");
 for (const feature of [
   "YI_AUTH_READY",
@@ -471,11 +472,11 @@ for (const feature of [
 ]) {
   assert.ok(cabinet.includes(feature), `Personal cabinet control missing: ${feature}`);
 }
-assert.doesNotMatch(cabinet,/yi_user_token|yi_user_refresh|yi_user_id|auth\\/v1\\/otp/,"Cabinet must not duplicate token storage or expose a second sign-in flow");
+assert.doesNotMatch(cabinet,/yi_user_token|yi_user_refresh|yi_user_id|auth[./]v1[./]otp/,"Cabinet must not duplicate token storage or expose a second sign-in flow");
 const sharedAuth = read("auth-client.js");
 const authBridge = read("auth-bridge.js");
 assert.ok(sharedAuth.includes("supabase.auth.getUser()"),"Shared auth client must verify user identity against Supabase");
-assert.ok(sharedAuth.includes("persistSession: true") && sharedAuth.includes("autoRefreshToken: true") && sharedAuth.includes("flowType: \"pkce\""),"Shared auth client must persist and refresh the PKCE session");
+assert.ok(sharedAuth.includes("persistSession: true") && sharedAuth.includes("autoRefreshToken: true") && sharedAuth.includes('flowType: "pkce"'),"Shared auth client must persist and refresh the PKCE session");
 assert.ok(authBridge.includes("getIdentity: getVerifiedIdentity") && authBridge.includes("yi-auth-change"),"Legacy pages must share verified identity and cross-tab auth changes");
 assert.doesNotMatch(index,/yi_user_token|yi_user_refresh|yi_user_id/,"Homepage must not use ad-hoc auth token storage");
 assert.ok(index.includes("YI_AUTH_READY") && index.includes("getIdentity()"),"Homepage forms and votes must use the shared auth bridge");
@@ -483,8 +484,10 @@ assert.ok(memberHtml.includes('id="hpRecoveryForm"') && memberHtml.includes('id=
 assert.doesNotMatch(memberJs,/sessionStorage.*yi_user_token/,"Community page must not duplicate the access token");
 const authMigration=read("supabase/migrations/20261118120000_harden_initiative_owner_update_and_admin_review.sql");
 assert.ok(authMigration.includes("owners update own pending initiatives or admins review"),"Owner-scoped initiative update policy must be versioned");
-new vm.Script(sharedAuth.replace(/^import .*;\\s*$/gm,"").replace(/^export /gm,""),{filename:"auth-client.js"});
-new vm.Script(authBridge.replace(/^import .*;\\s*$/gm,""),{filename:"auth-bridge.js"});
+const authClientForSyntax=sharedAuth.split("\n").filter(line=>!line.startsWith("import ")).join("\n").replaceAll("export ","");
+const authBridgeForSyntax=authBridge.split("\n").filter(line=>!line.startsWith("import ")).join("\n");
+new vm.Script(authClientForSyntax,{filename:"auth-client.js"});
+new vm.Script(authBridgeForSyntax,{filename:"auth-bridge.js"});
 console.log("✓ shared Supabase auth, owner-scoped cabinet and single account/session flow validated");
 
 for (const feature of [
