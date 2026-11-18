@@ -119,21 +119,17 @@ try{
      if(await page.locator("#yiAuthGate a.button").count()!==2)fail(item[1]+" "+width,"assessment sign-in and registration links are missing");
     }
     if(item[0]==="/index.html"&&width<=700){
-     const banner=page.locator(".yi-hero-banner");
-     if(await banner.count()!==1)fail(item[1]+" "+width,"the original homepage banner is missing or duplicated");
+     const hero=page.locator("main#top > section.hero");
+     if(await hero.count()!==1)fail(item[1]+" "+width,"the current homepage hero section is missing or duplicated");
      else{
-      await banner.waitFor({state:"visible",timeout:5000});
-      const dimensions=await banner.evaluate(el=>{const style=getComputedStyle(el),parts=style.aspectRatio.split("/").map(x=>Number(x.trim()));return {naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,objectFit:style.objectFit,cssAspectRatio:parts.length===2?parts[0]/parts[1]:0};});
-      if(dimensions.naturalWidth<10||dimensions.naturalHeight<10||dimensions.objectFit!=="contain"||Math.abs(dimensions.cssAspectRatio-16/9)>.01)fail(item[1]+" "+width,"the original banner was not loaded or is not contained in its responsive 16:9 frame");
-      await page.locator(".yi-hero-image-button").click();
-      const heroModal=page.locator("#yiHeroImageModal");
-      if(await heroModal.getAttribute("aria-hidden")!=="false"||!(await heroModal.isVisible()))fail(item[1]+" "+width,"tap-to-expand image viewer did not open accessibly");
-      if(!(await page.locator(".yi-hero-modal-close").evaluate(el=>el===document.activeElement)))fail(item[1]+" "+width,"image viewer did not move keyboard focus to its close control");
-      await page.locator(".yi-hero-modal-close").click();
-      if(await heroModal.getAttribute("aria-hidden")!=="true")fail(item[1]+" "+width,"image viewer close control did not restore hidden state");
-      await page.locator(".yi-hero-image-button").click();
-      await page.keyboard.press("Escape");
-      if(await heroModal.getAttribute("aria-hidden")!=="true")fail(item[1]+" "+width,"Escape did not close the expanded banner viewer");
+      const heading=hero.locator(".hero-copy h1").first();
+      if(!(await heading.isVisible()))fail(item[1]+" "+width,"the homepage hero heading is not visible");
+      if((await heading.innerText()).trim().length<12)fail(item[1]+" "+width,"the homepage hero heading is incomplete");
+      const primaryCta=hero.locator(".hero-copy .actions a.btn").first();
+      if(!(await primaryCta.isVisible()))fail(item[1]+" "+width,"the primary opportunity CTA is not visible in the hero");
+      const ctaBox=await primaryCta.boundingBox();
+      if(!ctaBox||ctaBox.height<43)fail(item[1]+" "+width,"the primary hero CTA is too small for touch");
+      if(ctaBox&&ctaBox.x<0)fail(item[1]+" "+width,"the primary hero CTA is clipped off-screen");
      }
      const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
      if(await toggle.count()!==1)fail(item[1]+" "+width,"three-line drawer trigger is missing");
