@@ -54,6 +54,24 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 </style>
 <link rel="stylesheet" href="./shared-theme.css">
   <link rel="stylesheet" href="./mobile-guard.css">
+<style id="pilot-metrics-styles">
+.pilot-monitor{margin:14px 0}
+.pilot-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pilot-kpi{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:13px}
+.pilot-kpi span{display:block;min-height:30px;color:var(--muted);font-size:10px;font-weight:800;line-height:1.45}
+.pilot-kpi strong{display:block;margin-top:5px;font:800 25px/1.2 Manrope,sans-serif;letter-spacing:-.8px}
+.pilot-kpi small{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.45}
+.pilot-weekly{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+.pilot-weekly-title{margin-bottom:11px;font-size:11px;font-weight:800}
+.pilot-week-row{display:grid;grid-template-columns:70px minmax(0,1fr) 30px;gap:10px;align-items:center;margin:8px 0;font-size:10px}
+.pilot-week-label{color:var(--muted)}
+.pilot-week-track{height:8px;overflow:hidden;border-radius:99px;background:var(--line)}
+.pilot-week-track span{display:block;height:100%;border-radius:99px;background:var(--green)}
+.pilot-week-count{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.pilot-note{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+@media(max-width:1050px){.pilot-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){.pilot-kpi{padding:11px}.pilot-kpi strong{font-size:22px}.pilot-week-row{grid-template-columns:58px minmax(0,1fr) 25px;gap:7px}}
+</style>
 </head>
 <body>
 <div id="loginView" class="loginwrap">
@@ -114,6 +132,33 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
           <article class="stat"><div class="stathead">Yakunlangan <span class="staticon">✓</span></div><strong id="statDone">—</strong><small>Natijaga yetgan tashabbuslar</small></article>
           <article class="stat"><div class="stathead">Yangi hamkorliklar <span class="staticon">◎</span></div><strong id="statPartners">—</strong><small>Javob kutilayotgan murojaatlar</small></article>
         </div>
+        <section class="panel pilot-monitor" aria-labelledby="pilotMonitorTitle">
+          <div class="panelhead">
+            <div>
+              <h3 id="pilotMonitorTitle">Pilot monitoring — foydalanuvchi faolligi</h3>
+              <p>Platformadan foydalanish va imkoniyat jarayonlari bo‘yicha anonim yig‘ma ko‘rsatkichlar.</p>
+            </div>
+            <span class="statuspill" id="pilotMetricsState">Yuklanmoqda</span>
+          </div>
+          <div class="panelbody">
+            <div class="pilot-kpis">
+              <article class="pilot-kpi"><span>Ro‘yxatdan o‘tgan hisoblar</span><strong id="pilotRegisteredUsers">—</strong><small>Anonim hisoblar kiritilmaydi</small></article>
+              <article class="pilot-kpi"><span>Yangi hisoblar · 7 kun</span><strong id="pilotNewUsers7d">—</strong><small>Oxirgi 7 kun ichida</small></article>
+              <article class="pilot-kpi"><span>Faol foydalanuvchilar · 7 kun</span><strong id="pilotActiveUsers7d">—</strong><small>Kamida bitta qayd etilgan harakat</small></article>
+              <article class="pilot-kpi"><span>Faol foydalanuvchilar · 30 kun</span><strong id="pilotActiveUsers30d">—</strong><small>Kamida bitta qayd etilgan harakat</small></article>
+              <article class="pilot-kpi"><span>Imkoniyat jarayonlari</span><strong id="pilotJourneysStarted">—</strong><small>Shaxsiy kabinetda boshlangan</small></article>
+              <article class="pilot-kpi"><span>Yakunlangan jarayonlar</span><strong id="pilotJourneysCompleted">—</strong><small>Foydalanuvchi yakunlagan</small></article>
+              <article class="pilot-kpi"><span>Bilim sinovi urinishlari</span><strong id="pilotAssessmentAttempts">—</strong><small>Bazaga saqlangan natijalar</small></article>
+              <article class="pilot-kpi"><span>Yuborilgan tashabbuslar</span><strong id="pilotInitiatives">—</strong><small>Yoshlar-Ishi ichidagi arizalar</small></article>
+            </div>
+            <div class="pilot-weekly">
+              <div class="pilot-weekly-title">Haftalik faollik · so‘nggi 8 hafta</div>
+              <div id="pilotWeekBars"><div class="subtle">Ko‘rsatkichlar yuklanmoqda…</div></div>
+              <p class="pilot-note" id="pilotLastActivity">Oxirgi faollik qaydi tekshirilmoqda.</p>
+            </div>
+            <p class="pilot-note">Eslatma: “faol foydalanuvchi” — member_activity_events jadvalida shu davr ichida kamida bitta harakati qayd etilgan alohida hisob. Bu Vercel tashriflari yoki barcha sahifa ko‘rishlari soni emas.</p>
+          </div>
+        </section>
         <div class="grid2">
           <div class="panel"><div class="panelhead"><div><h3>Arizalar holati</h3><p>Barcha holatlarning taqsimoti</p></div><button class="button" data-goto="initiatives">Arizalarni ko‘rish ↗</button></div><div class="panelbody"><div class="bars" id="statusBars"><div class="subtle">Ko‘rsatkichlar yuklanmoqda…</div></div></div></div>
           <div class="panel"><div class="panelhead"><div><h3>Tizim tekshiruvi</h3><p>Panel va xizmatlar ulanishi</p></div><span class="statuspill" id="lastRefresh">Yangilanmoqda</span></div><div class="panelbody"><div class="healthlist">
@@ -295,12 +340,43 @@ async function loadData(){try{
  teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];youthPrograms=yp||[];
  renderAll();setDbHealth(true,"Ulandi");$("lastRefresh").textContent="Yangilandi";$("lastUpdated").textContent=fmt(new Date().toISOString());
  }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e)}}
+async function loadPilotMetrics(){
+ try{
+  const m=await api("rpc/admin_get_pilot_metrics",{method:"POST",body:"{}"});
+  const value=(v)=>Number(v||0).toLocaleString("uz-UZ");
+  $("pilotRegisteredUsers").textContent=value(m.registered_users);
+  $("pilotNewUsers7d").textContent=value(m.new_users_7d);
+  $("pilotActiveUsers7d").textContent=value(m.active_users_7d);
+  $("pilotActiveUsers30d").textContent=value(m.active_users_30d);
+  $("pilotJourneysStarted").textContent=value(m.journeys_started);
+  $("pilotJourneysCompleted").textContent=value(m.journeys_completed);
+  $("pilotAssessmentAttempts").textContent=value(m.assessment_attempts);
+  $("pilotInitiatives").textContent=value(m.initiative_submissions);
+  const weeks=Array.isArray(m.weekly_activity)?m.weekly_activity:[];
+  const max=Math.max(1,...weeks.map(w=>Number(w.active_users)||0));
+  $("pilotWeekBars").innerHTML=weeks.map(w=>{
+   const count=Number(w.active_users)||0;
+   const date=new Date(String(w.week_start||"")+"T00:00:00");
+   const label=Number.isNaN(date.getTime())?String(w.week_start||"—"):date.toLocaleDateString("uz-UZ",{day:"2-digit",month:"short"});
+   const width=Math.max(0,Math.min(100,Math.round(count/max*100)));
+   return '<div class="pilot-week-row"><span class="pilot-week-label">'+esc(label)+'</span><div class="pilot-week-track"><span style="width:'+width+'%"></span></div><strong class="pilot-week-count">'+count+'</strong></div>';
+  }).join("")||'<div class="subtle">Hozircha haftalik faollik qaydi yo‘q.</div>';
+  const last=m.last_member_activity_at?new Date(m.last_member_activity_at).toLocaleString("uz-UZ"):"Hali faollik qayd etilmagan";
+  $("pilotLastActivity").textContent="Oxirgi qayd etilgan harakat: "+last;
+  $("pilotMetricsState").textContent="Yangilandi";
+ }catch(e){
+  $("pilotMetricsState").textContent="Yuklanmadi";
+  $("pilotLastActivity").textContent="Pilot statistikasi yuklanmadi. Admin ruxsati va RPC ulanishini tekshiring.";
+  console.error("Pilot metrics:",e);
+ }
+}
 async function loadStats(){try{
  const [all,n,rev,progress,done,partnerNew,sourceActive,portalActive]=await Promise.all([
  getQueryCount("initiatives"),getQueryCount("initiatives","status=eq.submitted"),getQueryCount("initiatives","status=eq.reviewing"),getQueryCount("initiatives","status=eq.in_progress"),getQueryCount("initiatives","status=eq.completed"),getQueryCount("connection_requests","review_status=eq.new"),getQueryCount("opportunity_sources","active=eq.true"),getQueryCount("official_portal_integrations","active=eq.true")]);
  $("statAll").textContent=all;$("statNew").textContent=n;$("statProgress").textContent=progress;$("statDone").textContent=done;$("statPartners").textContent=partnerNew;$("healthSources").textContent=sourceActive+" imkoniyat + "+portalActive+" rasmiy portal";setDbHealth(true,"Ulandi");
  const statuses=["submitted","reviewing","needs_details","approved","in_progress","completed","declined"],labels=statuses.map(s=>statusNames[s]),counts=await Promise.all(statuses.map(s=>getQueryCount("initiatives","status=eq."+s))),max=Math.max(1,...counts);
  $("statusBars").innerHTML=statuses.map((s,i)=>'<div class="barrow"><div class="barlabel">'+esc(labels[i])+'</div><div class="trackbar"><div class="fillbar" style="width:'+(counts[i]/max*100)+'%"></div></div><div class="barcount">'+counts[i]+'</div></div>').join("");
+ await loadPilotMetrics();
  }catch(e){setDbHealth(false,"Ulanmadi");console.error(e)}}
 function renderOverview(){const recent=initiatives.slice(0,6);$("recentBody").innerHTML=recent.length?recent.map(i=>'<tr><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(dateShort(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+'</span></td><td>'+esc(i.district||"—")+'</td><td>'+toTableStatus(i.status)+'</td><td>'+esc(dateShort(i.created_at))+'</td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha arizalar yo‘q.</td></tr>'}
 function renderInitiatives(){const term=($("initiativeSearch").value||"").toLowerCase(),status=$("initiativeFilter").value;const rows=initiatives.filter(i=>(!status||i.status===status)&&[i.title,i.submitter_name,i.reference_code,i.district,i.contact,i.category].join(" ").toLowerCase().includes(term));$("initiativeCount").textContent=rows.length+" ta ko‘rsatilmoqda · bazadan oxirgi 300 ta";$("initiativesBody").innerHTML=rows.length?rows.map(i=>'<tr data-id="'+esc(i.id)+'"><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(fmt(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+' · '+esc(i.age_band)+'</span><span class="sub">'+esc(i.problem||"")+'</span></td><td>'+esc(categoryNames[i.category]||i.category)+'<span class="sub">'+esc(i.district||"Hudud kiritilmagan")+'</span></td><td>'+esc(i.contact||"—")+'</td><td><select class="statusselect js-istatus" aria-label="Holat">'+Object.entries(statusNames).map(([k,v])=>'<option value="'+k+'" '+(i.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><input class="noteinput js-inote" maxlength="2000" value="'+esc(i.admin_notes||"")+'" placeholder="Ichki izoh (ixtiyoriy)"></td><td><button class="savebtn js-isave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">Mos ariza topilmadi.</td></tr>'}
