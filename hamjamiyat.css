@@ -271,3 +271,5 @@ body.hp-dark .hp-google-copy b{color:#f0f5f8}
 body.hp-dark .hp-google-copy small,body.hp-dark .hp-google-hint{color:#9db0bf}
 @media(max-width:600px){.hp-google-button{min-height:60px;padding:10px 12px}.hp-google-copy b{font-size:11px}.hp-google-hint{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.hp-google-button,.hp-google-arrow{transition:none}}
+
+.hp-google-area[hidden]{display:none!important}
