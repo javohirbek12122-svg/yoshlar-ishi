@@ -561,6 +561,38 @@ $("showcaseBoard").addEventListener("click",async e=>{
 });
 loadTeamBoard();loadShowcase();
 
+function updateHomepageAccountUi(){
+ const login=document.querySelector(".yi-cabinet-link");
+ const register=document.querySelector(".yi-register-link");
+ if(!login||!register)return;
+ const guestMarkup=login.dataset.guestMarkup||(login.dataset.guestMarkup=login.innerHTML);
+ const guestHref=login.dataset.guestHref||(login.dataset.guestHref=login.getAttribute("href")||"./hamjamiyat.html#hpAuthGate");
+ const refresh=async()=>{
+  try{
+   const identity=await authIdentity();
+   if(identity){
+    login.href="./hamjamiyat.html?tab=profile";
+    login.textContent="Shaxsiy kabinet";
+    login.setAttribute("aria-label","Shaxsiy kabinet");
+    register.style.display="none";
+   }else{
+    login.href=guestHref;
+    login.innerHTML=guestMarkup;
+    login.removeAttribute("aria-label");
+    register.style.display="";
+   }
+  }catch{
+   login.href=guestHref;
+   login.innerHTML=guestMarkup;
+   login.removeAttribute("aria-label");
+   register.style.display="";
+  }
+ };
+ refresh();
+ window.addEventListener("yi-auth-change",refresh);
+}
+updateHomepageAccountUi();
+
 function telegramHelp(code){
  const bot=String(cfg.telegramBotUsername||"").replace(/^@/,"").trim(),cmd="/link "+code;
  return '<div class="notice" style="margin-top:10px"><strong>Telegram xabarnomalari</strong><div style="margin-top:5px">Bot orqali kuzatish buyrug‘i: <code>'+escapeHtml(cmd)+'</code></div><button class="btn alt" type="button" data-copy-telegram="'+escapeHtml(cmd)+'" style="margin-top:7px">Buyruqni nusxalash</button> '+(bot?'<a class="portal-link-cta" href="https://t.me/'+encodeURIComponent(bot)+'" target="_blank" rel="noopener noreferrer">Telegram botni ochish ↗</a>':'<span class="smallmuted">Botning ommaviy username’i sozlangach, shu yerda havola paydo bo‘ladi.</span>')+'</div>';

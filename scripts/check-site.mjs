@@ -482,6 +482,7 @@ assert.ok(sharedAuth.includes("persistSession: true") && sharedAuth.includes("au
 assert.ok(authBridge.includes("getIdentity: getVerifiedIdentity") && authBridge.includes("yi-auth-change"),"Legacy pages must share verified identity and cross-tab auth changes");
 assert.doesNotMatch(index,/yi_user_token|yi_user_refresh|yi_user_id/,"Homepage must not use ad-hoc auth token storage");
 assert.ok(index.includes("YI_AUTH_READY") && index.includes("getIdentity()"),"Homepage forms and votes must use the shared auth bridge");
+assert.ok(index.includes("updateHomepageAccountUi") && index.includes("yi-auth-change") && index.includes("Shaxsiy kabinet"),"Homepage account action must reflect the verified signed-in state");
 assert.ok(memberHtml.includes('id="hpRecoveryForm"') && memberHtml.includes('id="hpResendConfirmation"'),"Password reset and confirmation resend controls are required");
 assert.doesNotMatch(memberJs,/sessionStorage.*yi_user_token/,"Community page must not duplicate the access token");
 assert.ok(opportunities.includes("YI_AUTH_READY") && opportunities.includes("getIdentity"),"Opportunity catalogue must use shared Supabase Auth");
