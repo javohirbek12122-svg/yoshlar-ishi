@@ -619,10 +619,10 @@ foldAfterHeader("jarayon","5 bosqichli yo‘l xaritasini ko‘rish","Muammodan n
 foldAfterHeader("imkoniyatlar-yakun","Loyiha va hamjamiyat vositalarini ko‘rish","G‘oya tahlili, jamoa, tashabbus va hamkorlik vositalari.");
 const aiCard=$("ai-yordamchi");
 if(aiCard&&!aiCard.closest("details.compact-fold")){
- const details=document.createElement("details");details.id="ai-yordamchi";details.className="compact-fold compact-ai";
+ const details=document.createElement("details");details.id="ai-yordamchi-fold";details.className="compact-fold compact-ai";
  const summary=document.createElement("summary");
  summary.innerHTML='<span class="fold-summary-label">AI yordamchi — g‘oyani tahlil qilish<span class="fold-meta">Kuchli tomonlar · kamchiliklar · xavflar · keyingi qadam</span></span><span class="fold-action">Tahlilni ochish ↗</span>';
- aiCard.removeAttribute("id");aiCard.parentNode.insertBefore(details,aiCard);details.append(summary,aiCard);
+ aiCard.parentNode.insertBefore(details,aiCard);details.append(summary,aiCard);
 }
 const initiativeDraftForm=$("initiativeForm");
 if(initiativeDraftForm&&!initiativeDraftForm.closest("details.compact-initiative")){

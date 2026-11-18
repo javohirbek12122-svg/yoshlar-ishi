@@ -45,6 +45,18 @@
 .nuclear-warning{display:block}
 .footer{border-top:1px solid var(--line);padding:16px 0 25px;color:#71786a;font-size:9px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b72c;outline-offset:3px}
+.theory-section{padding:18px 0 42px}.theory-heading{max-width:760px;margin:0 0 16px}
+.theory-heading h2{margin:6px 0;font:800 clamp(22px,3vw,32px)/1.15 Manrope,sans-serif;letter-spacing:-.045em}
+.theory-heading p,.theory-note{max-width:760px;color:#687064;font-size:12px;line-height:1.75}
+.theory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.theory-card{min-width:0;padding:17px;border:1px solid #dce0d4;border-radius:11px;background:#fffefa;box-shadow:0 7px 22px #1b241008}
+.theory-card>span{color:#75824e;font-size:9px;font-weight:900;letter-spacing:.12em}
+.theory-card h3{margin:8px 0;font:800 15px Manrope,sans-serif}
+.theory-card p{min-height:66px;margin:0 0 12px;color:#687064;font-size:11px;line-height:1.7}
+.theory-card strong{display:block;padding-top:10px;border-top:1px solid #e7eadf;color:#415720;font-size:12px}
+.theory-note{margin-top:14px}
+@media(max-width:800px){.theory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.theory-grid{grid-template-columns:1fr}.theory-card p{min-height:0}}
 [hidden]{display:none!important}
 @media(max-width:1000px){.lab-shell{grid-template-columns:190px minmax(0,1fr)}.lower-grid{grid-template-columns:1fr}.viewport{height:430px}}
 @media(max-width:720px){.wrap{width:calc(100% - 22px)}.navlinks{display:none}.lab-shell{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow-x:auto;gap:5px;padding:8px}.side-label,.side-note{display:none}.mode-btn{min-width:115px;width:auto;flex-direction:column;gap:5px;text-align:center;padding:8px 9px;font-size:9px}.mode-icon{width:27px;height:27px}.viewport{height:370px}.control-list{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat strong{font-size:15px}.scene-head{align-items:flex-start}.scene-actions{width:100%}}
@@ -87,20 +99,28 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 <div class="card history" id="saqlangan"><h3>Saqlangan tajribalar</h3><p class="sub">Shaxsiy kabinetingiz orqali saqlangan so‘nggi tajribalar.</p><div class="history-list" id="historyList"><div class="empty">Tajriba natijalarini saqlash uchun elektron pochta manzilingiz orqali shaxsiy hisobingizga kiring.</div></div></div>
 </section>
 </div>
+<section class="theory-section" id="nazariya" aria-labelledby="theoryHeading">
+ <div class="theory-heading"><div class="eyebrow">FIZIKA NAZARIYASI</div><h2 id="theoryHeading">Model ortidagi qonuniyatni tushuning.</h2><p>Parametrlarni o‘zgartirishdan oldin fizik mazmun va har bir modelning cheklovini biling.</p></div>
+ <div class="theory-grid">
+  <article class="theory-card"><span>01 · MEKANIKA</span><h3>Parabolik harakat</h3><p>Havo qarshiligi e’tiborga olinmasa, gorizontal tezlik doimiy, vertikal tezlanish esa gravitatsiyaga teng bo‘ladi.</p><strong>R = v₀² sin(2θ) / g</strong></article>
+  <article class="theory-card"><span>02 · TEBRANISH</span><h3>Matematik mayatnik</h3><p>Kichik tebranish burchaklarida davr ip uzunligining kvadrat ildiziga mutanosib, gravitatsiyaga esa teskari bog‘liq.</p><strong>T ≈ 2π√(L/g)</strong></article>
+  <article class="theory-card"><span>03 · MOLEKULYAR FIZIKA</span><h3>Ideal gaz</h3><p>Ideal gaz modeli zarrachalar hajmi va o‘zaro ta’sirini soddalashtiradi. Bosim kartasi mutlaq bosim emas, nisbiy ko‘rsatkichdir.</p><strong>PV = nRT</strong></article>
+  <article class="theory-card"><span>04 · TO‘LQINLAR</span><h3>Mexanik to‘lqin</h3><p>Chastota va to‘lqin uzunligi ko‘paytmasi muhitdagi tarqalish tezligini beradi.</p><strong>v = fλ</strong></article>
+  <article class="theory-card"><span>05 · OPTIKA</span><h3>Yorug‘lik sinishi</h3><p>Ikki muhit chegarasida nur yo‘nalishi sinish ko‘rsatkichlariga bog‘liq ravishda o‘zgaradi.</p><strong>n₁ sin θ₁ = n₂ sin θ₂</strong></article>
+  <article class="theory-card"><span>06 · YADRO FIZIKASI</span><h3>Konseptual bo‘linish</h3><p>Model faqat atom yadrosi bo‘linishining umumiy ilmiy g‘oyasini ko‘rsatadi; texnik, konstruktiv yoki amaliy parametrlar berilmaydi.</p><strong>ΔE = Δm · c²</strong></article>
+ </div>
+ <p class="theory-note">Ushbu raqamli simulyatsiyalar ta’limiy soddalashtirishdir. Ular laboratoriya o‘lchovi yoki xavfsizlik yo‘riqnomasining o‘rnini bosmaydi.</p>
+</section>
 </main>
 <footer class="wrap footer"><span>© 2026 Yoshlar-Ishi · Mustaqil ta’limiy modul</span><span>Modellar — o‘quv maqsadida. Haqiqiy tajriba uchun laboratoriya xavfsizligi qoidalariga rioya qiling.</span></footer>
 <script src="./config.js"></script>
 <script type="module">
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import { supabase, getVerifiedIdentity } from "./auth-client.js";
 (()=>{
 "use strict";
 const $=id=>document.getElementById(id);
-const cfg=window.YI_CONFIG||{};
-const apiBase=(cfg.supabaseUrl||"").replace(/\/$/,"");
-const apiKey=cfg.supabaseAnonKey||cfg.supabaseKey||"";
-let token=sessionStorage.getItem("yi_user_token")||"";
-let refreshToken=sessionStorage.getItem("yi_user_refresh")||"";
 let currentUser=null;
 let scene,camera,renderer,controls,group,clock;
 let running=true,elapsed=0,currentMode="projectile",params={};
@@ -219,15 +239,23 @@ const nuclearBtn=document.createElement("button");nuclearBtn.id="runNuclear";nuc
 document.querySelector(".scene-actions").appendChild(nuclearBtn);
 nuclearBtn.addEventListener("click",startNuclear);
 function fmtDate(v){return new Date(v).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"})}
-async function authRequest(path,opts={}){const h={apikey:apiKey,Authorization:"Bearer "+(token||apiKey),"Content-Type":"application/json",...(opts.headers||{})};const res=await fetch(apiBase+path,{...opts,headers:h});if(!res.ok){const body=await res.text();throw new Error("Server so‘rovi ("+res.status+"): "+body.slice(0,170))}if(res.status===204)return null;return res.json()}
-async function refreshSession(){if(!apiBase||!apiKey)return false;if(!token)return false;try{const r=await fetch(apiBase+"/auth/v1/user",{headers:{apikey:apiKey,Authorization:"Bearer "+token}});if(r.ok){currentUser=await r.json();sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}if(refreshToken){try{const r=await fetch(apiBase+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:apiKey,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});if(r.ok){const d=await r.json();token=d.access_token;refreshToken=d.refresh_token;currentUser=d.user;sessionStorage.setItem("yi_user_token",token);sessionStorage.setItem("yi_user_refresh",refreshToken);sessionStorage.setItem("yi_user_id",currentUser.id);return true}}catch{}}return false}
+async function refreshSession(){
+ try{
+  const identity=await getVerifiedIdentity({force:true});
+  currentUser=identity?.user||null;
+  return Boolean(currentUser?.id&&identity?.session?.access_token);
+ }catch{
+  currentUser=null;
+  return false;
+ }}
 function resultSummary(){if(currentMode==="projectile"){return "Uchish vaqti "+fmt(2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" s; masofa "+fmt(params.v0*Math.cos(params.angle*Math.PI/180)*2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" m."}if(currentMode==="pendulum")return "Mayatnik davri "+fmt(2*Math.PI*Math.sqrt(params.length/params.g))+" s.";if(currentMode==="gas")return "Harorat "+params.temperature+" K; "+params.count+" zarracha; nisbiy bosim "+fmt(params.count/60*params.temperature/300)+" × P₀.";if(currentMode==="wave")return "To‘lqin tezligi "+fmt(params.frequency*params.wavelength)+" m/s; amplituda "+fmt(params.amplitude)+" m.";if(currentMode==="refraction")return "Sinish burchagi "+fmt(Math.asin(Math.sin(params.angle*Math.PI/180)/params.n2)*180/Math.PI)+"°.";return "Atom yadrosi bo‘linishining konseptual modeli kuzatildi; texnik yoki konstruktiv parametrlar qo‘llanilmagan."}
 $("saveBtn").addEventListener("click",async()=>{
  const btn=$("saveBtn");btn.disabled=true;$("saveStatus").classList.remove("error");
  try{
   if(!await refreshSession())throw new Error("Saqlash uchun avval Yoshlar-Ishi shaxsiy kabinetiga kiring.");
   const payload={user_id:currentUser.id,experiment_key:currentMode==="nuclear"?"nuclear-concept":currentMode,params:params,result_summary:resultSummary()};
-  await authRequest("/rest/v1/lab_runs",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});
+  const {error}=await supabase.from("lab_runs").insert(payload);
+  if(error)throw error;
   $("saveStatus").textContent="Tajriba natijasi shaxsiy bazangizga saqlandi.";await loadHistory();
  }catch(e){$("saveStatus").textContent=e.message;$("saveStatus").classList.add("error")}
  finally{btn.disabled=false}
@@ -235,12 +263,20 @@ $("saveBtn").addEventListener("click",async()=>{
 async function loadHistory(){
  if(!await refreshSession()){$("historyList").innerHTML='<div class="empty">Bulutdagi tarixni ko‘rish uchun <a href="./kabinet.html" target="_blank" rel="noopener" style="font-weight:800;text-decoration:underline">shaxsiy kabinetga kiring</a>. Simulyatsiyalardan mehmon sifatida foydalanish mumkin.</div>';return}
  try{
-  const rows=await authRequest("/rest/v1/lab_runs?select=id,experiment_key,params,result_summary,created_at&order=created_at.desc&limit=8");
+  const {data:rows,error}=await supabase.from("lab_runs").select("id,experiment_key,params,result_summary,created_at").order("created_at",{ascending:false}).limit(8);
+  if(error)throw error;
   const names={projectile:"Jism harakati",pendulum:"Mayatnik",gas:"Gaz molekulalari",wave:"To‘lqin",refraction:"Yorug‘lik sinishi","nuclear-concept":"Yadro fizikasi"};
-  $("historyList").innerHTML=rows.length?rows.map(r=>'<div class="history-row"><div><strong>'+names[r.experiment_key]+'</strong><small>'+fmtDate(r.created_at)+' · '+String(r.result_summary||"").replace(/[<>]/g,"")+'</small></div><button type="button" class="small-btn" data-delete="'+r.id+'">O‘chirish</button></div>').join(""):'<div class="empty">Hozircha saqlangan tajribalar yo‘q.</div>';
+  const safe=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+  $("historyList").innerHTML=rows.length?rows.map(r=>'<div class="history-row"><div><strong>'+safe(names[r.experiment_key]||"Tajriba")+'</strong><small>'+safe(fmtDate(r.created_at))+' · '+safe(r.result_summary||"")+'</small></div><button type="button" class="small-btn" data-delete="'+safe(r.id)+'">O‘chirish</button></div>').join(""):'<div class="empty">Hozircha saqlangan tajribalar yo‘q.</div>';
  }catch(e){$("historyList").innerHTML='<div class="empty">Tarixni yuklab bo‘lmadi. '+String(e.message).slice(0,140)+'</div>'}
 }
-$("historyList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete]");if(!b)return;b.disabled=true;try{await authRequest("/rest/v1/lab_runs?id=eq."+encodeURIComponent(b.dataset.delete),{method:"DELETE",headers:{"Prefer":"return=minimal"}});await loadHistory()}catch(err){b.disabled=false;$("saveStatus").textContent=err.message;$("saveStatus").classList.add("error")}});
+$("historyList").addEventListener("click",async e=>{const b=e.target.closest("[data-delete]");if(!b)return;b.disabled=true;try{const {error}=await supabase.from("lab_runs").delete().eq("id",b.dataset.delete);if(error)throw error;await loadHistory()}catch(err){b.disabled=false;$("saveStatus").textContent=err.message;$("saveStatus").classList.add("error")}});
+const legacySessionPrefix=["yi","user"].join("_")+"_";
+["token","refresh","id"].forEach(key=>sessionStorage.removeItem(legacySessionPrefix+key));
+supabase.auth.onAuthStateChange((event,session)=>{
+ currentUser=session?.user||null;
+ if(["SIGNED_IN","SIGNED_OUT","USER_UPDATED"].includes(event))window.setTimeout(()=>loadHistory(),0);
+});
 init3d();loadHistory();
 })();
 </script>

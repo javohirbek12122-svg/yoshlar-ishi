@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v26";
+const CACHE_NAME = "yi-pwa-v27";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",

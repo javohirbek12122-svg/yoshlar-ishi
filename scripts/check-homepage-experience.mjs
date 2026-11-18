@@ -12,8 +12,9 @@ const polish = read("platform-polish.css");
 const worker = read("service-worker.js");
 const staticMarkup = html.split(/<script\b/i)[0];
 assert.equal((staticMarkup.match(/id="ai-yordamchi"/g) || []).length, 1, "The homepage must define one static AI anchor target");
-assert.ok(html.includes('details.id="ai-yordamchi"'), "The inline homepage controller must retain the AI accordion anchor");
-assert.ok(html.includes('aiCard.removeAttribute("id")'), "The original AI card ID must be removed when moved");
+assert.ok(html.includes('details.id="ai-yordamchi-fold"'), "The disclosure wrapper must have its own unique ID");
+assert.ok(html.includes('details.append(summary,aiCard)'), "The AI content must remain nested inside its disclosure");
+assert.ok(!html.includes('aiCard.removeAttribute("id")'), "The AI anchor must remain on the actual target content");
 assert.ok(html.includes('href="./homepage-experience.css"'), "Homepage must load the modular homepage stylesheet");
 assert.ok(html.includes('src="./homepage-experience.js"'), "Homepage must load the modular homepage controller");
 new vm.Script(js, { filename: "homepage-experience.js" });
@@ -89,7 +90,7 @@ assert.ok(js.includes("setupSearch") && js.includes("setupTheme") && js.includes
 
 assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v26"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v27"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(worker.includes("https://d2ol7oe51mr4n9.cloudfront.net"), "The supplied hero image host must be cache-allowlisted for offline use");

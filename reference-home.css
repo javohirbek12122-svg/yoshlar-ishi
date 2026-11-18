@@ -566,3 +566,12 @@ body .yi-hero-quote{max-width:220px;font-size:16px;line-height:1.35}
   body .yi-official-card{transition:none!important}
   body .yi-official-card:hover{transform:none!important}
 }
+
+
+/* Readability and first-viewport refinement — 2026-11-18 */
+@media(min-width:1081px){body .hero.wrap{min-height:700px;padding-top:108px;grid-template-rows:minmax(400px,1fr) auto}body .hero .art.yi-hero-visual{min-height:0;max-width:760px}}
+body .yi-official-type{font-size:8px}body .yi-official-card-copy strong{font-size:11px}body .yi-official-card-copy small{font-size:9px}
+body .yi-quick-copy strong{font-size:11px}body .yi-quick-copy small{font-size:9px}body .yi-quick-card-bottom{font-size:9px}
+@media(max-width:1080px){body .hero.wrap{padding-top:104px}body .hero .art.yi-hero-visual{min-height:0}}
+@media(max-width:720px){body .hero.wrap{padding:88px 15px 14px;gap:8px;row-gap:8px}body .hero .art.yi-hero-visual{min-height:0;padding-bottom:12px}body .hero h1{font-size:clamp(34px,8.8vw,48px)!important;line-height:1.02}body .hero .hero-lede{font-size:15px;line-height:1.55}body .hero .hero-expanded-copy{font-size:13px;line-height:1.65}body .yi-hero-caption{font-size:8px;gap:8px}body .yi-official-type{font-size:7px}body .yi-official-card-copy strong{font-size:9px}body .yi-official-card-copy small{font-size:8px}body .yi-quick-grid .yi-quick-card{min-height:122px}body .yi-quick-copy strong{font-size:10px}body .yi-quick-copy small{font-size:9px}body .yi-quick-card-bottom{font-size:8px}}
+@media(max-width:390px){body .yi-official-card-copy strong{font-size:9px}body .yi-official-card-copy small{display:none}body .yi-quick-grid .yi-quick-card{min-height:116px}body .yi-quick-copy small{font-size:8.5px}}
