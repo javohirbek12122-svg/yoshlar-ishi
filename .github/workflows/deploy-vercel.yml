@@ -1,4 +1,4 @@
-name: Deploy Yoshlar-Ishi to Vercel
+name: Yoshlar-Ishi Vercel Deployment Handoff
 
 on:
   workflow_run:
@@ -31,16 +31,15 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
             echo "Vercel deployment credentials are present."
           else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
             {
-              echo "## Vercel deployment blocked"
+              echo "## Optional Vercel CLI deploy skipped"
               echo ""
-              echo "Quality checks passed, but no build/deploy was performed."
-              echo "Missing one or more required GitHub Actions values: secret VERCEL_TOKEN, variable VERCEL_ORG_ID, or variable VERCEL_PROJECT_ID."
-              echo "No Yoshlar-Ishi project is currently visible in the connected Vercel team. First connect this GitHub repository to the intended Vercel project and verify its owner/team, then configure these values."
+              echo "The GitHub Actions Vercel CLI fallback is not configured because VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID are not all present."
+              echo "No deployment was performed by this workflow. Vercel Git integration is the active deployment path; its per-commit Vercel status check must be green before treating the commit as deployed."
+              echo "This is an intentional skip, not a successful CLI deployment."
             } >> "$GITHUB_STEP_SUMMARY"
-            echo "::error::Vercel deployment is blocked: the canonical project is not connected or its deployment credentials are missing."
-            echo "::notice::Live deployment health is checked separately by the Yoshlar-Ishi Live Site Health workflow."
-            exit 1
+            echo "::notice::Vercel CLI deployment skipped; verify the Vercel – yoshlar-ishi-site status for this commit."
           fi
 
       - name: Checkout the tested commit
