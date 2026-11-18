@@ -73,9 +73,20 @@ try{
     const response=await page.goto(origin+item[0],{waitUntil:"domcontentloaded",timeout:25000});
     assert.ok(response&&response.ok(),"Page did not load successfully");
     await page.waitForTimeout(100);
-    const m=await page.evaluate(()=>{
+     if(width<=760&&item[0]!=="/admin.html"&&item[0]!=="/offline.html"){
+      await page.waitForFunction(()=>document.querySelectorAll("#yi-mobile-dock a").length===5,{},{timeout:5000}).catch(()=>fail(item[1]+" "+width,"five-item mobile navigation did not initialize"));
+      const dock=page.locator("#yi-mobile-dock");
+      if(await dock.count()!==1)fail(item[1]+" "+width,"mobile navigation shell is missing or duplicated");
+      else{
+       const items=await dock.locator("a").evaluateAll(els=>els.map(el=>({label:el.innerText.trim(),h:el.getBoundingClientRect().height,href:el.getAttribute("href")})));
+       if(items.length!==5)fail(item[1]+" "+width,"mobile navigation must expose five destinations");
+       for(const entry of items)if(entry.h<44)fail(item[1]+" "+width,"mobile navigation target below 44px: "+entry.label);
+       if(!items.some(entry=>entry.href==="/hamjamiyat.html?tab=feed"))fail(item[1]+" "+width,"direct community route is missing");
+      }
+     }
+     const m=await page.evaluate(()=>{
      const w=innerWidth,root=document.documentElement,body=document.body;
-     const controls=Array.from(document.querySelectorAll('button,.btn,.button,input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea,summary,.navlinks a'))
+     const controls=Array.from(document.querySelectorAll('button,.btn,.button,input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea,summary,.navlinks a,.yi-mobile-dock a'))
       .filter(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.display!=="none"&&s.visibility!=="hidden"})
       .map(e=>({tag:e.tagName.toLowerCase(),text:(e.innerText||e.getAttribute("aria-label")||e.getAttribute("placeholder")||"").trim().slice(0,36),h:Math.round(e.getBoundingClientRect().height),font:getComputedStyle(e).fontSize,type:e.getAttribute("type")||""}));
      return {w,root:root.clientWidth,rootScroll:root.scrollWidth,bodyScroll:body.scrollWidth,meta:document.querySelector('meta[name=viewport]')?.content||"",controls};
@@ -151,12 +162,23 @@ try{
       if(!ctaBox||ctaBox.height<43)fail(item[1]+" "+width,"the primary hero CTA is too small for touch");
       if(ctaBox&&ctaBox.x<0)fail(item[1]+" "+width,"the primary hero CTA is clipped off-screen");
      }
-     const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
+     const quickCards=page.locator(".service-ribbon .yi-quick-card");
+      if(await quickCards.count()===8){
+       const visibleCards=async()=>quickCards.evaluateAll(els=>els.filter(el=>getComputedStyle(el).display!=="none").length);
+       if(await visibleCards()!==4)fail(item[1]+" "+width,"quick services must start in a compact 2×2 grid");
+       await page.locator("#yi-services-more").click();
+       if(await visibleCards()!==8)fail(item[1]+" "+width,"quick services did not expand");
+       await page.locator("#yi-services-more").click();
+       if(await visibleCards()!==4)fail(item[1]+" "+width,"quick services did not collapse");
+      }
+      const toggle=page.locator("#yiDrawerToggle"),drawer=page.locator("#yiSideDrawer"),close=page.locator("#yiDrawerClose");
      if(await toggle.count()!==1)fail(item[1]+" "+width,"three-line drawer trigger is missing");
      else{
       await toggle.click();
       await page.waitForFunction(()=>document.querySelector("#yiSideDrawer")?.getAttribute("aria-hidden")==="false",{},{timeout:4000}).catch(()=>fail(item[1]+" "+width,"side drawer did not open"));
       if(await toggle.getAttribute("aria-expanded")!=="true")fail(item[1]+" "+width,"drawer trigger did not update aria-expanded");
+       const dockHidden=await page.locator("#yi-mobile-dock").evaluate(el=>getComputedStyle(el).visibility==="hidden"||getComputedStyle(el).opacity==="0");
+       if(!dockHidden)fail(item[1]+" "+width,"mobile dock overlaps the open navigation drawer");
       if(await drawer.locator('a[href="./imkoniyatlar.html"]').count()===0)fail(item[1]+" "+width,"drawer links are missing");
       await page.keyboard.press("Escape");
       await page.waitForFunction(()=>document.querySelector("#yiSideDrawer")?.hidden===true,null,{timeout:4000}).catch(()=>fail(item[1]+" "+width,"Escape did not close the drawer"));

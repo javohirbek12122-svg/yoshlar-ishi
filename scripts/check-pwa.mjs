@@ -50,7 +50,7 @@ assert.match(admin, /admin-manifest\.webmanifest/, "Admin manifest remains separ
 const pwa = read("pwa.js");
 for (const marker of [
   "beforeinstallprompt", "appinstalled", "serviceWorker.register",
-  "isIOS", "isAndroid", "Safari", "Add to Home Screen", "Open as Web App",
+  "isIOS", "isAndroid", "Safari", "Add to Home Screen", "Open as Web App", "mobile-experience.js",
   "Internet aloqasi yo‘q"
 ]) assert.ok(pwa.includes(marker), "PWA install UX marker missing: " + marker);
 
@@ -75,6 +75,8 @@ assert.ok(precache.includes("/homepage-experience.css"), "PWA must precache the 
 assert.ok(precache.includes("/platform-polish.css"), "PWA must precache the final unified layout stylesheet");
     assert.ok(precache.includes("/reference-home.css"), "PWA must precache the reference-led homepage stylesheet");
 assert.ok(precache.includes("/homepage-experience.js"), "PWA must precache the new homepage controller");
+assert.ok(precache.includes("/mobile-experience.css"), "PWA must precache the dedicated mobile stylesheet");
+assert.ok(precache.includes("/mobile-experience.js"), "PWA must precache the dedicated mobile controller");
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
 assert.ok(!precache.includes("/hamjamiyat.html"), "Member community page must never be precached");
@@ -108,7 +110,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v25"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v26"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

@@ -929,6 +929,13 @@ new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" 
 console.log("✓ 3D virtual laboratory, six learning models, module syntax and account-scoped result storage are present");
 
 const mobileGuard = read("mobile-guard.css");
+const mobileExperienceCss = read("mobile-experience.css");
+const mobileExperienceJs = read("mobile-experience.js");
+assert.ok(mobileGuard.includes('@import url("./mobile-experience.css");'), "Global mobile styles must include the dedicated mobile layer");
+for (const marker of ["--yi-mobile-dock-height:64px","grid-template-columns:repeat(5,minmax(0,1fr))","env(safe-area-inset-bottom","yi-keyboard-open","yi-mobile-overlay-open","yi-mobile-table-scroll"]) assert.ok(mobileExperienceCss.includes(marker), "Mobile CSS marker missing: "+marker);
+for (const marker of ["Yoshlar hamjamiyati","Jarayonlar va murojaatlar","visualViewport","yi-services-expanded","yi-mobile-table-scroll","aria-current"]) assert.ok(mobileExperienceJs.includes(marker), "Mobile JS marker missing: "+marker);
+assert.ok(read("pwa.js").includes('script.src = "/mobile-experience.js"'), "PWA must load the standalone mobile controller");
+
 
 assert.match(mobileGuard,/^@import url\("\.\/design-system\.css"\);/,"Every page must receive the unified design system through the shared mobile stylesheet");
 const benchmark100=read("DESIGN_BENCHMARK_100.md");
