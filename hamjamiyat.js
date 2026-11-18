@@ -19,11 +19,21 @@ const avatarMarkup=(profile,cls="")=>profile?.avatar_url?'<span class="'+cls+'">
 function toast(message){const box=$("hpToast");box.textContent=message;box.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>box.classList.remove("show"),3200);}
 function errMessage(error){
  const s=String(error?.message||error||"");
+ const localMessages=new Set([
+  "Email manzilini to‘g‘ri kiriting.",
+  "Parolni kiriting.",
+  "Ism va familiyani to‘liq yozing.",
+  "Parol kamida 10 belgi, harf va raqamdan iborat bo‘lsin.",
+  "Parollar bir xil emas.",
+  "Maxfiylik siyosatiga rozilik belgilang.",
+  "Tiklash havolasi muddati tugagan. Yangi havola so‘rang."
+ ]);
+ if(localMessages.has(s))return s;
  if(/Invalid login credentials/i.test(s))return "Email yoki parol noto‘g‘ri.";
  if(/Email not confirmed/i.test(s))return "Email hali tasdiqlanmagan. Tasdiqlash xatini qayta yuboring.";
  if(/User already registered/i.test(s))return "Bu email bilan hisob mavjud bo‘lishi mumkin. Kirish yoki parol tiklashdan foydalaning.";
  if(/rate limit|too many requests|over_email_send_rate_limit/i.test(s))return "Juda ko‘p urinish bo‘ldi. Biroz kutib qayta urinib ko‘ring.";
- if(/provider is not enabled|unsupported provider/i.test(s))return "Google orqali kirish Supabase Auth sozlamasida yoqilmagan. Email orqali kirishdan foydalaning.";
+ if(/provider is not enabled|unsupported provider/i.test(s))return "Google orqali kirish Supabase boshqaruv panelida yoqilmagan. Email orqali kirishdan foydalaning.";
  if(/Password should be at least|weak_password/i.test(s))return "Parol xavfsizlik talablariga mos emas. Kamida 10 belgi, harf va raqam ishlating.";
  if(/expired|invalid.*token|otp_expired/i.test(s))return "Tasdiqlash yoki tiklash havolasi muddati tugagan. Yangi havola so‘rang.";
  if(/Failed to fetch|network|Load failed/i.test(s))return "Tarmoq bilan aloqa yo‘q. Internetni tekshirib qayta urinib ko‘ring.";
