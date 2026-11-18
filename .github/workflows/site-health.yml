@@ -299,5 +299,5 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Test the live production domain at mobile, tablet and desktop widths
         env:
-          MOBILE_BASE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site.vercel.app' }}
+          MOBILE_BASE_URL: https://yoshlar-ishi-site.vercel.app
         run: npm run check:contrast && npm run check:pwa && npm run check:government && npm run check:mobile
