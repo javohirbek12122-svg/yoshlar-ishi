@@ -7,7 +7,7 @@ Ushbu qo‘llanma foydalanuvchilar uchun yagona hisob oqimini production’da to
 Supabase Dashboard → **Authentication → URL Configuration**:
 
 - **Site URL:** `https://yoshlar-ishi-site.vercel.app`
-- **Additional Redirect URLs:** `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html`
+- **Additional Redirect URLs:** `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html` va `https://yoshlar-ishi-site.vercel.app/admin.html?admin-google=1`
 - Query-parametrli callback va shu production host ichidagi kelajakdagi auth sahifalari kerak bo‘lsa, allowlist’ga `https://yoshlar-ishi-site.vercel.app/**` qo‘shing.
 
 Email tasdig‘i, parol tiklash va Google OAuth callback’i `hamjamiyat.html` ga qaytadi. Boshqa host yoki tasdiqlanmagan domenlarga yo‘naltirish qabul qilinmaydi. Preview deployment ishlatilsa, uning aniq Vercel hostini alohida allowlist’ga kiriting; production wildcard’ni begona domenlarga yoymang.
@@ -27,6 +27,8 @@ Parolni tiklash faqat Supabase yuborgan tasdiqlangan recovery sessiyasi bilan is
 ## 3. Google OAuth (ixtiyoriy)
 
 Google orqali kirish uchun Supabase Dashboard → **Authentication → Providers → Google** bo‘limida provider’ni yoqing, Google OAuth Client ID va Client Secret’ni Dashboard’ning o‘ziga kiriting.
+
+Foydalanuvchi Google kirishi va ro‘yxatdan o‘tishi uchun callback: `https://yoshlar-ishi-site.vercel.app/hamjamiyat.html?auth=google`. Admin Google callback’i: `https://yoshlar-ishi-site.vercel.app/admin.html?admin-google=1`.
 
 Google Cloud OAuth client’dagi **Authorized redirect URI**:
 
