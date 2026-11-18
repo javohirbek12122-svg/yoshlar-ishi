@@ -109,6 +109,10 @@ try{
      if(await page.locator("#loginForm").count()!==0)fail(item[1]+" "+width,"a separate legacy OTP login must not remain in the cabinet");
      if(!(await page.locator("#authLinks a").first().getAttribute("href")).includes("./hamjamiyat.html"))fail(item[1]+" "+width,"cabinet must route to the shared account center");
     }
+    if(item[0]==="/imkoniyatlar.html"&&width===390){
+     if(await page.locator("#authState a").count()!==2)fail(item[1]+" "+width,"opportunity catalogue must link to shared login and registration screens");
+     if(!(await page.locator("#authState a").first().getAttribute("href")).includes("./hamjamiyat.html"))fail(item[1]+" "+width,"opportunity auth must route to the shared account center");
+    }
     if(item[0]==="/assessment.html"&&width===390){
      if(!(await page.locator(".yi-assessment-hero h1").innerText()).includes("Bilimingizni sinang"))fail(item[1]+" "+width,"assessment hero heading is missing");
      if(!(await page.locator(".yi-assessment-partner").innerText()).includes("hozir yakunlangan testlar"))fail(item[1]+" "+width,"partner notice does not explain that completed test results will also be considered");

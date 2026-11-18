@@ -214,3 +214,10 @@ Sinovlar: `npm run check` (shu jumladan `scripts/check-assessment.mjs`).
 - Member profiles are created by the database trigger for each `auth.users.id`. Private profile data, CV, portfolio, activity, posts, likes and initiatives rely on owner-scoped RLS and `auth.uid()`.
 - The initiatives cabinet now shares the same login/register center. It no longer creates accounts through a separate magic-link/OTP flow.
 - Signing out clears the shared Supabase session across Yoshlar-Ishi pages/tabs. Real inbox confirmation, Google provider configuration and multi-account isolation still require live test accounts before public launch.
+
+
+### Yagona Auth integratsiyasi
+
+- The assessment and youth-opportunity catalogue now use the same `auth-client.js` / `auth-bridge.js` modules as the member area, homepage and initiatives cabinet.
+- Saved opportunity progress and assessment results load using the currently verified Supabase account. Switching accounts clears prior private screen state before loading the next account.
+- The administrator console intentionally retains its separate Google/allowlist authentication gate.
