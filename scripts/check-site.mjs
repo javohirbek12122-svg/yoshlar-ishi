@@ -223,7 +223,8 @@ assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"')
 assert.match(admin, /create_user:false/);
 assert.match(admin, /verify.*type:"email"/);
 assert.match(admin, /token\?grant_type=password/);
-assert.ok(admin.includes("createPkcePair()") && admin.includes('provider:"google"') && admin.includes('code_challenge_method:"s256"') && admin.includes("token?grant_type=pkce") && admin.includes("code_verifier:verifier"), "Admin Google OAuth must use PKCE authorization-code exchange with a matching verifier");
+assert.ok(admin.includes('flowType:"pkce"') && admin.includes('storageKey:"yi-admin-auth"') && admin.includes("client.auth.signInWithOAuth({") && admin.includes('provider:"google"') && admin.includes("client.auth.getSession()") && admin.includes('localStorage.setItem("yi_admin_google_session","1")'), "Admin Google OAuth must use Supabase SDK-managed PKCE and persist the verified session");
+assert.doesNotMatch(admin, /createPkcePair|code_challenge_method:"s256"|token\\?grant_type=pkce|code_verifier:verifier/, "Admin OAuth must not use a second hand-written PKCE verifier alongside the Supabase SDK");
 assert.doesNotMatch(admin, /create_user:true/);
 console.log("✓ Parkent-style admin OTP/password/Google gate uses a server-side allowlist RPC and prevents self-signup");
 const index = read("index.html");
