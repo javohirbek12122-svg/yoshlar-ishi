@@ -488,16 +488,15 @@ assert.ok(opportunities.includes("YI_AUTH_READY") && opportunities.includes("get
 assert.doesNotMatch(opportunities,/yi_user_token|yi_user_refresh|yi_user_id|auth[./]v1[./]user|auth[./]v1[./]token/,"Opportunity catalogue must not manage a duplicate session or refresh flow");
 assert.ok(opportunities.includes('mode=login#hpAuthGate') && opportunities.includes('mode=register#hpAuthGate'),"Opportunity catalogue must provide unified login and registration routes");
 assert.ok(assessment.includes('import { supabase, getVerifiedIdentity } from "./auth-client.js"'),"Assessment page must use the shared Auth client");
-assert.doesNotMatch(assessment,/createClient\\(|auth\\.getSession\\(\)/,"Assessment page must not create an independent Auth client or trust an unverified local user");
-const assessmentForSyntax=assessment.split("\\n").filter(line=>!line.startsWith("import ")).join("\\n");
+assert.ok(!assessment.includes("createClient(") && !assessment.includes("auth.getSession()"),"Assessment page must not create an independent Auth client or trust an unverified local user");
+const assessmentForSyntax=assessment.split(String.fromCharCode(10)).filter(line=>!line.startsWith("import ")).join(String.fromCharCode(10));
 new vm.Script(assessmentForSyntax,{filename:"assessment.js"});
-const opportunityMarker='<script>\\n(()=>{"use strict";';
+const opportunityMarker="<script>"+String.fromCharCode(10)+'(()=>{"use strict";';
 const opportunityStart=opportunities.indexOf(opportunityMarker);
 assert.ok(opportunityStart>=0,"Opportunity inline application script is missing");
 const opportunityEnd=opportunities.indexOf("</script>",opportunityStart);
 assert.ok(opportunityEnd>opportunityStart,"Opportunity inline application script is incomplete");
 new vm.Script(opportunities.slice(opportunityStart+8,opportunityEnd),{filename:"imkoniyatlar.html"});
-
 const authMigration=read("supabase/migrations/20261118120000_harden_initiative_owner_update_and_admin_review.sql");
 assert.ok(authMigration.includes("owners update own pending initiatives or admins review"),"Owner-scoped initiative update policy must be versioned");
 const authClientForSyntax=sharedAuth.split("\n").filter(line=>!line.startsWith("import ")).join("\n").replaceAll("export ","");
