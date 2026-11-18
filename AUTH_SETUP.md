@@ -20,7 +20,7 @@ Supabase Dashboard → **Authentication → Providers → Email**:
 - Production’da email tasdig‘ini yoqing.
 - Confirmation xatini yuborish va qayta yuborish ishlashini o‘zingiz boshqaradigan mailbox bilan tekshiring.
 - **Password Security** bo‘limida server tomondagi minimum uzunlikni kamida 10 belgi qilib belgilang; parolda harf va raqam talabini yoqing. Frontend validatsiyasi server siyosatining o‘rnini bosmaydi.
-- Agar amaldagi Supabase tarif rejasida **Leaked Password Protection** mavjud bo‘lsa, uni yoqing. Joriy security advisor bu himoya o‘chiq байгааг qayd etgan; bu sozlama ushbu repozitoriydagi frontend kodi orqali o‘zgartirilmaydi.
+- Agar amaldagi Supabase tarif rejasida **Leaked Password Protection** mavjud bo‘lsa, uni yoqing. Joriy security advisor bu himoya hozir o‘chiq ekanini qayd etgan; bu sozlama ushbu repozitoriydagi frontend kodi orqali o‘zgartirilmaydi.
 
 Parolni tiklash faqat Supabase yuborgan tasdiqlangan recovery sessiyasi bilan ishlaydi. Boshqa foydalanuvchining emailiga kirish havolasini yuborish mumkin emas.
 
