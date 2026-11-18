@@ -460,7 +460,7 @@ for (const feature of [
 assert.match(opportunitiesPage, /opportunity_journeys\?select=\*&program_slug=eq\./);
 console.log("✓ youth opportunity catalogue, explicit application states, age-fit guide, preparation checklist, draft builder and private journey timeline are present");
 
-const index = read("index.html");
+
 const cabinet = read("kabinet.html");
 for (const feature of [
   "YI_AUTH_READY",
