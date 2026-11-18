@@ -62,13 +62,13 @@ assert.ok(html.includes('href="./platform-polish.css"'), "Homepage must load the
 assert.ok(html.includes('href="./reference-home.css"') && html.indexOf('href="./reference-home.css"') > html.indexOf('href="./platform-polish.css"'), "Reference homepage skin must load after existing styles");
 assert.ok(html.includes('class="yi-agency-brand"') && html.includes('href="https://gov.uz/oz/yoshlar"'), "Agency logo must open the official agency website");
 assert.ok(html.includes('class="yi-register-link"') && html.includes('href="./hamjamiyat.html?mode=register#hpAuthGate"'), "Registration must route to the existing OTP form");
-assert.ok(html.includes('class="yi-hero-quote"') && html.includes('Imkoniyatlarni ko‘rish'), "Reference hero and primary CTA must exist");
+assert.ok(html.includes('class="yi-hero-quote"') && html.includes('Imkoniyatlar katalogi'), "Reference hero and primary CTA must exist");
 assert.ok(worker.includes('"/reference-home.css"'), "PWA must precache the new homepage skin");
 
 assert.match(polish, /yi-official-logo[\s\S]*?object-fit:contain/);
 assert.match(polish, /body \.yi-platform-proof\s*\{[\s\S]*?margin:18px auto 0/);
 assert.match(polish, /body \.yi-nav\s*\{[\s\S]*?margin:12px auto 0/);
-assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun rasmiy platformalar"'), "Hero must present an accessible official resource strip");
+assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun tavsiya etiladigan manbalar"'), "Hero must present an accessible official resource strip");
 assert.ok(html.includes('class="yi-official-card yi-official-agency"') && html.includes('class="yi-official-card yi-official-ustoz"'), "Official platform links must use the separated card layout");
 assert.ok(html.includes("yi-drawer-brand-icon") && html.includes("yi-drawer-ustoz-icon"), "The side navigation must use the same official brand logos as the hero strip");
 assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
