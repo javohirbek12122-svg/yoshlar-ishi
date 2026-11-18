@@ -228,20 +228,46 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{},url=(cfg.supabaseUrl||"").replace(/\/$/,""),key=cfg.supabaseAnonKey||cfg.supabaseKey;
 const $=id=>document.getElementById(id),statusNames={submitted:"Yangi",reviewing:"Ko‘rib chiqilmoqda",needs_details:"Qo‘shimcha ma’lumot kerak",approved:"Ma’qullangan",in_progress:"Jarayonda",completed:"Yakunlangan",declined:"Rad etilgan"},requestNames={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",handled:"Ko‘rib chiqildi",archived:"Arxiv"},typeNames={mentor:"Mentorlik",organization:"Tashkilot",event:"Tadbir",resource:"Resurs",feedback:"Fikr-mulohaza"},categoryNames={official:"Rasmiy manba",support:"Yordam",navigator:"Navigator",startup:"Startap",volunteer:"Ko‘ngillilik",grants:"Grantlar",education:"Ta’lim",opportunity:"Imkoniyat",community:"Jamiyat",technology:"Texnologiya",culture:"Madaniyat",other:"Boshqa"};
+let adminAuthClient=null,adminAuthClientPromise=null;
 let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],youthPrograms=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],audit=[],timer=null,otpCooldown=0,otpCooldownTimer=null;
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function notify(text){const t=$("toast");t.textContent=text;t.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.style.display="none",4000)}
 function tell(id,text,error=false){const e=$(id);e.textContent=text;e.classList.toggle("error",!!error)}
 function authHeaders(){return {"apikey":key,"Authorization":"Bearer "+token,"Content-Type":"application/json"}}
 async function authFetch(path,opts={}){const r=await fetch(url+"/auth/v1/"+path,{...opts,headers:{apikey:key,"Content-Type":"application/json",...(opts.headers||{})}});let data=null;try{data=await r.json()}catch{}if(!r.ok)throw Error((data&&data.msg)||(data&&data.message)||(data&&data.error_description)||(data&&data.error)||("Auth xatosi "+r.status));return data}
+async function getAdminAuthClient(){
+ if(adminAuthClient)return adminAuthClient;
+ if(!adminAuthClientPromise){
+  adminAuthClientPromise=(async()=>{
+   const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2");
+   adminAuthClient=createClient(url,key,{auth:{
+    persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce",
+    storage:window.localStorage,storageKey:"yi-admin-auth"
+   }});
+   return adminAuthClient;
+  })();
+ }
+ return adminAuthClientPromise;
+}
 async function api(path,opts={}){let r=await fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});if(r.status===401&&refreshToken){await refreshSession();r=await fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}})}let data=null;try{data=await r.json()}catch{}if(!r.ok)throw Error((data&&data.message)||(data&&data.details)||(data&&data.hint)||("Ma’lumotlar bazasi xatosi "+r.status));return data}
 function saveSession(data){if(!data||!data.access_token)throw Error("Tasdiqlangan sessiya qaytmadi.");token=data.access_token;refreshToken=data.refresh_token||"";sessionStorage.setItem("yi_access_token",token);if(refreshToken)sessionStorage.setItem("yi_refresh_token",refreshToken)}
-async function refreshSession(){if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)}
+async function refreshSession(){if(adminAuthClient&&localStorage.getItem("yi_admin_google_session")==="1"){const {data,error}=await adminAuthClient.auth.refreshSession();if(error||!data.session)throw error||Error("Google sessiyasini yangilab bo‘lmadi.");saveSession(data.session);return;}if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)}
 function getQueryCount(table,filter=""){return fetch(url+"/rest/v1/"+table+"?select=id"+(filter?"&"+filter:""),{headers:{...authHeaders(),"Prefer":"count=exact","Range":"0-0"}}).then(async r=>{if(!r.ok)throw Error("Count "+table+" "+r.status);const value=r.headers.get("content-range")||"";const match=value.match(/\/(\d+|\*)$/);return match&&match[1]!=="*" ? Number(match[1]) : 0})}
 async function checkAdmin(requireGoogle=false){const me=await authFetch("user",{headers:{Authorization:"Bearer "+token}});user=me;if(!me.email)throw Error("Hisob email manzilini qaytarmadi.");if(requireGoogle){const googleAllowed=await api("rpc/admin_google_console_check",{method:"POST",body:"{}"});if(googleAllowed!==true)throw Error("Admin paneliga faqat ruxsat berilgan va Google orqali tasdiqlangan hisob kira oladi.");}const allowed=await api("rpc/admin_console_check",{method:"POST",body:"{}"});if(allowed!==true)throw Error("Bu hisob admin ro‘yxatida faol emas. Kirish rad etildi.");return true}
 function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden")}
 function showLogin(){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");$("otpPanel").classList.add("hidden");$("loginEmail").disabled=false;$("loginCode").value="";$("loginPassword").value=""}
-async function signOut(revoke=true){const old=token;token="";refreshToken="";user=null;sessionStorage.removeItem("yi_admin_google_pending");if(new URLSearchParams(location.search).has("admin-google"))history.replaceState(null,"",location.pathname+location.hash);sessionStorage.removeItem("yi_access_token");sessionStorage.removeItem("yi_refresh_token");sessionStorage.removeItem("yi_admin_google_pending");if(timer)clearInterval(timer);if(otpCooldownTimer)clearInterval(otpCooldownTimer);otpCooldown=0;if(revoke&&old){try{await fetch(url+"/auth/v1/logout",{method:"POST",headers:{apikey:key,Authorization:"Bearer "+old}})}catch{}}showLogin()}
+async function signOut(revoke=true){
+ const old=token;token="";refreshToken="";user=null;
+ sessionStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_session");
+ sessionStorage.removeItem("yi_access_token");sessionStorage.removeItem("yi_refresh_token");
+ if(new URLSearchParams(location.search).has("admin-google"))history.replaceState(null,"",location.pathname+location.hash);
+ if(timer)clearInterval(timer);if(otpCooldownTimer)clearInterval(otpCooldownTimer);otpCooldown=0;
+ if(adminAuthClient){try{await adminAuthClient.auth.signOut({scope:"local"})}catch{}}
+ if(revoke&&old){try{await fetch(url+"/auth/v1/logout",{method:"POST",headers:{apikey:key,Authorization:"Bearer "+old}})}catch{}}
+ showLogin();
+}
 async function requestAdminOtp(email){const target=email.trim().toLowerCase();if(!target)throw Error("Email manzilini kiriting.");return authFetch("otp?redirect_to="+encodeURIComponent(location.origin+location.pathname),{method:"POST",body:JSON.stringify({email:target,create_user:false})})}
 async function verifyAdminOtp(email,code){const target=email.trim().toLowerCase(),clean=code.replace(/\D/g,"").trim();if(!target||!clean)throw Error("Email va tasdiqlash kodini kiriting.");const data=await authFetch("verify",{method:"POST",body:JSON.stringify({email:target,token:clean,type:"email"})});saveSession(data);await establish()}
 async function signInWithPassword(email,password){const target=email.trim().toLowerCase();if(!target||!password)throw Error("Admin email va parolni kiriting.");const data=await authFetch("token?grant_type=password",{method:"POST",body:JSON.stringify({email:target,password})});saveSession(data);await establish()}
@@ -440,50 +466,40 @@ async function savePartner(btn){
 async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{await api("opportunity_sources?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!row.active})});await loadData();await loadStats();notify("Manba holati yangilandi.")}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
 function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);notify("CSV fayl tayyorlandi. Oxirgi 300 ta ariza eksport qilindi.")}
 async function addSource(ev){ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("sourceNotice","Manba saqlanmoqda…");const payload={title:$("sourceTitle").value.trim(),description:$("sourceDesc").value.trim(),category:$("sourceCategory").value,url:$("sourceUrl").value.trim(),provider:$("sourceProvider").value.trim(),active:$("sourceActive").checked,verified_on:new Date().toISOString().slice(0,10)};try{await api("opportunity_sources",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});ev.currentTarget.reset();$("sourceActive").checked=true;tell("sourceNotice","Manba qo‘shildi.");await loadData();await loadStats()}catch(e){tell("sourceNotice","Xatolik: "+e.message,true)}finally{btn.disabled=false}}
-async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki Supabase sozlamalari bo‘sh.");if(!token)return false;const params=new URLSearchParams(location.search);const requireGoogle=sessionStorage.getItem("yi_admin_google_pending")==="1"||params.get("admin-google")==="1";await checkAdmin(requireGoogle);if(requireGoogle)history.replaceState(null,"",location.pathname+location.hash);showApp();setPage(location.hash.slice(1)||"overview");await Promise.all([loadData(),loadStats()]);if(timer)clearInterval(timer);timer=setInterval(()=>{if(token)Promise.all([loadData(),loadStats()])},60000);return true}
-function toBase64Url(bytes){
- let binary="";
- bytes.forEach(byte=>{binary+=String.fromCharCode(byte)});
- return btoa(binary).split("+").join("-").split("/").join("_").replace(/=+$/,"");
-}
-async function createPkcePair(){
- if(!window.crypto||!crypto.subtle)throw Error("Xavfsiz OAuth uchun HTTPS va zamonaviy brauzer kerak.");
- const random=new Uint8Array(32);
- crypto.getRandomValues(random);
- const verifier=toBase64Url(random);
- const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(verifier));
- return {verifier,challenge:toBase64Url(new Uint8Array(digest))};
-}
+async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki Supabase sozlamalari bo‘sh.");if(!token)return false;const params=new URLSearchParams(location.search);const requireGoogle=sessionStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_session")==="1"||params.get("admin-google")==="1";await checkAdmin(requireGoogle);if(requireGoogle)history.replaceState(null,"",location.pathname+location.hash);showApp();setPage(location.hash.slice(1)||"overview");await Promise.all([loadData(),loadStats()]);if(timer)clearInterval(timer);timer=setInterval(()=>{if(token)Promise.all([loadData(),loadStats()])},60000);return true}
 async function completeGoogleCallback(){
  const query=new URLSearchParams(location.search);
- const isGoogleCallback=query.get("admin-google")==="1"||sessionStorage.getItem("yi_admin_google_pending")==="1";
+ const isGoogleCallback=query.get("admin-google")==="1"||
+  sessionStorage.getItem("yi_admin_google_pending")==="1"||
+  localStorage.getItem("yi_admin_google_pending")==="1"||
+  localStorage.getItem("yi_admin_google_session")==="1";
  const callbackError=query.get("error_description")||query.get("error");
  if(callbackError&&isGoogleCallback){
   sessionStorage.removeItem("yi_admin_google_pending");
-  sessionStorage.removeItem("yi_admin_pkce_verifier");
-  ["error","error_description","error_code","admin-google","state"].forEach(k=>query.delete(k));
+  localStorage.removeItem("yi_admin_google_pending");
+  localStorage.removeItem("yi_admin_google_session");
+  ["error","error_description","error_code","admin-google","state","code"].forEach(k=>query.delete(k));
   history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
-  tell("loginNotice","Google orqali kirish yakunlanmadi: "+callbackError,true);
+  throw Error("Google orqali kirish yakunlanmadi: "+callbackError);
+ }
+ if(!isGoogleCallback)return false;
+ const client=await getAdminAuthClient();
+ const {data,error}=await client.auth.getSession();
+ if(error)throw error;
+ if(!data.session){
+  if(query.has("code"))throw Error("Google sessiyasi tasdiqlanmadi. Admin sahifasini qayta ochib, yana urinib ko‘ring.");
+  if(query.get("admin-google")==="1"){
+   sessionStorage.removeItem("yi_admin_google_pending");
+   localStorage.removeItem("yi_admin_google_pending");
+  }
   return false;
  }
- const code=query.get("code");
- if(!code||!isGoogleCallback)return false;
- const verifier=sessionStorage.getItem("yi_admin_pkce_verifier");
- sessionStorage.removeItem("yi_admin_pkce_verifier");
- if(!verifier){
-  sessionStorage.removeItem("yi_admin_google_pending");
-  query.delete("code");query.delete("state");
-  history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
-  throw Error("Google tasdiqlash kodi topildi, lekin shu brauzerdagi PKCE kaliti yo‘q. Qayta urinib ko‘ring.");
- }
- // Authorization code bir martalik; URL tarixida qolmasligi uchun darhol tozalanadi.
- query.delete("code");query.delete("state");
- history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
- const data=await authFetch("token?grant_type=pkce",{
-  method:"POST",
-  body:JSON.stringify({auth_code:code,code_verifier:verifier})
- });
- saveSession(data);
+ saveSession(data.session);
+ sessionStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_pending");
+ localStorage.setItem("yi_admin_google_session","1");
+ ["code","state","admin-google"].forEach(k=>query.delete(k));
+ history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():"")+location.hash);
  return true;
 }
 function parseHashSession(){
@@ -491,7 +507,7 @@ function parseHashSession(){
  const callbackError=hash.get("error_description")||hash.get("error")||query.get("error_description")||query.get("error");
  if(callbackError){
   sessionStorage.removeItem("yi_admin_google_pending");
-  sessionStorage.removeItem("yi_admin_pkce_verifier");
+  
   ["error","error_description","error_code","admin-google","state"].forEach(k=>query.delete(k));
   history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
   tell("loginNotice","Kirish yakunlanmadi: "+callbackError,true);
@@ -513,8 +529,6 @@ $("passwordForm").addEventListener("submit",async ev=>{ev.preventDefault();const
 $("googleLoginBtn").addEventListener("click",async()=>{
  const btn=$("googleLoginBtn");
  const productionAdminUrl="https://yoshlar-ishi-site.vercel.app/admin.html";
- // PKCE verifier faqat OAuth boshlangan shu origin'da mavjud bo‘ladi.
- // Shu sabab localhost yoki preview manzildan OAuth boshlashga yo‘l qo‘ymaymiz.
  if(location.origin!=="https://yoshlar-ishi-site.vercel.app"||location.pathname!=="/admin.html"){
   location.assign(productionAdminUrl);
   return;
@@ -522,29 +536,24 @@ $("googleLoginBtn").addEventListener("click",async()=>{
  if(!url||!key){tell("loginNotice","Supabase sozlamalari topilmadi. config.js faylini tekshiring.",true);return}
  btn.disabled=true;btn.classList.add("is-loading");btn.querySelector(".google-label").textContent="Google sahifasiga yo‘naltirilmoqda…";
  try{
-  const pkce=await createPkcePair();
-  sessionStorage.setItem("yi_admin_pkce_verifier",pkce.verifier);
   sessionStorage.setItem("yi_admin_google_pending","1");
-  const redirect=new URL("https://yoshlar-ishi-site.vercel.app/admin.html");
-  redirect.searchParams.set("admin-google","1");
-  const target=new URL(url+"/auth/v1/authorize");
-  target.search=new URLSearchParams({
+  localStorage.setItem("yi_admin_google_pending","1");
+  const client=await getAdminAuthClient();
+  const {error}=await client.auth.signInWithOAuth({
    provider:"google",
-   redirect_to:redirect.toString(),
-   code_challenge:pkce.challenge,
-   code_challenge_method:"s256",
-   apikey:key,
-   prompt:"select_account"
-  }).toString();
-  location.assign(target.toString());
+   options:{
+    redirectTo:"https://yoshlar-ishi-site.vercel.app/admin.html?admin-google=1",
+    queryParams:{prompt:"select_account"}
+   }
+  });
+  if(error)throw error;
  }catch(e){
   sessionStorage.removeItem("yi_admin_google_pending");
-  sessionStorage.removeItem("yi_admin_pkce_verifier");
+  localStorage.removeItem("yi_admin_google_pending");
   btn.disabled=false;btn.classList.remove("is-loading");btn.querySelector(".google-label").textContent="Google orqali xavfsiz kirish";
   tell("loginNotice","Google orqali kirish boshlanmadi: "+e.message,true);
  }
 });
-
 $("logoutBtn").addEventListener("click",()=>signOut(true));
 $("refreshBtn").addEventListener("click",()=>Promise.all([loadData(),loadStats()]).then(()=>notify("Panel yangilandi.")));
 $("activityRefresh").addEventListener("click",()=>loadData());
@@ -564,7 +573,7 @@ $("partnersBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-p
 $("sourcesBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-stoggle");if(b)toggleSource(b)});
 $("exportBtn").addEventListener("click",downloadCsv);$("sourceForm").addEventListener("submit",addSource);
 $("youthProgramForm").addEventListener("submit",saveYouthProgram);$("programReset").addEventListener("click",resetYouthProgramForm);$("programVerified").value=new Date().toISOString().slice(0,10);$("youthProgramsBody").addEventListener("click",ev=>{const edit=ev.target.closest(".js-program-edit"),toggle=ev.target.closest(".js-program-toggle");if(edit)editYouthProgram(edit.closest("tr").dataset.id);if(toggle)toggleYouthProgram(toggle)});
-(async()=>{try{await completeGoogleCallback();parseHashSession();if(token){await establish();sessionStorage.removeItem("yi_admin_google_pending");sessionStorage.removeItem("yi_admin_pkce_verifier")}else showLogin()}catch(e){await signOut(false);tell("loginNotice","Kirish tekshiruvi: "+e.message,true);showLogin()}})();
+(async()=>{try{await completeGoogleCallback();parseHashSession();if(token){await establish();sessionStorage.removeItem("yi_admin_google_pending");}else showLogin()}catch(e){await signOut(false);tell("loginNotice","Kirish tekshiruvi: "+e.message,true);showLogin()}})();
 })();
 </script>
 </body>
