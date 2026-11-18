@@ -288,7 +288,8 @@ for (const feature of [
 console.log("✓ daily official endpoint monitor plus dynamic registry and image URL audit are wired into CI");
 
 const liveHealthWorkflow = read(".github/workflows/site-health.yml");
-assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site-a4kjtjihh-javohir-s-projects-04fa6668\.vercel\.app' \}\}/);
+assert.match(liveHealthWorkflow, /SITE_URL:\s*https:\/\/yoshlar-ishi-site\.vercel\.app/);
+assert.doesNotMatch(liveHealthWorkflow, /vars\.SITE_URL/, "Live health must not inherit a stale deployment-specific URL");
 assert.match(liveHealthWorkflow, /Check website, current feature set and admin page/);
 assert.ok(liveHealthWorkflow.includes('"$BASE_URL/mobile-guard.css"'), "Live health must verify the mobile stylesheet is deployed");
 assert.match(liveHealthWorkflow, /paths:/);

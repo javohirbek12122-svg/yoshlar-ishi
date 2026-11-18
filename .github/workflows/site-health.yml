@@ -72,12 +72,11 @@ jobs:
     name: Check public site endpoints
     runs-on: ubuntu-latest
     env:
-      SITE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site-a4kjtjihh-javohir-s-projects-04fa6668.vercel.app' }}
+      SITE_URL: https://yoshlar-ishi-site.vercel.app
     steps:
-      - name: Explain missing live URL
-        if: ${{ vars.SITE_URL == '' }}
+      - name: Explain canonical production URL
         run: |
-          echo "::notice::SITE_URL is unset; checking the known production alias https://yoshlar-ishi-site.vercel.app. This deployment-specific URL is a temporary fallback while the static project alias is corrected. Set SITE_URL to the verified canonical domain after the alias is repaired."
+          echo "::notice::Live health checks use the canonical Yoshlar-Ishi Production project domain."
       - name: Check website, current feature set and admin page
         run: |
           set -euo pipefail
