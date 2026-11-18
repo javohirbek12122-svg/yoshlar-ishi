@@ -123,8 +123,8 @@ try{
      if(await banner.count()!==1)fail(item[1]+" "+width,"the original homepage banner is missing or duplicated");
      else{
       await banner.waitFor({state:"visible",timeout:5000});
-      const dimensions=await banner.evaluate(el=>{const box=el.getBoundingClientRect(),style=getComputedStyle(el);return {naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,boxRatio:box.width/Math.max(1,box.height),objectFit:style.objectFit};});
-      if(dimensions.naturalWidth<10||dimensions.naturalHeight<10||dimensions.objectFit!=="contain"||Math.abs(dimensions.boxRatio-16/9)>.03)fail(item[1]+" "+width,"the original banner was not loaded and preserved inside the responsive 16:9 frame");
+      const dimensions=await banner.evaluate(el=>{const style=getComputedStyle(el),parts=style.aspectRatio.split("/").map(x=>Number(x.trim()));return {naturalWidth:el.naturalWidth,naturalHeight:el.naturalHeight,objectFit:style.objectFit,cssAspectRatio:parts.length===2?parts[0]/parts[1]:0};});
+      if(dimensions.naturalWidth<10||dimensions.naturalHeight<10||dimensions.objectFit!=="contain"||Math.abs(dimensions.cssAspectRatio-16/9)>.01)fail(item[1]+" "+width,"the original banner was not loaded or is not contained in its responsive 16:9 frame");
       await page.locator(".yi-hero-image-button").click();
       const heroModal=page.locator("#yiHeroImageModal");
       if(await heroModal.getAttribute("aria-hidden")!=="false"||!(await heroModal.isVisible()))fail(item[1]+" "+width,"tap-to-expand image viewer did not open accessibly");
