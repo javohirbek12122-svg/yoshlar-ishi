@@ -512,13 +512,20 @@ $("resendCodeBtn").addEventListener("click",async()=>{if(otpCooldown>0)return;co
 $("passwordForm").addEventListener("submit",async ev=>{ev.preventDefault();const btn=$("passwordLoginBtn");btn.disabled=true;tell("loginNotice","Admin hisobi tekshirilmoqda…");try{await signInWithPassword($("loginEmail").value,$("loginPassword").value);$("loginPassword").value=""}catch(e){await signOut(false);tell("loginNotice","Parol orqali kirish rad etildi: "+e.message,true)}finally{btn.disabled=false}});
 $("googleLoginBtn").addEventListener("click",async()=>{
  const btn=$("googleLoginBtn");
+ const productionAdminUrl="https://yoshlar-ishi-site.vercel.app/admin.html";
+ // PKCE verifier faqat OAuth boshlangan shu origin'da mavjud bo‘ladi.
+ // Shu sabab localhost yoki preview manzildan OAuth boshlashga yo‘l qo‘ymaymiz.
+ if(location.origin!=="https://yoshlar-ishi-site.vercel.app"||location.pathname!=="/admin.html"){
+  location.assign(productionAdminUrl);
+  return;
+ }
  if(!url||!key){tell("loginNotice","Supabase sozlamalari topilmadi. config.js faylini tekshiring.",true);return}
  btn.disabled=true;btn.classList.add("is-loading");btn.querySelector(".google-label").textContent="Google sahifasiga yo‘naltirilmoqda…";
  try{
   const pkce=await createPkcePair();
   sessionStorage.setItem("yi_admin_pkce_verifier",pkce.verifier);
   sessionStorage.setItem("yi_admin_google_pending","1");
-  const redirect=new URL(location.pathname,location.origin);
+  const redirect=new URL("https://yoshlar-ishi-site.vercel.app/admin.html");
   redirect.searchParams.set("admin-google","1");
   const target=new URL(url+"/auth/v1/authorize");
   target.search=new URLSearchParams({
