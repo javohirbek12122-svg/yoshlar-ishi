@@ -136,6 +136,7 @@
 </main>
 <footer class="footer"><div class="wrap"><span>© 2026 Yoshlar-Ishi · Mustaqil platforma.</span><span>Rasmiy qaror, subsidiya yoki kredit ajratish Yoshlar-Ishi vakolatiga kirmaydi. <a href="./privacy.html">Maxfiylik</a> · <a href="./index.html">Bosh sahifa</a></span></div></footer>
 <script src="./config.js"></script>
+<script>window.YI_AUTH_READY=import("./auth-bridge.js").then(()=>window.YI_AUTH).catch(error=>{console.error("YI Auth bridge failed",error);throw error;});</script>
 <script>
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{},base=String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/rest/v1/",anon=cfg.supabaseAnonKey||cfg.supabaseKey||"";
@@ -144,18 +145,40 @@ const labels={social_support:"Ijtimoiy yordam",language:"Til va ta’lim",busine
 const availabilityLabels={open:"Ochiq qabul",permanent:"Doimiy xizmat",upcoming:"Keyinroq / rejalashtirilgan",unverified:"Qabul holati tasdiqlanmagan",closed:"Qabul yopilgan"};
 const availabilityKinds={open:"open",permanent:"permanent",upcoming:"upcoming",unverified:"unverified",closed:"closed"};
 const statusLabels={interested:"Qiziqish bildirildi",preparing:"Tayyorlanyapman",ready:"Ariza topshirishga tayyor",submitted:"Rasmiy portalga yuborildi",waiting:"Javob kutilmoqda",approved:"Ma’qullandi",declined:"Rad etildi / tuzatish kerak",completed:"Yakunlandi",paused:"Vaqtincha to‘xtatildi"};
-let programs=[],selected=null,journey=null,user=null,token=sessionStorage.getItem("yi_user_token")||"",refreshToken=sessionStorage.getItem("yi_user_refresh")||"",chipFilter="all",availabilityFilter="all";
+let programs=[],selected=null,journey=null,user=null,chipFilter="all",availabilityFilter="all";
 function setNotice(id,text,bad){const el=$(id);if(el){el.textContent=text;el.classList.toggle("error",!!bad)}}
-async function api(path,opts){const headers={apikey:anon,Authorization:"Bearer "+(token||anon),"Content-Type":"application/json",...(opts&&opts.headers||{})};const r=await fetch(base+path,{...(opts||{}),headers});if(!r.ok){let t="";try{t=await r.text()}catch{}throw new Error("So‘rov bajarilmadi ("+r.status+"). "+t.slice(0,180))}if(r.status===204)return null;const text=await r.text();return text?JSON.parse(text):null}
+async function currentIdentity(force=false){
+ const bridge=await window.YI_AUTH_READY;
+ if(!bridge)throw new Error("Yagona hisob tizimi yuklanmadi. Sahifani yangilang.");
+ return bridge.getIdentity({force});
+}
+async function api(path,opts={}){
+ const forcePublic=opts.headers?.Authorization==="Bearer "+anon;
+ const identity=forcePublic?null:await currentIdentity();
+ const headers={apikey:anon,Authorization:"Bearer "+(identity?.session?.access_token||anon),"Content-Type":"application/json",...(opts.headers||{})};
+ const response=await fetch(base+path,{...opts,headers});
+ if(!response.ok){let body="";try{body=await response.text()}catch{}throw new Error("So‘rov bajarilmadi ("+response.status+"). "+body.slice(0,180))}
+ if(response.status===204)return null;
+ const body=await response.text();
+ return body?JSON.parse(body):null;
+}
 async function authCheck(){
- if(!token){user=null;return null}
- let r=await fetch(String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/auth/v1/user",{headers:{apikey:anon,Authorization:"Bearer "+token}});
- if(r.ok){user=await r.json();return user}
- if(refreshToken){
-  const rr=await fetch(String(cfg.supabaseUrl||"").replace(/\/$/,"")+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:anon,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});
-  if(rr.ok){const d=await rr.json();token=d.access_token;refreshToken=d.refresh_token;user=d.user;sessionStorage.setItem("yi_user_token",token);sessionStorage.setItem("yi_user_refresh",refreshToken);sessionStorage.setItem("yi_user_id",user.id);return user}
- }
- token="";refreshToken="";user=null;["yi_user_token","yi_user_refresh","yi_user_id"].forEach(k=>sessionStorage.removeItem(k));return null;
+ const identity=await currentIdentity(true);
+ user=identity?.user||null;
+ return user;
+}
+function renderAuthState(){
+ const el=$("authState");if(!el)return;
+ if(user)el.textContent="Kabinetga kirilgan · saqlangan jarayonlar faqat ushbu hisobda ko‘rinadi.";
+ else el.innerHTML='Jarayonlarni shaxsiy hisobingizda saqlash uchun <a href="./hamjamiyat.html?mode=login#hpAuthGate">Kirish</a> yoki <a href="./hamjamiyat.html?mode=register#hpAuthGate">Ro‘yxatdan o‘tish</a> kerak.';
+}
+function clearPrivateJourney(){
+ journey=null;
+ ["draftSituation","draftSupport","draftResult","draftAmount","draftExtra","externalReference"].forEach(id=>{const el=$(id);if(el)el.value="";});
+ if($("journeyStatus"))$("journeyStatus").value="preparing";
+ document.querySelectorAll("[data-step-check],[data-doc-check]").forEach(el=>el.checked=false);
+ const timeline=$("journeyTimeline");
+ if(timeline)timeline.innerHTML='<div class="muted">Shaxsiy jarayon tarixi hisobdan chiqilgani yoki hisob almashtirilgani sababli tozalandi.</div>';
 }
 function fitProgram(p){
  const ageRaw=$("ageFilter").value,age=ageRaw===""?null:Number(ageRaw);
@@ -226,7 +249,7 @@ async function openProgram(slug){
 }
 async function loadJourneyTimeline(journeyId){
  const el=$("journeyTimeline");if(!el)return;
- if(!user||!journeyId){el.innerHTML='<div class="muted">Bu jarayon tarixi shaxsiy hisob bilan bog‘lanadi. Tarixni ko‘rish va saqlash uchun email orqali kiring.</div>';return}
+ if(!user||!journeyId){el.innerHTML='<div class="muted">Jarayon tarixini ko‘rish uchun <a href="./hamjamiyat.html?mode=login#hpAuthGate">yagona hisobga kiring</a> yoki <a href="./hamjamiyat.html?mode=register#hpAuthGate">ro‘yxatdan o‘ting</a>.</div>';return}
  try{
   const rows=await api("opportunity_journey_events?select=id,event_type,from_status,to_status,title,details,created_at&journey_id=eq."+encodeURIComponent(journeyId)+"&order=created_at.desc&limit=30");
   el.innerHTML=rows&&rows.length?rows.map(x=>'<article class="journey-event"><time>'+esc(new Date(x.created_at).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"}))+'</time><div><strong>'+esc(x.title)+'</strong><p>'+esc(x.details||"")+'</p></div></article>').join(""):'<div class="muted">Hozircha hodisa qayd etilmagan. Jarayonni birinchi marta saqlaganingizdan keyin tarix shakllanadi.</div>';
@@ -236,14 +259,14 @@ function renderSaved(rows){
  $("savedJourneys").innerHTML=rows&&rows.length?rows.map(r=>'<div class="saved-item"><div><strong>'+esc(r.program_title)+'</strong><small>'+esc(statusLabels[r.status]||r.status)+' · '+esc(new Date(r.updated_at).toLocaleDateString("uz-UZ"))+'</small></div><button type="button" class="btn secondary" data-resume="'+esc(r.program_slug)+'">Davom ettirish ↗</button></div>').join(""):'<div class="muted">Hozircha saqlangan jarayon yo‘q. Katalogdan dastur tanlab, tayyorgarlikni boshlang.</div>';
 }
 async function loadSaved(){
- if(!user){renderSaved([]);$("authState").textContent="Jarayonlarni saqlash uchun email orqali kiring.";return}
- $("authState").textContent="Kabinetga kirilgan · jarayonlaringiz shaxsiy hisobingiz bilan himoyalangan.";
+ if(!user){renderSaved([]);renderAuthState();return}
+ renderAuthState();
  try{const rows=await api("opportunity_journeys?select=id,program_slug,program_title,status,updated_at&order=updated_at.desc&limit=50");renderSaved(rows||[])}
  catch(e){$("savedJourneys").innerHTML='<div class="muted">Saqlangan jarayonlar yuklanmadi: '+esc(e.message)+'</div>'}
 }
 async function saveJourney(){
  if(!selected)return;
- if(!user){setNotice("saveNotice","Jarayonni hisobingizda saqlash uchun avval shaxsiy kabinetga kiring.",true);return}
+ if(!user){setNotice("saveNotice","Jarayonni saqlash uchun avval yagona hisobga kiring yoki ro‘yxatdan o‘ting.",true);return}
  const c=collectChecks(),draft={situation:$("draftSituation").value.trim(),support:$("draftSupport").value.trim(),result:$("draftResult").value.trim(),amount:$("draftAmount").value.trim(),extra:$("draftExtra").value.trim()};
  const previousStatus=journey&&journey.status||null;
  const status=$("journeyStatus").value;
@@ -282,11 +305,28 @@ $("programGrid").addEventListener("click",e=>{const b=e.target.closest("[data-op
 $("savedJourneys").addEventListener("click",e=>{const b=e.target.closest("[data-resume]");if(b)openProgram(b.dataset.resume)});
 $("saveJourney").addEventListener("click",saveJourney);
 $("copyDraft").addEventListener("click",async()=>{const text=draftText();if(!text)return;try{await navigator.clipboard.writeText(text);setNotice("saveNotice","Ariza qoralamasi nusxalandi.",false)}catch(e){setNotice("saveNotice","Brauzer nusxalashga ruxsat bermadi. Matnni qo‘lda belgilang.",true)}});
-async function init(){
- try{await authCheck()}catch(e){user=null}
- $("authState").textContent=user?"Kabinetga kirilgan · jarayonlaringiz himoyalangan.":"Saqlash uchun shaxsiy kabinetga kiring.";
- await loadPrograms();await loadSaved();
+async function syncOpportunityAccount(){
+ const identity=await currentIdentity(true);
+ const nextUser=identity?.user||null;
+ const changed=user?.id!==nextUser?.id;
+ if(changed)clearPrivateJourney();
+ user=nextUser;
+ renderAuthState();
+ await loadSaved();
+ if(selected&&user)await openProgram(selected.slug);
 }
+async function init(){
+ try{await window.YI_AUTH_READY;await authCheck();}catch(error){user=null;}
+ renderAuthState();
+ await loadPrograms();await loadSaved();
+ window.addEventListener("yi-auth-change",event=>{
+  if(!["SIGNED_OUT","SIGNED_IN","USER_UPDATED"].includes(event.detail?.event))return;
+  window.setTimeout(()=>syncOpportunityAccount().catch(()=>{
+   user=null;clearPrivateJourney();renderAuthState();renderSaved([]);
+  }),0);
+ });
+}
+init();
 init();
 })();
 </script>

@@ -1,14 +1,10 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { supabase, getVerifiedIdentity } from "./auth-client.js";
 
-const cfg=window.YI_CONFIG||{};
-const base=String(cfg.supabaseUrl||"").replace(/\/$/,"");
-const key=cfg.supabaseKey||cfg.supabaseAnonKey||"";
 const bank=window.YI_ASSESSMENT_BANK;
 const $=id=>document.getElementById(id);
 const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 const state={user:null,progress:[],history:[],activeTrack:null,questions:[],answers:{},index:0,remaining:30*60,timer:null,submitting:false,lastResult:null};
-if(!base||!key||!bank)throw new Error("Test moduli yuklanmadi. Sahifani yangilang.");
-const supabase=createClient(base,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce"}});
+if(!bank)throw new Error("Test moduli yuklanmadi. Sahifani yangilang.");
 
 function setNotice(message,isError=false){
  let el=$("yiGlobalNotice");
@@ -32,10 +28,9 @@ function showDashboard(){
  $("yiWelcomeTitle").textContent=(state.user.user_metadata?.full_name||state.user.email||"Foydalanuvchi")+" — bilim sinovlari";
 }
 async function loadAccount(){
- const {data,error}=await supabase.auth.getSession();
- if(error)throw error;
- state.user=data.session?.user||null;
- if(!state.user){showAuth();return;}
+ const identity=await getVerifiedIdentity({force:true});
+ state.user=identity?.user||null;
+ if(!state.user){state.progress=[];state.history=[];showAuth();return;}
  showDashboard();
  await loadResults();
 }
@@ -180,13 +175,34 @@ function bind(){
  $("yiSubmit").addEventListener("click",()=>submitTest(false));
  $("yiSignOut").addEventListener("click",async()=>{clearInterval(state.timer);await supabase.auth.signOut();state.user=null;showAuth();});
 }
+async function syncAssessmentIdentity(){
+ const identity=await getVerifiedIdentity({force:true});
+ const nextUser=identity?.user||null;
+ if(!nextUser){
+  clearInterval(state.timer);
+  state.user=null;state.progress=[];state.history=[];
+  state.answers={};state.questions=[];state.activeTrack=null;state.lastResult=null;
+  showAuth();return;
+ }
+ const changed=state.user?.id!==nextUser.id;
+ if(changed){
+  clearInterval(state.timer);
+  state.answers={};state.questions=[];state.activeTrack=null;state.lastResult=null;
+  $("yiResultPanel").hidden=true;
+ }
+ state.user=nextUser;
+ showDashboard();
+ await loadResults();
+}
 async function boot(){
  bind();
- try{await loadAccount();}catch(error){showAuth();setNotice(errorText(error),true);}
- supabase.auth.onAuthStateChange((_event,session)=>{
-  state.user=session?.user||null;
-  if(!state.user){clearInterval(state.timer);showAuth();}
-  else{showDashboard();loadResults().catch(error=>setNotice(errorText(error),true));}
+ supabase.auth.onAuthStateChange(event=>{
+  if(!["SIGNED_OUT","SIGNED_IN","USER_UPDATED"].includes(event))return;
+  window.setTimeout(()=>syncAssessmentIdentity().catch(error=>{
+   showAuth();setNotice(errorText(error),true);
+  }),0);
  });
+ try{await loadAccount();}catch(error){showAuth();setNotice(errorText(error),true);}
 }
+boot();
 boot();
