@@ -39,7 +39,7 @@ for (const marker of ["yiAuthGate", "yiTrackGrid", "yiTestPanel", "yiQuestionNav
 }
 
 const app = read("assessment.js");
-for (const marker of ["auth.getSession", "assessment_progress", "assessment_attempts", "submit_assessment_attempt", "p_track_id", "p_bank_version", "p_answers", "subjectResults", "sessionStorage", "assessment_daily_attempt_limit_reached"]) {
+for (const marker of ["getVerifiedIdentity", "assessment_progress", "assessment_attempts", "submit_assessment_attempt", "p_track_id", "p_bank_version", "p_answers", "subjectResults", "sessionStorage", "assessment_daily_attempt_limit_reached"]) {
   assert.ok(app.includes(marker), "Assessment app missing " + marker);
 }
 assert.doesNotMatch(app, /p_user_id/, "Client must not pass a user identity to the scoring RPC");
