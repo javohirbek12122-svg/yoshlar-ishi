@@ -77,23 +77,39 @@
     </div>
     <div class="hp-auth-card" id="hpAuthCard">
       <div class="hp-auth-card-top"><span class="hp-auth-mark">YI</span><span><b>Shaxsiy hisob</b><small>Yagona kirish markazi</small></span></div>
-      <div class="hp-auth-tabs" role="tablist" aria-label="Kirish turi">
+      <div class="hp-auth-tabs" id="hpAuthTabs" role="tablist" aria-label="Kirish turi">
         <button type="button" class="active" data-auth-mode="login" role="tab" aria-selected="true">Kirish</button>
         <button type="button" data-auth-mode="register" role="tab" aria-selected="false">Ro‘yxatdan o‘tish</button>
       </div>
       <form id="hpAuthForm" novalidate>
         <div class="hp-field" id="hpNameField" hidden><label for="hpName">Ism va familiya</label><input id="hpName" name="name" autocomplete="name" maxlength="120" placeholder="Masalan, Javohir Mirahmadov"></div>
-        <div class="hp-field"><label for="hpEmail">Elektron pochta</label><input id="hpEmail" name="email" type="email" autocomplete="email" required placeholder="siz@example.com"></div>
-        <div class="hp-field"><label for="hpPassword">Parol</label><div class="hp-password-wrap"><input id="hpPassword" name="password" type="password" autocomplete="current-password" required minlength="10" placeholder="Kamida 10 ta belgi"><button id="hpPasswordToggle" type="button" aria-label="Parolni ko‘rsatish">◉</button></div></div>
-        <div class="hp-field" id="hpConfirmField" hidden><label for="hpConfirm">Parolni takrorlang</label><input id="hpConfirm" type="password" autocomplete="new-password" minlength="10" placeholder="Parolni qayta kiriting"></div>
+        <div class="hp-field"><label for="hpEmail">Elektron pochta</label><input id="hpEmail" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="siz@example.com"></div>
+        <div class="hp-field">
+          <label for="hpPassword">Parol</label>
+          <div class="hp-password-wrap"><input id="hpPassword" name="password" type="password" autocomplete="current-password" required placeholder="Parolingiz"><button id="hpPasswordToggle" type="button" aria-label="Parolni ko‘rsatish" aria-pressed="false">◉</button></div>
+          <small class="hp-password-strength" id="hpPasswordStrength" role="status" aria-live="polite" hidden></small>
+        </div>
+        <div class="hp-field" id="hpConfirmField" hidden>
+          <label for="hpConfirm">Parolni takrorlang</label>
+          <div class="hp-password-wrap"><input id="hpConfirm" type="password" autocomplete="new-password" placeholder="Parolni qayta kiriting"><button id="hpConfirmToggle" type="button" aria-label="Takrorlangan parolni ko‘rsatish" aria-pressed="false">◉</button></div>
+        </div>
         <label class="hp-consent" id="hpConsent" hidden><input id="hpPrivacy" type="checkbox"><span><a href="./privacy.html" target="_blank" rel="noopener">Maxfiylik siyosati</a> bilan tanishdim va roziman.</span></label>
         <button class="hp-primary-button" id="hpAuthSubmit" type="submit">Kirish <span>→</span></button>
       </form>
-      <div class="hp-divider"><span>yoki</span></div>
+      <button class="hp-resend-button" id="hpResendConfirmation" type="button" hidden>Tasdiqlash xatini qayta yuborish ↗</button>
+      <div class="hp-divider" id="hpDivider"><span>yoki</span></div>
       <button class="hp-google-button" id="hpGoogleLogin" type="button"><span class="hp-google-g">G</span> Google orqali davom etish</button>
       <button class="hp-forgot-button" id="hpForgotPassword" type="button">Parolni unutdingizmi?</button>
+      <form class="hp-recovery-form" id="hpRecoveryForm" hidden>
+        <div class="hp-recovery-heading"><b>Yangi parol yarating</b><small>Email orqali tasdiqlangan tiklash sessiyasi talab qilinadi.</small></div>
+        <label class="hp-field" for="hpRecoveryPassword">Yangi parol<input id="hpRecoveryPassword" type="password" autocomplete="new-password" minlength="10" required placeholder="Kamida 10 belgi, harf va raqam"></label>
+        <label class="hp-field" for="hpRecoveryConfirm">Parolni takrorlang<input id="hpRecoveryConfirm" type="password" autocomplete="new-password" minlength="10" required placeholder="Yangi parolni qayta kiriting"></label>
+        <p class="hp-auth-message" id="hpRecoveryMessage" role="status" aria-live="polite"></p>
+        <button class="hp-primary-button" id="hpRecoverySubmit" type="submit">Parolni yangilash <span>→</span></button>
+        <button class="hp-forgot-button" id="hpRecoveryBack" type="button">Kirish oynasiga qaytish</button>
+      </form>
       <p class="hp-auth-message" id="hpAuthMessage" role="status" aria-live="polite"></p>
-      <small class="hp-auth-security">🔒 Sessiya himoyalangan. Parolingiz ommaviy profilga chiqarilmaydi.</small>
+      <small class="hp-auth-security">🔒 Har bir profil alohida Supabase foydalanuvchi ID’siga bog‘langan. Parol brauzerda yoki ommaviy profilda saqlanmaydi.</small>
     </div>
   </section>
 
