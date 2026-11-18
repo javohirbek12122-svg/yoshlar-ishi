@@ -107,7 +107,8 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v23"/);
+assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
+assert.match(worker, /CACHE_NAME = "yi-pwa-v24"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

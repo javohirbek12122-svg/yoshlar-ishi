@@ -204,3 +204,13 @@ Sinov buyruqlari: npm run check:pwa va npm run check:mobile. Haqiqiy iPhone/Andr
 - Savollar milliy fan mazmuni va xalqaro kompetensiya yondashuvlariga yo‘naltirilgan diagnostik mashqdir; ular rasmiy PISA, CEFR yoki davlat imtihoni hisoblanmaydi.
 
 Sinovlar: `npm run check` (shu jumladan `scripts/check-assessment.mjs`).
+
+
+## Yagona foydalanuvchi hisobi
+
+- `auth-client.js` is the single Supabase JS client for the site. It validates identities with `auth.getUser()` and uses Supabase's built-in persistent PKCE session and refresh logic.
+- `auth-bridge.js` exposes the verified identity to legacy pages without copying access or refresh tokens into custom `sessionStorage` keys.
+- Signup supports email confirmation and resend; login uses email/password; password recovery requires a verified recovery session. Google OAuth remains available only when the Google provider is enabled in Supabase.
+- Member profiles are created by the database trigger for each `auth.users.id`. Private profile data, CV, portfolio, activity, posts, likes and initiatives rely on owner-scoped RLS and `auth.uid()`.
+- The initiatives cabinet now shares the same login/register center. It no longer creates accounts through a separate magic-link/OTP flow.
+- Signing out clears the shared Supabase session across Yoshlar-Ishi pages/tabs. Real inbox confirmation, Google provider configuration and multi-account isolation still require live test accounts before public launch.

@@ -87,6 +87,28 @@ try{
      if(width<=900&&["input","select","textarea"].includes(c.tag)&&!["checkbox","radio","hidden"].includes(c.type)&&parseFloat(c.font)<16)fail(item[1]+" "+width,"iOS input zoom risk "+c.font+"px: "+c.text);
     }
     if(errors.length)fail(item[1]+" "+width,"uncaught JS: "+errors.join(" | "));
+    if(item[0]==="/hamjamiyat.html"&&width===390){
+     if(await page.locator("#hpAuthGate").count()!==1)fail(item[1]+" "+width,"shared login/register gate is missing");
+     await page.locator('[data-auth-mode="register"]').click();
+     if(await page.locator("#hpNameField").isHidden())fail(item[1]+" "+width,"registration name field did not open");
+     if(await page.locator("#hpConfirmField").isHidden())fail(item[1]+" "+width,"confirm-password field did not open");
+     if(await page.locator("#hpConsent").isHidden())fail(item[1]+" "+width,"privacy consent was not displayed during registration");
+     await page.locator("#hpPassword").fill("abc123");
+     if(!(await page.locator("#hpPasswordStrength").innerText()).toLowerCase().includes("kuch"))fail(item[1]+" "+width,"password strength feedback did not update");
+     await page.locator("#hpPasswordToggle").click();
+     if(await page.locator("#hpPassword").getAttribute("type")!=="text")fail(item[1]+" "+width,"password visibility control did not reveal the password");
+     await page.locator("#hpPasswordToggle").click();
+     if(await page.locator("#hpPassword").getAttribute("type")!=="password")fail(item[1]+" "+width,"password visibility control did not hide the password");
+     await page.locator('[data-auth-mode="login"]').click();
+     if(!(await page.locator("#hpNameField").isHidden()))fail(item[1]+" "+width,"login mode retained registration-only fields");
+     if(await page.locator("#hpForgotPassword").isHidden())fail(item[1]+" "+width,"password reset action is not visible");
+     if(await page.locator("#hpRecoveryForm").isVisible())fail(item[1]+" "+width,"password recovery form is visible without a verified recovery session");
+    }
+    if(item[0]==="/kabinet.html"&&width===390){
+     if(await page.locator("#authLinks a").count()!==2)fail(item[1]+" "+width,"central login and registration links are missing");
+     if(await page.locator("#loginForm").count()!==0)fail(item[1]+" "+width,"a separate legacy OTP login must not remain in the cabinet");
+     if(!(await page.locator("#authLinks a").first().getAttribute("href")).includes("./hamjamiyat.html"))fail(item[1]+" "+width,"cabinet must route to the shared account center");
+    }
     if(item[0]==="/assessment.html"&&width===390){
      if(!(await page.locator(".yi-assessment-hero h1").innerText()).includes("Bilimingizni sinang"))fail(item[1]+" "+width,"assessment hero heading is missing");
      if(!(await page.locator(".yi-assessment-partner").innerText()).includes("hozir yakunlangan testlar"))fail(item[1]+" "+width,"partner notice does not explain that completed test results will also be considered");

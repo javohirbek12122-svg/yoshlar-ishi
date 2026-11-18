@@ -226,12 +226,13 @@ assert.match(admin, /token\?grant_type=password/);
 assert.match(admin, /authorize\?provider=google/);
 assert.doesNotMatch(admin, /create_user:true/);
 console.log("✓ Parkent-style admin OTP/password/Google gate uses a server-side allowlist RPC and prevents self-signup");
+const index = read("index.html");
 const memberHtml = read("hamjamiyat.html");
 const memberCss = read("hamjamiyat.css");
 const memberJs = read("hamjamiyat.js");
-for (const marker of ['id="hpAuthGate"','id="hpAuthForm"','id="hpGoogleLogin"','id="hpTabProfile"','id="hpTabActivity"','id="hpTabSettings"','id="hpCvForm"','id="hpPortfolioForm"','id="hpPostType"','id="hpFeedType"','id="hpPrivacySave"']) assert.ok(memberHtml.includes(marker),"Member UI is missing " + marker);
+for (const marker of ['id="hpAuthGate"','id="hpAuthTabs"','id="hpAuthForm"','id="hpGoogleLogin"','id="hpRecoveryForm"','id="hpResendConfirmation"','id="hpPasswordStrength"','id="hpConfirmToggle"','id="hpTabProfile"','id="hpTabActivity"','id="hpTabSettings"','id="hpCvForm"','id="hpPortfolioForm"','id="hpPostType"','id="hpFeedType"','id="hpPrivacySave"']) assert.ok(memberHtml.includes(marker),"Member UI is missing " + marker);
 for (const category of ["project","achievement","question","collaboration","team","learning","event","volunteer","opportunity","resource"]) assert.ok(memberHtml.includes('value="' + category + '"'),"Member post category missing: " + category);
-for (const marker of ["signInWithPassword","signUp","signInWithOAuth","member_profiles","member_private_assets","member_posts","member_portfolio_items","member_activity_events","record_member_daily_visit","member-cv","createSignedUrl","post_type:postType","save_member_cv_path","save_member_privacy_settings","PROFILE_FIELDS"]) assert.ok(memberJs.includes(marker),"Supabase member workflow missing " + marker);
+for (const marker of ["signInWithPassword","signUp","signInWithOAuth","resetPasswordForEmail","auth.resend","PASSWORD_RECOVERY","getVerifiedIdentity","member_profiles","member_private_assets","member_posts","member_portfolio_items","member_activity_events","record_member_daily_visit","member-cv","createSignedUrl","post_type:postType","save_member_cv_path","save_member_privacy_settings","PROFILE_FIELDS"]) assert.ok(memberJs.includes(marker),"Supabase member workflow missing " + marker);
 assert.doesNotMatch(memberJs,/save_my_member_privacy/,"Disabled legacy CV RPC must not be called by the UI");
 assert.match(memberJs,/async function loadActivity\(/);
 assert.match(memberJs,/function drawChart\(/);
@@ -461,15 +462,30 @@ console.log("✓ youth opportunity catalogue, explicit application states, age-f
 
 const cabinet = read("kabinet.html");
 for (const feature of [
-  "yi_user_token",
-  "/auth/v1/otp",
+  "YI_AUTH_READY",
+  "getIdentity()",
   "rpc/get_my_initiatives",
   "rpc/update_my_initiative",
   "owner_id=user.id",
+  "authLinks",
 ]) {
   assert.ok(cabinet.includes(feature), `Personal cabinet control missing: ${feature}`);
 }
-console.log("✓ email magic-link cabinet and owner-scoped initiative RPCs are present");
+assert.doesNotMatch(cabinet,/yi_user_token|yi_user_refresh|yi_user_id|auth\\/v1\\/otp/,"Cabinet must not duplicate token storage or expose a second sign-in flow");
+const sharedAuth = read("auth-client.js");
+const authBridge = read("auth-bridge.js");
+assert.ok(sharedAuth.includes("supabase.auth.getUser()"),"Shared auth client must verify user identity against Supabase");
+assert.ok(sharedAuth.includes("persistSession: true") && sharedAuth.includes("autoRefreshToken: true") && sharedAuth.includes("flowType: \"pkce\""),"Shared auth client must persist and refresh the PKCE session");
+assert.ok(authBridge.includes("getIdentity: getVerifiedIdentity") && authBridge.includes("yi-auth-change"),"Legacy pages must share verified identity and cross-tab auth changes");
+assert.doesNotMatch(index,/yi_user_token|yi_user_refresh|yi_user_id/,"Homepage must not use ad-hoc auth token storage");
+assert.ok(index.includes("YI_AUTH_READY") && index.includes("getIdentity()"),"Homepage forms and votes must use the shared auth bridge");
+assert.ok(memberHtml.includes('id="hpRecoveryForm"') && memberHtml.includes('id="hpResendConfirmation"'),"Password reset and confirmation resend controls are required");
+assert.doesNotMatch(memberJs,/sessionStorage.*yi_user_token/,"Community page must not duplicate the access token");
+const authMigration=read("supabase/migrations/20261118120000_harden_initiative_owner_update_and_admin_review.sql");
+assert.ok(authMigration.includes("owners update own pending initiatives or admins review"),"Owner-scoped initiative update policy must be versioned");
+new vm.Script(sharedAuth.replace(/^import .*;\\s*$/gm,"").replace(/^export /gm,""),{filename:"auth-client.js"});
+new vm.Script(authBridge.replace(/^import .*;\\s*$/gm,""),{filename:"auth-bridge.js"});
+console.log("✓ shared Supabase auth, owner-scoped cabinet and single account/session flow validated");
 
 for (const feature of [
   'id="page-team"',

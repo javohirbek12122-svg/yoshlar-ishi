@@ -221,6 +221,13 @@ jobs:
           grep -Fqi 'post_type:postType' /tmp/yoshlar-community.js || { echo "::error::Post categories are not stored in Supabase."; exit 1; }
           grep -Fqi 'record_member_daily_visit' /tmp/yoshlar-community.js || { echo "::error::Daily activity tracking is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/hamjamiyat.css" -o /tmp/yoshlar-community.css
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/auth-client.js" -o /tmp/yoshlar-auth-client.js
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/auth-bridge.js" -o /tmp/yoshlar-auth-bridge.js
+          grep -Fq 'supabase.auth.getUser()' /tmp/yoshlar-auth-client.js || { echo "::error::Shared Supabase auth client does not verify the logged-in identity."; exit 1; }
+          grep -Fq 'getIdentity: getVerifiedIdentity' /tmp/yoshlar-auth-bridge.js || { echo "::error::Shared auth bridge is missing the verified identity function."; exit 1; }
+          grep -Fq 'id="hpRecoveryForm"' /tmp/yoshlar-community.html || { echo "::error::Password recovery UI is missing."; exit 1; }
+          grep -Fq 'id="hpResendConfirmation"' /tmp/yoshlar-community.html || { echo "::error::Signup confirmation resend UI is missing."; exit 1; }
+          grep -Fq 'YI_AUTH_READY' /tmp/yoshlar-cabinet.html || { echo "::error::Cabinet is not wired to the shared auth bridge."; exit 1; }
           grep -Fqi '.hp-drawer' /tmp/yoshlar-community.css || { echo "::error::Community drawer styles are missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/startap-yoli.html" -o /tmp/yoshlar-startup.html
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/laboratoriya.html" -o /tmp/yoshlar-lab.html
@@ -252,7 +259,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v23";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v24";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
