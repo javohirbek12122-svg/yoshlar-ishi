@@ -288,7 +288,7 @@ for (const feature of [
 console.log("✓ daily official endpoint monitor plus dynamic registry and image URL audit are wired into CI");
 
 const liveHealthWorkflow = read(".github/workflows/site-health.yml");
-assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site-m47c1uxtt-javohir-s-projects-04fa6668\.vercel\.app' \}\}/);
+assert.match(liveHealthWorkflow, /SITE_URL:\s*\$\{\{ vars\.SITE_URL \|\| 'https:\/\/yoshlar-ishi-site-a4kjtjihh-javohir-s-projects-04fa6668\.vercel\.app' \}\}/);
 assert.match(liveHealthWorkflow, /Check website, current feature set and admin page/);
 assert.ok(liveHealthWorkflow.includes('"$BASE_URL/mobile-guard.css"'), "Live health must verify the mobile stylesheet is deployed");
 assert.match(liveHealthWorkflow, /paths:/);
@@ -297,7 +297,8 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "imkoniyatdan amaliy natijagacha",
+  "grep -Fqi 'imkoniyatdan' /tmp/yoshlar-home.html",
+  "grep -Fqi 'amaliy natijagacha.' /tmp/yoshlar-home.html",
   'class="hero-expanded-copy"',
   'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
@@ -306,7 +307,7 @@ for (const marker of [
 ]) {
   assert.ok(liveHealthWorkflow.includes(marker), `Live health check is missing new design freshness marker: ${marker}`);
 }
-console.log("✓ live-site health check defaults to the known production alias, checks current design markers and runs when public pages change");
+console.log("✓ live-site health check defaults to the current production deployment, checks current design markers and runs when public pages change");
 
 
 console.log("✓ daily official portal availability monitor is present");

@@ -72,7 +72,7 @@ jobs:
     name: Check public site endpoints
     runs-on: ubuntu-latest
     env:
-      SITE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site-m47c1uxtt-javohir-s-projects-04fa6668.vercel.app' }}
+      SITE_URL: ${{ vars.SITE_URL || 'https://yoshlar-ishi-site-a4kjtjihh-javohir-s-projects-04fa6668.vercel.app' }}
     steps:
       - name: Explain missing live URL
         if: ${{ vars.SITE_URL == '' }}
@@ -89,7 +89,7 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           # Wait briefly for the Vercel Git integration to finish the new production build.
           for attempt in $(seq 1 16); do
-            if grep -Fq 'yi-quick-panel' /tmp/yoshlar-home.html && grep -Fq 'yi-hero-quote' /tmp/yoshlar-home.html && grep -Fq 'href="./reference-home.css"' /tmp/yoshlar-home.html && grep -Fq 'imkoniyatdan amaliy natijagacha' /tmp/yoshlar-home.html; then break; fi
+            if grep -Fq 'yi-quick-panel' /tmp/yoshlar-home.html && grep -Fq 'yi-hero-quote' /tmp/yoshlar-home.html && grep -Fq 'href="./reference-home.css"' /tmp/yoshlar-home.html && grep -Fq 'imkoniyatdan' /tmp/yoshlar-home.html && grep -Fq 'amaliy natijagacha.' /tmp/yoshlar-home.html; then break; fi
             if [ "$attempt" -eq 16 ]; then echo "::error::The redesigned homepage has not reached the production alias yet."; exit 1; fi
             sleep 5
             curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
@@ -139,7 +139,7 @@ jobs:
           grep -Fqi '.showcase-empty-art' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the real-project portfolio empty-state styles."; exit 1; }
           grep -Fqi '.detail-btn' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the dynamic team interest button styles."; exit 1; }
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
-          grep -Fqi "imkoniyatdan amaliy natijagacha" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: new Yoshlar-Ishi hero headline is missing."; exit 1; }
+          grep -Fqi "imkoniyatdan" /tmp/yoshlar-home.html && grep -Fqi "amaliy natijagacha." /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: new Yoshlar-Ishi hero headline is missing."; exit 1; }
           grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
           grep -Fqi "IMKONIYAT · TAYYORGARLIK · ARIZA · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
           grep -Fqi 'Bu forma davlat idorasiga ariza yubormaydi.' /tmp/yoshlar-home.html || { echo "::error::The live initiative form is unclear about not submitting to a government agency."; exit 1; }
@@ -262,7 +262,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v25";' /tmp/yoshlar-service-worker.js || { echo "::error::The production deployment is stale: the current offline image cache v16 has not reached this domain."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v26";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v26."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }
