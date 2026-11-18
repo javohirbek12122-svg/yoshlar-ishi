@@ -297,8 +297,8 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "grep -Fqi 'imkoniyatdan' /tmp/yoshlar-home.html",
-  "grep -Fqi 'amaliy natijagacha.' /tmp/yoshlar-home.html",
+  'grep -Fqi "imkoniyatdan" /tmp/yoshlar-home.html',
+  'grep -Fqi "amaliy natijagacha." /tmp/yoshlar-home.html',
   'class="hero-expanded-copy"',
   'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
