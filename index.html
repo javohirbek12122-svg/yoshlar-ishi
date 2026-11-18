@@ -276,7 +276,9 @@
 </section>
 
 <footer class="wrap"><div class="brand"><span class="logo">YI</span>Yoshlar-Ishi</div><p>Yoshlar uchun davlat imkoniyatlari va xizmatlarini topish, talablarni tushunish, arizaga tayyorlanish va keyingi jarayonlarni qayd etishga yordam beruvchi mustaqil platforma.</p><div class="linkrow"><a href="https://my.gov.uz/uz" target="_blank" rel="noopener noreferrer">my.gov.uz ↗</a><a href="https://gov.uz/oz" target="_blank" rel="noopener noreferrer">gov.uz ↗</a><a href="https://lex.uz/uz/" target="_blank" rel="noopener noreferrer">LEX.UZ ↗</a><a href="https://murojaat.gov.uz/" target="_blank" rel="noopener noreferrer">Murojaat.gov.uz ↗</a><a href="./startap-yoli.html">Startap yo‘li</a><a href="./laboratoriya.html">3D laboratoriya</a><a href="./assessment.html">Bilim sinovlari</a><a href="./privacy.html">Maxfiylik bildirishnomasi</a></div><div class="legal">© <span id="year"></span> Yoshlar-Ishi. Mustaqil platforma — davlat tashkilotining rasmiy sayti emas. Tashqi portallarning xizmat shartlari, ma’lumotlari va muddatlarini ularning o‘zida tekshiring. Davlat xizmatlariga kirish yoki rasmiy murojaat yuborish tegishli portalda amalga oshiriladi.</div></footer>
-<script src="config.js"></script><script>
+<script src="config.js"></script>
+<script>window.YI_AUTH_READY=import("./auth-bridge.js").then(()=>window.YI_AUTH).catch(error=>{console.error("YI Auth bridge failed",error);throw error;});</script>
+<script>
 (()=>{"use strict";
 const cfg=window.YI_CONFIG,base=cfg.supabaseUrl.replace(/\/$/,"")+"/rest/v1/",anon=cfg.supabaseAnonKey;
 const baseHeaders={"apikey":anon,"Authorization":"Bearer "+anon,"Content-Type":"application/json"};
@@ -284,13 +286,30 @@ const $=id=>document.getElementById(id);
 $("year").textContent=new Date().getFullYear();
 const tell=(id,text,error=false)=>{const e=$(id);e.textContent=text;e.classList.toggle("error",error)};
 const trim=id=>$(id).value.trim();
-async function api(path,opts={}){const headers={...baseHeaders,...(opts.headers||{})};const accountToken=sessionStorage.getItem("yi_user_token");if(accountToken)headers.Authorization="Bearer "+accountToken;const res=await fetch(base+path,{...opts,headers});if(!res.ok){let body="";try{body=await res.text()}catch{}throw Error("So‘rov bajarilmadi ("+res.status+"). "+body.slice(0,120))}if(res.status===204)return null;return res.json()}
+async function authIdentity(){
+ const bridge=await window.YI_AUTH_READY;
+ if(!bridge)throw Error("Kirish xizmati yuklanmadi. Sahifani yangilang.");
+ return bridge.getIdentity();
+}
+async function authHeaders(extra={}){
+ const identity=await authIdentity();
+ return {"apikey":anon,"Authorization":"Bearer "+(identity?.session?.access_token||anon),"Content-Type":"application/json",...extra};
+}
+async function api(path,opts={}){
+ const headers=await authHeaders(opts.headers||{});
+ const res=await fetch(base+path,{...opts,headers});
+ if(!res.ok){let body="";try{body=await res.text()}catch{}throw Error("So‘rov bajarilmadi ("+res.status+"). "+body.slice(0,120))}
+ if(res.status===204)return null;return res.json();
+}
 async function submitCommunity(payload){
- const accountToken=sessionStorage.getItem("yi_user_token");
+ const identity=await authIdentity();
+ if(!identity){
+  window.location.href="./hamjamiyat.html?mode=login&returnTo="+encodeURIComponent("./index.html#tashabbus")+"#hpAuthGate";
+  throw Error("Tashabbus yuborish uchun avval shaxsiy hisobingizga kiring.");
+ }
+ const headers=await authHeaders();
  const response=await fetch(cfg.supabaseUrl.replace(/\/$/,"")+"/functions/v1/community-submit",{
-  method:"POST",
-  headers:{"apikey":anon,"Authorization":"Bearer "+(accountToken||anon),"Content-Type":"application/json"},
-  body:JSON.stringify(payload)
+  method:"POST",headers,body:JSON.stringify(payload)
  });
  const data=await response.json().catch(()=>({}));
  if(!response.ok||data.ok!==true)throw Error(data.error||"So‘rov vaqtincha bajarilmadi.");
@@ -534,10 +553,10 @@ async function loadShowcase(){
 }
 $("showcaseBoard").addEventListener("click",async e=>{
  const btn=e.target.closest("[data-vote]");if(!btn)return;
- const token=sessionStorage.getItem("yi_user_token"),userId=sessionStorage.getItem("yi_user_id");
- if(!token||!userId){window.location.href="./kabinet.html?from=vote";return}
+ const identity=await authIdentity();
+ if(!identity){window.location.href="./hamjamiyat.html?mode=login&returnTo="+encodeURIComponent("./index.html#top-tashabbuslar")+"#hpAuthGate";return}
  btn.disabled=true;
- try{await api("initiative_showcase_votes",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({showcase_id:btn.dataset.vote,voter_id:userId})});await loadShowcase()}
+ try{await api("initiative_showcase_votes",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({showcase_id:btn.dataset.vote,voter_id:identity.user.id})});await loadShowcase()}
  catch(e){btn.textContent=e.message.includes("(409)")?"Ovoz berilgan":"Ovoz berish shartini tekshiring";btn.disabled=true}
 });
 loadTeamBoard();loadShowcase();
