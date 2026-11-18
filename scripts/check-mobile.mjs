@@ -134,7 +134,8 @@ try{
     }
     if(item[0]==="/assessment.html"&&width===390){
      if(!(await page.locator(".yi-assessment-hero h1").innerText()).includes("Bilimingizni sinang"))fail(item[1]+" "+width,"assessment hero heading is missing");
-     if(!(await page.locator(".yi-assessment-partner").innerText()).includes("hozir yakunlangan testlar"))fail(item[1]+" "+width,"partner notice does not explain that completed test results will also be considered");
+     const partnerNotice=(await page.locator(".yi-assessment-partner").innerText()).toLowerCase();
+     if(!partnerNotice.includes("faqat platforma ichida")||!partnerNotice.includes("rasmiy imtihon"))fail(item[1]+" "+width,"partner notice must explain that scores are internal and are not an official exam or certificate");
      if(await page.locator("#yiAuthGate a.button").count()!==2)fail(item[1]+" "+width,"assessment sign-in and registration links are missing");
     }
     if(item[0]==="/index.html"&&width<=700){
