@@ -1,13 +1,7 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const cfg=window.YI_CONFIG||{};
-const base=String(cfg.supabaseUrl||"").replace(/\/$/,"");
-const key=cfg.supabaseKey||cfg.supabaseAnonKey||"";
-if(!base||!key)throw new Error("Supabase sozlamalari topilmadi. config.js faylini tekshiring.");
-
-const supabase=createClient(base,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce"}});
+import { supabase, getVerifiedIdentity } from "./auth-client.js";
 const $=id=>document.getElementById(id);
 const state={user:null,profile:null,cvAsset:null,tab:"feed",feed:[],directory:[],portfolio:[],activity:[],range:"week",commentOpen:new Set(),publicProfile:null};
+let authBusy=false,pendingConfirmationEmail="",authSyncPromise=null;
 const copy={
  profile_updated:"Profil yangilandi",post_created:"Yangi post joylandi",post_liked:"Postga layk bosildi",post_unliked:"Post layki olib tashlandi",comment_created:"Izoh yozildi",portfolio_added:"Portfolio ishi qo‘shildi",journey_progress:"Imkoniyat jarayoni yangilandi",lab_completed:"Laboratoriya mashqi yakunlandi",initiative_submitted:"Tashabbus yuborildi",assessment_completed:"Bilim sinovi yakunlandi",daily_visit:"Platformaga tashrif"
 };
@@ -24,8 +18,66 @@ const localDateKey=value=>{const p=new Intl.DateTimeFormat("en-CA",{timeZone:"As
 const avatarMarkup=(profile,cls="")=>profile?.avatar_url?'<span class="'+cls+'"><img src="'+esc(profile.avatar_url)+'" alt="" loading="lazy"></span>':'<span class="'+cls+'">'+esc(initials(profile?.display_name))+'</span>';
 function toast(message){const box=$("hpToast");box.textContent=message;box.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>box.classList.remove("show"),3200);}
 function errMessage(error){const s=String(error?.message||error||"Noma’lum xatolik");if(/Invalid login credentials/i.test(s))return "Email yoki parol noto‘g‘ri.";if(/Email not confirmed/i.test(s))return "Email manzilingiz tasdiqlanmagan. Emailingizga yuborilgan havolani oching.";if(/User already registered/i.test(s))return "Bu email bilan hisob mavjud. Kirish bo‘limidan foydalaning.";if(/rate limit/i.test(s))return "Juda ko‘p urinish bo‘ldi. Biroz kutib qayta urinib ko‘ring.";if(/provider is not enabled|unsupported provider/i.test(s))return "Google kirishi Youth-Ishi Supabase Auth sozlamasida hali yoqilmagan.";if(/Password should be at least/i.test(s))return "Parol kamida 10 belgidan iborat bo‘lishi kerak.";return s.slice(0,220);}
-function setAuthMode(mode){const register=mode==="register";document.querySelectorAll("[data-auth-mode]").forEach(b=>{const active=b.dataset.authMode===mode;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});$("hpNameField").hidden=!register;$("hpConfirmField").hidden=!register;$("hpConsent").hidden=!register;$("hpForgotPassword").hidden=register;$("hpAuthSubmit").innerHTML=register?'Hisob yaratish <span>→</span>':'Kirish <span>→</span>';$("hpPassword").autocomplete=register?"new-password":"current-password";$("hpAuthMessage").textContent="";$("hpAuthMessage").classList.remove("error");$("hpAuthForm").dataset.mode=mode; if(location.hash==="#register"&&register)$("hpName").focus();}
-function setTab(tab){if(!["feed","directory","profile","activity","settings"].includes(tab))tab="feed";state.tab=tab;document.querySelectorAll(".hp-side-menu [data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));document.querySelectorAll(".hp-tab-panel").forEach(p=>p.classList.remove("active"));$("hpPublicProfile").hidden=true;const panel=$("hpTab"+tab[0].toUpperCase()+tab.slice(1));if(panel)panel.classList.add("active");const title={feed:"Hamjamiyat markazi",directory:"Yoshlar katalogi",profile:"Shaxsiy profil",activity:"Faollik markazi",settings:"Hisob sozlamalari"};$("hpWelcomeTitle").textContent=title[tab];$("hpWelcomeText").textContent=tab==="feed"?"Faol yoshlar, loyihalar va natijalarni kuzating.":"Shaxsiy ma’lumotlaringiz va rivojlanish jarayoningizni boshqaring.";history.replaceState(null,"",location.pathname+"?tab="+tab);closeDrawer();if(tab==="feed")loadFeed();if(tab==="directory")loadDirectory();if(tab==="profile"){loadProfileForm();loadPortfolio();}if(tab==="activity")loadActivity();if(tab==="settings")loadSettings();}
+function safeReturnTarget(){
+ const raw=new URLSearchParams(location.search).get("returnTo");
+ if(!raw)return "";
+ try{
+  const url=new URL(raw,location.origin);
+  const allowed=new Set(["/index.html","/kabinet.html","/assessment.html","/imkoniyatlar.html","/davlat-xizmatlari.html","/startap-yoli.html","/laboratoriya.html"]);
+  if(url.origin!==location.origin||!allowed.has(url.pathname))return "";
+  return url.pathname+url.search+url.hash;
+ }catch{return ""}
+}
+function authCallbackUrl(mode=""){
+ const url=new URL("./hamjamiyat.html",location.origin),target=safeReturnTarget();
+ if(target)url.searchParams.set("returnTo",target);
+ if(mode)url.searchParams.set("auth",mode);
+ return url.toString();
+}
+function redirectAfterAuthentication(){const target=safeReturnTarget();if(target)location.replace(target);}
+function setAuthBusy(busy,label=""){
+ authBusy=!!busy;
+ [$("hpAuthSubmit"),$("hpGoogleLogin"),$("hpForgotPassword"),$("hpResendConfirmation"),$("hpRecoverySubmit")].filter(Boolean).forEach(button=>button.disabled=authBusy);
+ const submit=$("hpAuthSubmit");if(!submit)return;
+ if(authBusy){submit.dataset.idleHtml=submit.innerHTML;submit.innerHTML='<span class="hp-auth-spinner" aria-hidden="true"></span> '+(label||"Tekshirilmoqda…");}
+ else if(submit.dataset.idleHtml){submit.innerHTML=submit.dataset.idleHtml;delete submit.dataset.idleHtml;}
+}
+function validateStrongPassword(value){return value.length>=10&&/[A-Za-z]/.test(value)&&/\d/.test(value);}
+function updatePasswordStrength(){
+ const input=$("hpPassword"),meter=$("hpPasswordStrength");if(!input||!meter)return;
+ const value=input.value,score=[value.length>=10,/[A-Za-z]/.test(value),/\d/.test(value),/[^A-Za-z0-9]/.test(value)].filter(Boolean).length;
+ meter.hidden=($("hpAuthForm").dataset.mode||"login")!=="register";
+ meter.dataset.level=score>=4?"strong":score>=3?"medium":score>=1?"weak":"empty";
+ meter.textContent=!value?"Kamida 10 belgi, harf va raqam ishlating.":score>=4?"Kuchli parol":score>=3?"Yaxshi parol. Yana murakkablashtirish mumkin.":"Parolni kuchaytiring.";
+}
+function setPasswordVisibility(inputId,buttonId){
+ const input=$(inputId),button=$(buttonId);if(!input||!button)return;
+ const reveal=input.type==="password";input.type=reveal?"text":"password";
+ button.setAttribute("aria-pressed",String(reveal));button.setAttribute("aria-label",reveal?"Parolni yashirish":"Parolni ko‘rsatish");button.textContent=reveal?"◎":"◉";
+}
+function showPasswordRecovery(message=""){
+ $("hpAuthTabs").hidden=true;$("hpAuthForm").hidden=true;$("hpGoogleLogin").hidden=true;
+ $("hpForgotPassword").hidden=true;$("hpResendConfirmation").hidden=true;$("hpDivider").hidden=true;
+ $("hpRecoveryForm").hidden=false;say("hpAuthMessage",message||"Yangi parol yarating.");$("hpRecoveryPassword").focus();
+}
+function setAuthMode(mode){
+ const register=mode==="register";$("hpAuthTabs").hidden=false;
+ document.querySelectorAll("[data-auth-mode]").forEach(button=>{
+  const active=button.dataset.authMode===mode;button.classList.toggle("active",active);
+  button.setAttribute("aria-selected",String(active));button.tabIndex=active?0:-1;
+ });
+ $("hpNameField").hidden=!register;$("hpConfirmField").hidden=!register;$("hpConsent").hidden=!register;
+ $("hpForgotPassword").hidden=register;$("hpResendConfirmation").hidden=true;
+ $("hpAuthSubmit").innerHTML=register?'Hisob yaratish <span>→</span>':'Kirish <span>→</span>';
+ $("hpPassword").autocomplete=register?"new-password":"current-password";
+ $("hpName").required=register;$("hpConfirm").required=register;$("hpPrivacy").required=register;
+ $("hpPasswordStrength").hidden=!register;$("hpRecoveryForm").hidden=true;
+ $("hpAuthForm").hidden=false;$("hpGoogleLogin").hidden=false;$("hpDivider").hidden=false;
+ $("hpAuthMessage").textContent="";$("hpAuthMessage").classList.remove("error");
+ $("hpAuthForm").dataset.mode=mode;updatePasswordStrength();
+ if(register)$("hpName").focus();
+}
+function setTab(tab){if(!["feed","directory","profile","activity","settings"].includes(tab))tab="feed";state.tab=tab;document.querySelectorAll(".hp-side-menu [data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));document.querySelectorAll(".hp-tab-panel").forEach(p=>p.classList.remove("active"));$("hpPublicProfile").hidden=true;const panel=$("hpTab"+tab[0].toUpperCase()+tab.slice(1));if(panel)panel.classList.add("active");const title={feed:"Hamjamiyat markazi",directory:"Yoshlar katalogi",profile:"Shaxsiy profil",activity:"Faollik markazi",settings:"Hisob sozlamalari"};$("hpWelcomeTitle").textContent=title[tab];$("hpWelcomeText").textContent=tab==="feed"?"Faol yoshlar, loyihalar va natijalarni kuzating.":"Shaxsiy ma’lumotlaringiz va rivojlanish jarayoningizni boshqaring.";const nextUrl=new URL(location.href);nextUrl.searchParams.set("tab",tab);nextUrl.searchParams.delete("mode");nextUrl.searchParams.delete("auth");history.replaceState(null,"",nextUrl.pathname+nextUrl.search+nextUrl.hash);closeDrawer();if(tab==="feed")loadFeed();if(tab==="directory")loadDirectory();if(tab==="profile"){loadProfileForm();loadPortfolio();}if(tab==="activity")loadActivity();if(tab==="settings")loadSettings();}
 function openDrawer(){ $("hpDrawer").classList.add("open");$("hpDrawer").setAttribute("aria-hidden","false");$("hpDrawerBackdrop").hidden=false;$("hpMenuToggle").setAttribute("aria-expanded","true");document.body.style.overflow="hidden";$("hpDrawerClose").focus();}
 function closeDrawer(){ $("hpDrawer").classList.remove("open");$("hpDrawer").setAttribute("aria-hidden","true");$("hpDrawerBackdrop").hidden=true;$("hpMenuToggle").setAttribute("aria-expanded","false");document.body.style.overflow="";}
 function showAuth(message="",bad=false){$("hpAuthGate").hidden=false;$("hpAppShell").hidden=true;$("hpHeaderProfile").hidden=true;$("hpHeaderSignOut").hidden=true;if(message)say("hpAuthMessage",message,bad);}
@@ -51,10 +103,94 @@ function activeDates(){return [...new Set(state.activity.map(x=>localDateKey(x.c
 function renderActivity(){const events=state.activity;const now=new Date();const today=localDateKey(now);const dayCount=events.filter(e=>localDateKey(e.created_at)===today).length;const weekDate=new Date(Date.now()-7*86400000).toISOString();const monthDate=new Date(Date.now()-30*86400000).toISOString();$("hpTodayCount").textContent=dayCount;$("hpWeekCount").textContent=events.filter(e=>e.created_at>=weekDate).length;$("hpMonthCount").textContent=events.filter(e=>e.created_at>=monthDate).length;const dates=new Set(activeDates());let streak=0,cursor=new Date();while(streak<370){const key=localDateKey(cursor);if(!dates.has(key))break;streak++;cursor.setDate(cursor.getDate()-1);} $("hpStreakCount").textContent=streak;const counts={};events.forEach(e=>counts[e.event_type]=(counts[e.event_type]||0)+1);const total=Math.max(1,events.length);$("hpActivityBreakdown").innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<div class="hp-breakdown-row"><span>'+esc(copy[k]||k)+'</span><div class="hp-breakdown-track"><i style="width:'+Math.round(v/total*100)+'%"></i></div><b>'+v+'</b></div>').join("")||'<div class="hp-empty">Hali faollik qayd etilmagan.</div>';const recent=events.slice(0,9);$("hpActivityList").innerHTML=recent.map(e=>'<div class="hp-activity-item"><i>'+esc(icons[e.event_type]||"•")+'</i><span>'+esc(copy[e.event_type]||e.event_type)+'<small>'+new Intl.DateTimeFormat("uz-UZ",{dateStyle:"medium",timeStyle:"short",timeZone:"Asia/Tashkent"}).format(new Date(e.created_at))+'</small></span></div>').join("")||'<div class="hp-empty">Harakatlar shu yerda ko‘rinadi.</div>';drawChart(state.range);}
 function drawChart(range){state.range=range;document.querySelectorAll("[data-range]").forEach(b=>b.classList.toggle("active",b.dataset.range===range));let points=[],title="",format="";const now=new Date();if(range==="day"){title="Bugungi faollik · soat kesimida";points=Array.from({length:24},(_,h)=>({key:h,label:String(h).padStart(2,"0"),value:0}));state.activity.forEach(e=>{if(localDateKey(e.created_at)===localDateKey(now)){const hour=Number(new Intl.DateTimeFormat("en-US",{hour:"2-digit",hourCycle:"h23",timeZone:"Asia/Tashkent"}).format(new Date(e.created_at)));points[hour].value++;}});}else if(range==="week"){title="Oxirgi 7 kun";points=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));const key=localDateKey(d);return {key,label:new Intl.DateTimeFormat("uz-UZ",{weekday:"short",timeZone:"Asia/Tashkent"}).format(d),value:0};});state.activity.forEach(e=>{const k=localDateKey(e.created_at);const p=points.find(x=>x.key===k);if(p)p.value++;});}else if(range==="month"){title="Oxirgi 30 kun";points=Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(29-i));return {key:localDateKey(d),label:new Intl.DateTimeFormat("uz-UZ",{day:"2-digit",timeZone:"Asia/Tashkent"}).format(d),value:0};});state.activity.forEach(e=>{const p=points.find(x=>x.key===localDateKey(e.created_at));if(p)p.value++;});}else{title="Oxirgi 12 oy";points=Array.from({length:12},(_,i)=>{const d=new Date();d.setMonth(d.getMonth()-(11-i),1);const key=localDateKey(d).slice(0,7);return {key,label:new Intl.DateTimeFormat("uz-UZ",{month:"short",timeZone:"Asia/Tashkent"}).format(d),value:0};});state.activity.forEach(e=>{const p=points.find(x=>x.key===localDateKey(e.created_at).slice(0,7));if(p)p.value++;});}const max=Math.max(1,...points.map(p=>p.value));$("hpChartTitle").textContent=title;$("hpChartTotal").textContent="Jami: "+points.reduce((s,p)=>s+p.value,0);$("hpActivityChart").innerHTML=points.map(p=>'<div class="hp-chart-bar" title="'+esc(p.label)+': '+p.value+'"><i data-value="'+p.value+'" style="height:'+Math.max(3,p.value/max*100)+'%"></i><span>'+esc(p.label)+'</span></div>').join("");}
 function exportJson(name,object){const blob=new Blob([JSON.stringify(object,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name+"-"+localDateKey(new Date())+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
-async function ensureSignedIn(){const {data,error}=await supabase.auth.getSession();if(error)throw error;state.user=data.session?.user||null;if(!state.user){showAuth();return false;}await loadOrCreateProfile();showApp();await supabase.rpc("record_member_daily_visit");await Promise.all([loadFeed(),loadDirectory(),loadActivity()]);if(location.search.includes("profile=")){const slug=new URLSearchParams(location.search).get("profile");if(slug)await showProfileBySlug(slug);}else{const tab=new URLSearchParams(location.search).get("tab")||"feed";setTab(tab);}return true;}
-async function authSubmit(event){event.preventDefault();const mode=$("hpAuthForm").dataset.mode||"login",email=clean($("hpEmail").value).toLowerCase(),password=$("hpPassword").value;const button=$("hpAuthSubmit");button.disabled=true;say("hpAuthMessage","Hisob tekshirilmoqda…");try{if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error("Email manzilini to‘g‘ri kiriting.");if(password.length<10)throw new Error("Parol kamida 10 belgidan iborat bo‘lsin.");if(mode==="register"){const name=clean($("hpName").value);if(name.length<3||name.split(/\s+/).length<2)throw new Error("Ism va familiyani to‘liq yozing.");if(password!==$("hpConfirm").value)throw new Error("Parollar bir xil emas.");if(!/[A-Za-z]/.test(password)||!/\d/.test(password))throw new Error("Parolda kamida bitta harf va bitta raqam bo‘lsin.");if(!$("hpPrivacy").checked)throw new Error("Maxfiylik shartlariga rozilikni belgilang.");const {data,error}=await supabase.auth.signUp({email,password,options:{data:{full_name:name,name},emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(!data.session){say("hpAuthMessage","Hisob yaratildi. Emailingizga kelgan tasdiqlash havolasini oching, keyin kiring.");return;}}else{const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;}await ensureSignedIn();say("hpAuthMessage","Kirish muvaffaqiyatli.");}catch(e){say("hpAuthMessage",errMessage(e),true);}finally{button.disabled=false;}}
-async function googleLogin(){const b=$("hpGoogleLogin");b.disabled=true;say("hpAuthMessage","Google oynasi ochilmoqda…");try{const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+location.pathname+"?tab=feed"}});if(error)throw error;}catch(e){say("hpAuthMessage",errMessage(e),true);b.disabled=false;}}
-async function forgotPassword(){const email=clean($("hpEmail").value).toLowerCase();if(!email){say("hpAuthMessage","Avval email manzilini kiriting.",true);$("hpEmail").focus();return;}try{const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname+"?tab=settings"});if(error)throw error;say("hpAuthMessage","Parolni tiklash havolasi emailingizga yuborildi.");}catch(e){say("hpAuthMessage",errMessage(e),true);}}
+async function ensureSignedIn(){
+ const identity=await getVerifiedIdentity(),nextUser=identity?.user||null;
+ if(!nextUser){state.user=null;state.profile=null;state.cvAsset=null;showAuth();return false;}
+ if(state.user?.id&&state.user.id!==nextUser.id){
+  state.profile=null;state.cvAsset=null;state.feed=[];state.directory=[];state.portfolio=[];state.activity=[];state.commentOpen.clear();
+ }
+ state.user=nextUser;await loadOrCreateProfile();showApp();
+ await supabase.rpc("record_member_daily_visit");
+ await Promise.all([loadFeed(),loadDirectory(),loadActivity()]);
+ const params=new URLSearchParams(location.search);
+ if(params.get("profile"))await showProfileBySlug(params.get("profile"));
+ else setTab(params.get("tab")||"feed");
+ return true;
+}
+async function authSubmit(event){
+ event.preventDefault();if(authBusy)return;
+ const mode=$("hpAuthForm").dataset.mode||"login",email=clean($("hpEmail").value).toLowerCase(),password=$("hpPassword").value;
+ try{
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw Error("Email manzilini to‘g‘ri kiriting.");
+  if(!password)throw Error("Parolni kiriting.");
+  if(mode==="register"){
+   const name=clean($("hpName").value);
+   if(name.length<3||name.split(/\s+/).length<2)throw Error("Ism va familiyani to‘liq yozing.");
+   if(!validateStrongPassword(password))throw Error("Parol kamida 10 belgi, harf va raqamdan iborat bo‘lsin.");
+   if(password!==$("hpConfirm").value)throw Error("Parollar bir xil emas.");
+   if(!$("hpPrivacy").checked)throw Error("Maxfiylik siyosatiga rozilik belgilang.");
+   setAuthBusy(true,"Hisob yaratilmoqda…");
+   const {data,error}=await supabase.auth.signUp({email,password,options:{data:{full_name:name,name},emailRedirectTo:authCallbackUrl("confirmed")}});
+   if(error)throw error;
+   if(data.session){
+    await ensureSignedIn();say("hpAuthMessage","Hisob yaratildi. Platformaga xush kelibsiz.");redirectAfterAuthentication();
+   }else{
+    pendingConfirmationEmail=email;$("hpResendConfirmation").hidden=false;
+    say("hpAuthMessage","Ro‘yxatdan o‘tish so‘rovi qabul qilindi. Emailingizga yuborilgan tasdiqlash havolasini oching. Keyin shu sahifaga qayting.");
+   }
+   return;
+  }
+  setAuthBusy(true,"Hisob tekshirilmoqda…");
+  const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;
+  await ensureSignedIn();say("hpAuthMessage","Kirish muvaffaqiyatli. Shaxsiy ma’lumotlaringiz yuklandi.");redirectAfterAuthentication();
+ }catch(error){say("hpAuthMessage",errMessage(error),true);}
+ finally{setAuthBusy(false);}
+}
+async function resendConfirmation(){
+ if(authBusy)return;
+ const email=pendingConfirmationEmail||clean($("hpEmail").value).toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say("hpAuthMessage","Tasdiqlash xatini yuborish uchun email manzilini kiriting.",true);return;}
+ try{
+  setAuthBusy(true,"Xat yuborilmoqda…");
+  const {error}=await supabase.auth.resend({type:"signup",email,options:{emailRedirectTo:authCallbackUrl("confirmed")}});
+  if(error)throw error;
+  say("hpAuthMessage","Agar ushbu email tasdiqlashni kutayotgan hisobga tegishli bo‘lsa, yangi havola yuborildi. Spam papkasini ham tekshiring.");
+ }catch(error){say("hpAuthMessage",errMessage(error),true);}
+ finally{setAuthBusy(false);}
+}
+async function googleLogin(){
+ if(authBusy)return;
+ try{
+  setAuthBusy(true,"Google’ga ulanmoqda…");
+  const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:authCallbackUrl("google")}});
+  if(error)throw error;
+ }catch(error){say("hpAuthMessage",errMessage(error),true);setAuthBusy(false);}
+}
+async function forgotPassword(){
+ if(authBusy)return;
+ const email=clean($("hpEmail").value).toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say("hpAuthMessage","Avval to‘g‘ri email manzilini kiriting.",true);$("hpEmail").focus();return;}
+ try{
+  setAuthBusy(true,"So‘rov yuborilmoqda…");
+  const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:authCallbackUrl("recovery")});
+  if(error)throw error;
+  say("hpAuthMessage","Agar bu email hisobga ulangan bo‘lsa, parolni tiklash havolasi yuborildi. Xat kelmasa, Spam papkasini tekshiring.");
+ }catch(error){say("hpAuthMessage",errMessage(error),true);}
+ finally{setAuthBusy(false);}
+}
+async function finishPasswordRecovery(event){
+ event.preventDefault();if(authBusy)return;
+ const password=$("hpRecoveryPassword").value,confirm=$("hpRecoveryConfirm").value;
+ if(!validateStrongPassword(password)){say("hpRecoveryMessage","Parol kamida 10 belgi, harf va raqamdan iborat bo‘lsin.",true);return;}
+ if(password!==confirm){say("hpRecoveryMessage","Parollar mos kelmadi.",true);return;}
+ try{
+  setAuthBusy(true,"Parol yangilanmoqda…");
+  const identity=await getVerifiedIdentity({force:true});if(!identity)throw Error("Tiklash havolasi muddati tugagan. Yangi havola so‘rang.");
+  const {error}=await supabase.auth.updateUser({password});if(error)throw error;
+  $("hpRecoveryForm").reset();await ensureSignedIn();toast("Parol muvaffaqiyatli yangilandi.");
+ }catch(error){say("hpRecoveryMessage",errMessage(error),true);}
+ finally{setAuthBusy(false);}
+}
 async function uploadAvatar(file){if(!file)return;if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>4*1024*1024)throw new Error("Profil rasmi JPG, PNG yoki WebP bo‘lsin, hajmi 4 MB dan oshmasin.");const ext=file.type.split("/")[1].replace("jpeg","jpg");const path=state.user.id+"/"+Date.now()+"."+ext;const {error}=await supabase.storage.from("member-avatars").upload(path,file,{upsert:false,contentType:file.type,cacheControl:"3600"});if(error)throw error;const {data}=supabase.storage.from("member-avatars").getPublicUrl(path);const oldUrl=state.profile?.avatar_url||"";const {data:updated,error:updateError}=await supabase.from("member_profiles").update({avatar_url:data.publicUrl,updated_at:new Date().toISOString()}).eq("user_id",state.user.id).select(PROFILE_FIELDS).single();if(updateError){await supabase.storage.from("member-avatars").remove([path]);throw updateError;}state.profile=updated;const marker="/storage/v1/object/public/member-avatars/";if(oldUrl.includes(marker)){const oldPath=oldUrl.split(marker)[1].split("?")[0];if(oldPath&&oldPath.startsWith(state.user.id+"/"))await supabase.storage.from("member-avatars").remove([decodeURIComponent(oldPath)]);}updateHeader();await loadProfileForm();toast("Profil rasmi yangilandi.");}
 async function saveProfile(event){event.preventDefault();const button=$("hpProfileSave");button.disabled=true;say("hpProfileMessage","Profil saqlanmoqda…");try{const payload={display_name:clean($("hpDisplayName").value),headline:clean($("hpHeadline").value),bio:clean($("hpBio").value),city:clean($("hpCity").value),district:clean($("hpDistrict").value),website_url:clean($("hpWebsite").value),github_url:clean($("hpGithub").value),linkedin_url:clean($("hpLinkedin").value),skills:splitList($("hpSkills").value),interests:splitList($("hpInterests").value),education:fromLines($("hpEducation").value),experience:fromLines($("hpExperience").value),achievements:fromLines($("hpAchievements").value),updated_at:new Date().toISOString()};for(const field of ["website_url","github_url","linkedin_url"]){if(payload[field]&&!/^https:\/\//i.test(payload[field]))throw new Error("Sayt va ijtimoiy havolalar https:// bilan boshlansin.");}const {data,error}=await supabase.from("member_profiles").update(payload).eq("user_id",state.user.id).select(PROFILE_FIELDS).single();if(error)throw error;state.profile=data;updateHeader();profileCompletion(data);say("hpProfileMessage","Profil ma’lumotlari saqlandi.");toast("Profil yangilandi.");}catch(e){say("hpProfileMessage",errMessage(e),true);}finally{button.disabled=false;}}
 async function savePost(event){event.preventDefault();const button=$("hpPostSubmit"),body=clean($("hpPostBody").value),files=$("hpPostImages").files,postType=$("hpPostType").value;if(!body&&!files.length){say("hpPostMessage","Post matnini yozing yoki rasm tanlang.",true);return;}if(files.length>6){say("hpPostMessage","Bir postga 6 tadan ortiq rasm qo‘shib bo‘lmaydi.",true);return;}if(!postTypeLabels[postType]){say("hpPostMessage","Post yo‘nalishini tanlang.",true);return;}button.disabled=true;say("hpPostMessage","Rasmlar yuklanmoqda…");let paths=[],inserted=false;try{paths=files.length?await uploadFiles("member-post-media",files,state.user.id,10*1024*1024):[];const {error}=await supabase.from("member_posts").insert({author_id:state.user.id,body,media_paths:paths,post_type:postType,visibility:$("hpPostVisibility").value,status:"published"});if(error)throw error;inserted=true;$("hpPostForm").reset();$("hpPostType").value="project";$("hpPostVisibility").value="members";$("hpPostFileHint").textContent="6 tagacha rasm · JPG, PNG yoki WebP";say("hpPostMessage","Post joylandi.");toast("Post hamjamiyatga qo‘shildi.");const refresh=await Promise.allSettled([loadFeed(),loadActivity()]);if(refresh.some(x=>x.status==="rejected"))say("hpPostMessage","Post saqlandi, ammo lentani yangilashda xatolik bo‘ldi. “Yangilash” tugmasini bosing.",true);}catch(e){if(!inserted&&paths.length)await supabase.storage.from("member-post-media").remove(paths);say("hpPostMessage",errMessage(e),true);}finally{button.disabled=false;}}
@@ -66,11 +202,56 @@ async function saveCv(event){event.preventDefault();const file=$("hpCvInput").fi
 async function addPortfolio(event){event.preventDefault();const b=$("hpPortfolioSave");b.disabled=true;say("hpPortfolioMessage","Portfolio saqlanmoqda…");let paths=[],inserted=false;try{const files=$("hpPortfolioImages").files;if(files.length>6)throw new Error("6 tagacha rasm tanlang.");paths=files.length?await uploadFiles("member-post-media",files,state.user.id,10*1024*1024):[];const payload={user_id:state.user.id,title:clean($("hpPortfolioTitle").value),description:clean($("hpPortfolioDescription").value),category:$("hpPortfolioCategory").value,media_paths:paths,project_url:clean($("hpPortfolioUrl").value),visibility:$("hpPortfolioPublic").checked?"members":"only_me"};if(payload.project_url&&!/^https:\/\//i.test(payload.project_url))throw new Error("Havola https:// bilan boshlanishi kerak.");const {error}=await supabase.from("member_portfolio_items").insert(payload);if(error)throw error;inserted=true;$("hpPortfolioForm").reset();$("hpPortfolioPublic").checked=true;say("hpPortfolioMessage","Portfolio ishi qo‘shildi.");const refresh=await Promise.allSettled([loadPortfolio(),loadActivity()]);if(refresh.some(x=>x.status==="rejected"))say("hpPortfolioMessage","Portfolio saqlandi, ammo galereyani yangilashda xatolik bo‘ldi.",true);}catch(e){if(!inserted&&paths.length)await supabase.storage.from("member-post-media").remove(paths);say("hpPortfolioMessage",errMessage(e),true);}finally{b.disabled=false;}}
 async function deletePortfolio(id){if(!confirm("Portfolio yozuvini o‘chirasizmi?"))return;const item=state.portfolio.find(x=>x.id===id);const {error}=await supabase.from("member_portfolio_items").delete().eq("id",id).eq("user_id",state.user.id);if(error){toast(errMessage(error));return;}if(item?.media_paths?.length)await supabase.storage.from("member-post-media").remove(item.media_paths);await Promise.all([loadPortfolio(),loadActivity()]);}
 async function savePrivacy(event){event.preventDefault();const visibility=$("hpVisibility").value,show=visibility==="private"?false:$("hpDiscoverable").checked,cvPublic=$("hpPublicCv").checked;if(cvPublic&&!state.cvAsset?.cv_object_path){say("hpPrivacyMessage","Avval profilingizga CV yuklang.",true);return;}if(cvPublic&&(visibility!=="members"||!show)){say("hpPrivacyMessage","CV’ni ulashish uchun profil hamjamiyat katalogida ochiq bo‘lishi kerak.",true);return;}const button=$("hpPrivacySave");if(button)button.disabled=true;say("hpPrivacyMessage","Maxfiylik sozlamalari xavfsiz saqlanmoqda…");try{const {data,error}=await supabase.rpc("save_member_privacy_settings",{p_visibility:visibility,p_show_in_directory:show,p_cv_is_public:cvPublic});if(error)throw error;if(data!==true)throw new Error("Maxfiylik sozlamalari saqlanmadi.");const [profile,cv]=await Promise.all([supabase.from("member_profiles").select(PROFILE_FIELDS).eq("user_id",state.user.id).single(),supabase.from("member_private_assets").select("cv_object_path,cv_is_public").eq("user_id",state.user.id).maybeSingle()]);if(profile.error)throw profile.error;if(cv.error)throw cv.error;state.profile=profile.data;state.cvAsset=cv.data||{cv_object_path:"",cv_is_public:false};updateHeader();say("hpPrivacyMessage","Profil va CV maxfiyligi bir vaqtda saqlandi.");toast("Maxfiylik sozlamalari yangilandi.");}catch(e){say("hpPrivacyMessage",errMessage(e),true);}finally{if(button)button.disabled=false;}}
-async function changePassword(event){event.preventDefault();const p=$("hpNewPassword").value,c=$("hpNewPasswordConfirm").value;if(p.length<10||!/[A-Za-z]/.test(p)||!/\d/.test(p)){say("hpPasswordMessage","Parol kamida 10 belgi, harf va raqamdan iborat bo‘lsin.",true);return;}if(p!==c){say("hpPasswordMessage","Parollar mos kelmadi.",true);return;}const {error}=await supabase.auth.updateUser({password:p});if(error){say("hpPasswordMessage",errMessage(error),true);return;}$("hpPasswordForm").reset();say("hpPasswordMessage","Parol yangilandi.");}
+async function changePassword(event){event.preventDefault();if(authBusy)return;const p=$("hpNewPassword").value,c=$("hpNewPasswordConfirm").value;if(!validateStrongPassword(p)){say("hpPasswordMessage","Parol kamida 10 belgi, harf va raqamdan iborat bo‘lsin.",true);return;}if(p!==c){say("hpPasswordMessage","Parollar mos kelmadi.",true);return;}const button=$("hpPasswordForm").querySelector('button[type="submit"]');button.disabled=true;say("hpPasswordMessage","Parol yangilanmoqda…");try{const identity=await getVerifiedIdentity({force:true});if(!identity)throw Error("Sessiya muddati tugagan. Qayta kiring.");const {error}=await supabase.auth.updateUser({password:p});if(error)throw error;$("hpPasswordForm").reset();say("hpPasswordMessage","Parol yangilandi.");}catch(error){say("hpPasswordMessage",errMessage(error),true);}finally{button.disabled=false;}}
 async function exportAll(){const data={profile:state.profile,posts:state.feed.filter(x=>x.author_id===state.user.id),portfolio:state.portfolio,activity:state.activity,exported_at:new Date().toISOString()};exportJson("yoshlar-ishi-hisob-malumotlari",data);}
-async function signOut(){await supabase.auth.signOut();state.user=null;state.profile=null;showAuth("Hisobdan chiqildi.");}
+async function signOut(){try{const {error}=await supabase.auth.signOut();if(error)throw error;state.user=null;state.profile=null;state.cvAsset=null;state.feed=[];state.directory=[];state.portfolio=[];state.activity=[];state.commentOpen.clear();showAuth("Hisobdan chiqildi. Sessiya yakunlandi.");}catch(error){toast("Hisobdan chiqishda xatolik: "+errMessage(error));}}
 async function handleClick(event){const t=event.target.closest("[data-tab],[data-open-tab],[data-profile],[data-like],[data-comments],[data-delete-post],[data-delete-portfolio],[data-range]");if(!t)return;if(t.dataset.tab){setTab(t.dataset.tab);return;}if(t.dataset.openTab){setTab(t.dataset.openTab);return;}if(t.dataset.profile){try{await showProfileBySlug(t.dataset.profile);}catch(e){toast("Profilni yuklab bo‘lmadi: "+errMessage(e));}return;}if(t.dataset.like){await toggleLike(t.dataset.like,t);return;}if(t.dataset.comments){const postId=t.dataset.comments,panel=document.querySelector('[data-comment-panel="'+postId+'"]');panel.hidden=!panel.hidden;if(!panel.hidden&&!state.commentOpen.has(postId)){state.commentOpen.add(postId);await loadComments(postId);}return;}if(t.dataset.deletePost){await deletePost(t.dataset.deletePost);return;}if(t.dataset.deletePortfolio){await deletePortfolio(t.dataset.deletePortfolio);return;}if(t.dataset.range){drawChart(t.dataset.range);}}
-function bindEvents(){document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));$("hpAuthForm").addEventListener("submit",authSubmit);$("hpGoogleLogin").addEventListener("click",googleLogin);$("hpForgotPassword").addEventListener("click",forgotPassword);$("hpPasswordToggle").addEventListener("click",()=>{const p=$("hpPassword");p.type=p.type==="password"?"text":"password";});$("hpThemeToggle").addEventListener("click",()=>{document.body.classList.toggle("hp-dark");localStorage.setItem("yi-community-theme",document.body.classList.contains("hp-dark")?"dark":"light");});if(localStorage.getItem("yi-community-theme")==="dark")document.body.classList.add("hp-dark");$("hpMenuToggle").addEventListener("click",openDrawer);$("hpDrawerClose").addEventListener("click",closeDrawer);$("hpDrawerBackdrop").addEventListener("click",closeDrawer);$("hpHeaderProfile").addEventListener("click",()=>setTab("profile"));$("hpHeaderSignOut").addEventListener("click",signOut);$("hpSignOut").addEventListener("click",signOut);$("hpRefreshAll").addEventListener("click",()=>ensureSignedIn().then(()=>toast("Ma’lumotlar yangilandi.")));$("hpFeedRefresh").addEventListener("click",loadFeed);$("hpFeedSearch").addEventListener("input",()=>renderFeedSearch());$("hpDirectorySearch").addEventListener("input",renderDirectory);$("hpDirectoryDistrict").addEventListener("change",renderDirectory);$("hpDirectorySkill").addEventListener("change",renderDirectory);$("hpFeedType").addEventListener("change",renderFeedSearch);$("hpPostForm").addEventListener("submit",savePost);$("hpProfileForm").addEventListener("submit",saveProfile);$("hpAvatarInput").addEventListener("change",async e=>{try{await uploadAvatar(e.target.files[0]);}catch(x){toast(errMessage(x));}finally{e.target.value="";}});$("hpCvForm").addEventListener("submit",saveCv);$("hpPortfolioForm").addEventListener("submit",addPortfolio);$("hpPrivacyForm").addEventListener("submit",savePrivacy);$("hpPasswordForm").addEventListener("submit",changePassword);$("hpExportProfile").addEventListener("click",()=>exportJson("yoshlar-ishi-profil",state.profile));$("hpExportAll").addEventListener("click",exportAll);$("hpBackToDirectory").addEventListener("click",()=>{history.replaceState(null,"",location.pathname+"?tab=directory");setTab("directory");});$("hpPostImages").addEventListener("change",e=>{$("hpPostFileHint").textContent=e.target.files.length?e.target.files.length+" ta rasm tanlandi":"6 tagacha rasm · JPG, PNG yoki WebP";});document.body.addEventListener("click",handleClick);document.body.addEventListener("submit",e=>{const f=e.target.closest("[data-comment-form]");if(f){e.preventDefault();addComment(e,f.dataset.commentForm);}});document.body.addEventListener("click",e=>{const button=e.target.closest("#hpPublicProfile [data-open-tab]");if(button){setTab(button.dataset.openTab);}});document.querySelectorAll(".hp-side-menu [data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));document.querySelectorAll(".hp-drawer-section [data-open-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.openTab)));document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});}
+function bindEvents(){document.querySelectorAll("[data-auth-mode]").forEach(b=>b.addEventListener("click",()=>setAuthMode(b.dataset.authMode)));$("hpAuthForm").addEventListener("submit",authSubmit);$("hpRecoveryForm").addEventListener("submit",finishPasswordRecovery);$("hpRecoveryBack").addEventListener("click",()=>{setAuthMode("login");say("hpAuthMessage","Yangi tiklash havolasi uchun email manzilingizni kiriting.");});$("hpGoogleLogin").addEventListener("click",googleLogin);$("hpForgotPassword").addEventListener("click",forgotPassword);$("hpResendConfirmation").addEventListener("click",resendConfirmation);$("hpPasswordToggle").addEventListener("click",()=>setPasswordVisibility("hpPassword","hpPasswordToggle"));$("hpConfirmToggle").addEventListener("click",()=>setPasswordVisibility("hpConfirm","hpConfirmToggle"));$("hpPassword").addEventListener("input",updatePasswordStrength);$("hpThemeToggle").addEventListener("click",()=>{document.body.classList.toggle("hp-dark");localStorage.setItem("yi-community-theme",document.body.classList.contains("hp-dark")?"dark":"light");});if(localStorage.getItem("yi-community-theme")==="dark")document.body.classList.add("hp-dark");$("hpMenuToggle").addEventListener("click",openDrawer);$("hpDrawerClose").addEventListener("click",closeDrawer);$("hpDrawerBackdrop").addEventListener("click",closeDrawer);$("hpHeaderProfile").addEventListener("click",()=>setTab("profile"));$("hpHeaderSignOut").addEventListener("click",signOut);$("hpSignOut").addEventListener("click",signOut);$("hpRefreshAll").addEventListener("click",()=>ensureSignedIn().then(()=>toast("Ma’lumotlar yangilandi.")));$("hpFeedRefresh").addEventListener("click",loadFeed);$("hpFeedSearch").addEventListener("input",()=>renderFeedSearch());$("hpDirectorySearch").addEventListener("input",renderDirectory);$("hpDirectoryDistrict").addEventListener("change",renderDirectory);$("hpDirectorySkill").addEventListener("change",renderDirectory);$("hpFeedType").addEventListener("change",renderFeedSearch);$("hpPostForm").addEventListener("submit",savePost);$("hpProfileForm").addEventListener("submit",saveProfile);$("hpAvatarInput").addEventListener("change",async e=>{try{await uploadAvatar(e.target.files[0]);}catch(x){toast(errMessage(x));}finally{e.target.value="";}});$("hpCvForm").addEventListener("submit",saveCv);$("hpPortfolioForm").addEventListener("submit",addPortfolio);$("hpPrivacyForm").addEventListener("submit",savePrivacy);$("hpPasswordForm").addEventListener("submit",changePassword);$("hpExportProfile").addEventListener("click",()=>exportJson("yoshlar-ishi-profil",state.profile));$("hpExportAll").addEventListener("click",exportAll);$("hpBackToDirectory").addEventListener("click",()=>{history.replaceState(null,"",location.pathname+"?tab=directory");setTab("directory");});$("hpPostImages").addEventListener("change",e=>{$("hpPostFileHint").textContent=e.target.files.length?e.target.files.length+" ta rasm tanlandi":"6 tagacha rasm · JPG, PNG yoki WebP";});document.body.addEventListener("click",handleClick);document.body.addEventListener("submit",e=>{const f=e.target.closest("[data-comment-form]");if(f){e.preventDefault();addComment(e,f.dataset.commentForm);}});document.body.addEventListener("click",e=>{const button=e.target.closest("#hpPublicProfile [data-open-tab]");if(button){setTab(button.dataset.openTab);}});document.querySelectorAll(".hp-side-menu [data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));document.querySelectorAll(".hp-drawer-section [data-open-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.openTab)));document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});}
 function renderFeedSearch(){const t=clean($("hpFeedSearch").value).toLocaleLowerCase("uz"),type=$("hpFeedType").value;document.querySelectorAll(".hp-post-card[data-post-type]").forEach(card=>{const text=card.textContent.toLocaleLowerCase("uz"),typeMatch=type==="all"||card.dataset.postType===type;card.hidden=!typeMatch||!!t&&!text.includes(t);});}
-async function boot(){bindEvents();setAuthMode(new URLSearchParams(location.search).get("mode")==="register"||location.hash==="#register"?"register":"login");try{await ensureSignedIn();}catch(e){showAuth(errMessage(e),true);}supabase.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT"){state.user=null;state.profile=null;showAuth();}else if(event==="SIGNED_IN"&&session?.user&&!state.user){state.user=session.user;ensureSignedIn().catch(e=>showAuth(errMessage(e),true));}});}
+async function handleAuthStateChange(event,session){
+ if(event==="PASSWORD_RECOVERY"){
+  const identity=await getVerifiedIdentity({force:true});
+  if(identity)showPasswordRecovery("Email orqali tasdiqlandi. Endi yangi parol belgilang.");
+  else showAuth("Tiklash havolasi yaroqsiz yoki muddati tugagan. Yangi havola so‘rang.",true);
+  return;
+ }
+ if(event==="SIGNED_OUT"){
+  state.user=null;state.profile=null;state.cvAsset=null;state.feed=[];state.directory=[];state.portfolio=[];state.activity=[];state.commentOpen.clear();
+  showAuth("Hisobdan chiqildi.");return;
+ }
+ if(event==="SIGNED_IN"||event==="INITIAL_SESSION"||event==="USER_UPDATED"){
+  const identity=await getVerifiedIdentity({force:true});if(!identity){showAuth();return;}
+  if(state.user?.id!==identity.user.id){state.user=null;state.profile=null;state.cvAsset=null;state.feed=[];state.directory=[];state.portfolio=[];state.activity=[];state.commentOpen.clear();}
+  if(!state.user)await loadAuthState();
+  if(event==="SIGNED_IN")redirectAfterAuthentication();
+ }
+}
+async function loadAuthState(){
+ if(authSyncPromise)return authSyncPromise;
+ authSyncPromise=ensureSignedIn();
+ try{return await authSyncPromise;}finally{authSyncPromise=null;}
+}
+async function boot(){
+ bindEvents();
+ const params=new URLSearchParams(location.search);
+ setAuthMode(params.get("mode")==="register"?"register":"login");
+ supabase.auth.onAuthStateChange((event,session)=>{
+  window.setTimeout(()=>{handleAuthStateChange(event,session).catch(error=>showAuth(errMessage(error),true));},0);
+ });
+ try{
+  const identity=await getVerifiedIdentity({force:true});
+  if(params.get("auth")==="recovery"){
+   if(identity)showPasswordRecovery("Parolni tiklash havolasi tasdiqlandi. Yangi parol yarating.");
+   else showAuth("Tiklash havolasi eskirgan yoki noto‘g‘ri. Qayta so‘rov yuboring.",true);
+  }else if(identity){
+   await loadAuthState();
+   if(params.get("auth")==="confirmed")say("hpAuthMessage","Email manzilingiz tasdiqlandi. Hisobingiz faollashtirildi.");
+   redirectAfterAuthentication();
+  }else{
+   showAuth();
+   if(params.get("auth")==="confirmed")say("hpAuthMessage","Email tasdiqlandi. Endi email va parolingiz bilan kiring.");
+  }
+ }catch(error){showAuth(errMessage(error),true);}
+}
+boot();
 boot();
