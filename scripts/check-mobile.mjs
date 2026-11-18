@@ -99,10 +99,29 @@ try{
      if(await page.locator("#hpPassword").getAttribute("type")!=="text")fail(item[1]+" "+width,"password visibility control did not reveal the password");
      await page.locator("#hpPasswordToggle").click();
      if(await page.locator("#hpPassword").getAttribute("type")!=="password")fail(item[1]+" "+width,"password visibility control did not hide the password");
+     await page.locator("#hpName").fill("Test Foydalanuvchi");
+     await page.locator("#hpEmail").fill("invalid-email");
+     await page.locator("#hpPassword").fill("StrongPass123");
+     await page.locator("#hpConfirm").fill("StrongPass123");
+     await page.locator("#hpPrivacy").check();
+     await page.locator("#hpAuthSubmit").click();
+     if(!(await page.locator("#hpAuthMessage").innerText()).includes("Email manzilini to‘g‘ri kiriting"))fail(item[1]+" "+width,"registration did not validate email before contacting Supabase");
+     await page.locator("#hpEmail").fill("ui-check@example.invalid");
+     await page.locator("#hpConfirm").fill("DifferentPass123");
+     await page.locator("#hpAuthSubmit").click();
+     if(!(await page.locator("#hpAuthMessage").innerText()).includes("Parollar bir xil emas"))fail(item[1]+" "+width,"registration did not validate matching passwords");
+     await page.locator("#hpConfirm").fill("StrongPass123");
+     await page.locator("#hpPrivacy").uncheck();
+     await page.locator("#hpAuthSubmit").click();
+     if(!(await page.locator("#hpAuthMessage").innerText()).includes("rozilik"))fail(item[1]+" "+width,"registration did not require privacy consent");
      await page.locator('[data-auth-mode="login"]').click();
      if(!(await page.locator("#hpNameField").isHidden()))fail(item[1]+" "+width,"login mode retained registration-only fields");
      if(await page.locator("#hpForgotPassword").isHidden())fail(item[1]+" "+width,"password reset action is not visible");
      if(await page.locator("#hpRecoveryForm").isVisible())fail(item[1]+" "+width,"password recovery form is visible without a verified recovery session");
+     await page.locator("#hpEmail").fill("invalid-email");
+     await page.locator("#hpPassword").fill("wrong-password");
+     await page.locator("#hpAuthSubmit").click();
+     if(!(await page.locator("#hpAuthMessage").innerText()).includes("Email manzilini to‘g‘ri kiriting"))fail(item[1]+" "+width,"login did not validate email before contacting Supabase");
     }
     if(item[0]==="/kabinet.html"&&width===390){
      if(await page.locator("#authLinks a").count()!==2)fail(item[1]+" "+width,"central login and registration links are missing");
