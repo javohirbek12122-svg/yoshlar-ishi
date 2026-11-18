@@ -490,11 +490,11 @@ assert.ok(memberHtml.includes('id="hpRecoveryForm"') && memberHtml.includes('id=
 assert.doesNotMatch(memberJs,/sessionStorage.*yi_user_token/,"Community page must not duplicate the access token");
 assert.ok(opportunities.includes("YI_AUTH_READY") && opportunities.includes("getIdentity"),"Opportunity catalogue must use shared Supabase Auth");
 assert.doesNotMatch(opportunities,/yi_user_token|yi_user_refresh|yi_user_id|auth[./]v1[./]user|auth[./]v1[./]token/,"Opportunity catalogue must not manage a duplicate session or refresh flow");
-const laboratory = read("laboratoriya.html");
-assert.ok(laboratory.includes('import { supabase, getVerifiedIdentity } from "./auth-client.js"'),"3D laboratory must use the shared authenticated client");
-assert.doesNotMatch(laboratory,/yi_user_token|yi_user_refresh|yi_user_id/,"3D laboratory must not duplicate user session tokens");
-assert.ok(laboratory.includes('supabase.from("lab_runs").insert(payload)') && laboratory.includes('supabase.from("lab_runs").delete()'),"3D laboratory saves and deletes must use the shared Supabase client");
-assert.ok(laboratory.includes('id="nazariya"') && laboratory.includes('href="#nazariya"'),"3D laboratory theory navigation must have a real target");
+const laboratoryAuthPage = read("laboratoriya.html");
+assert.ok(laboratoryAuthPage.includes('import { supabase, getVerifiedIdentity } from "./auth-client.js"'),"3D laboratory must use the shared authenticated client");
+assert.doesNotMatch(laboratoryAuthPage,/yi_user_token|yi_user_refresh|yi_user_id/,"3D laboratory must not duplicate user session tokens");
+assert.ok(laboratoryAuthPage.includes('supabase.from("lab_runs").insert(payload)') && laboratoryAuthPage.includes('supabase.from("lab_runs").delete()'),"3D laboratory saves and deletes must use the shared Supabase client");
+assert.ok(laboratoryAuthPage.includes('id="nazariya"') && laboratoryAuthPage.includes('href="#nazariya"'),"3D laboratory theory navigation must have a real target");
 assert.ok(opportunities.includes('mode=login#hpAuthGate') && opportunities.includes('mode=register#hpAuthGate'),"Opportunity catalogue must provide unified login and registration routes");
 assert.ok(assessment.includes('import { supabase, getVerifiedIdentity } from "./auth-client.js"'),"Assessment page must use the shared Auth client");
 assert.ok(!assessment.includes("createClient(") && !assessment.includes("auth.getSession()"),"Assessment page must not create an independent Auth client or trust an unverified local user");
