@@ -221,3 +221,7 @@ Sinovlar: `npm run check` (shu jumladan `scripts/check-assessment.mjs`).
 - The assessment and youth-opportunity catalogue now use the same `auth-client.js` / `auth-bridge.js` modules as the member area, homepage and initiatives cabinet.
 - Saved opportunity progress and assessment results load using the currently verified Supabase account. Switching accounts clears prior private screen state before loading the next account.
 - The administrator console intentionally retains its separate Google/allowlist authentication gate.
+
+
+## Auth konfiguratsiyasi
+Production Auth URL, email confirmation, server-side password policy, Google OAuth callback va ikki akkauntli RLS tekshiruvlari uchun [AUTH_SETUP.md](./AUTH_SETUP.md) qo‘llanmasiga qarang.
