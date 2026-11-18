@@ -49,8 +49,9 @@ function safeReturnTarget(){
   return url.pathname+url.search+url.hash;
  }catch{return ""}
 }
+const YI_PRODUCTION_ORIGIN="https://yoshlar-ishi-site.vercel.app";
 function authCallbackUrl(mode=""){
- const url=new URL("./hamjamiyat.html",location.origin),target=safeReturnTarget();
+ const url=new URL("/hamjamiyat.html",YI_PRODUCTION_ORIGIN),target=safeReturnTarget();
  if(target)url.searchParams.set("returnTo",target);
  if(mode)url.searchParams.set("auth",mode);
  return url.toString();
@@ -83,6 +84,8 @@ function showPasswordRecovery(message=""){
 }
 function setAuthMode(mode){
  const register=mode==="register";$("hpAuthTabs").hidden=false;
+ $("hpGoogleLabel").textContent=register?"Google orqali ro‘yxatdan o‘tish":"Google orqali kirish";
+ $("hpGoogleHint").textContent=register?"Google hisobingiz bilan tez ro‘yxatdan o‘ting. Davom etish orqali maxfiylik siyosatiga rozilik bildirasiz.":"Google hisobingiz bilan xavfsiz va tez kiring.";
  document.querySelectorAll("[data-auth-mode]").forEach(button=>{
   const active=button.dataset.authMode===mode;button.classList.toggle("active",active);
   button.setAttribute("aria-selected",String(active));button.tabIndex=active?0:-1;
@@ -181,11 +184,31 @@ async function resendConfirmation(){
 }
 async function googleLogin(){
  if(authBusy)return;
+ const mode=$("hpAuthForm").dataset.mode||"login";
+ if(mode==="register"&&!$("hpPrivacy").checked){
+  say("hpAuthMessage","Google orqali ro‘yxatdan o‘tishdan oldin maxfiylik siyosatiga rozilik bering.",true);
+  $("hpPrivacy").focus();
+  return;
+ }
+ if(location.origin!==YI_PRODUCTION_ORIGIN){
+  const target=new URL("/hamjamiyat.html",YI_PRODUCTION_ORIGIN);
+  target.searchParams.set("mode",mode);
+  const returnTarget=safeReturnTarget();
+  if(returnTarget)target.searchParams.set("returnTo",returnTarget);
+  location.assign(target.toString());
+  return;
+ }
  try{
   setAuthBusy(true,"Google’ga ulanmoqda…");
-  const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:authCallbackUrl("google")}});
+  const {error}=await supabase.auth.signInWithOAuth({
+   provider:"google",
+   options:{redirectTo:authCallbackUrl("google"),queryParams:{prompt:"select_account"}}
+  });
   if(error)throw error;
- }catch(error){say("hpAuthMessage",errMessage(error),true);setAuthBusy(false);}
+ }catch(error){
+  say("hpAuthMessage",errMessage(error),true);
+  setAuthBusy(false);
+ }
 }
 async function forgotPassword(){
  if(authBusy)return;
