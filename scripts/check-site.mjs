@@ -223,7 +223,7 @@ assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"')
 assert.match(admin, /create_user:false/);
 assert.match(admin, /verify.*type:"email"/);
 assert.match(admin, /token\?grant_type=password/);
-assert.ok(admin.includes('new URLSearchParams({provider:"google"') && admin.includes("redirect_to:redirect"), "Admin Google OAuth must use the configured provider and explicit callback URL");
+assert.ok(admin.includes("createPkcePair()") && admin.includes('provider:"google"') && admin.includes('code_challenge_method:"s256"') && admin.includes("token?grant_type=pkce") && admin.includes("code_verifier:verifier"), "Admin Google OAuth must use PKCE authorization-code exchange with a matching verifier");
 assert.doesNotMatch(admin, /create_user:true/);
 console.log("✓ Parkent-style admin OTP/password/Google gate uses a server-side allowlist RPC and prevents self-signup");
 const index = read("index.html");
