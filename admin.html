@@ -444,7 +444,7 @@ async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki S
 function toBase64Url(bytes){
  let binary="";
  bytes.forEach(byte=>{binary+=String.fromCharCode(byte)});
- return btoa(binary).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");
+ return btoa(binary).split("+").join("-").split("/").join("_").replace(/=+$/,"");
 }
 async function createPkcePair(){
  if(!window.crypto||!crypto.subtle)throw Error("Xavfsiz OAuth uchun HTTPS va zamonaviy brauzer kerak.");
