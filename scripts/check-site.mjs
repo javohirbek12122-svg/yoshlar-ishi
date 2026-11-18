@@ -297,7 +297,7 @@ assert.ok(liveHealthWorkflow.includes('curl --fail --silent --show-error --locat
 assert.match(liveHealthWorkflow, /Idorani toifasiga qarab toping/);
 assert.match(liveHealthWorkflow, /media-card/);
 for (const marker of [
-  "kelajagingiz uchun",
+  "imkoniyatdan amaliy natijagacha",
   'class="hero-expanded-copy"',
   'class="hero-storyline yi-hero-ribbon"',
   'id="afzalliklar"',
@@ -697,13 +697,13 @@ console.log("✓ AI quota and Telegram subscription tables are explicitly scoped
 const opportunityDesignHome = read("index.html");
 const opportunityStyles = read("site.css");
 for (const feature of [
-  '<title>Yoshlar-Ishi — kelajagingiz uchun birinchi qadam!</title>',
+  '<title>Yoshlar-Ishi — yoshlar uchun imkoniyatlar va yo‘l-yo‘riq</title>',
   '<link rel="stylesheet" href="./site.css">',
   'id="qo-shimcha-vositalar"',
   "Qo‘shimcha vositalar",
   "Bu vositalar asosiy davlat imkoniyatlari katalogidan alohida.",
-  "YANGI IMKONIYATLAR SARI!",
-  "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
+  "YOSHLAR UCHUN IMKONIYATLAR",
+  "IMKONIYAT · TAYYORGARLIK · ARIZA · NATIJA",
   "Imkoniyatlar",
   "href=\"./imkoniyatlar.html#savedJourneys\"",
   'class="hero-expanded-copy"',
@@ -812,8 +812,8 @@ for (const feature of [
   'id="ambientCanvas"',
   'class="hero-storyline yi-hero-ribbon"',
   'class="hero-story-step"',
-  'data-flow-label="IMKONIYAT · ARIZA · ISHTIROK · NATIJA"',
-  "IMKONIYAT · ARIZA · ISHTIROK · NATIJA",
+  'data-flow-label="IMKONIYAT · TAYYORGARLIK · ARIZA · NATIJA"',
+  "IMKONIYAT · TAYYORGARLIK · ARIZA · NATIJA",
   'id="readingProgress"',
   'id="draftReadiness"',
   'id="draftReadinessScore"',

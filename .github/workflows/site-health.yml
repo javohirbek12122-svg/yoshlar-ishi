@@ -89,7 +89,7 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
           # Wait briefly for the Vercel Git integration to finish the new production build.
           for attempt in $(seq 1 16); do
-            if grep -Fq 'yi-quick-panel' /tmp/yoshlar-home.html && grep -Fq 'yi-hero-quote' /tmp/yoshlar-home.html && grep -Fq 'href="./reference-home.css"' /tmp/yoshlar-home.html && grep -Fq 'kelajagingiz uchun' /tmp/yoshlar-home.html; then break; fi
+            if grep -Fq 'yi-quick-panel' /tmp/yoshlar-home.html && grep -Fq 'yi-hero-quote' /tmp/yoshlar-home.html && grep -Fq 'href="./reference-home.css"' /tmp/yoshlar-home.html && grep -Fq 'imkoniyatdan amaliy natijagacha' /tmp/yoshlar-home.html; then break; fi
             if [ "$attempt" -eq 16 ]; then echo "::error::The redesigned homepage has not reached the production alias yet."; exit 1; fi
             sleep 5
             curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/" -o /tmp/yoshlar-home.html
@@ -139,9 +139,9 @@ jobs:
           grep -Fqi '.showcase-empty-art' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the real-project portfolio empty-state styles."; exit 1; }
           grep -Fqi '.detail-btn' /tmp/yoshlar-site.css || { echo "::error::The live homepage is missing the dynamic team interest button styles."; exit 1; }
           # Markers detect a reachable but outdated deployment, not just a successful HTTP response.
-          grep -Fqi "kelajagingiz uchun" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: new Yoshlar-Ishi hero headline is missing."; exit 1; }
+          grep -Fqi "imkoniyatdan amaliy natijagacha" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: new Yoshlar-Ishi hero headline is missing."; exit 1; }
           grep -Fqi 'id="qo-shimcha-vositalar"' /tmp/yoshlar-home.html || { echo "::error::Homepage optional modules are not grouped."; exit 1; }
-          grep -Fqi "IMKONIYAT · ARIZA · ISHTIROK · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
+          grep -Fqi "IMKONIYAT · TAYYORGARLIK · ARIZA · NATIJA" /tmp/yoshlar-home.html || { echo "::error::The live homepage is outdated: opportunity-to-outcome identity is missing."; exit 1; }
           grep -Fqi 'Bu forma davlat idorasiga ariza yubormaydi.' /tmp/yoshlar-home.html || { echo "::error::The live initiative form is unclear about not submitting to a government agency."; exit 1; }
           grep -Fqi 'Yuborgan tashabbus holati' /tmp/yoshlar-home.html || { echo "::error::The live homepage does not distinguish internal initiative tracking."; exit 1; }
           grep -Fqi 'Yoshlar-Ishi platformasi bergan ichki kuzatuv kodini kiriting.' /tmp/yoshlar-home.html || { echo "::error::The live homepage is missing the internal tracking-code explanation."; exit 1; }
