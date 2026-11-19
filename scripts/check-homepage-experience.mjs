@@ -54,6 +54,11 @@ assert.match(refcss, /\.yi-hero-casing[\s\S]*?preserve-3d/);
 assert.match(refcss, /\.yi-hero-modal[\s\S]*?position:fixed/);
 assert.match(refcss, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(refcss, /aspect-ratio:\s*16\/9/);
+assert.ok(refcss.includes("/* 2026-11-19: desktop and mobile hero redesign */"), "The latest desktop/mobile hero design layer must be present");
+assert.doesNotMatch(refcss, /res\\.cloudinary\\.com\\/tourhq/, "Hero background must not depend on the unrelated external plaza photo");
+assert.match(refcss, /body \\.hero \\.hero-focus\\s*\\{[\\s\\S]*?display:\\s*grid/i, "The three main platform directions must be visible in the hero");
+assert.match(refcss, /@media\\(max-width:720px\\)[\\s\\S]*?body \\.hero \\.hero-focus/, "Mobile hero must have a dedicated compact layout");
+
 assert.match(css, /\.yi-directory-groups/);
 
 assert.ok(html.includes('href="https://gov.uz/oz/yoshlar" target="_blank" rel="noopener noreferrer"'), "Agency logo must open the official agency site safely");
@@ -90,7 +95,7 @@ assert.ok(js.includes("setupSearch") && js.includes("setupTheme") && js.includes
 
 assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v27"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v28"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(worker.includes("https://d2ol7oe51mr4n9.cloudfront.net"), "The supplied hero image host must be cache-allowlisted for offline use");

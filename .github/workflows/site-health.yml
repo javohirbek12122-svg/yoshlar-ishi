@@ -174,9 +174,9 @@ jobs:
           grep -Fqi '.yi-hero-casing' /tmp/yoshlar-reference-home.css || { echo "::error::The cinematic 3D hero frame styles are missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg' -o /tmp/yoshlar-hero-banner.jpg
           file --mime-type /tmp/yoshlar-hero-banner.jpg | grep -Eq 'image/jpeg' || { echo "::error::The supplied hero banner is not a valid JPEG image."; exit 1; }
-          grep -Fqi 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' /tmp/yoshlar-reference-home.css || { echo "::error::The Tashkent reference styling is missing."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' -o /tmp/yoshlar-hero-background.jpg
-          file --mime-type /tmp/yoshlar-hero-background.jpg | grep -Eq 'image/(jpeg|png|webp)' || { echo "::error::The Tashkent plaza background is not a supported image."; exit 1; }
+          grep -Fqi '2026-11-19: desktop and mobile hero redesign' /tmp/yoshlar-reference-home.css || { echo "::error::The new desktop/mobile hero layout is missing."; exit 1; }
+          if grep -Fqi 'https://res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql.jpg' /tmp/yoshlar-reference-home.css; then echo "::error::The hero must not request the unrelated external plaza background."; exit 1; fi
+          grep -Fqi 'body .hero .hero-focus' /tmp/yoshlar-reference-home.css || { echo "::error::The three visible platform directions are missing from the hero."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/opportunity-page-filters.js" -o /tmp/yoshlar-opportunity-filters.js
           grep -Fqi 'categoryFilter' /tmp/yoshlar-opportunity-filters.js || { echo "::error::The quick-access catalogue filters are missing."; exit 1; }
           grep -Fqi 'class="hero-storyline yi-hero-ribbon"' /tmp/yoshlar-home.html || { echo "::error::The hero benefit ribbon is not rendered."; exit 1; }
@@ -261,7 +261,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v27";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v27."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v28";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v28."; exit 1; }
           grep -Fq 'CACHEABLE_EXTERNAL_IMAGE_ORIGINS' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker is missing cross-origin hero image caching."; exit 1; }
           grep -Fq '"/offline.html"' /tmp/yoshlar-service-worker.js || { echo "::error::The live service worker has no offline page."; exit 1; }
           grep -Fq '"/kabinet.html"' /tmp/yoshlar-service-worker.js || { echo "::error::Private pages are not explicitly excluded from offline caching."; exit 1; }

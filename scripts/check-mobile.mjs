@@ -149,6 +149,16 @@ try{
      if(!partnerNotice.includes("faqat platforma ichida")||!partnerNotice.includes("rasmiy imtihon"))fail(item[1]+" "+width,"partner notice must explain that scores are internal and are not an official exam or certificate");
      if(await page.locator("#yiAuthGate a.button").count()!==2)fail(item[1]+" "+width,"assessment sign-in and registration links are missing");
     }
+    if(item[0]==="/index.html"&&width>=1280){
+     const desktopHero=page.locator("main#top > section.hero");
+     const columns=await desktopHero.evaluate(section=>{
+      const copy=section.querySelector(".hero-copy").getBoundingClientRect();
+      const art=section.querySelector(".art.yi-hero-visual").getBoundingClientRect();
+      return{copyRight:copy.right,artLeft:art.left,focusDisplay:getComputedStyle(section.querySelector(".hero-focus")).display};
+     });
+     if(columns.copyRight>columns.artLeft+8)fail(item[1]+" "+width,"desktop hero must keep copy and original banner in separate columns");
+     if(columns.focusDisplay==="none")fail(item[1]+" "+width,"desktop hero must show the three platform directions");
+    }
     if(item[0]==="/index.html"&&width<=700){
      const hero=page.locator("main#top > section.hero");
      if(await hero.count()!==1)fail(item[1]+" "+width,"the current homepage hero section is missing or duplicated");
@@ -161,6 +171,16 @@ try{
       const ctaBox=await primaryCta.boundingBox();
       if(!ctaBox||ctaBox.height<43)fail(item[1]+" "+width,"the primary hero CTA is too small for touch");
       if(ctaBox&&ctaBox.x<0)fail(item[1]+" "+width,"the primary hero CTA is clipped off-screen");
+      const geometry=await hero.evaluate(section=>{
+       const box=(selector)=>{const node=section.querySelector(selector);if(!node)return null;const r=node.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,display:getComputedStyle(node).display}};
+       return{copy:box(".hero-copy"),focus:box(".hero-focus"),cta:box(".hero-copy .actions a.btn"),art:box(".art.yi-hero-visual"),banner:box(".yi-hero-banner"),resources:box(".yi-official-resources")};
+      });
+      if(!geometry.focus||geometry.focus.display==="none")fail(item[1]+" "+width,"the three platform directions must be visible in the mobile hero");
+      if(!geometry.banner||geometry.banner.width<200)fail(item[1]+" "+width,"the original hero banner must remain large enough to read");
+      if(geometry.banner&&(geometry.banner.left<0||geometry.banner.right>width+1))fail(item[1]+" "+width,"the hero banner is clipped horizontally");
+      if(geometry.copy&&geometry.art&&geometry.copy.bottom>geometry.art.top+3)fail(item[1]+" "+width,"mobile hero order must place copy and CTA before the banner");
+      if(geometry.art&&geometry.resources&&geometry.art.bottom>geometry.resources.top+3)fail(item[1]+" "+width,"official resources must follow the hero banner on mobile");
+
      }
      const quickCards=page.locator(".service-ribbon .yi-quick-card");
       if(await quickCards.count()===8){
