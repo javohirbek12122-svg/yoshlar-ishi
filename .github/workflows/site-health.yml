@@ -112,7 +112,12 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/platform-polish.css" -o /tmp/yoshlar-platform-polish.css
           grep -Fq "yi-official-logo" /tmp/yoshlar-platform-polish.css || { echo "::error::The shared platform layout stylesheet is missing logo normalization."; exit 1; }
           grep -Fqi 'href="./reference-home.css"' /tmp/yoshlar-home.html || { echo "::error::The reference-led homepage stylesheet is not linked."; exit 1; }
-          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/reference-home.css" -o /tmp/yoshlar-reference-home.css
+          for attempt in $(seq 1 16); do
+            curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/reference-home.css" -o /tmp/yoshlar-reference-home.css
+            if grep -Fq '2026-11-19: desktop and mobile hero redesign' /tmp/yoshlar-reference-home.css; then break; fi
+            if [ "$attempt" -eq 16 ]; then echo "::error::The new desktop/mobile hero stylesheet has not reached Production."; exit 1; fi
+            sleep 5
+          done
           grep -Fq ".yi-hero-quote" /tmp/yoshlar-reference-home.css || { echo "::error::The reference hero design layer is missing."; exit 1; }
           grep -Fq ".yi-quick-grid" /tmp/yoshlar-reference-home.css || { echo "::error::The redesigned quick-access layer is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/mobile-guard.css" -o /tmp/yoshlar-mobile-guard.css

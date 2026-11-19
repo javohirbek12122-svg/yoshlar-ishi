@@ -55,9 +55,9 @@ assert.match(refcss, /\.yi-hero-modal[\s\S]*?position:fixed/);
 assert.match(refcss, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(refcss, /aspect-ratio:\s*16\/9/);
 assert.ok(refcss.includes("/* 2026-11-19: desktop and mobile hero redesign */"), "The latest desktop/mobile hero design layer must be present");
-assert.doesNotMatch(refcss, /res\\.cloudinary\\.com\\/tourhq/, "Hero background must not depend on the unrelated external plaza photo");
-assert.match(refcss, /body \\.hero \\.hero-focus\\s*\\{[\\s\\S]*?display:\\s*grid/i, "The three main platform directions must be visible in the hero");
-assert.match(refcss, /@media\\(max-width:720px\\)[\\s\\S]*?body \\.hero \\.hero-focus/, "Mobile hero must have a dedicated compact layout");
+assert.ok(!refcss.includes("https://res.cloudinary.com/tourhq/"), "Hero background must not depend on the unrelated external plaza photo");
+assert.ok(refcss.includes("body .hero .hero-focus{") && refcss.includes("display:grid!important"), "The three main platform directions must be visible in the hero");
+assert.ok(refcss.includes("@media(max-width:720px)") && refcss.includes("body .hero .hero-focus"), "Mobile hero must have a dedicated compact layout");
 
 assert.match(css, /\.yi-directory-groups/);
 
