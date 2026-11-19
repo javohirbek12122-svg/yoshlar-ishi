@@ -223,6 +223,22 @@ try{
       const ctaBox=await primaryCta.boundingBox();
       if(!ctaBox||ctaBox.height<43)fail(item[1]+" "+width,"the primary hero CTA is too small for touch");
       if(ctaBox&&ctaBox.x<0)fail(item[1]+" "+width,"the primary hero CTA is clipped off-screen");
+      const readability=await page.evaluate(()=>{
+       const size=selector=>{const node=document.querySelector(selector);return node?Number.parseFloat(getComputedStyle(node).fontSize):0};
+       return{
+        cta:size("main#top > section.hero .hero-copy .actions a.btn"),
+        note:size("main#top > section.hero .hero-note"),
+        focusTitle:size("main#top > section.hero .hero-focus>div>strong"),
+        quickTitle:size(".service-ribbon .yi-quick-card .yi-quick-copy strong"),
+        quickDescription:size(".service-ribbon .yi-quick-card .yi-quick-copy small"),
+        resourceTitle:size(".yi-official-card-copy strong"),
+        dockLabel:size("#yi-mobile-dock .yi-dock-label")
+       };
+      });
+      const minimums=[["hero CTA",readability.cta,10],["hero note",readability.note,9],["hero direction title",readability.focusTitle,10],["quick service title",readability.quickTitle,10],["quick service description",readability.quickDescription,9],["official resource title",readability.resourceTitle,9],["mobile navigation label",readability.dockLabel,9]];
+      for(const [label,actual,minimum] of minimums){
+       if(actual<minimum)fail(item[1]+" "+width,"mobile text is too small for "+label+" ("+actual+"px)");
+      }
       const geometry=await hero.evaluate(section=>{
        const box=(selector)=>{const node=section.querySelector(selector);if(!node)return null;const r=node.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,display:getComputedStyle(node).display}};
        return{copy:box(".hero-copy"),focus:box(".hero-focus"),cta:box(".hero-copy .actions a.btn"),art:box(".art.yi-hero-visual"),banner:box(".yi-hero-banner"),resources:box(".yi-official-resources")};

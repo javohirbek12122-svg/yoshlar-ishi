@@ -944,3 +944,36 @@ body .yi-hero-photo-credit:focus-visible{color:#fff;text-decoration:underline}
   }
   body .yi-hero-photo-credit{margin-top:6px;font-size:8px}
 }
+
+ 
+/* Mobile readability pass: prioritize legible text over dense, undersized labels. */
+@media(max-width:720px){
+  body .hero .eyebrow{font-size:9.5px;letter-spacing:.075em}
+  body .hero .hero-expanded-copy{font-size:12px;line-height:1.6}
+  body .hero .hero-focus>div{min-height:58px;padding:8px 9px}
+  body .hero .hero-focus>div>span{font-size:10px}
+  body .hero .hero-focus>div>strong{font-size:11px;line-height:1.35}
+  body .hero .hero-focus>div>small{font-size:9.25px;line-height:1.4}
+  body .hero .actions{gap:8px}
+  body .hero .actions .btn{min-height:48px;padding:10px 8px;font-size:10.5px;line-height:1.35}
+  body .hero .hero-note{font-size:9.5px;line-height:1.55;padding:8px 10px}
+  body .yi-hero-caption{font-size:9px;letter-spacing:.035em}
+  body .yi-hero-zoom-hint{font-size:9.5px}
+  body .yi-official-resources{gap:9px;padding:12px}
+  body .yi-official-intro p{font-size:10px;line-height:1.5}
+  body .yi-official-card{min-height:70px;gap:7px;padding:7px}
+  body .yi-official-logo-frame,
+  body .yi-agency-logo-frame,
+  body .yi-ustoz-logo-frame{flex-basis:34px;width:34px;height:34px}
+  body .yi-official-type{font-size:7.5px;letter-spacing:.02em}
+  body .yi-official-card-copy strong{font-size:10.25px;line-height:1.3}
+  body .yi-hero-photo-credit{font-size:9.5px}
+}
+@media(max-width:390px){
+  body .hero.wrap{padding-left:12px;padding-right:12px}
+  body .hero .actions .btn{font-size:10px;padding-inline:6px}
+  body .hero .hero-focus>div>strong{font-size:10.5px}
+  body .yi-official-resources{padding:10px}
+  body .yi-official-card-copy strong{font-size:9.75px}
+  body .yi-official-type{font-size:7px}
+}

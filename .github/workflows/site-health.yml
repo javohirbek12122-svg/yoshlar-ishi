@@ -273,7 +273,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v31";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v31."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v32";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v32."; exit 1; }
           grep -Fq 'https://static.tuit.uz' /tmp/yoshlar-service-worker.js || { echo "::error::The Registan hero photo origin is not included in the public image cache allow-list."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://static.tuit.uz/crop/1/6/1200__95_1622872966.jpg' -o /tmp/yoshlar-registan-photo.jpg
           file --mime-type /tmp/yoshlar-registan-photo.jpg | grep -Eq 'image/(jpeg|webp|png)' || { echo "::error::The Registan youth photo source is not a valid image."; exit 1; }
