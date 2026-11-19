@@ -895,3 +895,52 @@ body .yi-official-card{min-height:66px}
   body .yi-hero-ambient-glow{animation:none}
   body .yi-hero-casing{transition:none!important}
 }
+
+
+/* Registan youth group photo — source attribution is linked in the hero copy. */
+body .hero.wrap:before{
+  background-image:
+    radial-gradient(ellipse at 76% 26%,rgba(78,161,236,.17),transparent 34%),
+    linear-gradient(105deg,rgba(2,15,40,.78) 0%,rgba(3,25,63,.52) 46%,rgba(3,24,58,.23) 100%),
+    url("https://static.tuit.uz/crop/1/6/1200__95_1622872966.jpg");
+  background-position:center,center,center 46%;
+  background-size:cover,cover,cover;
+  background-repeat:no-repeat;
+}
+body .hero.wrap:after{
+  background:
+    linear-gradient(90deg,rgba(2,13,36,.74) 0%,rgba(3,18,47,.40) 43%,rgba(3,20,48,.10) 100%),
+    linear-gradient(180deg,rgba(1,12,34,.12) 0%,rgba(2,15,40,.10) 54%,rgba(2,15,40,.48) 100%);
+}
+body .yi-hero-photo-credit{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:fit-content;
+  max-width:100%;
+  margin-top:8px;
+  color:rgba(235,245,255,.76);
+  font:700 9px/1.35 Manrope,sans-serif;
+  text-decoration:none;
+  text-underline-offset:3px;
+}
+body .yi-hero-photo-credit:hover,
+body .yi-hero-photo-credit:focus-visible{color:#fff;text-decoration:underline}
+@media(max-width:1080px){
+  body .hero.wrap:before{
+    background-position:center,center,center 82px;
+    background-size:cover,cover,100% auto;
+  }
+}
+@media(max-width:720px){
+  body .hero.wrap:before{
+    background-position:center,center,center 76px;
+    background-size:cover,cover,100% auto;
+  }
+  body .hero.wrap:after{
+    background:
+      linear-gradient(90deg,rgba(2,13,36,.76),rgba(3,20,52,.50)),
+      linear-gradient(180deg,rgba(1,12,34,.08) 0%,rgba(2,15,40,.38) 38%,rgba(2,15,40,.94) 100%);
+  }
+  body .yi-hero-photo-credit{margin-top:6px;font-size:8px}
+}

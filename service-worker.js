@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v30";
+const CACHE_NAME = "yi-pwa-v31";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",
@@ -94,7 +94,7 @@ const PRECACHE_URLS = [
   "/apple-touch-icon.png"
 ];
 const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html", "/hamjamiyat.html"]);
-const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com", "https://d2ol7oe51mr4n9.cloudfront.net"]);
+const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com", "https://d2ol7oe51mr4n9.cloudfront.net", "https://static.tuit.uz"]);
 
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {

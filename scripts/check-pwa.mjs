@@ -89,6 +89,8 @@ assert.ok(precache.includes("/mobile-experience.css"), "PWA must precache the de
 assert.ok(precache.includes("/mobile-experience.js"), "PWA must precache the dedicated mobile controller");
 assert.ok(precache.includes("/site-background.css"), "PWA must precache the site-wide background stylesheet");
 assert.ok(precache.includes("/assets/uzbekistan-flag.svg"), "PWA must precache the local state flag asset");
+assert.ok(worker.includes('"https://static.tuit.uz"'), "PWA must cache the Registan hero background photo from TUIT");
+
 
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
@@ -123,7 +125,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v30"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v31"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

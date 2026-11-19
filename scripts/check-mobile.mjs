@@ -205,6 +205,13 @@ try{
      if(columns.focusDisplay==="none")fail(item[1]+" "+width,"desktop hero must show the three platform directions");
     }
     if(item[0]==="/index.html"&&width<=700){
+     const heroPhoto=await page.evaluate(()=>{
+      const bg=getComputedStyle(document.querySelector("main#top > section.hero"),"::before").backgroundImage;
+      return bg.includes("static.tuit.uz/crop/1/6/1200__95_1622872966.jpg");
+     });
+     if(!heroPhoto)fail(item[1]+" "+width,"the Registan youth group photo is not applied behind the hero");
+     const heroPhotoCredit=page.locator(".yi-hero-photo-credit");
+     if(await heroPhotoCredit.count()!==1||!(await heroPhotoCredit.getAttribute("href")).includes("tuit.uz/en/post/"))fail(item[1]+" "+width,"the hero photo source attribution is missing");
      const hero=page.locator("main#top > section.hero");
      if(await hero.count()!==1)fail(item[1]+" "+width,"the current homepage hero section is missing or duplicated");
      else{
@@ -337,7 +344,7 @@ try{
    return urls.some(url=>url.includes("d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg")) &&
           urls.some(url=>url.includes("res.cloudinary.com/tourhq/image/upload/v1695112996/znj0avtophmpnvchl4ql")) &&
           urls.some(url=>url.includes("photo6fe378ad750c9351681f39aca9de5c32")) &&
-          urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6"));
+          urls.some(url=>url.includes("2cbf2330eea2f444c4bf454a6b8f69e6")) &&\n          urls.some(url=>url.includes("static.tuit.uz/crop/1/6/1200__95_1622872966.jpg"));
   },pwaCacheName,{timeout:20000}).then(()=>true).catch(()=>false);
   if(!heroCacheReady){
    const diagnostics=await androidPage.evaluate(async(cacheName)=>{
