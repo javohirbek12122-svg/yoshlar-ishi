@@ -23,6 +23,8 @@ const required = [
   "supabase/migrations/20261117190000_competency_assessment_engine.sql",
   "scripts/check-biletlar.mjs",
   "site.css",
+  "site-background.css",
+  "assets/uzbekistan-flag.svg",
   "shared-theme.css",
   "sitemap.xml",
   "BENCHMARK_NOTES.md",
@@ -941,8 +943,14 @@ const mobileExperienceCss = read("mobile-experience.css");
 const mobileExperienceJs = read("mobile-experience.js");
 assert.ok(mobileGuard.includes('@import url("./mobile-experience.css");'), "Global mobile styles must include the dedicated mobile layer");
 assert.ok(mobileGuard.includes('@import url("./site-background.css");'), "Every page must inherit the site-wide flag background through the mobile guard");
+const siteBackground = read("site-background.css");
+assert.ok(siteBackground.includes("body::before") && siteBackground.includes('url("/assets/uzbekistan-flag.svg")'), "The flag must be rendered as a fixed visible image layer behind page content");
+assert.ok(siteBackground.includes("rgba(246,249,252,.42)"), "The national flag must not be hidden beneath an opaque overlay");
+assert.ok(siteBackground.includes("background-size:auto,min(100vw,1200px) auto"), "The full flag must retain its 2:1 image proportions on desktop");
+
 for (const marker of ["--yi-mobile-dock-height:64px","grid-template-columns:repeat(5,minmax(0,1fr))","env(safe-area-inset-bottom","yi-keyboard-open","yi-mobile-overlay-open","yi-mobile-table-scroll"]) assert.ok(mobileExperienceCss.includes(marker), "Mobile CSS marker missing: "+marker);
 for (const marker of ["Yoshlar hamjamiyati","Jarayonlar va murojaatlar","visualViewport","yi-services-expanded","yi-mobile-table-scroll","aria-current"]) assert.ok(mobileExperienceJs.includes(marker), "Mobile JS marker missing: "+marker);
+assert.ok(mobileExperienceJs.includes("__YI_MOBILE_EXPERIENCE_BOOTED"), "The mobile controller must be idempotent when a page injects scripts more than once");
 assert.ok(read("pwa.js").includes('script.src = "/mobile-experience.js"'), "PWA must load the standalone mobile controller");
 
 

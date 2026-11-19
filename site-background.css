@@ -1,30 +1,54 @@
-/* Subtle national-flag watermark for the full Yoshlar-Ishi experience.
-   Based on the public-domain state flag reference hosted by Wikimedia Commons. */
-html{background-color:#f3f7fa}
+/* Visible, correctly proportioned Uzbekistan flag watermark across the whole site.
+   The official flag artwork is stored locally so it also works offline. */
+html{
+  min-height:100%;
+  background:#f3f7fa!important;
+}
 body{
-  background-color:#f5f8fb!important;
+  position:relative!important;
+  isolation:isolate;
+  min-height:100vh;
+  min-height:100dvh;
+  background:#f5f8fb!important;
+  background-image:none!important;
+}
+body::before{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  inset:0;
+  display:block;
+  pointer-events:none;
   background-image:
-    linear-gradient(rgba(247,249,252,.88),rgba(247,249,252,.88)),
-    url("/assets/uzbekistan-flag.svg")!important;
-  background-position:center center,center center!important;
-  background-size:cover,cover!important;
-  background-repeat:no-repeat,no-repeat!important;
-  background-attachment:fixed,fixed!important;
+    linear-gradient(rgba(246,249,252,.42),rgba(246,249,252,.42)),
+    url("/assets/uzbekistan-flag.svg");
+  background-position:center center,center center;
+  background-size:auto,min(100vw,1200px) auto;
+  background-repeat:no-repeat,no-repeat;
 }
 body.yi-dark-mode{
-  background-color:#08172e!important;
-  background-image:
-    linear-gradient(rgba(8,23,46,.91),rgba(8,23,46,.91)),
-    url("/assets/uzbekistan-flag.svg")!important;
+  background:#08172e!important;
+  background-image:none!important;
 }
+body.yi-dark-mode::before{
+  background-image:
+    linear-gradient(rgba(8,23,46,.67),rgba(8,23,46,.67)),
+    url("/assets/uzbekistan-flag.svg");
+}
+/* Keep the flag visible through broad page bands without reducing card readability. */
+body .platform-proof{background:rgba(255,255,255,.86)!important}
+body .service-ribbon{background:rgba(248,251,253,.84)!important}
+body .state-assist{background:rgba(241,245,248,.86)!important}
+body .directory-section{background:rgba(243,247,251,.88)!important}
+body .yi-official-resources,
+body .yi-quick-panel,
+body .yi-site-directory{background-color:rgba(255,255,255,.88)!important}
 @media(max-width:760px){
-  body{
-    background-position:center center,8% center!important;
-    background-size:cover,auto 100vh!important;
-    background-attachment:fixed,fixed!important;
+  body::before{
+    background-position:center center,center center;
+    background-size:auto,100vw auto;
   }
 }
-@media(max-width:760px) and (orientation:landscape){
-  body{background-position:center center,center center!important;background-size:cover,cover!important}
+@media(prefers-reduced-motion:reduce){
+  body::before{background-attachment:scroll,scroll}
 }
-@media(prefers-reduced-motion:reduce){body{background-attachment:scroll,scroll!important}}

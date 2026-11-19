@@ -51,15 +51,33 @@ const pages=[
  ["/biletlar/049.html","Bilet 049 — xotira o‘yini"],
  ["/biletlar/050.html","Bilet 050 — krossvord"]
 ];
+function collectHtmlRoutes(directory,prefix=""){
+ const found=[];
+ for(const entry of fs.readdirSync(directory,{withFileTypes:true})){
+  if(["node_modules",".git",".vercel"].includes(entry.name))continue;
+  const relative=prefix?path.posix.join(prefix,entry.name):entry.name;
+  const absolute=path.join(directory,entry.name);
+  if(entry.isDirectory())found.push(...collectHtmlRoutes(absolute,relative));
+  else if(entry.isFile()&&entry.name.toLowerCase().endsWith(".html")){
+   const route="/"+relative;
+   found.push([route,relative.replace(/\.html$/i,"").replace(/\//g," · ")||"Bosh sahifa"]);
+  }
+ }
+ return found;
+}
+const routeMap=new Map([...pages,...collectHtmlRoutes(root)].map(item=>[item[0],item]));
+const allHtmlPages=[...routeMap.values()];
 const widths=[320,360,390,430,680,700,720,760,768,900,1024,1080,1280,1440];
 const failures=[],localFailures=[];
+let completedPageViewports=0;
 const fail=(label,message)=>failures.push(label+": "+message);
 let browser;
 try{
  browser=await chromium.launch({headless:true,args:["--no-sandbox","--disable-dev-shm-usage","--enable-webgl","--use-gl=swiftshader"]});
  for(const width of widths){
   const context=await browser.newContext({viewport:{width,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,reducedMotion:"reduce"});
-  for(const item of pages){
+  const pagesForWidth=(width===390||width===1440)?allHtmlPages:pages;
+  for(const item of pagesForWidth){
    const page=await context.newPage(),errors=[];
    page.on("pageerror",e=>errors.push(e.message));
    page.on("console",m=>{
@@ -72,9 +90,23 @@ try{
    try{
     const response=await page.goto(origin+item[0],{waitUntil:"domcontentloaded",timeout:25000});
     assert.ok(response&&response.ok(),"Page did not load successfully");
+    completedPageViewports++;
     await page.waitForTimeout(100);
-    const siteBackground=await page.evaluate(()=>getComputedStyle(document.body).backgroundImage);
-    if(!siteBackground.includes("uzbekistan-flag.svg"))fail(item[1]+" "+width,"the common Uzbekistan flag background is not applied");
+    const siteBackground=await page.evaluate(()=>{
+     const style=getComputedStyle(document.body,"::before");
+     return{content:style.content,image:style.backgroundImage,opacity:parseFloat(style.opacity),size:style.backgroundSize,isolation:getComputedStyle(document.body).isolation};
+    });
+    if(!siteBackground.image.includes("uzbekistan-flag.svg"))fail(item[1]+" "+width,"the Uzbekistan flag image is missing from the visible background layer");
+    if(siteBackground.content==="none"||siteBackground.opacity<.99)fail(item[1]+" "+width,"the flag background layer is hidden or faded before the intended overlay");
+    if(siteBackground.isolation!=="isolate")fail(item[1]+" "+width,"the flag background layer is not isolated behind page content");
+    if(width<=760&&!siteBackground.size.includes(width+"px"))fail(item[1]+" "+width,"the complete flag is not scaled to fit the mobile screen width");
+    if(item[0]==="/index.html"&&width===390){
+     const imageLoaded=await page.evaluate(async()=>{
+      const image=new Image();image.src="/assets/uzbekistan-flag.svg";
+      try{await image.decode();return image.naturalWidth===1000&&image.naturalHeight===500}catch{return false}
+     });
+     if(!imageLoaded)fail(item[1]+" "+width,"the local Uzbekistan flag image did not decode at its 2:1 native dimensions");
+    }
 
      if(width<=760&&item[0]!=="/admin.html"&&item[0]!=="/offline.html"){
       await page.waitForFunction(()=>document.querySelectorAll("#yi-mobile-dock a").length===5,{},{timeout:5000}).catch(()=>fail(item[1]+" "+width,"five-item mobile navigation did not initialize"));
@@ -358,7 +390,7 @@ try{
  for(const e of localFailures)fail("Local asset",e);
  if(failures.length){console.error("MOBILE CHECK FAILED");for(const f of failures)console.error("- "+f);process.exitCode=1}
  else{
-  console.log("✓ "+(pages.length*widths.length)+" page/viewport cases passed ("+pages.length+" pages × "+widths.length+" widths) on "+(remoteBase?"production: "+origin:"local source"));
+  console.log("✓ "+completedPageViewports+" page/viewport cases passed (core pages across "+widths.length+" widths plus every HTML route at mobile and desktop widths) on "+(remoteBase?"production: "+origin:"local source"));
   console.log("✓ no horizontal overflow, uncaught JavaScript errors or broken local assets");
   console.log("✓ touch targets, iOS input zoom, mobile menu and key filters checked");
   console.log("✓ Android install prompt, iPhone Safari instructions, offline home page and private-page cache exclusion checked");

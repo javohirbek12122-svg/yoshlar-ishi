@@ -1,5 +1,7 @@
 (() => {
  "use strict";
+ if(window.__YI_MOBILE_EXPERIENCE_BOOTED)return;
+ window.__YI_MOBILE_EXPERIENCE_BOOTED=true;
  const PHONE_QUERY=window.matchMedia("(max-width:760px)");
  const SKIP_PATHS=new Set(["/admin.html","/offline.html"]);
  const path=window.location.pathname.replace(/\/+$/,"")||"/";

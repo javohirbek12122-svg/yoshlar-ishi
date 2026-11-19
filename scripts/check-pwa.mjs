@@ -58,6 +58,10 @@ const backgroundCss = read("site-background.css");
 const flagSvg = read("assets/uzbekistan-flag.svg");
 const mobileGuardSource = read("mobile-guard.css");
 assert.ok(mobileGuardSource.includes('@import url("./site-background.css");'), "The common mobile layer must load the site-wide flag background");
+assert.ok(backgroundCss.includes("body::before"), "The flag must be a visible independent background layer, not merely a body background value");
+assert.ok(backgroundCss.includes("rgba(246,249,252,.42)"), "The flag image must remain visibly recognizable through the overlay");
+assert.ok(backgroundCss.includes("background-size:auto,min(100vw,1200px) auto"), "The entire 2:1 flag must fit the desktop viewport");
+
 assert.ok(backgroundCss.includes('/assets/uzbekistan-flag.svg'), "The site background must use the local Uzbekistan flag asset");
 assert.ok(flagSvg.includes('viewBox="0 0 1000 500"') && (flagSvg.match(/<use href="#star"/g) || []).length === 12, "The local flag asset must retain its 2:1 proportions and all 12 stars");
 const worker = read("service-worker.js");
@@ -119,7 +123,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v29"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v30"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");
