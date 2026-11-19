@@ -54,6 +54,12 @@ for (const marker of [
   "Internet aloqasi yo‘q"
 ]) assert.ok(pwa.includes(marker), "PWA install UX marker missing: " + marker);
 
+const backgroundCss = read("site-background.css");
+const flagSvg = read("assets/uzbekistan-flag.svg");
+const mobileGuardSource = read("mobile-guard.css");
+assert.ok(mobileGuardSource.includes('@import url("./site-background.css");'), "The common mobile layer must load the site-wide flag background");
+assert.ok(backgroundCss.includes('/assets/uzbekistan-flag.svg'), "The site background must use the local Uzbekistan flag asset");
+assert.ok(flagSvg.includes('viewBox="0 0 1000 500"') && (flagSvg.match(/<use href="#star"/g) || []).length === 12, "The local flag asset must retain its 2:1 proportions and all 12 stars");
 const worker = read("service-worker.js");
 assert.match(worker, /request\.method !== "GET"/);
 assert.match(worker, /url\.origin !== self\.location\.origin/);
@@ -77,6 +83,9 @@ assert.ok(precache.includes("/platform-polish.css"), "PWA must precache the fina
 assert.ok(precache.includes("/homepage-experience.js"), "PWA must precache the new homepage controller");
 assert.ok(precache.includes("/mobile-experience.css"), "PWA must precache the dedicated mobile stylesheet");
 assert.ok(precache.includes("/mobile-experience.js"), "PWA must precache the dedicated mobile controller");
+assert.ok(precache.includes("/site-background.css"), "PWA must precache the site-wide background stylesheet");
+assert.ok(precache.includes("/assets/uzbekistan-flag.svg"), "PWA must precache the local state flag asset");
+
 assert.ok(!precache.includes("/admin.html"), "Admin page must never be precached");
 assert.ok(!precache.includes("/kabinet.html"), "Personal cabinet must never be precached");
 assert.ok(!precache.includes("/hamjamiyat.html"), "Member community page must never be precached");
@@ -110,7 +119,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v28"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v29"/);
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
 console.log("✓ offline shell caches public pages only; admin and personal cabinet are excluded");

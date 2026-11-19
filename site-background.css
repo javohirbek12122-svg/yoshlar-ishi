@@ -1,0 +1,30 @@
+/* Subtle national-flag watermark for the full Yoshlar-Ishi experience.
+   Based on the public-domain state flag reference hosted by Wikimedia Commons. */
+html{background-color:#f3f7fa}
+body{
+  background-color:#f5f8fb!important;
+  background-image:
+    linear-gradient(rgba(247,249,252,.88),rgba(247,249,252,.88)),
+    url("/assets/uzbekistan-flag.svg")!important;
+  background-position:center center,center center!important;
+  background-size:cover,cover!important;
+  background-repeat:no-repeat,no-repeat!important;
+  background-attachment:fixed,fixed!important;
+}
+body.yi-dark-mode{
+  background-color:#08172e!important;
+  background-image:
+    linear-gradient(rgba(8,23,46,.91),rgba(8,23,46,.91)),
+    url("/assets/uzbekistan-flag.svg")!important;
+}
+@media(max-width:760px){
+  body{
+    background-position:center center,8% center!important;
+    background-size:cover,auto 100vh!important;
+    background-attachment:fixed,fixed!important;
+  }
+}
+@media(max-width:760px) and (orientation:landscape){
+  body{background-position:center center,center center!important;background-size:cover,cover!important}
+}
+@media(prefers-reduced-motion:reduce){body{background-attachment:scroll,scroll!important}}

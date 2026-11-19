@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- O‘zbekiston Respublikasi davlat bayrog‘i. Reference: https://commons.wikimedia.org/wiki/File:Flag_of_Uzbekistan.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="title desc">
+  <title id="title">O‘zbekiston Respublikasi davlat bayrog‘i</title>
+  <desc id="desc">Ko‘k, oq va yashil gorizontal ranglar, ularni ajratib turuvchi qizil chiziqlar, oq yarim oy va o‘n ikki yulduz.</desc>
+  <rect width="1000" height="500" fill="#1EB53A"/>
+  <rect width="1000" height="165" fill="#0099B5"/>
+  <rect y="165" width="1000" height="5" fill="#CE1126"/>
+  <rect y="170" width="1000" height="160" fill="#FFFFFF"/>
+  <rect y="330" width="1000" height="5" fill="#CE1126"/>
+  <circle cx="121" cy="83" r="49" fill="#FFFFFF"/>
+  <circle cx="140" cy="78" r="43" fill="#0099B5"/>
+  <defs><path id="star" d="M0-12 3.25-3.85 11.5-3.75 4.8 1.35 7.25 9.75 0 4.8-7.25 9.75-4.8 1.35-11.5-3.75-3.25-3.85Z"/></defs>
+  <g fill="#FFFFFF">
+    <use href="#star" x="286" y="37"/>
+    <use href="#star" x="346" y="37"/>
+    <use href="#star" x="406" y="37"/>
+    <use href="#star" x="256" y="85"/>
+    <use href="#star" x="316" y="85"/>
+    <use href="#star" x="376" y="85"/>
+    <use href="#star" x="436" y="85"/>
+    <use href="#star" x="226" y="133"/>
+    <use href="#star" x="286" y="133"/>
+    <use href="#star" x="346" y="133"/>
+    <use href="#star" x="406" y="133"/>
+    <use href="#star" x="466" y="133"/>
+  </g>
+</svg>

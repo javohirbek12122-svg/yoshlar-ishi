@@ -51,7 +51,7 @@ const pages=[
  ["/biletlar/049.html","Bilet 049 — xotira o‘yini"],
  ["/biletlar/050.html","Bilet 050 — krossvord"]
 ];
-const widths=[320,360,390,430,768,1024,1440];
+const widths=[320,360,390,430,680,700,720,760,768,900,1024,1080,1280,1440];
 const failures=[],localFailures=[];
 const fail=(label,message)=>failures.push(label+": "+message);
 let browser;
@@ -73,10 +73,23 @@ try{
     const response=await page.goto(origin+item[0],{waitUntil:"domcontentloaded",timeout:25000});
     assert.ok(response&&response.ok(),"Page did not load successfully");
     await page.waitForTimeout(100);
+    const siteBackground=await page.evaluate(()=>getComputedStyle(document.body).backgroundImage);
+    if(!siteBackground.includes("uzbekistan-flag.svg"))fail(item[1]+" "+width,"the common Uzbekistan flag background is not applied");
+
      if(width<=760&&item[0]!=="/admin.html"&&item[0]!=="/offline.html"){
       await page.waitForFunction(()=>document.querySelectorAll("#yi-mobile-dock a").length===5,{},{timeout:5000}).catch(()=>fail(item[1]+" "+width,"five-item mobile navigation did not initialize"));
       const dock=page.locator("#yi-mobile-dock");
       if(await dock.count()!==1)fail(item[1]+" "+width,"mobile navigation shell is missing or duplicated");
+      const dockLayout=await page.evaluate(()=>{
+       const dock=document.querySelector("#yi-mobile-dock"),r=dock?.getBoundingClientRect();
+       return{enabled:document.body.classList.contains("yi-mobile-enabled"),position:dock?getComputedStyle(dock).position:"",left:r?.left??-1,right:r?.right??-1,bottom:r?.bottom??Infinity,padding:parseFloat(getComputedStyle(document.body).paddingBottom)||0};
+      });
+      if(!dockLayout.enabled)fail(item[1]+" "+width,"mobile app-shell state was not enabled");
+      if(dockLayout.position!=="fixed")fail(item[1]+" "+width,"mobile navigation must remain fixed to the viewport");
+      if(dockLayout.left<0||dockLayout.right>width+1)fail(item[1]+" "+width,"mobile navigation is clipped horizontally");
+      if(dockLayout.bottom>844+1)fail(item[1]+" "+width,"mobile navigation extends below the viewport");
+      if(dockLayout.padding<50)fail(item[1]+" "+width,"page content is not reserved above the mobile navigation");
+
       else{
        const items=await dock.locator("a").evaluateAll(els=>els.map(el=>({label:el.innerText.trim(),h:el.getBoundingClientRect().height,href:el.getAttribute("href")})));
        if(items.length!==5)fail(item[1]+" "+width,"mobile navigation must expose five destinations");

@@ -59,8 +59,13 @@
  }
  function keepFocusedControlVisible(element){
   if(!PHONE_QUERY.matches||!element?.matches("input,textarea,select,[contenteditable='true']"))return;
-  window.setTimeout(()=>{const vv=window.visualViewport,visibleBottom=vv?vv.offsetTop+vv.height:window.innerHeight,rect=element.getBoundingClientRect();
-   if(rect.bottom>visibleBottom-22)window.scrollBy({top:rect.bottom-visibleBottom+32,behavior:"smooth"});updateKeyboardState();
+  window.setTimeout(()=>{
+   const vv=window.visualViewport,visibleTop=vv?vv.offsetTop+8:0,visibleBottom=vv?vv.offsetTop+vv.height:window.innerHeight;
+   const rect=element.getBoundingClientRect(),keyboardOpen=Boolean(vv&&window.innerHeight-vv.height>140);
+   if(keyboardOpen&&(rect.bottom>visibleBottom-22||rect.top<visibleTop)){
+    element.scrollIntoView({block:"nearest",inline:"nearest",behavior:"smooth"});
+   }
+   updateKeyboardState();
   },180);
  }
  function init(){

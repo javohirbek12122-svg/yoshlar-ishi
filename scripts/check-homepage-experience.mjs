@@ -95,7 +95,7 @@ assert.ok(js.includes("setupSearch") && js.includes("setupTheme") && js.includes
 
 assert.ok(js.includes('class="yi-hero-banner"') && js.includes("https://d2ol7oe51mr4n9.cloudfront.net/user_3JM13LmKQo41EGZkNQHbTC0mG4m/f0a06878-17e7-4fdb-94e6-0437ce7f174c.jpg"), "Hero uses the original user-supplied banner without image generation or modification");
 assert.equal(worker.includes('"/assets/yoshlar-people.webp"'), false, "Broken local image must not be precached");
-assert.match(worker, /CACHE_NAME = "yi-pwa-v28"/);
+assert.match(worker, /CACHE_NAME = "yi-pwa-v29"/);
 assert.match(worker, /CACHEABLE_EXTERNAL_IMAGE_ORIGINS/);
 assert.match(worker, /function cacheExternalImage\(request\)/);
 assert.ok(worker.includes("https://d2ol7oe51mr4n9.cloudfront.net"), "The supplied hero image host must be cache-allowlisted for offline use");
