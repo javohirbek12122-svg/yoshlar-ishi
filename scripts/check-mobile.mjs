@@ -113,16 +113,26 @@ try{
       const dock=page.locator("#yi-mobile-dock");
       if(await dock.count()!==1)fail(item[1]+" "+width,"mobile navigation shell is missing or duplicated");
       const dockLayout=await page.evaluate(()=>{
-       const dock=document.querySelector("#yi-mobile-dock"),r=dock?.getBoundingClientRect();
-       return{enabled:document.body.classList.contains("yi-mobile-enabled"),position:dock?getComputedStyle(dock).position:"",left:r?.left??-1,right:r?.right??-1,bottom:r?.bottom??Infinity,padding:parseFloat(getComputedStyle(document.body).paddingBottom)||0};
+       const dock=document.querySelector("#yi-mobile-dock"),r=dock?.getBoundingClientRect(),style=dock?getComputedStyle(dock):null;
+       const active=document.activeElement;
+       const editable=Boolean(active&&active.matches("input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]),textarea,select,[contenteditable='true']"));
+       const viewport=window.visualViewport;
+       const keyboardDelta=viewport?window.innerHeight-viewport.height:0;
+       const keyboardOpen=document.documentElement.classList.contains("yi-keyboard-open");
+       const overlayOpen=document.documentElement.classList.contains("yi-mobile-overlay-open");
+       const hidden=Boolean(!dock||dock.hidden||style.display==="none"||style.visibility==="hidden"||Number(style.opacity)<0.05||style.pointerEvents==="none");
+       return{enabled:document.body.classList.contains("yi-mobile-enabled"),position:style?.position||"",left:r?.left??-1,right:r?.right??-1,bottom:r?.bottom??Infinity,padding:parseFloat(getComputedStyle(document.body).paddingBottom)||0,hidden,keyboardOpen,overlayOpen,editable,keyboardDelta};
       });
       if(!dockLayout.enabled)fail(item[1]+" "+width,"mobile app-shell state was not enabled");
       if(dockLayout.position!=="fixed")fail(item[1]+" "+width,"mobile navigation must remain fixed to the viewport");
       if(dockLayout.left<0||dockLayout.right>width+1)fail(item[1]+" "+width,"mobile navigation is clipped horizontally");
       if(dockLayout.bottom>844+1)fail(item[1]+" "+width,"mobile navigation extends below the viewport");
-      if(dockLayout.padding<50)fail(item[1]+" "+width,"page content is not reserved above the mobile navigation");
-
-      else{
+      if(dockLayout.keyboardOpen&&(!dockLayout.editable||dockLayout.keyboardDelta<=140))fail(item[1]+" "+width,"keyboard state was enabled without a focused editable control and a reduced visual viewport");
+      if(dockLayout.keyboardOpen&&!dockLayout.hidden)fail(item[1]+" "+width,"mobile navigation must be hidden while the software keyboard is open");
+      if(dockLayout.overlayOpen&&!dockLayout.hidden)fail(item[1]+" "+width,"mobile navigation must be hidden while a modal or drawer is open");
+      if(dockLayout.hidden&&!dockLayout.keyboardOpen&&!dockLayout.overlayOpen)fail(item[1]+" "+width,"mobile navigation is hidden without an open keyboard or modal");
+      if(!dockLayout.hidden&&dockLayout.padding<50)fail(item[1]+" "+width,"page content is not reserved above the visible mobile navigation (padding="+dockLayout.padding+"px)");
+      if(!dockLayout.hidden){
        const items=await dock.locator("a").evaluateAll(els=>els.map(el=>({label:el.innerText.trim(),h:el.getBoundingClientRect().height,href:el.getAttribute("href")})));
        if(items.length!==5)fail(item[1]+" "+width,"mobile navigation must expose five destinations");
        for(const entry of items)if(entry.h<44)fail(item[1]+" "+width,"mobile navigation target below 44px: "+entry.label);
