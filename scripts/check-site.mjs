@@ -222,7 +222,7 @@ for (const feature of [
   'rpc/admin_list_console_events',
   'rpc/admin_record_console_event',
   'function safeHttpsUrl(value)',
-  'if(published&&!tr.querySelector(".js-showconsent").checked)',
+  'if(published&&!row.published&&!tr.querySelector(".js-showconsent").checked)',
   'id="showConsent"',
   'auditSuffix(audited)',
   'updated_at=eq.',
