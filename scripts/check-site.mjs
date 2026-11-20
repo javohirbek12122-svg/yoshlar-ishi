@@ -37,6 +37,7 @@ const required = [
   "platform-opportunity-feed.js",
   "platform-opportunity-feed.css",
   "supabase/migrations/20261120181500_youth_ecosystem_integrations.sql",
+  "supabase/migrations/20261120183000_youth_platform_directory_enhancements.sql",
   "scripts/check-government-pilot.mjs",
   "vercel.json",
   "service-worker.js",

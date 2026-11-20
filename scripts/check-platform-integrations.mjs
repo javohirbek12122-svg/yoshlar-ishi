@@ -12,4 +12,5 @@ assert.ok(opportunities.includes('get("program")')&&opportunities.includes("awai
 assert.ok(!hub.includes("service_role")&&!hub.includes("SUPABASE_SERVICE_ROLE_KEY"),"public module must not contain privileged Supabase credentials");
 console.log("✓ homepage pulls public program and partner registries from Supabase");
 console.log("✓ personal cabinet shows RLS-protected saved opportunity journeys");
-console.log("✓ official links, verification dates and program deep links are wired safely");
+assert.ok(hub.includes("yia-platform")&&hub.includes("besh-tashabbus-olimpiadasi"),"YIA and Besh Tashabbus must appear in the homepage partner feed");
+console.log("✓ official links, verification dates, YIA and Besh Tashabbus links, and program deep links are wired safely");

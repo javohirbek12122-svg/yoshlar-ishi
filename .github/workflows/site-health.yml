@@ -147,6 +147,8 @@ jobs:
           grep -Fq '"physics-lab/index.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::Nested physics lab flag allocation is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/platform-opportunity-feed.js" -o /tmp/yoshlar-platform-feed.js
                     grep -Fq "official_portal_integrations" /tmp/yoshlar-platform-feed.js || { echo "::error::Homepage partner-platform feed is missing."; exit 1; }
+          grep -Fq "yia-platform" /tmp/yoshlar-platform-feed.js || { echo "::error::YIA youth platform missing from homepage partners."; exit 1; }
+          grep -Fq "besh-tashabbus-olimpiadasi" /tmp/yoshlar-platform-feed.js || { echo "::error::Besh Tashabbus official link missing from homepage partners."; exit 1; }
                     grep -Fq "youth_opportunity_programs" /tmp/yoshlar-platform-feed.js || { echo "::error::Homepage opportunity feed is missing."; exit 1; }
                     curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/platform-opportunity-feed.css" -o /tmp/yoshlar-platform-feed.css
                     grep -Fq ".yi-home-program-grid" /tmp/yoshlar-platform-feed.css || { echo "::error::Homepage opportunity-card styles are missing."; exit 1; }
@@ -310,7 +312,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v35";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v35."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v36";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v36."; exit 1; }
           grep -Fq 'https://static.tuit.uz' /tmp/yoshlar-service-worker.js || { echo "::error::The Registan hero photo origin is not included in the public image cache allow-list."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://static.tuit.uz/crop/1/6/1200__95_1622872966.jpg' -o /tmp/yoshlar-registan-photo.jpg
           file --mime-type /tmp/yoshlar-registan-photo.jpg | grep -Eq 'image/(jpeg|webp|png)' || { echo "::error::The Registan youth photo source is not a valid image."; exit 1; }
