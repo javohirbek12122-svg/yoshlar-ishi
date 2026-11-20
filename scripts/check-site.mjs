@@ -51,6 +51,10 @@ const required = [
   "startap-yoli.html",
   "laboratoriya.html",
   "admin.html",
+  "admin-operations.js",
+  "admin-operations.css",
+  "supabase/migrations/20261120090000_admin_site_content_blocks.sql",
+  "supabase/migrations/20261120091000_admin_site_content_updated_by_index.sql",
   "davlat-xizmatlari.html",
   "imkoniyatlar.html",
   "kabinet.html",
@@ -215,6 +219,13 @@ for (const feature of [
   "official_portal_integrations?select=id",
   'nextStatus==="connected"&&nextMode==="external_link"',
   'id="page-activity"',
+  'id="page-control-center"',
+  'id="page-members"',
+  'id="page-community"',
+  'id="page-content"',
+  'id="page-reports"',
+  'admin-operations.js',
+  'YIAdminBridge',
   'setInterval(()=>{if(token)refreshDashboard()},60000)',
   'async function refreshSession()',
   'if(refreshPromise)return refreshPromise',
@@ -234,6 +245,11 @@ for (const feature of [
 assert.ok(admin.includes('official_portal_integrations?select=id'), "Admin integration registry query missing");
 assert.ok(admin.includes('nextStatus==="connected"&&nextMode==="external_link"'), "Admin must prevent false connected status for plain external links");
 assert.match(admin, /create_user:false/);
+const adminOperations = read("admin-operations.js");
+new vm.Script(adminOperations, { filename: "admin-operations.js" });
+for (const feature of ["admin_get_control_center_summary","admin_list_member_directory","admin_moderate_member_profile","admin_list_community_posts","admin_moderate_community_post","admin_build_report","site_content_blocks","admin-public-assets","p_include_sensitive"]) assert.ok(adminOperations.includes(feature), "Admin operation missing: " + feature);
+assert.ok(admin.includes("YIAdminBridge") && admin.includes("YIAdminPageChanged"), "Admin session bridge is required");
+assert.ok(read("homepage-experience.js").includes("applyManagedHero(art,imageUrl,imageAlt)"), "Homepage must consume CMS hero content");
 assert.match(admin, /verify.*type:"email"/);
 assert.match(admin, /token\?grant_type=password/);
 assert.ok(admin.includes('flowType:"pkce"') && admin.includes('storageKey:"yi-admin-auth"') && admin.includes("client.auth.signInWithOAuth({") && admin.includes('provider:"google"') && admin.includes("client.auth.getSession()") && admin.includes('localStorage.setItem("yi_admin_google_session","1")'), "Admin Google OAuth must use Supabase SDK-managed PKCE and persist the verified session");
@@ -823,6 +839,9 @@ assert.match(accountDesign, /rpc\/get_my_initiatives/);
 assert.match(adminDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(adminDesign, /id="page-team"/);
 assert.match(adminDesign, /id="page-showcase"/);
+assert.match(adminDesign, /id="page-control-center"/);
+assert.match(adminDesign, /id="page-content"/);
+assert.match(adminDesign, /id="page-reports"/);
 console.log("✓ service directory, personal cabinet and admin panel share the visual system without removing core flows");
 
 

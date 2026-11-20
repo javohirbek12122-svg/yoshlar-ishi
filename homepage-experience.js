@@ -49,6 +49,16 @@ function createHeroPreview(art){
     '</div>'+
    '</div>'+
   '</div>';
+ applyManagedHero(art,imageUrl,imageAlt);
+}
+async function applyManagedHero(art,fallbackUrl,fallbackAlt){
+ const image=art.querySelector(".yi-hero-banner"),modalImage=art.querySelector(".yi-hero-modal-image");if(!image||!modalImage)return;
+ try{const cfg=window.YI_CONFIG||{},base=String(cfg.supabaseUrl||"").replace(/\/$/,""),apiKey=cfg.supabaseAnonKey||cfg.supabaseKey;if(!base||!apiKey)return;
+  const response=await fetch(base+"/rest/v1/site_content_blocks?content_key=eq.homepage_hero&is_public=eq.true&select=content_value",{headers:{apikey:apiKey,Authorization:"Bearer "+apiKey},cache:"no-store"});if(!response.ok)return;
+  const rows=await response.json(),value=Array.isArray(rows)?rows[0]?.content_value:null,nextUrl=String(value?.image_url||"").trim(),nextAlt=String(value?.image_alt||fallbackAlt).trim();
+  if(value?.enabled!==true||!/^https:\/\//i.test(nextUrl))return;
+  image.src=nextUrl;modalImage.src=nextUrl;image.alt=nextAlt;modalImage.alt=nextAlt;art.setAttribute("aria-label",nextAlt);
+ }catch(error){console.warn("Managed hero content unavailable; using fallback banner.",error)}
 }
 function setupHeroExperience(art){
  if(!art||art.dataset.yiHeroExperience==="ready")return;

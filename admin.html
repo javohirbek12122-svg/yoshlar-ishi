@@ -54,6 +54,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 </style>
 <link rel="stylesheet" href="./shared-theme.css">
   <link rel="stylesheet" href="./mobile-guard.css">
+  <link rel="stylesheet" href="./admin-operations.css">
 <style id="pilot-metrics-styles">
 .pilot-monitor{margin:14px 0}
 .pilot-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -116,6 +117,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
       <button class="navitem" data-page="integrations"><span class="ico">⌘</span> Tashqi integratsiyalar</button>
       <button class="navitem" data-page="team"><span class="ico">◎</span> Jamoa doskasi</button>
       <button class="navitem" data-page="showcase"><span class="ico">★</span> Top tashabbuslar</button>
+      <button class="navitem" data-page="control-center"><span class="ico">▦</span> Nazorat markazi</button>
+      <button class="navitem" data-page="members"><span class="ico">♙</span> A’zolar</button>
+      <button class="navitem" data-page="community"><span class="ico">◉</span> Hamjamiyat</button>
+      <button class="navitem" data-page="content"><span class="ico">▣</span> Kontent va fayllar</button>
+      <button class="navitem" data-page="reports"><span class="ico">▤</span> Hisobotlar</button>
       <button class="navitem" data-page="activity"><span class="ico">◷</span> Faoliyat tarixi</button>
     </nav></div>
     <div class="sidebarfoot"><span>ADMIN MODE</span><small id="adminSessionInfo" style="display:block;color:#d8e6f1;font-size:10px;font-weight:700;overflow-wrap:anywhere;margin:0 0 7px">Administrator sessiyasi tasdiqlanadi</small>Ma’lumotlar bevosita alohida Supabase bazasidan o‘qiladi. Panel ochiq bo‘lsa, 60 soniyada yangilanadi.</div>
@@ -260,6 +266,53 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   <div class="panel"><div class="panelhead"><div><h3>Mavjud tashabbuslar</h3><p>Ommaviy ko‘rsatish, tanlash va reytingni boshqarish.</p></div><span class="statuspill" id="showcaseCountAdmin">—</span></div><div class="tablewrap"><table style="min-width:900px"><thead><tr><th>Loyiha</th><th>Ovoz</th><th>Tanlangan</th><th>Public</th><th>Amal</th></tr></thead><tbody id="showcaseAdminBody"><tr><td colspan="5" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
  </div>
 </section>
+<section class="page" id="page-control-center">
+ <div class="sectiontitle"><div><div class="eyebrow">Real vaqtga yaqin boshqaruv</div><h2>Markaziy nazorat</h2><p>Supabase ma’lumotlari asosida kutayotgan ishlar, sayt faolligi va boshqaruv holati.</p></div><button class="button" id="controlRefresh">↻ Ko‘rsatkichlarni yangilash</button></div>
+ <div class="admin-ops-banner"><div><span class="admin-ops-kicker">YOSHLAR-ISHI · CONTROL CENTER</span><h3>Sayt holati va bajarilishi kerak bo‘lgan ishlar</h3><p id="controlLastChange">Oxirgi o‘zgarish tekshirilmoqda.</p></div><span class="statuspill" id="controlState">Ulanmoqda</span></div>
+ <div class="admin-ops-grid" id="controlSummaryGrid"><article class="admin-ops-stat"><span>Ko‘rsatkichlar</span><strong>—</strong><small>Supabase’dan yuklanadi</small></article></div>
+ <div class="admin-ops-shortcuts"><button class="admin-ops-shortcut" data-goto="initiatives"><span>01</span><strong>Tashabbuslarni ko‘rib chiqish</strong><small>Arizalarni tasdiqlash va izoh berish</small></button><button class="admin-ops-shortcut" data-goto="community"><span>02</span><strong>Hamjamiyat moderatsiyasi</strong><small>Postlar va katalog ko‘rinishini tekshirish</small></button><button class="admin-ops-shortcut" data-goto="content"><span>03</span><strong>Sayt kontenti</strong><small>Bosh banner va media kutubxonasi</small></button><button class="admin-ops-shortcut" data-goto="reports"><span>04</span><strong>Hisobotlarni olish</strong><small>Davr kesimida JSON va CSV</small></button></div>
+ <p class="admin-ops-footnote">Bu ko‘rsatkichlar hosting tashriflari yoki reklama analitikasi emas. Faqat bazada qayd etilgan arizalar, a’zolar, jarayonlar va admin amallari hisoblanadi.</p>
+</section>
+<section class="page" id="page-members">
+ <div class="sectiontitle"><div><div class="eyebrow">A’zo profillari va maxfiylik</div><h2>Foydalanuvchilar</h2><p>Faqat xavfsiz profil maydonlari ko‘rsatiladi. Email, telefon va maxfiy CV ma’lumotlari bu ro‘yxatga olinmaydi.</p></div><button class="button" id="membersRefresh">↻ Yangilash</button></div>
+ <div class="filters admin-ops-filters"><input id="memberSearch" class="control" placeholder="Ism, hudud yoki yo‘nalish…"><select id="memberVisibilityFilter" class="control"><option value="">Barcha maxfiylik holatlari</option><option value="members">A’zolarga ko‘rinadi</option><option value="private">Shaxsiy</option></select><span id="memberCount" class="exporthint">— a’zo</span></div>
+ <div class="panel"><div class="tablewrap"><table style="min-width:1000px"><thead><tr><th>A’zo</th><th>Hudud</th><th>Ko‘rinish</th><th>Katalogda ko‘rsatish</th><th>Ommaviy postlar</th><th>Amal</th></tr></thead><tbody id="membersBody"><tr><td colspan="6" class="empty">A’zolar yuklanmoqda…</td></tr></tbody></table></div></div>
+ <p class="admin-ops-footnote">Maxfiylikni “Shaxsiy” qilish mumkin. Katalogga qayta chiqarishdan avval a’zoning roziligi va profil sozlamalarini tekshiring.</p>
+</section>
+<section class="page" id="page-community">
+ <div class="sectiontitle"><div><div class="eyebrow">Nashr va xavfsizlik</div><h2>Hamjamiyat moderatsiyasi</h2><p>Postni ko‘ring, nashr holatini va auditoriyasini boshqaring. Har o‘zgarish bazada auditga yoziladi.</p></div><button class="button" id="communityRefresh">↻ Postlarni yangilash</button></div>
+ <div class="filters admin-ops-filters"><input id="communitySearch" class="control" placeholder="Muallif yoki post matni…"><select id="communityStatusFilter" class="control"><option value="">Barcha holatlar</option><option value="published">Nashr qilingan</option><option value="draft">Yashirilgan</option></select><span id="communityCount" class="exporthint">— post</span></div>
+ <div class="panel"><div class="tablewrap"><table style="min-width:1180px"><thead><tr><th>Muallif / sana</th><th>Post matni</th><th>Ilovalar</th><th>Nashr holati</th><th>Auditoriya</th><th>Moderatsiya sababi</th><th>Saqlash</th></tr></thead><tbody id="communityPostsBody"><tr><td colspan="7" class="empty">Postlar yuklanmoqda…</td></tr></tbody></table></div></div>
+ <p class="admin-ops-footnote">Ilova fayllarining o‘zi ochilmaydi: foydalanuvchilarning shaxsiy fayllari maxfiy saqlanadi. Bu yerda faqat ilovalar soni ko‘rsatiladi.</p>
+</section>
+<section class="page" id="page-content">
+ <div class="sectiontitle"><div><div class="eyebrow">CMS · media boshqaruvi</div><h2>Sayt kontenti va fayllar</h2><p>Yuklangan rasmni bosh bannerga tayinlang. Saqlangan kontent bosh sahifada Supabase’dan olinadi.</p></div><button class="button" id="contentRefresh">↻ Yangilash</button></div>
+ <div class="admin-content-grid">
+  <div class="panel"><div class="panelhead"><div><h3>Bosh sahifa banneri</h3><p>Ommaviy sahifadagi asosiy hero tasvir.</p></div><span class="statuspill" id="heroContentState">Yuklanmoqda</span></div>
+   <form class="form" id="heroContentForm"><div class="admin-hero-preview" id="heroAdminPreview"><span>Banner preview</span></div><div class="field"><label for="heroImageUrl">Rasm URL (HTTPS)</label><input id="heroImageUrl" type="url" required placeholder="https://…"></div><div class="field"><label for="heroImageAlt">Rasm uchun tavsif (alt)</label><input id="heroImageAlt" maxlength="300" required></div>
+    <label class="check"><input id="heroEnabled" type="checkbox" checked> Bosh sahifada ushbu bannerni ishlatish</label><div class="admin-action-row"><button class="button primary" type="submit">Banner o‘zgarishini saqlash</button><button class="button" id="heroUseDefault" type="button">Asl bannerga qaytish</button></div><div class="notice" id="heroContentNotice" role="status" aria-live="polite"></div>
+   </form>
+  </div>
+  <div class="panel"><div class="panelhead"><div><h3>Fayl yuklash</h3><p>JPEG, PNG, WebP yoki PDF · 10 MB gacha.</p></div><span class="statuspill">Supabase Storage</span></div><div class="form">
+   <div class="admin-upload-zone"><span class="admin-upload-icon">↑</span><strong>Media faylini tanlang</strong><small>Fayllar alohida public-assets bucket’iga yuklanadi.</small><input id="adminAssetFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></div>
+   <div class="field"><label for="adminAssetLabel">Fayl nomi (ixtiyoriy)</label><input id="adminAssetLabel" maxlength="100" placeholder="Masalan: yoshlar-ishi-hero"></div><button class="button primary" id="adminAssetUpload" type="button">Supabase’ga yuklash ↑</button><div class="notice" id="assetUploadNotice" role="status" aria-live="polite"></div>
+   <p class="subtle">Yuklangan rasmning ochiq URL manzili banner, showcase va ommaviy kontentda ishlatilishi mumkin. Maxfiy CV bucket’lariga bu panel tegmaydi.</p>
+  </div></div>
+ </div>
+ <div class="panel admin-assets-panel"><div class="panelhead"><div><h3>Media kutubxonasi</h3><p id="assetLibraryMeta">Supabase Storage · public/</p></div><span class="statuspill" id="assetCount">— fayl</span></div><div class="tablewrap"><table style="min-width:850px"><thead><tr><th>Fayl</th><th>Format / hajm</th><th>Yuklangan</th><th>Ommaviy URL</th><th>Amal</th></tr></thead><tbody id="publicAssetsBody"><tr><td colspan="5" class="empty">Fayllar ro‘yxati yuklanmoqda…</td></tr></tbody></table></div></div>
+</section>
+<section class="page" id="page-reports">
+ <div class="sectiontitle"><div><div class="eyebrow">Tahlil va eksport</div><h2>Hisobotlar markazi</h2><p>Davrni tanlang, ma’lumotlarni ko‘ring va JSON yoki CSV shaklida yuklab oling.</p></div></div>
+ <div class="panel"><div class="panelhead"><div><h3>Hisobot parametrlari</h3><p>Standart rejimda aloqa ma’lumotlari va shaxsni aniqlovchi maydonlar yashiriladi.</p></div><span class="statuspill">Admin RPC</span></div>
+  <form class="form" id="adminReportForm"><div class="inlineform"><div class="field"><label for="reportFrom">Boshlanish sanasi</label><input id="reportFrom" type="date"></div><div class="field"><label for="reportTo">Tugash sanasi</label><input id="reportTo" type="date"></div></div>
+   <div class="field"><label for="reportLimit">Har bo‘lim uchun yozuv limiti</label><select id="reportLimit"><option value="100">100</option><option value="500" selected>500</option><option value="1000">1 000</option><option value="3000">3 000</option></select></div>
+   <label class="check"><input id="reportSensitive" type="checkbox"> Aloqa / shaxsiy maydonlarni hisobotga kiritish (faqat zarurat bo‘lsa)</label><label class="check admin-sensitive-confirm"><input id="reportSensitiveConfirm" type="checkbox"> Men bu shaxsiy ma’lumotlarni ko‘rish va eksport qilish uchun vakolatli ekanimni tasdiqlayman</label>
+   <div class="notice" id="reportNotice" role="status" aria-live="polite">Shaxsiy maydonlar sukut bo‘yicha hisobotdan chiqarilgan.</div><div class="admin-action-row"><button class="button primary" id="reportGenerateBtn" type="submit">Hisobotni shakllantirish</button><button class="button" id="reportJsonExport" type="button" disabled>JSON yuklash ↓</button><button class="button" id="reportCsvExport" type="button" disabled>CSV yuklash ↓</button></div>
+  </form>
+ </div>
+ <div class="panel admin-report-results"><div class="panelhead"><div><h3>Hisobot natijasi</h3><p id="reportGeneratedAt">Hali hisobot shakllantirilmagan.</p></div><span class="statuspill" id="reportState">Kutilmoqda</span></div><div class="panelbody"><div class="admin-report-grid" id="reportSectionCounts"><div class="subtle">Natijalar shu yerda ko‘rinadi.</div></div></div></div>
+</section>
+
 <section class="page" id="page-activity">
         <div class="sectiontitle"><div><div class="eyebrow">Kuzatuv va shaffoflik</div><h2>Faoliyat tarixi</h2><p>Tashabbus holati o‘zgarganda avtomatik qayd yaratiladi.</p></div><button class="button" id="activityRefresh">↻ Yangilash</button></div>
         <div class="panel"><div class="panelhead"><div><h3>Oxirgi amallar</h3><p>Ma’lumotlar bazasidagi audit jurnali</p></div><span class="statuspill" id="activityCount">— qayd</span></div><div class="panelbody"><div id="activityList" class="activity"><div class="subtle">Jurnal yuklanmoqda…</div></div></div></div>
@@ -303,7 +356,7 @@ function saveSession(data){if(!data||!data.access_token)throw Error("Tasdiqlanga
 async function refreshSession(){if(refreshPromise)return refreshPromise;refreshPromise=(async()=>{if(adminAuthClient&&localStorage.getItem("yi_admin_google_session")==="1"){const {data,error}=await adminAuthClient.auth.refreshSession();if(error||!data.session)throw error||Error("Google sessiyasini yangilab bo‘lmadi.");saveSession(data.session);return}if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)})();try{return await refreshPromise}finally{refreshPromise=null}}
 async function getQueryCount(table,filter=""){const request=()=>fetch(url+"/rest/v1/"+table+"?select=id"+(filter?"&"+filter:""),{headers:{...authHeaders(),"Prefer":"count=exact","Range":"0-0"}});let r=await request();if(r.status===401&&refreshToken){await refreshSession();r=await request()}if(!r.ok)throw Error("Count "+table+" "+r.status);const value=r.headers.get("content-range")||"";const match=value.match(/\/(\d+|\*)$/);if(!match||match[1]==="*")throw Error("Supabase aniq count qaytarmadi: "+table);return Number(match[1])}
 async function checkAdmin(requireGoogle=false){const me=await authFetch("user",{headers:{Authorization:"Bearer "+token}});user=me;if(!me.email)throw Error("Hisob email manzilini qaytarmadi.");if(requireGoogle){const googleAllowed=await api("rpc/admin_google_console_check",{method:"POST",body:"{}"});if(googleAllowed!==true)throw Error("Admin paneliga faqat ruxsat berilgan va Google orqali tasdiqlangan hisob kira oladi.");}const allowed=await api("rpc/admin_console_check",{method:"POST",body:"{}"});if(allowed!==true)throw Error("Bu hisob admin ro‘yxatida faol emas. Kirish rad etildi.");return true}
-function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");const identity=$("adminSessionInfo");if(identity)identity.textContent=user?.email||"Tasdiqlangan administrator";}
+function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");const identity=$("adminSessionInfo");if(identity)identity.textContent=user?.email||"Tasdiqlangan administrator";if(window.YIAdminExtensionInit)window.YIAdminExtensionInit();}
 function showLogin(){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");$("otpPanel").classList.add("hidden");$("loginEmail").disabled=false;$("loginCode").value="";$("loginPassword").value=""}
 async function signOut(revoke=true){
  const old=token;token="";refreshToken="";user=null;
@@ -556,7 +609,7 @@ async function toggleYouthProgram(btn){
 }
 
 function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderYouthPrograms();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
-function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar", "youth-programs":"Yoshlar dasturlari", integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page)}
+function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar", "youth-programs":"Yoshlar dasturlari", integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar","control-center":"Nazorat markazi",members:"Foydalanuvchilar",community:"Hamjamiyat moderatsiyasi",content:"Sayt kontenti va fayllar",reports:"Hisobotlar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page);if(window.YIAdminPageChanged)window.YIAdminPageChanged(page)}
 async function saveInitiative(btn){
  const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;
  btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value,oldStatus=row.status;
@@ -700,8 +753,10 @@ $("partnersBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-p
 $("sourcesBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-stoggle");if(b)toggleSource(b)});
 $("exportBtn").addEventListener("click",downloadCsv);$("sourceForm").addEventListener("submit",addSource);
 $("youthProgramForm").addEventListener("submit",saveYouthProgram);$("programReset").addEventListener("click",resetYouthProgramForm);$("programVerified").value=new Date().toISOString().slice(0,10);$("youthProgramsBody").addEventListener("click",ev=>{const edit=ev.target.closest(".js-program-edit"),toggle=ev.target.closest(".js-program-toggle");if(edit)editYouthProgram(edit.closest("tr").dataset.id);if(toggle)toggleYouthProgram(toggle)});
+window.YIAdminBridge={api,recordAdminEvent,notify,tell,safeHttpsUrl,get user(){return user},refresh:()=>refreshDashboard(),setPage,storageFetch:async(path,options={})=>{const run=()=>fetch(url+path,{...options,headers:{...authHeaders(),...(options.headers||{})}});let response=await run();if(response.status===401&&refreshToken){await refreshSession();response=await run()}return response}};
 (async()=>{try{await completeGoogleCallback();parseHashSession();if(token){await establish();sessionStorage.removeItem("yi_admin_google_pending");}else showLogin()}catch(e){await signOut(false);tell("loginNotice","Kirish tekshiruvi: "+e.message,true);showLogin()}})();
 })();
 </script>
+<script src="./admin-operations.js"></script>
 </body>
 </html>
