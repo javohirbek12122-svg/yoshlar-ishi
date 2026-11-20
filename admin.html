@@ -118,7 +118,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
       <button class="navitem" data-page="showcase"><span class="ico">★</span> Top tashabbuslar</button>
       <button class="navitem" data-page="activity"><span class="ico">◷</span> Faoliyat tarixi</button>
     </nav></div>
-    <div class="sidebarfoot"><span>ADMIN MODE</span>Ma’lumotlar bevosita alohida Supabase bazasidan o‘qiladi. Panel ochiq bo‘lsa, 60 soniyada yangilanadi.</div>
+    <div class="sidebarfoot"><span>ADMIN MODE</span><small id="adminSessionInfo" style="display:block;color:#d8e6f1;font-size:10px;font-weight:700;overflow-wrap:anywhere;margin:0 0 7px">Administrator sessiyasi tasdiqlanadi</small>Ma’lumotlar bevosita alohida Supabase bazasidan o‘qiladi. Panel ochiq bo‘lsa, 60 soniyada yangilanadi.</div>
   </aside>
   <main class="main">
     <header class="topbar"><div><div class="crumb">YOSHLAR-ISHI / ADMIN</div><h1 id="pageTitle">Umumiy ko‘rinish</h1></div><div class="topactions"><button id="refreshBtn" class="button">↻ Yangilash</button><button id="logoutBtn" class="button">Chiqish</button></div></header>
@@ -165,7 +165,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
             <div class="healthrow"><span>Supabase API</span><span class="statuspill" id="healthDb">Tekshirilmoqda</span></div>
             <div class="healthrow"><span>Ruxsat nazorati</span><span class="statuspill" id="healthAuth">Faol</span></div>
             <div class="healthrow"><span>GitHub kodi</span><a href="https://github.com/javohirbek12122-svg/yoshlar-ishi" target="_blank" rel="noopener">Repozitoriya ↗</a></div><div class="healthrow"><span>Avtomatik tekshiruvlar</span><a href="https://github.com/javohirbek12122-svg/yoshlar-ishi/actions" target="_blank" rel="noopener">Health / CI ↗</a></div>
-            <div class="healthrow"><span>Vercel loyihasi</span><a href="https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi" target="_blank" rel="noopener">Deploy sozlamalari ↗</a></div>
+            <div class="healthrow"><span>Vercel loyihasi</span><a href="https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site" target="_blank" rel="noopener">Deploy sozlamalari ↗</a></div>
             <div class="healthrow"><span>Manbalar katalogi</span><span id="healthSources">—</span></div><div class="healthrow"><span>Rasmiy portallar</span><a href="./index.html#rasmiy-xizmatlar">Katalogni ko‘rish ↗</a></div><div class="healthrow"><span>SSO / rasmiy API</span><span class="statuspill warn">Ulanmagan</span></div>
           </div><p class="subtle" style="margin:18px 0 0">Bu panel Supabase API va ma’lumotlar bazasini tekshiradi. Vercel deployment holatini alohida Vercel boshqaruv panelida tekshiring; maxfiy tokenlar saytga qo‘shilmagan.</p></div></div>
         </div>
@@ -253,6 +253,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
     <div class="field"><label for="showUrl">Loyiha havolasi (ixtiyoriy, HTTPS)</label><input id="showUrl" type="url" placeholder="https://..."></div>
     <label class="check"><input id="showFeatured" type="checkbox"> Asosiy tanlangan loyihalar qatorida ko‘rsatish</label>
     <label class="check"><input id="showPublish" type="checkbox"> Ommaga e’lon qilish</label>
+    <label class="check"><input id="showConsent" type="checkbox"> Muallif yoki jamoa roziligi tekshirildi</label>
     <button class="button primary" type="submit">Tashabbusni saqlash +</button><div id="showcaseNotice" class="notice" role="status" aria-live="polite"></div>
    </form>
   </div>
@@ -273,11 +274,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 (()=>{"use strict";
 const cfg=window.YI_CONFIG||{},url=(cfg.supabaseUrl||"").replace(/\/$/,""),key=cfg.supabaseAnonKey||cfg.supabaseKey;
 const $=id=>document.getElementById(id),statusNames={submitted:"Yangi",reviewing:"Ko‘rib chiqilmoqda",needs_details:"Qo‘shimcha ma’lumot kerak",approved:"Ma’qullangan",in_progress:"Jarayonda",completed:"Yakunlangan",declined:"Rad etilgan"},requestNames={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",handled:"Ko‘rib chiqildi",archived:"Arxiv"},typeNames={mentor:"Mentorlik",organization:"Tashkilot",event:"Tadbir",resource:"Resurs",feedback:"Fikr-mulohaza"},categoryNames={official:"Rasmiy manba",support:"Yordam",navigator:"Navigator",startup:"Startap",volunteer:"Ko‘ngillilik",grants:"Grantlar",education:"Ta’lim",opportunity:"Imkoniyat",community:"Jamiyat",technology:"Texnologiya",culture:"Madaniyat",other:"Boshqa"};
-let adminAuthClient=null,adminAuthClientPromise=null;
-let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],youthPrograms=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],audit=[],timer=null,otpCooldown=0,otpCooldownTimer=null;
+let adminAuthClient=null,adminAuthClientPromise=null,refreshPromise=null,dashboardRefreshPromise=null;
+let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],youthPrograms=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],legacyAudit=[],consoleEvents=[],audit=[],timer=null,otpCooldown=0,otpCooldownTimer=null;
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function notify(text){const t=$("toast");t.textContent=text;t.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.style.display="none",4000)}
 function tell(id,text,error=false){const e=$(id);e.textContent=text;e.classList.toggle("error",!!error)}
+function safeHttpsUrl(value){try{const parsed=new URL(String(value||"").trim());return parsed.protocol==="https:"&&!parsed.username&&!parsed.password&&Boolean(parsed.hostname)}catch{return false}}
+async function recordAdminEvent(eventType,entityType,entityId,summary,details={}){try{await api("rpc/admin_record_console_event",{method:"POST",body:JSON.stringify({p_event_type:eventType,p_entity_type:entityType,p_entity_id:String(entityId||""),p_summary:String(summary||"").slice(0,240),p_details:details})});return true}catch(error){console.error("Admin audit event:",error);return false}}
+function auditSuffix(saved){return saved?"":" Audit jurnaliga yozilmadi — qayd etish huquqini tekshiring."}
 function authHeaders(){return {"apikey":key,"Authorization":"Bearer "+token,"Content-Type":"application/json"}}
 async function authFetch(path,opts={}){const r=await fetch(url+"/auth/v1/"+path,{...opts,headers:{apikey:key,"Content-Type":"application/json",...(opts.headers||{})}});let data=null;try{data=await r.json()}catch{}if(!r.ok)throw Error((data&&data.msg)||(data&&data.message)||(data&&data.error_description)||(data&&data.error)||("Auth xatosi "+r.status));return data}
 async function getAdminAuthClient(){
@@ -294,12 +298,12 @@ async function getAdminAuthClient(){
  }
  return adminAuthClientPromise;
 }
-async function api(path,opts={}){let r=await fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});if(r.status===401&&refreshToken){await refreshSession();r=await fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}})}let data=null;try{data=await r.json()}catch{}if(!r.ok)throw Error((data&&data.message)||(data&&data.details)||(data&&data.hint)||("Ma’lumotlar bazasi xatosi "+r.status));return data}
+async function api(path,opts={}){const request=()=>fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});let r=await request();if(r.status===401&&refreshToken){try{await refreshSession()}catch(error){await signOut(false);throw Error("Admin sessiyasi tugagan. Qayta kiring. "+(error?.message||""))}r=await request()}let data=null;try{data=await r.json()}catch{}if(!r.ok){if(r.status===401)await signOut(false);throw Error((data&&data.message)||(data&&data.details)||(data&&data.hint)||("Ma’lumotlar bazasi xatosi "+r.status))}return data}
 function saveSession(data){if(!data||!data.access_token)throw Error("Tasdiqlangan sessiya qaytmadi.");token=data.access_token;refreshToken=data.refresh_token||"";sessionStorage.setItem("yi_access_token",token);if(refreshToken)sessionStorage.setItem("yi_refresh_token",refreshToken)}
-async function refreshSession(){if(adminAuthClient&&localStorage.getItem("yi_admin_google_session")==="1"){const {data,error}=await adminAuthClient.auth.refreshSession();if(error||!data.session)throw error||Error("Google sessiyasini yangilab bo‘lmadi.");saveSession(data.session);return;}if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)}
-function getQueryCount(table,filter=""){return fetch(url+"/rest/v1/"+table+"?select=id"+(filter?"&"+filter:""),{headers:{...authHeaders(),"Prefer":"count=exact","Range":"0-0"}}).then(async r=>{if(!r.ok)throw Error("Count "+table+" "+r.status);const value=r.headers.get("content-range")||"";const match=value.match(/\/(\d+|\*)$/);return match&&match[1]!=="*" ? Number(match[1]) : 0})}
+async function refreshSession(){if(refreshPromise)return refreshPromise;refreshPromise=(async()=>{if(adminAuthClient&&localStorage.getItem("yi_admin_google_session")==="1"){const {data,error}=await adminAuthClient.auth.refreshSession();if(error||!data.session)throw error||Error("Google sessiyasini yangilab bo‘lmadi.");saveSession(data.session);return}if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)})();try{return await refreshPromise}finally{refreshPromise=null}}
+async function getQueryCount(table,filter=""){const request=()=>fetch(url+"/rest/v1/"+table+"?select=id"+(filter?"&"+filter:""),{headers:{...authHeaders(),"Prefer":"count=exact","Range":"0-0"}});let r=await request();if(r.status===401&&refreshToken){await refreshSession();r=await request()}if(!r.ok)throw Error("Count "+table+" "+r.status);const value=r.headers.get("content-range")||"";const match=value.match(/\/(\d+|\*)$/);if(!match||match[1]==="*")throw Error("Supabase aniq count qaytarmadi: "+table);return Number(match[1])}
 async function checkAdmin(requireGoogle=false){const me=await authFetch("user",{headers:{Authorization:"Bearer "+token}});user=me;if(!me.email)throw Error("Hisob email manzilini qaytarmadi.");if(requireGoogle){const googleAllowed=await api("rpc/admin_google_console_check",{method:"POST",body:"{}"});if(googleAllowed!==true)throw Error("Admin paneliga faqat ruxsat berilgan va Google orqali tasdiqlangan hisob kira oladi.");}const allowed=await api("rpc/admin_console_check",{method:"POST",body:"{}"});if(allowed!==true)throw Error("Bu hisob admin ro‘yxatida faol emas. Kirish rad etildi.");return true}
-function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden")}
+function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");const identity=$("adminSessionInfo");if(identity)identity.textContent=user?.email||"Tasdiqlangan administrator";}
 function showLogin(){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");$("otpPanel").classList.add("hidden");$("loginEmail").disabled=false;$("loginCode").value="";$("loginPassword").value=""}
 async function signOut(revoke=true){
  const old=token;token="";refreshToken="";user=null;
@@ -322,24 +326,31 @@ function fmt(d){if(!d)return "—";try{return new Date(d).toLocaleString("uz-UZ"
 function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("uz-UZ",{day:"2-digit",month:"short",year:"numeric"})}
 function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
 async function loadData(){try{
- const [i,p,s,a,g,gn,tp,ti,sh,yp]=await Promise.all([
-  api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),
-  api("rpc/admin_list_connection_requests",{method:"POST",body:JSON.stringify({})}),
-  api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),
-  api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),
-  api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),
-  api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),
-  api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),
-  api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),
-  api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300"),
-  api("youth_opportunity_programs?select=*&order=featured.desc,sort_order.asc,title.asc&limit=300")
- ]);
- initiatives=i||[];partners=p||[];sources=s||[];audit=a||[];
- const notesById=new Map((gn||[]).map(n=>[n.integration_id,n]));
- integrations=(g||[]).map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||""}));
- teamPosts=tp||[];teamInterests=ti||[];showcase=sh||[];youthPrograms=yp||[];
- renderAll();setDbHealth(true,"Ulandi");$("lastRefresh").textContent="Yangilandi";$("lastUpdated").textContent=fmt(new Date().toISOString());
- }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e)}}
+ const jobs=[
+  {name:"Tashabbuslar",run:()=>api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),apply:v=>initiatives=v||[]},
+  {name:"Hamkorlik murojaatlari",run:()=>api("rpc/admin_list_connection_requests",{method:"POST",body:JSON.stringify({})}),apply:v=>partners=v||[]},
+  {name:"Manbalar",run:()=>api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),apply:v=>sources=v||[]},
+  {name:"Eski ariza auditi",run:()=>api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),apply:v=>legacyAudit=v||[]},
+  {name:"Umumiy audit jurnali",run:()=>api("rpc/admin_list_console_events",{method:"POST",body:JSON.stringify({p_limit:250})}),apply:v=>consoleEvents=v||[]},
+  {name:"Rasmiy portallar",run:()=>api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),apply:v=>integrations=v||[]},
+  {name:"Portal izohlari",run:()=>api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),apply:v=>{const notesById=new Map((v||[]).map(n=>[n.integration_id,n]));integrations=integrations.map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||x.admin_notes||""}))}},
+  {name:"Jamoa e’lonlari",run:()=>api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),apply:v=>teamPosts=v||[]},
+  {name:"Jamoaga qiziqishlar",run:()=>api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),apply:v=>teamInterests=v||[]},
+  {name:"Top tashabbuslar",run:()=>api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300"),apply:v=>showcase=v||[]},
+  {name:"Yoshlar dasturlari",run:()=>api("youth_opportunity_programs?select=*&order=featured.desc,sort_order.asc,title.asc&limit=300"),apply:v=>youthPrograms=v||[]}
+ ];
+ const results=await Promise.allSettled(jobs.map(job=>job.run()));
+ const failed=[];
+ results.forEach((result,index)=>{if(result.status==="fulfilled")jobs[index].apply(result.value);else{failed.push(jobs[index].name);console.error("Admin bo‘limi yuklanmadi:",jobs[index].name,result.reason)}});
+ audit=[...consoleEvents.map(x=>({...x,auditKind:"event"})),...legacyAudit.map(x=>({...x,auditKind:"initiative"}))].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0)).slice(0,250);
+ renderAll();
+ const hasConnection=results.some(result=>result.status==="fulfilled");
+ setDbHealth(hasConnection,failed.length?"Qisman ulandi":"Ulandi");
+ $("lastRefresh").textContent=failed.length?"Qisman yangilandi":"Yangilandi";
+ $("lastUpdated").textContent=fmt(new Date().toISOString());
+ if(failed.length)notify("Ayrim bo‘limlar yangilanmadi: "+failed.join(", ")+". Qayta urinib ko‘ring.");
+ return failed.length===0;
+ }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e);return false}}
 async function loadPilotMetrics(){
  try{
   const m=await api("rpc/admin_get_pilot_metrics",{method:"POST",body:"{}"});
@@ -364,20 +375,38 @@ async function loadPilotMetrics(){
   const last=m.last_member_activity_at?new Date(m.last_member_activity_at).toLocaleString("uz-UZ"):"Hali faollik qayd etilmagan";
   $("pilotLastActivity").textContent="Oxirgi qayd etilgan harakat: "+last;
   $("pilotMetricsState").textContent="Yangilandi";
+  return true;
  }catch(e){
   $("pilotMetricsState").textContent="Yuklanmadi";
   $("pilotLastActivity").textContent="Pilot statistikasi yuklanmadi. Admin ruxsati va RPC ulanishini tekshiring.";
   console.error("Pilot metrics:",e);
+  return false;
  }
 }
-async function loadStats(){try{
- const [all,n,rev,progress,done,partnerNew,sourceActive,portalActive]=await Promise.all([
- getQueryCount("initiatives"),getQueryCount("initiatives","status=eq.submitted"),getQueryCount("initiatives","status=eq.reviewing"),getQueryCount("initiatives","status=eq.in_progress"),getQueryCount("initiatives","status=eq.completed"),getQueryCount("connection_requests","review_status=eq.new"),getQueryCount("opportunity_sources","active=eq.true"),getQueryCount("official_portal_integrations","active=eq.true")]);
- $("statAll").textContent=all;$("statNew").textContent=n;$("statProgress").textContent=progress;$("statDone").textContent=done;$("statPartners").textContent=partnerNew;$("healthSources").textContent=sourceActive+" imkoniyat + "+portalActive+" rasmiy portal";setDbHealth(true,"Ulandi");
- const statuses=["submitted","reviewing","needs_details","approved","in_progress","completed","declined"],labels=statuses.map(s=>statusNames[s]),counts=await Promise.all(statuses.map(s=>getQueryCount("initiatives","status=eq."+s))),max=Math.max(1,...counts);
- $("statusBars").innerHTML=statuses.map((s,i)=>'<div class="barrow"><div class="barlabel">'+esc(labels[i])+'</div><div class="trackbar"><div class="fillbar" style="width:'+(counts[i]/max*100)+'%"></div></div><div class="barcount">'+counts[i]+'</div></div>').join("");
- await loadPilotMetrics();
- }catch(e){setDbHealth(false,"Ulanmadi");console.error(e)}}
+async function loadStats(){const metricJobs=[
+ ["all","Jami tashabbuslar",()=>getQueryCount("initiatives")],
+ ["new","Yangi tashabbuslar",()=>getQueryCount("initiatives","status=eq.submitted")],
+ ["progress","Jarayondagi tashabbuslar",()=>getQueryCount("initiatives","status=eq.in_progress")],
+ ["done","Yakunlangan tashabbuslar",()=>getQueryCount("initiatives","status=eq.completed")],
+ ["partners","Yangi hamkorliklar",()=>getQueryCount("connection_requests","review_status=eq.new")],
+ ["sources","Faol manbalar",()=>getQueryCount("opportunity_sources","active=eq.true")],
+ ["portals","Faol portallar",()=>getQueryCount("official_portal_integrations","active=eq.true")]
+ ];
+ const results=await Promise.allSettled(metricJobs.map(job=>job[2]()));
+ const values={};let failures=[];
+ results.forEach((result,index)=>{const key=metricJobs[index][0];if(result.status==="fulfilled")values[key]=result.value;else{values[key]=null;failures.push(metricJobs[index][1]);console.error("Admin hisoblagich:",metricJobs[index][1],result.reason)}});
+ const show=(id,value)=>$(id).textContent=value===null||value===undefined?"—":Number(value).toLocaleString("uz-UZ");
+ show("statAll",values.all);show("statNew",values.new);show("statProgress",values.progress);show("statDone",values.done);show("statPartners",values.partners);
+ $("healthSources").textContent=(values.sources===null?"—":values.sources+" imkoniyat")+" + "+(values.portals===null?"—":values.portals+" rasmiy portal");
+ const statuses=["submitted","reviewing","needs_details","approved","in_progress","completed","declined"],labels=statuses.map(s=>statusNames[s]);
+ const statusResults=await Promise.allSettled(statuses.map(s=>getQueryCount("initiatives","status=eq."+s)));
+ const counts=statusResults.map((result,index)=>{if(result.status==="fulfilled")return result.value;failures.push("Holatlar taqsimoti");console.error("Holat count:",statuses[index],result.reason);return null});
+ const validCounts=counts.filter(Number.isFinite),max=Math.max(1,...validCounts);
+ $("statusBars").innerHTML=statuses.map((s,i)=>'<div class="barrow"><div class="barlabel">'+esc(labels[i])+'</div><div class="trackbar"><div class="fillbar" style="width:'+(Number.isFinite(counts[i])?counts[i]/max*100:0)+'%"></div></div><div class="barcount">'+(Number.isFinite(counts[i])?counts[i]:"—")+'</div></div>').join("");
+ const pilotOk=await loadPilotMetrics();
+ setDbHealth(results.some(result=>result.status==="fulfilled"),failures.length?"Qisman ulandi":"Ulandi");
+ return failures.length===0&&pilotOk;
+}
 function renderOverview(){const recent=initiatives.slice(0,6);$("recentBody").innerHTML=recent.length?recent.map(i=>'<tr><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(dateShort(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+'</span></td><td>'+esc(i.district||"—")+'</td><td>'+toTableStatus(i.status)+'</td><td>'+esc(dateShort(i.created_at))+'</td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha arizalar yo‘q.</td></tr>'}
 function renderInitiatives(){const term=($("initiativeSearch").value||"").toLowerCase(),status=$("initiativeFilter").value;const rows=initiatives.filter(i=>(!status||i.status===status)&&[i.title,i.submitter_name,i.reference_code,i.district,i.contact,i.category].join(" ").toLowerCase().includes(term));$("initiativeCount").textContent=rows.length+" ta ko‘rsatilmoqda · bazadan oxirgi 300 ta";$("initiativesBody").innerHTML=rows.length?rows.map(i=>'<tr data-id="'+esc(i.id)+'"><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(fmt(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+' · '+esc(i.age_band)+'</span><span class="sub">'+esc(i.problem||"")+'</span></td><td>'+esc(categoryNames[i.category]||i.category)+'<span class="sub">'+esc(i.district||"Hudud kiritilmagan")+'</span></td><td>'+esc(i.contact||"—")+'</td><td><select class="statusselect js-istatus" aria-label="Holat">'+Object.entries(statusNames).map(([k,v])=>'<option value="'+k+'" '+(i.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><input class="noteinput js-inote" maxlength="2000" value="'+esc(i.admin_notes||"")+'" placeholder="Ichki izoh (ixtiyoriy)"></td><td><button class="savebtn js-isave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">Mos ariza topilmadi.</td></tr>'}
 function renderPartners(){const term=($("partnerSearch").value||"").toLowerCase(),filter=$("partnerFilter").value;const rows=partners.filter(p=>(!filter||p.review_status===filter)&&[p.name,p.organization,p.message,p.email,p.phone,p.request_type].join(" ").toLowerCase().includes(term));$("partnerCount").textContent=rows.length+" ta murojaat · bazadan oxirgi 300 ta";$("partnersBody").innerHTML=rows.length?rows.map(p=>'<tr data-id="'+esc(p.id)+'"><td>'+esc(fmt(p.created_at))+'</td><td><strong>'+esc(p.name)+'</strong><span class="sub">'+esc(p.organization||"Tashkilot ko‘rsatilmagan")+'</span></td><td><span class="typebadge">'+esc(typeNames[p.request_type]||p.request_type)+'</span><span class="sub">'+esc(p.message)+'</span></td><td>'+esc(p.email||"")+'<span class="sub">'+esc(p.phone||"")+'</span></td><td><select class="statusselect js-pstatus">'+Object.entries(requestNames).map(([k,v])=>'<option value="'+k+'" '+(p.review_status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><input class="noteinput js-pnote" maxlength="2000" value="'+esc(p.admin_notes||"")+'" placeholder="Ichki izoh"></td><td><button class="savebtn js-psave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">Hozircha hamkorlik murojaatlari yo‘q.</td></tr>'}
@@ -397,10 +426,12 @@ async function saveIntegration(btn){
   if(nextStatus==="connected"&&nextMode==="external_link"){notify("Tashqi havola yolg‘iz o‘zi API/SSO ulanishi emas. Avval haqiqiy integratsiyani sozlang.");btn.disabled=false;return}
   if(docsUrl&&!/^https:\/\/\S+/i.test(docsUrl)){notify("Texnik hujjat havolasi HTTPS bilan boshlansin.");btn.disabled=false;return}
   const adminNote=tr.querySelector(".js-inote").value;
-  const patch={connection_mode:nextMode,connection_status:nextStatus,docs_url:docsUrl,active:tr.querySelector(".js-iactive").checked,verified_on:new Date().toISOString().slice(0,10)};
-  await api("official_portal_integrations?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(patch)});
+  const patch={connection_mode:nextMode,connection_status:nextStatus,docs_url:docsUrl,active:tr.querySelector(".js-iactive").checked,verified_on:new Date().toISOString().slice(0,10),updated_at:new Date().toISOString()};
+  const changed=await api("official_portal_integrations?id=eq."+encodeURIComponent(id)+"&connection_status=eq."+encodeURIComponent(row.connection_status)+"&connection_mode=eq."+encodeURIComponent(row.connection_mode),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify(patch)});
+  if(!Array.isArray(changed)||!changed.length)throw Error("Portal yozuvi boshqa administrator tomonidan o‘zgartirilgan. Ma’lumotni yangilang.");
   await api("official_portal_admin_notes?on_conflict=integration_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({integration_id:id,admin_notes:adminNote,updated_at:new Date().toISOString()})});
-  await loadData();notify("Portal reyestri yangilandi.");
+  const audited=await recordAdminEvent("portal_update","official_portal",id,"Rasmiy portal reyestri yangilandi.",{connection_mode:nextMode,connection_status:nextStatus,active:patch.active});
+  await loadData();notify("Portal reyestri yangilandi."+auditSuffix(audited));
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
 function renderTeamPosts(){
@@ -417,34 +448,47 @@ function renderTeamInterests(){
 }
 async function saveTeamPost(btn){
  const tr=btn.closest("tr"),row=teamPosts.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
- try{await api("team_posts?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({status:tr.querySelector(".js-tpstatus").value})});await loadData();notify("Jamoa e’loni yangilandi.")}
+ const nextStatus=tr.querySelector(".js-tpstatus").value;
+ try{const changed=await api("team_posts?id=eq."+encodeURIComponent(row.id)+"&status=eq."+encodeURIComponent(row.status),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({status:nextStatus,updated_at:new Date().toISOString()})});if(!Array.isArray(changed)||!changed.length)throw Error("E’lon boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("team_post_review","team_post",row.id,"Jamoa e’loni holati o‘zgartirildi.",{old_status:row.status,new_status:nextStatus});await loadData();notify("Jamoa e’loni yangilandi."+auditSuffix(audited))}
  catch(e){notify("E’lon holati saqlanmadi: "+e.message)}finally{btn.disabled=false}
 }
 async function saveTeamInterest(btn){
  const tr=btn.closest("tr"),row=teamInterests.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
- try{await api("team_interest_requests?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({status:tr.querySelector(".js-tistatus").value})});await loadData();notify("Qiziqish murojaati yangilandi.")}
+ const nextStatus=tr.querySelector(".js-tistatus").value;
+ try{const changed=await api("team_interest_requests?id=eq."+encodeURIComponent(row.id)+"&status=eq."+encodeURIComponent(row.status),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({status:nextStatus})});if(!Array.isArray(changed)||!changed.length)throw Error("Murojaat boshqa admin tomonidan yangilangan. Qayta yuklang.");const audited=await recordAdminEvent("team_interest_review","team_interest",row.id,"Jamoaga qiziqish murojaati yangilandi.",{old_status:row.status,new_status:nextStatus});await loadData();notify("Qiziqish murojaati yangilandi."+auditSuffix(audited))}
  catch(e){notify("Murojaatni yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
 }
 function renderShowcaseAdmin(){
  const cat={technology:"Texnologiya",education:"Ta’lim",community:"Jamoa / mahalla",startup:"Startap",volunteer:"Ko‘ngillilik",culture:"Madaniyat",other:"Boshqa"};
  $("showcaseCountAdmin").textContent=showcase.length+" ta";
- $("showcaseAdminBody").innerHTML=showcase.length?showcase.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(cat[x.category]||x.category)+' · '+esc(x.slug)+'</span><span class="sub">'+esc(x.summary.slice(0,130))+'</span></td><td>'+Number(x.votes_count||0)+'</td><td><label class="check"><input type="checkbox" class="js-showfeatured" '+(x.featured?'checked':'')+'> Tanlangan</label></td><td><label class="check"><input type="checkbox" class="js-showpublished" '+(x.published?'checked':'')+'> Public</label></td><td><button class="savebtn js-showsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha showcase yozuvlari yo‘q. Tekshirilgan, ommaviy ko‘rsatishga rozilik olingan loyiha qo‘shing.</td></tr>';
+ $("showcaseAdminBody").innerHTML=showcase.length?showcase.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(cat[x.category]||x.category)+' · '+esc(x.slug)+'</span><span class="sub">'+esc(x.summary.slice(0,130))+'</span></td><td>'+Number(x.votes_count||0)+'</td><td><label class="check"><input type="checkbox" class="js-showfeatured" '+(x.featured?'checked':'')+'> Tanlangan</label></td><td><label class="check"><input type="checkbox" class="js-showpublished" '+(x.published?'checked':'')+'> Public</label><label class="check"><input type="checkbox" class="js-showconsent"> Rozilik tekshirildi</label></td><td><button class="savebtn js-showsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha showcase yozuvlari yo‘q. Tekshirilgan, ommaviy ko‘rsatishga rozilik olingan loyiha qo‘shing.</td></tr>';
 }
 async function saveShowcase(btn){
  const tr=btn.closest("tr"),row=showcase.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
- try{await api("initiative_showcase?id=eq."+encodeURIComponent(row.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({featured:tr.querySelector(".js-showfeatured").checked,published:tr.querySelector(".js-showpublished").checked})});await loadData();notify("Top tashabbus holati yangilandi.")}
+ const featured=tr.querySelector(".js-showfeatured").checked,published=tr.querySelector(".js-showpublished").checked;
+ try{if(published&&!row.published&&!tr.querySelector(".js-showconsent").checked)throw Error("Ommaga chiqarishdan oldin muallif/jamoa roziligini tekshirilgan deb tasdiqlang.");const changed=await api("initiative_showcase?id=eq."+encodeURIComponent(row.id)+"&featured=eq."+String(row.featured)+"&published=eq."+String(row.published),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({featured,published})});if(!Array.isArray(changed)||!changed.length)throw Error("Tashabbus boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("showcase_update","showcase",row.id,"Top tashabbus ommaviy holati yangilandi.",{featured,published});await loadData();notify("Top tashabbus holati yangilandi."+auditSuffix(audited))}
  catch(e){notify("Showcase saqlanmadi: "+e.message)}finally{btn.disabled=false}
 }
 async function addShowcase(ev){
  ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("showcaseNotice","Loyiha saqlanmoqda…");
- const img=$("showImage").value.trim(),url=$("showUrl").value.trim();
- if((img&&!/^https:\/\/\S+/i.test(img))||(url&&!/^https:\/\/\S+/i.test(url))){tell("showcaseNotice","Rasm va loyiha havolalari HTTPS bilan boshlanishi kerak.",true);btn.disabled=false;return}
- const payload={slug:$("showSlug").value.trim().toLowerCase(),title:$("showTitle").value.trim(),summary:$("showSummary").value.trim(),category:$("showCategory").value,district:$("showDistrict").value.trim(),display_name:$("showDisplayName").value.trim()||"Yoshlar-Ishi tashabbuskori",stage:$("showStage").value,image_url:img,public_url:url,featured:$("showFeatured").checked,published:$("showPublish").checked,created_by:user?.id||null};
- try{await api("initiative_showcase",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});ev.currentTarget.reset();$("showDisplayName").value="Yoshlar-Ishi tashabbuskori";tell("showcaseNotice","Tashabbus saqlandi. Public holat tanlangan bo‘lsa, saytning Top tashabbuslar qismida ko‘rinadi.");await loadData()}
+ const img=$("showImage").value.trim(),url=$("showUrl").value.trim(),published=$("showPublish").checked;
+ if((img&&!safeHttpsUrl(img))||(url&&!safeHttpsUrl(url))){tell("showcaseNotice","Rasm va loyiha havolalari yaroqli HTTPS manzil bo‘lishi kerak.",true);btn.disabled=false;return}
+ if(published&&!$("showConsent").checked){tell("showcaseNotice","Ommaga chiqarishdan oldin muallif/jamoa roziligini tekshirilgan deb belgilang.",true);btn.disabled=false;return}
+ const payload={slug:$("showSlug").value.trim().toLowerCase(),title:$("showTitle").value.trim(),summary:$("showSummary").value.trim(),category:$("showCategory").value,district:$("showDistrict").value.trim(),display_name:$("showDisplayName").value.trim()||"Yoshlar-Ishi tashabbuskori",stage:$("showStage").value,image_url:img,public_url:url,featured:$("showFeatured").checked,published,created_by:user?.id||null};
+ try{const inserted=await api("initiative_showcase",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(inserted)||!inserted.length)throw Error("Showcase yozuvi kiritilmadi. RLS va admin ruxsatini tekshiring.");const audited=await recordAdminEvent("showcase_create","showcase",inserted[0].id,"Yangi tashabbus showcase’ga qo‘shildi.",{published,featured:payload.featured});ev.currentTarget.reset();$("showDisplayName").value="Yoshlar-Ishi tashabbuskori";tell("showcaseNotice","Tashabbus saqlandi."+auditSuffix(audited));await loadData()}
  catch(e){tell("showcaseNotice","Saqlab bo‘lmadi: "+e.message,true)}
  finally{btn.disabled=false}
 }
-function renderAudit(){$("activityCount").textContent=audit.length+" qayd";$("activityList").innerHTML=audit.length?audit.map(a=>'<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · foydalanuvchi ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>').join(""):'<div class="empty">Hozircha qaydlar yo‘q. Ariza holati o‘zgarganda tarix avtomatik yoziladi.</div>'}
+function renderAudit(){
+ $("activityCount").textContent=audit.length+" qayd";
+ $("activityList").innerHTML=audit.length?audit.map(a=>{
+  if(a.auditKind==="event"){
+   const label=a.summary||"Boshqaruv amali";
+   return '<div class="activityitem"><div class="activityicon">✓</div><div class="activitytext"><strong>'+esc(label)+'</strong><small>Amal: '+esc(a.event_type||"—")+' · obyekt: '+esc(a.entity_type||"—")+' · ID: '+esc(a.entity_id||"—")+' · admin: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>';
+  }
+  return '<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · admin ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>';
+ }).join(""):'<div class="empty">Hozircha audit qaydlari yo‘q. Boshqaruv amallari shu yerda ko‘rinadi.</div>';
+}
 
 function renderYouthPrograms(){
  const statusLabels={open:"Ochiq qabul",permanent:"Doimiy xizmat",upcoming:"Rejalashtirilgan",unverified:"Tasdiqlanmagan",closed:"Yopilgan"};
@@ -478,30 +522,36 @@ async function saveYouthProgram(ev){
   if(raw){eligibility=JSON.parse(raw);if(!eligibility||Array.isArray(eligibility)||typeof eligibility!=="object")throw Error("Muvofiqlik shartlari JSON obyekt bo‘lishi kerak.");}
   const sourceUrl=$("programSourceUrl").value.trim(),appUrl=$("programApplicationUrl").value.trim(),secondaryUrl=$("programSecondaryUrl").value.trim();
   if(!/^[a-z0-9-]{3,100}$/.test($("programSlug").value.trim().toLowerCase()))throw Error("Slug faqat kichik lotin harflari, raqam va defisdan iborat bo‘lsin.");
-  if(!/^https?:\/\//i.test(sourceUrl))throw Error("Rasmiy manba URL http:// yoki https:// bilan boshlanishi kerak.");
-  if(appUrl&&!/^https?:\/\//i.test(appUrl))throw Error("Ariza portali URL noto‘g‘ri.");
-  if(secondaryUrl&&!/^https?:\/\//i.test(secondaryUrl))throw Error("Qo‘shimcha manba URL noto‘g‘ri.");
+  if(!safeHttpsUrl(sourceUrl))throw Error("Rasmiy manba URL yaroqli HTTPS manzil bo‘lishi kerak.");
+  if(appUrl&&!safeHttpsUrl(appUrl))throw Error("Ariza portali URL yaroqli HTTPS manzil bo‘lishi kerak.");
+  if(secondaryUrl&&!safeHttpsUrl(secondaryUrl))throw Error("Qo‘shimcha manba URL yaroqli HTTPS manzil bo‘lishi kerak.");
   const splitLines=id=>$(id).value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
   const min=$("programAgeMin").value,max=$("programAgeMax").value;
   if(min!==""&&max!==""&&Number(min)>Number(max))throw Error("Eng kam yosh eng yuqori yoshdan katta bo‘lishi mumkin emas.");
+  const verified=$("programVerified").value;
+  if(!verified||Number.isNaN(Date.parse(verified)))throw Error("Rasmiy manbani tekshirgan sanani belgilang.");
+  if(Date.parse(verified+"T00:00:00Z")>Date.now()+86400000)throw Error("Tekshirilgan sana kelajak sanasi bo‘lishi mumkin emas.");
+  const sortRaw=$("programSort").value,sortOrder=sortRaw===""?100:Number(sortRaw);
+  if(!Number.isInteger(sortOrder)||sortOrder<0||sortOrder>9999)throw Error("Tartib raqami 0–9999 oralig‘ida butun son bo‘lsin.");
   const payload={slug:$("programSlug").value.trim().toLowerCase(),title:$("programTitle").value.trim(),provider:$("programProvider").value.trim(),category:$("programCategory").value,
-   sort_order:Number($("programSort").value)||100,
-   availability_status:$("programAvailabilityStatus").value,
+   sort_order:sortOrder,availability_status:$("programAvailabilityStatus").value,
    summary:$("programSummary").value.trim(),benefit:$("programBenefit").value.trim(),age_min:min===""?null:Number(min),age_max:max===""?null:Number(max),
-   audience_tags:splitLines("programAudience"),eligibility:eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
+   audience_tags:splitLines("programAudience"),eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
    application_channel:$("programChannel").value.trim(),application_url:appUrl,source_title:$("programSourceTitle").value.trim(),source_url:sourceUrl,
    secondary_source_url:secondaryUrl,deadline_note:$("programDeadline").value.trim(),status_note:$("programStatusNote").value.trim(),
-   verified_on:$("programVerified").value,active:$("programActive").checked,featured:$("programFeatured").checked,updated_at:new Date().toISOString()};
+   verified_on:verified,active:$("programActive").checked,featured:$("programFeatured").checked,updated_at:new Date().toISOString()};
   const id=$("programEditId").value;
-  if(id){await api("youth_opportunity_programs?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});notify("Yoshlar dasturi yangilandi.")}
-  else{await api("youth_opportunity_programs",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});notify("Yangi yoshlar dasturi qo‘shildi.")}
-  resetYouthProgramForm();await loadData();await loadStats();
+  let saved;
+  if(id){const current=youthPrograms.find(p=>p.id===id);const filter="id=eq."+encodeURIComponent(id)+(current?.updated_at?"&updated_at=eq."+encodeURIComponent(current.updated_at):"");saved=await api("youth_opportunity_programs?"+filter,{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(saved)||!saved.length)throw Error("Dastur boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");}
+  else{saved=await api("youth_opportunity_programs",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(saved)||!saved.length)throw Error("Dastur saqlanmadi. RLS va admin ruxsatini tekshiring.");}
+  const audited=await recordAdminEvent(id?"program_update":"program_create","youth_program",id||saved[0].id,id?"Yoshlar dasturi yangilandi.":"Yangi yoshlar dasturi qo‘shildi.",{slug:payload.slug,availability_status:payload.availability_status,active:payload.active});
+  resetYouthProgramForm();await loadData();await loadStats();notify((id?"Yoshlar dasturi yangilandi.":"Yangi yoshlar dasturi qo‘shildi.")+auditSuffix(audited));
  }catch(e){tell("programFormNotice","Saqlash xatosi: "+e.message,true)}
  finally{btn.disabled=false}
 }
 async function toggleYouthProgram(btn){
  const tr=btn.closest("tr"),p=youthPrograms.find(x=>x.id===tr.dataset.id);if(!p)return;btn.disabled=true;
- try{await api("youth_opportunity_programs?id=eq."+encodeURIComponent(p.id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!p.active,updated_at:new Date().toISOString()})});await loadData();notify("Dastur katalog holati yangilandi.")}
+ try{const changed=await api("youth_opportunity_programs?id=eq."+encodeURIComponent(p.id)+"&active=eq."+String(p.active),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({active:!p.active,updated_at:new Date().toISOString()})});if(!Array.isArray(changed)||!changed.length)throw Error("Dastur boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("program_update","youth_program",p.id,"Yoshlar dasturi ommaviy holati o‘zgartirildi.",{active:!p.active,availability_status:p.availability_status});await loadData();notify("Dastur katalog holati yangilandi."+auditSuffix(audited))}
  catch(e){notify("Dastur holatini yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
 }
 
@@ -515,6 +565,7 @@ async function saveInitiative(btn){
   const reviewed=Array.isArray(reviewRows)?reviewRows[0]:null;
   if(!reviewed)throw Error("Admin review RPC returned no result.");
   row.status=reviewed.new_status;row.admin_notes=reviewed.admin_notes;row.reviewed_by=user.id;row.reviewed_at=reviewed.reviewed_at;
+  const audited=await recordAdminEvent("initiative_review","initiative",id,"Tashabbus ko‘rib chiqildi.",{old_status:oldStatus,new_status:status});
   let telegramMessage="";
   if(oldStatus!==status){
    try{
@@ -525,24 +576,24 @@ async function saveInitiative(btn){
     else if(nd.configured===false)telegramMessage=" Telegram bot tokeni hali sozlanmagan.";
    }catch{telegramMessage=" Telegram xabarnomasi yuborilmadi; holat saqlandi."}
   }
-  await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi."+telegramMessage);
+  await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi."+telegramMessage+auditSuffix(audited));
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
 async function savePartner(btn){
  const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;
  try{
-  const result=await api("rpc/admin_review_connection_request",{method:"POST",body:JSON.stringify({
-   p_id:id,p_expected_status:row.review_status,p_status:tr.querySelector(".js-pstatus").value,
-   p_admin_notes:tr.querySelector(".js-pnote").value
-  })});
-  if(!Array.isArray(result)||!result.length)throw Error("Admin review RPC returned no result.");
-  await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi.");
+  const nextStatus=tr.querySelector(".js-pstatus").value;
+  const result=await api("rpc/admin_review_connection_request",{method:"POST",body:JSON.stringify({p_id:id,p_expected_status:row.review_status,p_status:nextStatus,p_admin_notes:tr.querySelector(".js-pnote").value})});
+  if(!Array.isArray(result)||!result.length)throw Error("Murojaat yangilanmadi yoki boshqa administrator oldin o‘zgartirdi. Yangilang.");
+  const audited=await recordAdminEvent("partner_review","partner_request",id,"Hamkorlik murojaati ko‘rib chiqildi.",{old_status:row.review_status,new_status:nextStatus});
+  await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi."+auditSuffix(audited));
  }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
 }
-async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{await api("opportunity_sources?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({active:!row.active})});await loadData();await loadStats();notify("Manba holati yangilandi.")}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
-function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href);notify("CSV fayl tayyorlandi. Oxirgi 300 ta ariza eksport qilindi.")}
-async function addSource(ev){ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("sourceNotice","Manba saqlanmoqda…");const payload={title:$("sourceTitle").value.trim(),description:$("sourceDesc").value.trim(),category:$("sourceCategory").value,url:$("sourceUrl").value.trim(),provider:$("sourceProvider").value.trim(),active:$("sourceActive").checked,verified_on:new Date().toISOString().slice(0,10)};try{await api("opportunity_sources",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});ev.currentTarget.reset();$("sourceActive").checked=true;tell("sourceNotice","Manba qo‘shildi.");await loadData();await loadStats()}catch(e){tell("sourceNotice","Xatolik: "+e.message,true)}finally{btn.disabled=false}}
-async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki Supabase sozlamalari bo‘sh.");if(!token)return false;const params=new URLSearchParams(location.search);const requireGoogle=sessionStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_session")==="1"||params.get("admin-google")==="1";await checkAdmin(requireGoogle);if(requireGoogle)history.replaceState(null,"",location.pathname+location.hash);showApp();setPage(location.hash.slice(1)||"overview");await Promise.all([loadData(),loadStats()]);if(timer)clearInterval(timer);timer=setInterval(()=>{if(token)Promise.all([loadData(),loadStats()])},60000);return true}
+async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{const changed=await api("opportunity_sources?id=eq."+encodeURIComponent(id)+"&active=eq."+String(row.active),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({active:!row.active})});if(!Array.isArray(changed)||!changed.length)throw Error("Manba boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("source_update","opportunity_source",id,"Imkoniyat manbasi ko‘rinishi yangilandi.",{active:!row.active});await loadData();await loadStats();notify("Manba holati yangilandi."+auditSuffix(audited))}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
+async function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a"),objectUrl=URL.createObjectURL(blob);a.href=objectUrl;a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),1000);const audited=await recordAdminEvent("report_export","report","initiatives","Tashabbuslar CSV hisobotiga eksport qilindi.",{rows:rows.length,columns:cols.length});notify("CSV tayyorlandi: "+rows.length+" ta yozuv."+auditSuffix(audited))}
+async function addSource(ev){ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("sourceNotice","Manba saqlanmoqda…");const payload={title:$("sourceTitle").value.trim(),description:$("sourceDesc").value.trim(),category:$("sourceCategory").value,url:$("sourceUrl").value.trim(),provider:$("sourceProvider").value.trim(),active:$("sourceActive").checked,verified_on:new Date().toISOString().slice(0,10)};try{if(!safeHttpsUrl(payload.url))throw Error("Manba havolasi HTTPS bo‘lishi va foydalanuvchi nomi/parol saqlamasligi kerak.");if(!payload.title||!payload.description)throw Error("Nomi va tavsifini to‘ldiring.");const inserted=await api("opportunity_sources",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(inserted)||!inserted.length)throw Error("Manba saqlanmadi. RLS va admin ruxsatini tekshiring.");const audited=await recordAdminEvent("source_create","opportunity_source",inserted[0].id,"Yangi imkoniyat manbasi qo‘shildi.",{category:payload.category,active:payload.active});ev.currentTarget.reset();$("sourceActive").checked=true;tell("sourceNotice","Manba qo‘shildi."+auditSuffix(audited));await loadData();await loadStats()}catch(e){tell("sourceNotice","Xatolik: "+e.message,true)}finally{btn.disabled=false}}
+async function refreshDashboard(){if(dashboardRefreshPromise)return dashboardRefreshPromise;dashboardRefreshPromise=(async()=>{const results=await Promise.all([loadData(),loadStats()]);return results.every(Boolean)})().finally(()=>{dashboardRefreshPromise=null});return dashboardRefreshPromise}
+async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki Supabase sozlamalari bo‘sh.");if(!token)return false;const params=new URLSearchParams(location.search);const requireGoogle=sessionStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_session")==="1"||params.get("admin-google")==="1";await checkAdmin(requireGoogle);if(requireGoogle)history.replaceState(null,"",location.pathname+location.hash);showApp();setPage(location.hash.slice(1)||"overview");await refreshDashboard();if(timer)clearInterval(timer);timer=setInterval(()=>{if(token)refreshDashboard()},60000);return true}
 async function completeGoogleCallback(){
  const query=new URLSearchParams(location.search);
  const isGoogleCallback=query.get("admin-google")==="1"||
@@ -631,7 +682,7 @@ $("googleLoginBtn").addEventListener("click",async()=>{
  }
 });
 $("logoutBtn").addEventListener("click",()=>signOut(true));
-$("refreshBtn").addEventListener("click",()=>Promise.all([loadData(),loadStats()]).then(()=>notify("Panel yangilandi.")));
+$("refreshBtn").addEventListener("click",async()=>{const button=$("refreshBtn");button.disabled=true;button.textContent="↻ Yangilanmoqda…";try{const ok=await refreshDashboard();notify(ok?"Barcha admin bo‘limlari yangilandi.":"Ayrim bo‘limlar yangilanmadi; xatolar toast va jurnalga yozildi.")}finally{button.disabled=false;button.textContent="↻ Yangilash"}});
 $("activityRefresh").addEventListener("click",()=>loadData());
 document.querySelectorAll(".navitem").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.page)));
 $("teamRefreshAdmin").addEventListener("click",()=>loadData());$("showcaseRefresh").addEventListener("click",()=>loadData());
