@@ -210,6 +210,12 @@ jobs:
           if grep -Fqi 'create_user:true' /tmp/yoshlar-admin.html; then echo "::error::Unsafe self-signup marker found in admin page."; exit 1; fi
           grep -Fqi 'id="page-team"' /tmp/yoshlar-admin.html
           grep -Fqi 'id="page-showcase"' /tmp/yoshlar-admin.html
+          for page in control-center members community content reports; do grep -Fqi "id=\"page-$page\"" /tmp/yoshlar-admin.html || { echo "::error::The live admin panel is missing its $page management page."; exit 1; }; done
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin-operations.js" -o /tmp/yoshlar-admin-operations.js
+          grep -Fq "admin_build_report" /tmp/yoshlar-admin-operations.js || { echo "::error::The live admin extension is missing report generation."; exit 1; }
+          grep -Fq "admin_moderate_community_post" /tmp/yoshlar-admin-operations.js || { echo "::error::The live admin extension is missing community moderation."; exit 1; }
+          curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/admin-operations.css" -o /tmp/yoshlar-admin-operations.css
+          grep -Fq ".admin-ops-grid" /tmp/yoshlar-admin-operations.css || { echo "::error::The live admin operations stylesheet is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/davlat-xizmatlari.html" -o /tmp/yoshlar-services.html
           grep -Fqi 'href="./shared-theme.css"' /tmp/yoshlar-services.html || { echo "::error::The live service directory is missing the shared visual theme."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/shared-theme.css" -o /tmp/yoshlar-shared-theme.css
@@ -273,7 +279,7 @@ jobs:
           grep -Fq '"sizes": "192x192"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 192px icon."; exit 1; }
           grep -Fq '"sizes": "512x512"' /tmp/yoshlar-manifest.json || { echo "::error::The live PWA manifest is missing a 512px icon."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/service-worker.js" -o /tmp/yoshlar-service-worker.js
-          grep -Fq 'const CACHE_NAME = "yi-pwa-v32";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v32."; exit 1; }
+          grep -Fq 'const CACHE_NAME = "yi-pwa-v33";' /tmp/yoshlar-service-worker.js || { echo "::error::The production service worker cache version is outdated; expected yi-pwa-v33."; exit 1; }
           grep -Fq 'https://static.tuit.uz' /tmp/yoshlar-service-worker.js || { echo "::error::The Registan hero photo origin is not included in the public image cache allow-list."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 'https://static.tuit.uz/crop/1/6/1200__95_1622872966.jpg' -o /tmp/yoshlar-registan-photo.jpg
           file --mime-type /tmp/yoshlar-registan-photo.jpg | grep -Eq 'image/(jpeg|webp|png)' || { echo "::error::The Registan youth photo source is not a valid image."; exit 1; }
