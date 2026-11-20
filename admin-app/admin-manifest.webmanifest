@@ -1,0 +1,20 @@
+{
+  "id": "/admin.html",
+  "name": "YI Control — Yoshlar-Ishi",
+  "short_name": "YI Control",
+  "description": "Yoshlar-Ishi mustaqil boshqaruv tizimi",
+  "lang": "uz",
+  "start_url": "/admin.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f7fc",
+  "theme_color": "#0d2743",
+  "icons": [
+    {
+      "src": "/admin/admin-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

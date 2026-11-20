@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><base href="/admin/">
+<meta name="theme-color" content="#0d2743"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="YI Control"><link rel="manifest" href="./admin-manifest.webmanifest"><link rel="icon" href="./admin-favicon.svg" type="image/svg+xml"><meta name="robots" content="noindex,nofollow">
+<title>YI Control — Mustaqil boshqaruv tizimi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f4f7fb;--ink:#182b3f;--muted:#5f6f80;--line:#d8e1eb;--green:#153e68;--lime:#cfe3f3;--card:#ffffff;--danger:#a13e31;--shadow:0 12px 34px #1b2c1e09}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 "DM Sans",sans-serif}a{color:var(--green);text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}.layout{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.sidebar{background:#123255;color:#eff4ec;padding:23px 16px;display:flex;flex-direction:column;gap:25px}.brand{display:flex;align-items:center;gap:10px;font:800 18px Manrope,sans-serif;letter-spacing:-.5px;padding:0 8px}.logo{display:grid;place-items:center;width:35px;height:35px;background:var(--lime);border-radius:11px;color:var(--green)}.smallcap{color:#a9b7aa;text-transform:uppercase;letter-spacing:1.4px;font-size:9px;font-weight:800;padding:0 10px;margin-bottom:5px}.navlist{display:grid;gap:5px}.navitem{border:0;border-radius:10px;background:transparent;color:#ced9cf;text-align:left;padding:11px 12px;display:flex;align-items:center;gap:11px;font-size:12px;font-weight:700}.navitem.active,.navitem:hover{background:#28557f;color:#fff}.ico{width:20px;text-align:center;font-size:15px}.sidebarfoot{margin-top:auto;padding:14px 10px;border-top:1px solid #ffffff20;font-size:11px;color:#c8d6ca}.sidebarfoot span{display:block;color:var(--lime);font-weight:800;margin-bottom:6px}.main{min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#fbfaf6;border-bottom:1px solid var(--line);padding:17px 26px;position:sticky;top:0;z-index:3}.crumb{font-size:11px;color:var(--muted)}.topbar h1{font:800 18px Manrope,sans-serif;letter-spacing:-.5px;margin:2px 0 0}.topactions{display:flex;align-items:center;gap:8px}.button{border:1px solid var(--line);background:#fffefa;color:var(--ink);border-radius:10px;padding:10px 12px;font-size:11px;font-weight:800}.button.primary{background:var(--green);color:white;border-color:var(--green)}.button.dark{background:#153e68;color:#fff;border-color:#153e68}.content{max-width:1500px;margin:auto;padding:25px 26px 45px}.page{display:none}.page.active{display:block}.welcome{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:22px}.welcome h2{font:800 clamp(25px,3vw,34px)/1.15 Manrope,sans-serif;letter-spacing:-1.4px;margin:6px 0}.welcome p{color:var(--muted);font-size:12px;margin:0}.eyebrow{text-transform:uppercase;letter-spacing:1.4px;color:var(--green);font-size:9px;font-weight:800}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:var(--shadow)}.stathead{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:10px;font-weight:700}.staticon{width:29px;height:29px;display:grid;place-items:center;background:#ecf0e3;border-radius:9px;color:var(--green);font-size:14px}.stat strong{display:block;font:800 30px/1.25 Manrope,sans-serif;letter-spacing:-1.2px;margin-top:10px}.stat small{color:var(--muted);font-size:10px}.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:13px;margin-top:14px}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 18px;border-bottom:1px solid var(--line)}.panelhead h3{font:800 14px Manrope,sans-serif;letter-spacing:-.3px;margin:0}.panelhead p{color:var(--muted);font-size:10px;margin:4px 0 0}.panelbody{padding:17px 18px}.healthlist{display:grid;gap:11px}.healthrow{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:11px}.healthrow span:first-child{color:var(--muted)}.statuspill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:5px 8px;background:#eff3e7;color:#385c36;font-size:9px;font-weight:800;white-space:nowrap}.statuspill:before{content:"";width:5px;height:5px;border-radius:50%;background:#56934f}.statuspill.warn{background:#fbf1de;color:#865d22}.statuspill.warn:before{background:#d6a13c}.statuspill.error{background:#f7e8e4;color:#963c30}.statuspill.error:before{background:#c75343}.bars{display:grid;gap:14px}.barrow{display:grid;grid-template-columns:105px 1fr 30px;gap:8px;align-items:center;font-size:10px}.barlabel{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.trackbar{height:8px;border-radius:99px;background:#ebede5;overflow:hidden}.fillbar{height:100%;border-radius:99px;background:var(--green);width:0;transition:width .4s}.barcount{text-align:right;font-weight:800}.sectiontitle{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:4px 0 17px}.sectiontitle h2{font:800 26px Manrope,sans-serif;letter-spacing:-1px;margin:5px 0}.sectiontitle p{margin:0;color:var(--muted);font-size:11px}.filters{display:flex;gap:8px;flex-wrap:wrap}.control{border:1px solid var(--line);background:#fffefa;border-radius:9px;padding:9px 10px;color:var(--ink);font-size:11px;max-width:100%}.filters input{min-width:220px}.tablewrap{overflow:auto;width:100%}table{border-collapse:collapse;width:100%;min-width:900px;font-size:11px}th{background:#f6f6ef;color:#637066;text-align:left;font-weight:800;white-space:nowrap}th,td{padding:12px 13px;border-bottom:1px solid #eceee6;vertical-align:top}tbody tr:hover{background:#fbfbf6}td .sub{display:block;color:var(--muted);font-size:10px;margin-top:4px;max-width:260px;overflow-wrap:anywhere}.rowtitle{font-weight:800;max-width:260px;display:block}.statusselect{font-size:10px;border:1px solid var(--line);border-radius:7px;padding:7px;max-width:180px;background:#fffefa}.savebtn{border:0;background:#e9efde;border-radius:7px;padding:7px 9px;color:#315a32;font-size:10px;font-weight:800}.noteinput{width:190px;border:1px solid var(--line);border-radius:7px;padding:7px;font-size:10px}.typebadge{display:inline-block;background:#eef0e6;border-radius:6px;padding:4px 7px;font-size:9px;font-weight:800}.empty{padding:34px!important;text-align:center;color:var(--muted)}.formsgrid{display:grid;grid-template-columns:.85fr 1.15fr;gap:14px;align-items:start}.form{padding:18px;display:grid;gap:12px}.field{display:grid;gap:5px}.field label{font-size:10px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:white;color:var(--ink);font-size:11px}.field textarea{min-height:80px;resize:vertical}.inlineform{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;align-items:center;gap:7px;font-size:11px}.check input{accent-color:var(--green)}.notice{font-size:11px;color:var(--green);min-height:16px}.notice.error{color:var(--danger)}.activity{display:grid;gap:0}.activityitem{display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:13px 0;border-bottom:1px solid #eceee6;align-items:start}.activityicon{width:27px;height:27px;display:grid;place-items:center;background:#edf0e4;border-radius:8px;color:var(--green)}.activitytext{font-size:11px}.activitytext small{display:block;color:var(--muted);margin-top:4px}.activitytime{color:var(--muted);font-size:9px;white-space:nowrap}.exporthint{font-size:10px;color:var(--muted)}.loginwrap{min-height:100vh;display:grid;place-items:center;padding:20px}.loginbox{width:min(430px,100%);background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:var(--shadow)}.loginbox h1{font:800 27px Manrope,sans-serif;letter-spacing:-1px;margin:18px 0 7px}.loginbox p{color:var(--muted);font-size:12px}.loginbox form{margin-top:22px}.login-divider{display:flex;align-items:center;gap:12px;margin:18px 0 10px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}.login-divider:before,.login-divider:after{content:"";height:1px;flex:1;background:var(--line)}.login-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.login-actions .button{font-size:10px}.loginbox .field input{font-size:12px}.hidden{display:none!important}.subtle{font-size:10px;color:var(--muted);line-height:1.65}.linkrow{display:flex;flex-wrap:wrap;gap:10px;font-size:10px;font-weight:800;margin-top:8px}.toast{position:fixed;right:18px;bottom:18px;z-index:10;background:#123255;color:white;padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);font-size:12px;max-width:350px;display:none}.mobiletoggle{display:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}.barrow{grid-template-columns:115px 1fr 30px}}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{padding:12px;gap:10px}.sidebar .brand{padding:3px 8px}.sidebar .smallcap,.sidebarfoot{display:none}.navlist{display:flex;overflow:auto}.navitem{white-space:nowrap;flex:0 0 auto;padding:10px}.topbar{padding:12px 15px}.content{padding:18px 14px 32px}.formsgrid{grid-template-columns:1fr}.welcome{align-items:start;flex-direction:column}.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}.sectiontitle{align-items:start;flex-direction:column}.filters input{min-width:150px}.loginbox{padding:23px}}
+@media(max-width:480px){.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:26px}.stathead{font-size:9px}.topactions .button{padding:9px}.topbar h1{font-size:16px}.barrow{grid-template-columns:80px 1fr 22px}.inlineform{grid-template-columns:1fr}.panelhead{padding:13px}.panelbody{padding:13px}}
+
+/* Yoshlar-Ishi shared startup palette */
+:root{--paper:#f7f6f2;--ink:#111411;--muted:#656960;--line:#dedfd5;--green:#111411;--lime:#d7ff66;--card:#fffefa;--danger:#a13e31;--shadow:0 12px 34px #1b21100b}
+body{background:var(--paper);color:var(--ink)}
+.sidebar{background:#111411;color:#f0f3e8;border-right:1px solid #252b20}
+.brand{color:#f7f8f1}
+.logo{background:#d7ff66;color:#111411;border-radius:8px}
+.smallcap{color:#9fa797}
+.navitem{color:#c7ccbf;border-radius:6px}
+.navitem.active,.navitem:hover{background:#d7ff66;color:#111411}
+.navitem.active .ico,.navitem:hover .ico{color:#111411}
+.sidebarfoot{border-color:#353a2e;color:#c7ccbf}
+.sidebarfoot span{color:#d7ff66}
+.topbar{background:#fbfaf6;border-color:#dedfd5}
+.crumb{color:#74796c}
+.topbar h1{color:#111411;letter-spacing:-.04em}
+.content{background:var(--paper)}
+.page,.welcome h2,.page-title{color:#111411}
+.eyebrow{color:#627d16}
+.button{border-color:#d6d9cc;background:#fffefa;color:#111411;border-radius:6px}
+.button:hover{border-color:#b7d15d;background:#f7faee}
+.button.primary,.button.dark{background:#111411;color:#fff;border-color:#111411}
+.button.primary:hover,.button.dark:hover{background:#31382a}
+.kpi,.stat,.metric,.panel,.tablewrap,.chart-card,.widget,.integration-card,.source-card,.audit-card{border-color:#dedfd5;border-radius:9px;box-shadow:0 5px 22px #171b1208}
+.kpi strong,.metric strong{letter-spacing:-.05em}
+.status,.badge,.tag{border-radius:4px}
+input,select,textarea{border-color:#d8dbcf;border-radius:6px;background:#fbfcf7;color:#111411}
+input:focus,select:focus,textarea:focus{outline:2px solid #99c733;outline-offset:1px}
+table th{background:#f0f3e6;color:#3f4735}
+table td,table th{border-color:#e2e4db}
+tr:hover td{background:#fafcf3}
+.notice,.alert{border-radius:6px}
+.notice{background:#f0f5e2;color:#4b5537;border-color:#d2e2a7}
+.notice.error,.alert.error{background:#fff1ef;border-color:#e8b7ae;color:#963a30}
+.kpi-icon,.metric-icon{background:#eff4df;color:#536d17;border-radius:6px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #99c733;outline-offset:3px}
+@media(max-width:850px){.sidebar{border-bottom:1px solid #353a2e}.navitem.active,.navitem:hover{background:#d7ff66;color:#111411}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important}}
+
+
+.google-auth-btn{width:100%;min-height:50px;margin-top:10px;padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#1f2937;font:700 13px "DM Sans",sans-serif;box-shadow:0 2px 7px #172b420c;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s}.google-auth-btn svg{width:20px;height:20px;flex:0 0 20px}.google-auth-btn:hover:not(:disabled){background:#f8fbff;border-color:#9fb4ca;box-shadow:0 7px 18px #172b4212;transform:translateY(-1px)}.google-auth-btn:focus-visible{outline:3px solid #7db5ed;outline-offset:3px}.google-auth-btn.is-loading{background:#f3f6fa;color:#526274}
+</style>
+<link rel="stylesheet" href="./admin-operations.css">
+  <link rel="stylesheet" href="./admin-shell.css">
+<style id="pilot-metrics-styles">
+.pilot-monitor{margin:14px 0}
+.pilot-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pilot-kpi{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:13px}
+.pilot-kpi span{display:block;min-height:30px;color:var(--muted);font-size:10px;font-weight:800;line-height:1.45}
+.pilot-kpi strong{display:block;margin-top:5px;font:800 25px/1.2 Manrope,sans-serif;letter-spacing:-.8px}
+.pilot-kpi small{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.45}
+.pilot-weekly{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+.pilot-weekly-title{margin-bottom:11px;font-size:11px;font-weight:800}
+.pilot-week-row{display:grid;grid-template-columns:70px minmax(0,1fr) 30px;gap:10px;align-items:center;margin:8px 0;font-size:10px}
+.pilot-week-label{color:var(--muted)}
+.pilot-week-track{height:8px;overflow:hidden;border-radius:99px;background:var(--line)}
+.pilot-week-track span{display:block;height:100%;border-radius:99px;background:var(--green)}
+.pilot-week-count{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.pilot-note{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+@media(max-width:1050px){.pilot-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){.pilot-kpi{padding:11px}.pilot-kpi strong{font-size:22px}.pilot-week-row{grid-template-columns:58px minmax(0,1fr) 25px;gap:7px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="loginwrap">
+  <div class="loginbox">
+    <div class="brand"><span class="logo">YI.</span> Yoshlar-Ishi</div>
+    <div class="eyebrow" style="margin-top:25px">Himoyalangan admin kirishi</div>
+    <h1>Boshqaruv markazi</h1>
+    <p>Davom etish uchun administrator elektron pochta manzilingizni tasdiqlang. Shu manzilga bir martalik kod yoki tasdiqlash havolasi yuboriladi.</p>
+    <form id="loginForm">
+      <div class="field"><label for="loginEmail">Administrator elektron pochta manzili</label><input id="loginEmail" type="email" required autocomplete="username" placeholder="Admin email manzilingiz"></div>
+      <button id="sendCodeBtn" class="button primary" style="width:100%;padding:13px" type="submit">Elektron pochtaga tasdiqlash yuborish ↗</button>
+    </form>
+    <div id="otpPanel" class="hidden">
+      <div class="field" style="margin-top:14px"><label for="loginCode">Emaildagi tasdiqlash kodi</label><input id="loginCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Kod bo‘lsa shu yerga kiriting"></div>
+      <button id="verifyCodeBtn" class="button primary" style="width:100%;padding:13px;margin-top:10px" type="button">Kod bilan kirish</button>
+      <div class="login-actions">
+        <button id="changeEmailBtn" class="button" type="button">Emailni o‘zgartirish</button>
+        <button id="resendCodeBtn" class="button" type="button">Kodni qayta yuborish</button>
+      </div>
+      <p class="subtle">Agar xatda kod o‘rniga tasdiqlash havolasi kelsa, havolani shu brauzerda oching.</p>
+    </div>
+    <div class="login-divider">yoki</div>
+    <form id="passwordForm">
+      <div class="field"><label for="loginPassword">Admin paroli</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Mavjud admin hisob paroli"></div>
+      <button id="passwordLoginBtn" class="button dark" style="width:100%;padding:13px" type="submit">Parol orqali kirish</button>
+    </form>
+    <button id="googleLoginBtn" class="google-auth-btn" type="button"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.73 6C44.43 37.97 46.98 31.86 46.98 24.55z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.14 1.45-4.89 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span class="google-label">Google orqali xavfsiz kirish</span></button>
+    <div id="loginNotice" class="notice" role="status" aria-live="polite" style="margin-top:12px"></div>
+    <p class="subtle">Faqat faol administratorlar ro‘yxatidagi tasdiqlangan hisob kirishi mumkin. Yangi hisob avtomatik yaratilmaydi.</p>
+    <div class="linkrow"><a href="https://yoshlar-ishi-site.vercel.app/" target="_blank" rel="noopener noreferrer">← Ommaviy sayt</a><a href="https://supabase.com/dashboard/project/nnodsqnqsqrmzcycrmpr/auth/url-configuration">Auth redirect sozlamalari ↗</a></div>
+  </div>
+</div>
+<div id="appView" class="layout hidden">
+  <aside class="sidebar">
+    <a class="brand" href="https://yoshlar-ishi-site.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="logo">YI.</span><span>Yoshlar-Ishi</span></a>
+    <div><div class="smallcap">Boshqaruv</div><nav class="navlist">
+      <button class="navitem active" data-page="overview"><span class="ico">◫</span> Umumiy ko‘rinish</button>
+      <button class="navitem" data-page="initiatives"><span class="ico">▤</span> Tashabbuslar</button>
+      <button class="navitem" data-page="partners"><span class="ico">◎</span> Hamkorlik murojaatlari</button>
+      <button class="navitem" data-page="sources"><span class="ico">↗</span> Manbalar va portallar</button>
+      <button class="navitem" data-page="youth-programs"><span class="ico">✦</span> Yoshlar dasturlari</button>
+      <button class="navitem" data-page="integrations"><span class="ico">⌘</span> Tashqi integratsiyalar</button>
+      <button class="navitem" data-page="team"><span class="ico">◎</span> Jamoa doskasi</button>
+      <button class="navitem" data-page="showcase"><span class="ico">★</span> Top tashabbuslar</button>
+      <button class="navitem" data-page="control-center"><span class="ico">▦</span> Nazorat markazi</button>
+      <button class="navitem" data-page="members"><span class="ico">♙</span> A’zolar</button>
+      <button class="navitem" data-page="community"><span class="ico">◉</span> Hamjamiyat</button>
+      <button class="navitem" data-page="content"><span class="ico">▣</span> Kontent va fayllar</button>
+      <button class="navitem" data-page="reports"><span class="ico">▤</span> Hisobotlar</button>
+      <button class="navitem" data-page="activity"><span class="ico">◷</span> Faoliyat tarixi</button>
+    </nav></div>
+    <div class="sidebarfoot"><span>ADMIN MODE</span><small id="adminSessionInfo" style="display:block;color:#d8e6f1;font-size:10px;font-weight:700;overflow-wrap:anywhere;margin:0 0 7px">Administrator sessiyasi tasdiqlanadi</small>Ma’lumotlar bevosita alohida Supabase bazasidan o‘qiladi. Panel ochiq bo‘lsa, 60 soniyada yangilanadi.</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="crumb">YOSHLAR-ISHI / ADMIN</div><h1 id="pageTitle">Umumiy ko‘rinish</h1></div><div class="topactions"><button id="refreshBtn" class="button">↻ Yangilash</button><button id="logoutBtn" class="button">Chiqish</button></div></header>
+    <div class="content">
+      <section class="page active" id="page-overview">
+        <div class="welcome"><div><div class="eyebrow">Boshqaruv va monitoring</div><h2>Salom, administrator.</h2><p>Saytning amaldagi faolligi, yangi arizalar va bajarilishi kerak bo‘lgan ishlarni kuzating.</p></div><div class="statuspill" id="connectionPill">Bazaga ulanmoqda</div></div>
+        <div class="stats">
+          <article class="stat"><div class="stathead">Jami tashabbuslar <span class="staticon">▤</span></div><strong id="statAll">—</strong><small>Bazadagi barcha arizalar</small></article>
+          <article class="stat"><div class="stathead">Yangi arizalar <span class="staticon">＋</span></div><strong id="statNew">—</strong><small>Ko‘rib chiqish kutilmoqda</small></article>
+          <article class="stat"><div class="stathead">Jarayonda <span class="staticon">◷</span></div><strong id="statProgress">—</strong><small>Hozir faol olib borilmoqda</small></article>
+          <article class="stat"><div class="stathead">Yakunlangan <span class="staticon">✓</span></div><strong id="statDone">—</strong><small>Natijaga yetgan tashabbuslar</small></article>
+          <article class="stat"><div class="stathead">Yangi hamkorliklar <span class="staticon">◎</span></div><strong id="statPartners">—</strong><small>Javob kutilayotgan murojaatlar</small></article>
+        </div>
+        <section class="panel pilot-monitor" aria-labelledby="pilotMonitorTitle">
+          <div class="panelhead">
+            <div>
+              <h3 id="pilotMonitorTitle">Pilot monitoring — foydalanuvchi faolligi</h3>
+              <p>Platformadan foydalanish va imkoniyat jarayonlari bo‘yicha anonim yig‘ma ko‘rsatkichlar.</p>
+            </div>
+            <span class="statuspill" id="pilotMetricsState">Yuklanmoqda</span>
+          </div>
+          <div class="panelbody">
+            <div class="pilot-kpis">
+              <article class="pilot-kpi"><span>Ro‘yxatdan o‘tgan hisoblar</span><strong id="pilotRegisteredUsers">—</strong><small>Anonim hisoblar kiritilmaydi</small></article>
+              <article class="pilot-kpi"><span>Yangi hisoblar · 7 kun</span><strong id="pilotNewUsers7d">—</strong><small>Oxirgi 7 kun ichida</small></article>
+              <article class="pilot-kpi"><span>Faol foydalanuvchilar · 7 kun</span><strong id="pilotActiveUsers7d">—</strong><small>Kamida bitta qayd etilgan harakat</small></article>
+              <article class="pilot-kpi"><span>Faol foydalanuvchilar · 30 kun</span><strong id="pilotActiveUsers30d">—</strong><small>Kamida bitta qayd etilgan harakat</small></article>
+              <article class="pilot-kpi"><span>Imkoniyat jarayonlari</span><strong id="pilotJourneysStarted">—</strong><small>Shaxsiy kabinetda boshlangan</small></article>
+              <article class="pilot-kpi"><span>Yakunlangan jarayonlar</span><strong id="pilotJourneysCompleted">—</strong><small>Foydalanuvchi yakunlagan</small></article>
+              <article class="pilot-kpi"><span>Bilim sinovi urinishlari</span><strong id="pilotAssessmentAttempts">—</strong><small>Bazaga saqlangan natijalar</small></article>
+              <article class="pilot-kpi"><span>Yuborilgan tashabbuslar</span><strong id="pilotInitiatives">—</strong><small>Yoshlar-Ishi ichidagi arizalar</small></article>
+            </div>
+            <div class="pilot-weekly">
+              <div class="pilot-weekly-title">Haftalik faollik · so‘nggi 8 hafta</div>
+              <div id="pilotWeekBars"><div class="subtle">Ko‘rsatkichlar yuklanmoqda…</div></div>
+              <p class="pilot-note" id="pilotLastActivity">Oxirgi faollik qaydi tekshirilmoqda.</p>
+            </div>
+            <p class="pilot-note">Eslatma: “faol foydalanuvchi” — member_activity_events jadvalida shu davr ichida kamida bitta harakati qayd etilgan alohida hisob. Bu Vercel tashriflari yoki barcha sahifa ko‘rishlari soni emas.</p>
+          </div>
+        </section>
+        <div class="grid2">
+          <div class="panel"><div class="panelhead"><div><h3>Arizalar holati</h3><p>Barcha holatlarning taqsimoti</p></div><button class="button" data-goto="initiatives">Arizalarni ko‘rish ↗</button></div><div class="panelbody"><div class="bars" id="statusBars"><div class="subtle">Ko‘rsatkichlar yuklanmoqda…</div></div></div></div>
+          <div class="panel"><div class="panelhead"><div><h3>Tizim tekshiruvi</h3><p>Panel va xizmatlar ulanishi</p></div><span class="statuspill" id="lastRefresh">Yangilanmoqda</span></div><div class="panelbody"><div class="healthlist">
+            <div class="healthrow"><span>Supabase API</span><span class="statuspill" id="healthDb">Tekshirilmoqda</span></div>
+            <div class="healthrow"><span>Ruxsat nazorati</span><span class="statuspill" id="healthAuth">Faol</span></div>
+            <div class="healthrow"><span>GitHub kodi</span><a href="https://github.com/javohirbek12122-svg/yoshlar-ishi" target="_blank" rel="noopener">Repozitoriya ↗</a></div><div class="healthrow"><span>Avtomatik tekshiruvlar</span><a href="https://github.com/javohirbek12122-svg/yoshlar-ishi/actions" target="_blank" rel="noopener">Health / CI ↗</a></div>
+            <div class="healthrow"><span>Vercel loyihasi</span><a href="https://vercel.com/javohir-s-projects-04fa6668/yoshlar-ishi-site" target="_blank" rel="noopener">Deploy sozlamalari ↗</a></div>
+            <div class="healthrow"><span>Manbalar katalogi</span><span id="healthSources">—</span></div><div class="healthrow"><span>Rasmiy portallar</span><a href="https://yoshlar-ishi-site.vercel.app/#rasmiy-xizmatlar" target="_blank" rel="noopener noreferrer">Katalogni ko‘rish ↗</a></div><div class="healthrow"><span>SSO / rasmiy API</span><span class="statuspill warn">Ulanmagan</span></div>
+          </div><p class="subtle" style="margin:18px 0 0">Bu panel Supabase API va ma’lumotlar bazasini tekshiradi. Vercel deployment holatini alohida Vercel boshqaruv panelida tekshiring; maxfiy tokenlar saytga qo‘shilmagan.</p></div></div>
+        </div>
+        <div class="panel" style="margin-top:14px"><div class="panelhead"><div><h3>Eng so‘nggi tashabbuslar</h3><p>Oxirgi kelib tushgan arizalar</p></div><button class="button" data-goto="initiatives">Barchasi ↗</button></div><div class="tablewrap"><table><thead><tr><th>Ariza</th><th>Muallif</th><th>Hudud</th><th>Holat</th><th>Sana</th></tr></thead><tbody id="recentBody"><tr><td colspan="5" class="empty">Ma’lumotlar yuklanmoqda…</td></tr></tbody></table></div></div>
+      </section>
+      <section class="page" id="page-initiatives">
+        <div class="sectiontitle"><div><div class="eyebrow">Ko‘rib chiqish va tartiblash</div><h2>Tashabbuslar</h2><p>Holatni yangilang, izoh qoldiring yoki CSV formatida eksport qiling.</p></div><button class="button primary" id="exportBtn">↓ CSV eksport</button></div>
+        <div class="filters" style="margin-bottom:13px"><input id="initiativeSearch" class="control" placeholder="Nom, muallif, kod yoki hudud…"><select id="initiativeFilter" class="control"><option value="">Barcha holatlar</option><option value="submitted">Yangi</option><option value="reviewing">Ko‘rib chiqilmoqda</option><option value="needs_details">Qo‘shimcha ma’lumot kerak</option><option value="approved">Ma’qullangan</option><option value="in_progress">Jarayonda</option><option value="completed">Yakunlangan</option><option value="declined">Rad etilgan</option></select><span class="exporthint" id="initiativeCount"></span></div>
+        <div class="panel"><div class="tablewrap"><table><thead><tr><th>Kod / sana</th><th>Tashabbus / muallif</th><th>Yo‘nalish / hudud</th><th>Aloqa</th><th>Holat</th><th>Admin izohi</th><th>Saqlash</th></tr></thead><tbody id="initiativesBody"><tr><td colspan="7" class="empty">Arizalar yuklanmoqda…</td></tr></tbody></table></div></div>
+      </section>
+      <section class="page" id="page-partners">
+        <div class="sectiontitle"><div><div class="eyebrow">Mentorlar va hamkorlar</div><h2>Hamkorlik murojaatlari</h2><p>Kelgan takliflarni ko‘rib chiqing va holatini yangilang.</p></div></div>
+        <div class="filters" style="margin-bottom:13px"><input id="partnerSearch" class="control" placeholder="Ism, tashkilot yoki xabar…"><select id="partnerFilter" class="control"><option value="">Barcha holatlar</option><option value="new">Yangi</option><option value="reviewing">Ko‘rib chiqilmoqda</option><option value="handled">Ko‘rib chiqildi</option><option value="archived">Arxiv</option></select><span id="partnerCount" class="exporthint"></span></div>
+        <div class="panel"><div class="tablewrap"><table><thead><tr><th>Sana</th><th>Muallif / tashkilot</th><th>Taklif</th><th>Aloqa</th><th>Holat</th><th>Admin izohi</th><th>Saqlash</th></tr></thead><tbody id="partnersBody"><tr><td colspan="7" class="empty">Murojaatlar yuklanmoqda…</td></tr></tbody></table></div></div>
+      </section>
+      <section class="page" id="page-sources">
+        <div class="sectiontitle"><div><div class="eyebrow">Ommaviy saytdagi katalog</div><h2>Imkoniyatlar manbalari</h2><p>Manbani qo‘shing, tahrirlang yoki vaqtincha yashiring.</p></div></div>
+        <div class="formsgrid">
+          <div class="panel"><div class="panelhead"><div><h3>Yangi manba qo‘shish</h3><p>Faqat ishonchli havolalarni kiriting.</p></div></div><form class="form" id="sourceForm">
+            <div class="field"><label for="sourceTitle">Nomi *</label><input id="sourceTitle" required maxlength="180"></div>
+            <div class="field"><label for="sourceDesc">Tavsif *</label><textarea id="sourceDesc" required maxlength="1000"></textarea></div>
+            <div class="inlineform"><div class="field"><label for="sourceCategory">Kategoriya *</label><select id="sourceCategory"><option value="official">Rasmiy manba</option><option value="support">Yordam</option><option value="navigator">Navigator</option><option value="startup">Startap</option><option value="volunteer">Ko‘ngillilik</option><option value="grants">Grantlar</option><option value="education">Ta’lim</option><option value="opportunity">Imkoniyat</option></select></div><div class="field"><label for="sourceProvider">Tashkilot / manba</label><input id="sourceProvider" maxlength="180"></div></div>
+            <div class="field"><label for="sourceUrl">Havola (https://) *</label><input id="sourceUrl" type="url" required placeholder="https://..."></div>
+            <label class="check"><input id="sourceActive" type="checkbox" checked> Saqlangach ommaviy saytda ko‘rsatish</label>
+            <button class="button primary" type="submit">Manbani qo‘shish +</button><div id="sourceNotice" class="notice" role="status" aria-live="polite"></div>
+          </form></div>
+          <div class="panel"><div class="panelhead"><div><h3>Mavjud manbalar</h3><p>Faol manbalar ommaviy saytda ko‘rinadi.</p></div><span class="statuspill" id="sourceTotal">— ta</span></div><div class="tablewrap"><table style="min-width:500px"><thead><tr><th>Manba</th><th>Kategoriya</th><th>Holat</th><th>Amal</th></tr></thead><tbody id="sourcesBody"><tr><td colspan="4" class="empty">Manbalar yuklanmoqda…</td></tr></tbody></table></div></div>
+        </div>
+      </section>
+      <section class="page" id="page-youth-programs">
+        <div class="sectiontitle"><div><div class="eyebrow">Davlat va yoshlar dasturlari</div><h2>Yoshlar imkoniyatlari reyestri</h2><p>Dastur shartlari, hujjatlar, qadamlar va rasmiy manbalarni boshqaring.</p></div><span class="statuspill" id="youthProgramCount">— ta</span></div>
+        <div class="formsgrid">
+          <div class="panel"><div class="panelhead"><div><h3 id="programFormTitle">Yangi dastur qo‘shish</h3><p>Ommaviy “Imkoniyatlar” katalogi shu ma’lumotlardan foydalanadi.</p></div></div>
+            <form class="form" id="youthProgramForm">
+              <input type="hidden" id="programEditId">
+              <div class="field"><label for="programTitle">Dastur nomi *</label><input id="programTitle" required maxlength="180"></div>
+              <div class="inlineform"><div class="field"><label for="programSlug">Slug *</label><input id="programSlug" required pattern="[a-z0-9-]{3,100}" maxlength="100"></div><div class="field"><label for="programProvider">Tashkilot *</label><input id="programProvider" required maxlength="180"></div></div>
+              <div class="field"><label for="programCategory">Yo‘nalish *</label><select id="programCategory"><option value="social_support">Ijtimoiy yordam</option><option value="language">Til / subsidiya</option><option value="business">Biznes / kredit</option><option value="career">Ish / stajirovka</option><option value="education">Ta’lim</option><option value="community">Jamoa / tashabbus</option></select></div>
+              <div class="field"><label for="programAvailabilityStatus">Ariza qabul holati *</label><select id="programAvailabilityStatus" required><option value="open">Ochiq qabul — rasmiy muddat bor</option><option value="permanent">Doimiy xizmat — individual qaror</option><option value="upcoming">Rejalashtirilgan — hali ochilmagan</option><option value="unverified">Tasdiqlanmagan — tekshirish kerak</option><option value="closed">Yopilgan — qabul tugagan</option></select><small class="sub">“Ommaviy katalogda faol” faqat kartani ko‘rsatadi. Bu maydon esa ariza qabul holatini bildiradi.</small></div>
+              <div class="field"><label for="programSort">Katalogdagi tartib raqami</label><input id="programSort" type="number" min="0" max="9999" value="100"></div>
+              <div class="field"><label for="programSummary">Qisqa tushuntirish *</label><textarea id="programSummary" required maxlength="3000"></textarea></div>
+              <div class="field"><label for="programBenefit">Nima beradi? *</label><textarea id="programBenefit" required maxlength="3000"></textarea></div>
+              <div class="inlineform"><div class="field"><label for="programAgeMin">Eng kam yosh</label><input id="programAgeMin" type="number" min="0" max="100"></div><div class="field"><label for="programAgeMax">Eng yuqori yosh</label><input id="programAgeMax" type="number" min="0" max="100"></div></div>
+              <div class="field"><label for="programAudience">Kimlar uchun? (har qatorga bittadan)</label><textarea id="programAudience" maxlength="6000"></textarea></div>
+              <div class="field"><label for="programEligibility">Muvofiqlik shartlari (JSON obyekt)</label><textarea id="programEligibility" maxlength="12000" placeholder='{"important":"Rasmiy talablarni tekshiring."}'></textarea></div>
+              <div class="field"><label for="programSteps">Ariza qadamlari (har qatorga bittadan)</label><textarea id="programSteps" maxlength="16000"></textarea></div>
+              <div class="field"><label for="programDocuments">Kerakli hujjatlar (har qatorga bittadan)</label><textarea id="programDocuments" maxlength="12000"></textarea></div>
+              <div class="field"><label for="programChannel">Ariza topshirish kanali</label><textarea id="programChannel" maxlength="3000"></textarea></div>
+              <div class="field"><label for="programApplicationUrl">Ariza / rasmiy portal URL</label><input id="programApplicationUrl" type="url" placeholder="https://..."></div>
+              <div class="inlineform"><div class="field"><label for="programSourceTitle">Rasmiy manba nomi *</label><input id="programSourceTitle" required maxlength="180"></div><div class="field"><label for="programVerified">Tekshirilgan sana *</label><input id="programVerified" type="date" required></div></div>
+              <div class="field"><label for="programSourceUrl">Rasmiy manba URL *</label><input id="programSourceUrl" type="url" required placeholder="https://..."></div>
+              <div class="field"><label for="programSecondaryUrl">Qo‘shimcha manba URL</label><input id="programSecondaryUrl" type="url" placeholder="https://..."></div>
+              <div class="field"><label for="programDeadline">Muddat / qabul holati haqida izoh</label><textarea id="programDeadline" maxlength="2000"></textarea></div>
+              <div class="field"><label for="programStatusNote">Muhim ogohlantirish / holat izohi</label><textarea id="programStatusNote" maxlength="3000"></textarea></div>
+              <div class="inlineform"><label class="check"><input id="programActive" type="checkbox" checked> Ommaviy katalogda faol</label><label class="check"><input id="programFeatured" type="checkbox"> Muhim imkoniyat</label></div>
+              <div class="inlineform"><button class="button primary" type="submit">Dastur ma’lumotini saqlash</button><button class="button" id="programReset" type="button">Yangi forma</button></div>
+              <div id="programFormNotice" class="notice" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+          <div class="panel"><div class="panelhead"><div><h3>Mavjud dasturlar</h3><p>Tahrirlash yoki vaqtincha yashirish uchun yozuvni tanlang.</p></div></div><div class="tablewrap"><table style="min-width:620px"><thead><tr><th>Dastur</th><th>Yosh / sana</th><th>Qabul / ko‘rinish</th><th>Amal</th></tr></thead><tbody id="youthProgramsBody"><tr><td colspan="4" class="empty">Dasturlar yuklanmoqda…</td></tr></tbody></table></div></div>
+        </div>
+      </section>
+      <section class="page" id="page-integrations">
+        <div class="sectiontitle"><div><div class="eyebrow">Tashqi rasmiy portallar</div><h2>Integratsiyalar reyestri</h2><p>Havolalar, texnik ulanish turi, ruxsat talabi va integratsiya tayyorgarligini kuzating.</p></div><button class="button" id="integrationRefresh">↻ Yangilash</button></div>
+        <div class="notice" style="background:#eaf3fb;border:1px solid #d8e5f0;border-radius:8px;padding:13px 15px;color:#36536d;font-size:11px;margin-bottom:14px">Hozirgi holat: rasmiy portallar katalogi tashqi havolalar orqali ishlaydi. <strong>“Ulangan API/SSO”</strong> holatini faqat tegishli tashkilot ruxsati, texnik hujjat va haqiqiy test muvaffaqiyatli bo‘lgandan keyin belgilang. Ushbu reyestrning o‘zi tashqi tizimga ulanishni yaratmaydi.</div>
+        <div class="filters" style="margin-bottom:13px"><input id="integrationSearch" class="control" placeholder="Portal yoki tashkilotni qidirish…"><select id="integrationFilter" class="control"><option value="">Barcha holatlar</option><option value="link_only">Faqat havola</option><option value="docs_needed">Hujjat kerak</option><option value="approval_needed">Ruxsat kerak</option><option value="connected">API / SSO ulangan</option><option value="disabled">O‘chirilgan</option></select><span class="exporthint" id="integrationCount"></span></div>
+        <div class="panel"><div class="tablewrap"><table style="min-width:1400px"><thead><tr><th>Portal / vazifa</th><th>Ulanish turi</th><th>Holat</th><th>Texnik hujjat URL</th><th>Kirish talabi</th><th>Tekshirilgan</th><th>Ichki izoh</th><th>Saqlash</th></tr></thead><tbody id="integrationsBody"><tr><td colspan="8" class="empty">Reyestr yuklanmoqda…</td></tr></tbody></table></div></div>
+      </section>
+      <section class="page" id="page-team">
+ <div class="sectiontitle"><div><div class="eyebrow">Jamoa va sherik izlash</div><h2>Jamoa doskasi moderatsiyasi</h2><p>Ommaga chiqishidan oldin e’lonlarni tekshiring. Faqat “E’lonni chop etish” holatidagi yozuvlar public sahifada ko‘rinadi.</p></div><button class="button" id="teamRefreshAdmin">↻ Yangilash</button></div>
+ <div class="panel"><div class="panelhead"><div><h3>Jamoa e’lonlari</h3><p>Shaxsiy kontakt ommaga faqat muallif alohida rozilik berganida chiqadi.</p></div><span class="statuspill" id="teamPostCount">—</span></div><div class="tablewrap"><table style="min-width:1050px"><thead><tr><th>E’lon</th><th>Yo‘nalish / hudud</th><th>Rol / ko‘nikmalar</th><th>Holat</th><th>Kontakt ulashilgan</th><th>Saqlash</th></tr></thead><tbody id="teamPostsBody"><tr><td colspan="6" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+ <div class="panel" style="margin-top:15px"><div class="panelhead"><div><h3>Sheriklikka qiziqishlar</h3><p>Ism, aloqa va xabarlar faqat admin panelida ko‘rinadi.</p></div><span class="statuspill" id="teamInterestCount">—</span></div><div class="tablewrap"><table style="min-width:1050px"><thead><tr><th>E’lon</th><th>Ism / kontakt</th><th>Rol</th><th>Xabar</th><th>Holat</th><th>Saqlash</th></tr></thead><tbody id="teamInterestsBody"><tr><td colspan="6" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+</section>
+<section class="page" id="page-showcase">
+ <div class="sectiontitle"><div><div class="eyebrow">Tavsiya etilgan tashabbuslar</div><h2>Top tashabbuslarni boshqarish</h2><p>Faqat tekshirilgan va muallif ommaga ko‘rsatishga rozilik bergan loyihani e’lon qiling. Bu grant yoki davlat mukofoti degani emas.</p></div><button class="button" id="showcaseRefresh">↻ Yangilash</button></div>
+ <div class="formsgrid">
+  <div class="panel"><div class="panelhead"><div><h3>Showcase’ga tashabbus qo‘shish</h3><p>Public title, qisqa tavsif va loyiha materiallari.</p></div></div>
+   <form class="form" id="showcaseForm">
+    <div class="field"><label for="showSlug">URL identifikatori *</label><input id="showSlug" required maxlength="100" placeholder="parkent-ekologik-loyiha" pattern="[a-z0-9-]{3,100}"></div>
+    <div class="field"><label for="showTitle">Loyiha nomi *</label><input id="showTitle" required minlength="5" maxlength="140"></div>
+    <div class="field"><label for="showSummary">Ommaviy qisqacha tavsif *</label><textarea id="showSummary" required minlength="20" maxlength="1800"></textarea></div>
+    <div class="inlineform"><div class="field"><label for="showCategory">Yo‘nalish</label><select id="showCategory"><option value="technology">Texnologiya</option><option value="education">Ta’lim</option><option value="community">Jamoa / mahalla</option><option value="startup">Startap</option><option value="volunteer">Ko‘ngillilik</option><option value="culture">Madaniyat</option><option value="other">Boshqa</option></select></div><div class="field"><label for="showDistrict">Hudud</label><input id="showDistrict" maxlength="100"></div></div>
+    <div class="field"><label for="showDisplayName">Ommaviy ko‘rinadigan muallif / jamoa nomi</label><input id="showDisplayName" maxlength="120" value="Yoshlar-Ishi tashabbuskori"></div>
+    <div class="inlineform"><div class="field"><label for="showStage">Bosqich</label><select id="showStage"><option>G‘oya</option><option>Prototip</option><option>Sinov</option><option>Amalda</option><option>Natija ko‘rsatgan</option></select></div><div class="field"><label for="showImage">Rasm URL (ixtiyoriy, HTTPS)</label><input id="showImage" type="url" placeholder="https://..."></div></div>
+    <div class="field"><label for="showUrl">Loyiha havolasi (ixtiyoriy, HTTPS)</label><input id="showUrl" type="url" placeholder="https://..."></div>
+    <label class="check"><input id="showFeatured" type="checkbox"> Asosiy tanlangan loyihalar qatorida ko‘rsatish</label>
+    <label class="check"><input id="showPublish" type="checkbox"> Ommaga e’lon qilish</label>
+    <label class="check"><input id="showConsent" type="checkbox"> Muallif yoki jamoa roziligi tekshirildi</label>
+    <button class="button primary" type="submit">Tashabbusni saqlash +</button><div id="showcaseNotice" class="notice" role="status" aria-live="polite"></div>
+   </form>
+  </div>
+  <div class="panel"><div class="panelhead"><div><h3>Mavjud tashabbuslar</h3><p>Ommaviy ko‘rsatish, tanlash va reytingni boshqarish.</p></div><span class="statuspill" id="showcaseCountAdmin">—</span></div><div class="tablewrap"><table style="min-width:900px"><thead><tr><th>Loyiha</th><th>Ovoz</th><th>Tanlangan</th><th>Public</th><th>Amal</th></tr></thead><tbody id="showcaseAdminBody"><tr><td colspan="5" class="empty">Yuklanmoqda…</td></tr></tbody></table></div></div>
+ </div>
+</section>
+<section class="page" id="page-control-center">
+ <div class="sectiontitle"><div><div class="eyebrow">Real vaqtga yaqin boshqaruv</div><h2>Markaziy nazorat</h2><p>Supabase ma’lumotlari asosida kutayotgan ishlar, sayt faolligi va boshqaruv holati.</p></div><button class="button" id="controlRefresh">↻ Ko‘rsatkichlarni yangilash</button></div>
+ <div class="admin-ops-banner"><div><span class="admin-ops-kicker">YOSHLAR-ISHI · CONTROL CENTER</span><h3>Sayt holati va bajarilishi kerak bo‘lgan ishlar</h3><p id="controlLastChange">Oxirgi o‘zgarish tekshirilmoqda.</p></div><span class="statuspill" id="controlState">Ulanmoqda</span></div>
+ <div class="admin-ops-grid" id="controlSummaryGrid"><article class="admin-ops-stat"><span>Ko‘rsatkichlar</span><strong>—</strong><small>Supabase’dan yuklanadi</small></article></div>
+ <div class="admin-ops-shortcuts"><button class="admin-ops-shortcut" data-goto="initiatives"><span>01</span><strong>Tashabbuslarni ko‘rib chiqish</strong><small>Arizalarni tasdiqlash va izoh berish</small></button><button class="admin-ops-shortcut" data-goto="community"><span>02</span><strong>Hamjamiyat moderatsiyasi</strong><small>Postlar va katalog ko‘rinishini tekshirish</small></button><button class="admin-ops-shortcut" data-goto="content"><span>03</span><strong>Sayt kontenti</strong><small>Bosh banner va media kutubxonasi</small></button><button class="admin-ops-shortcut" data-goto="reports"><span>04</span><strong>Hisobotlarni olish</strong><small>Davr kesimida JSON va CSV</small></button></div>
+ <p class="admin-ops-footnote">Bu ko‘rsatkichlar hosting tashriflari yoki reklama analitikasi emas. Faqat bazada qayd etilgan arizalar, a’zolar, jarayonlar va admin amallari hisoblanadi.</p>
+</section>
+<section class="page" id="page-members">
+ <div class="sectiontitle"><div><div class="eyebrow">A’zo profillari va maxfiylik</div><h2>Foydalanuvchilar</h2><p>Faqat xavfsiz profil maydonlari ko‘rsatiladi. Email, telefon va maxfiy CV ma’lumotlari bu ro‘yxatga olinmaydi.</p></div><button class="button" id="membersRefresh">↻ Yangilash</button></div>
+ <div class="filters admin-ops-filters"><input id="memberSearch" class="control" placeholder="Ism, hudud yoki yo‘nalish…"><select id="memberVisibilityFilter" class="control"><option value="">Barcha maxfiylik holatlari</option><option value="members">A’zolarga ko‘rinadi</option><option value="private">Shaxsiy</option></select><span id="memberCount" class="exporthint">— a’zo</span></div>
+ <div class="panel"><div class="tablewrap"><table style="min-width:1000px"><thead><tr><th>A’zo</th><th>Hudud</th><th>Ko‘rinish</th><th>Katalogda ko‘rsatish</th><th>Ommaviy postlar</th><th>Amal</th></tr></thead><tbody id="membersBody"><tr><td colspan="6" class="empty">A’zolar yuklanmoqda…</td></tr></tbody></table></div></div>
+ <p class="admin-ops-footnote">Maxfiylikni “Shaxsiy” qilish mumkin. Katalogga qayta chiqarishdan avval a’zoning roziligi va profil sozlamalarini tekshiring.</p>
+</section>
+<section class="page" id="page-community">
+ <div class="sectiontitle"><div><div class="eyebrow">Nashr va xavfsizlik</div><h2>Hamjamiyat moderatsiyasi</h2><p>Postni ko‘ring, nashr holatini va auditoriyasini boshqaring. Har o‘zgarish bazada auditga yoziladi.</p></div><button class="button" id="communityRefresh">↻ Postlarni yangilash</button></div>
+ <div class="filters admin-ops-filters"><input id="communitySearch" class="control" placeholder="Muallif yoki post matni…"><select id="communityStatusFilter" class="control"><option value="">Barcha holatlar</option><option value="published">Nashr qilingan</option><option value="draft">Yashirilgan</option></select><span id="communityCount" class="exporthint">— post</span></div>
+ <div class="panel"><div class="tablewrap"><table style="min-width:1180px"><thead><tr><th>Muallif / sana</th><th>Post matni</th><th>Ilovalar</th><th>Nashr holati</th><th>Auditoriya</th><th>Moderatsiya sababi</th><th>Saqlash</th></tr></thead><tbody id="communityPostsBody"><tr><td colspan="7" class="empty">Postlar yuklanmoqda…</td></tr></tbody></table></div></div>
+ <p class="admin-ops-footnote">Ilova fayllarining o‘zi ochilmaydi: foydalanuvchilarning shaxsiy fayllari maxfiy saqlanadi. Bu yerda faqat ilovalar soni ko‘rsatiladi.</p>
+</section>
+<section class="page" id="page-content">
+ <div class="sectiontitle"><div><div class="eyebrow">CMS · media boshqaruvi</div><h2>Sayt kontenti va fayllar</h2><p>Yuklangan rasmni bosh bannerga tayinlang. Saqlangan kontent bosh sahifada Supabase’dan olinadi.</p></div><button class="button" id="contentRefresh">↻ Yangilash</button></div>
+ <div class="admin-content-grid">
+  <div class="panel"><div class="panelhead"><div><h3>Bosh sahifa banneri</h3><p>Ommaviy sahifadagi asosiy hero tasvir.</p></div><span class="statuspill" id="heroContentState">Yuklanmoqda</span></div>
+   <form class="form" id="heroContentForm"><div class="admin-hero-preview" id="heroAdminPreview"><span>Banner preview</span></div><div class="field"><label for="heroImageUrl">Rasm URL (HTTPS)</label><input id="heroImageUrl" type="url" required placeholder="https://…"></div><div class="field"><label for="heroImageAlt">Rasm uchun tavsif (alt)</label><input id="heroImageAlt" maxlength="300" required></div>
+    <label class="check"><input id="heroEnabled" type="checkbox" checked> Bosh sahifada ushbu bannerni ishlatish</label><div class="admin-action-row"><button class="button primary" type="submit">Banner o‘zgarishini saqlash</button><button class="button" id="heroUseDefault" type="button">Asl bannerga qaytish</button></div><div class="notice" id="heroContentNotice" role="status" aria-live="polite"></div>
+   </form>
+  </div>
+  <div class="panel"><div class="panelhead"><div><h3>Fayl yuklash</h3><p>JPEG, PNG, WebP yoki PDF · 10 MB gacha.</p></div><span class="statuspill">Supabase Storage</span></div><div class="form">
+   <div class="admin-upload-zone"><span class="admin-upload-icon">↑</span><strong>Media faylini tanlang</strong><small>Fayllar alohida public-assets bucket’iga yuklanadi.</small><input id="adminAssetFile" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></div>
+   <div class="field"><label for="adminAssetLabel">Fayl nomi (ixtiyoriy)</label><input id="adminAssetLabel" maxlength="100" placeholder="Masalan: yoshlar-ishi-hero"></div><button class="button primary" id="adminAssetUpload" type="button">Supabase’ga yuklash ↑</button><div class="notice" id="assetUploadNotice" role="status" aria-live="polite"></div>
+   <p class="subtle">Yuklangan rasmning ochiq URL manzili banner, showcase va ommaviy kontentda ishlatilishi mumkin. Maxfiy CV bucket’lariga bu panel tegmaydi.</p>
+  </div></div>
+ </div>
+ <div class="panel admin-assets-panel"><div class="panelhead"><div><h3>Media kutubxonasi</h3><p id="assetLibraryMeta">Supabase Storage · public/</p></div><span class="statuspill" id="assetCount">— fayl</span></div><div class="tablewrap"><table style="min-width:850px"><thead><tr><th>Fayl</th><th>Format / hajm</th><th>Yuklangan</th><th>Ommaviy URL</th><th>Amal</th></tr></thead><tbody id="publicAssetsBody"><tr><td colspan="5" class="empty">Fayllar ro‘yxati yuklanmoqda…</td></tr></tbody></table></div></div>
+</section>
+<section class="page" id="page-reports">
+ <div class="sectiontitle"><div><div class="eyebrow">Tahlil va eksport</div><h2>Hisobotlar markazi</h2><p>Davrni tanlang, ma’lumotlarni ko‘ring va JSON yoki CSV shaklida yuklab oling.</p></div></div>
+ <div class="panel"><div class="panelhead"><div><h3>Hisobot parametrlari</h3><p>Standart rejimda aloqa ma’lumotlari va shaxsni aniqlovchi maydonlar yashiriladi.</p></div><span class="statuspill">Admin RPC</span></div>
+  <form class="form" id="adminReportForm"><div class="inlineform"><div class="field"><label for="reportFrom">Boshlanish sanasi</label><input id="reportFrom" type="date"></div><div class="field"><label for="reportTo">Tugash sanasi</label><input id="reportTo" type="date"></div></div>
+   <div class="field"><label for="reportLimit">Har bo‘lim uchun yozuv limiti</label><select id="reportLimit"><option value="100">100</option><option value="500" selected>500</option><option value="1000">1 000</option><option value="3000">3 000</option></select></div>
+   <label class="check"><input id="reportSensitive" type="checkbox"> Aloqa / shaxsiy maydonlarni hisobotga kiritish (faqat zarurat bo‘lsa)</label><label class="check admin-sensitive-confirm"><input id="reportSensitiveConfirm" type="checkbox"> Men bu shaxsiy ma’lumotlarni ko‘rish va eksport qilish uchun vakolatli ekanimni tasdiqlayman</label>
+   <div class="notice" id="reportNotice" role="status" aria-live="polite">Shaxsiy maydonlar sukut bo‘yicha hisobotdan chiqarilgan.</div><div class="admin-action-row"><button class="button primary" id="reportGenerateBtn" type="submit">Hisobotni shakllantirish</button><button class="button" id="reportJsonExport" type="button" disabled>JSON yuklash ↓</button><button class="button" id="reportCsvExport" type="button" disabled>CSV yuklash ↓</button></div>
+  </form>
+ </div>
+ <div class="panel admin-report-results"><div class="panelhead"><div><h3>Hisobot natijasi</h3><p id="reportGeneratedAt">Hali hisobot shakllantirilmagan.</p></div><span class="statuspill" id="reportState">Kutilmoqda</span></div><div class="panelbody"><div class="admin-report-grid" id="reportSectionCounts"><div class="subtle">Natijalar shu yerda ko‘rinadi.</div></div></div></div>
+</section>
+
+<section class="page" id="page-activity">
+        <div class="sectiontitle"><div><div class="eyebrow">Kuzatuv va shaffoflik</div><h2>Faoliyat tarixi</h2><p>Tashabbus holati o‘zgarganda avtomatik qayd yaratiladi.</p></div><button class="button" id="activityRefresh">↻ Yangilash</button></div>
+        <div class="panel"><div class="panelhead"><div><h3>Oxirgi amallar</h3><p>Ma’lumotlar bazasidagi audit jurnali</p></div><span class="statuspill" id="activityCount">— qayd</span></div><div class="panelbody"><div id="activityList" class="activity"><div class="subtle">Jurnal yuklanmoqda…</div></div></div></div>
+      </section>
+      <div class="subtle" style="margin-top:18px">Yangilanish oralig‘i: 60 soniya · Oxirgi yangilanish vaqti <span id="lastUpdated">—</span>. Panel faqat yangi Yoshlar-Ishi Supabase loyihasini boshqaradi.</div>
+    </div>
+  </main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="./config.js"></script>
+<script>
+(()=>{"use strict";
+const cfg=window.YI_CONFIG||{},url=(cfg.supabaseUrl||"").replace(/\/$/,""),key=cfg.supabaseAnonKey||cfg.supabaseKey;
+const $=id=>document.getElementById(id),statusNames={submitted:"Yangi",reviewing:"Ko‘rib chiqilmoqda",needs_details:"Qo‘shimcha ma’lumot kerak",approved:"Ma’qullangan",in_progress:"Jarayonda",completed:"Yakunlangan",declined:"Rad etilgan"},requestNames={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",handled:"Ko‘rib chiqildi",archived:"Arxiv"},typeNames={mentor:"Mentorlik",organization:"Tashkilot",event:"Tadbir",resource:"Resurs",feedback:"Fikr-mulohaza"},categoryNames={official:"Rasmiy manba",support:"Yordam",navigator:"Navigator",startup:"Startap",volunteer:"Ko‘ngillilik",grants:"Grantlar",education:"Ta’lim",opportunity:"Imkoniyat",community:"Jamiyat",technology:"Texnologiya",culture:"Madaniyat",other:"Boshqa"};
+let adminAuthClient=null,adminAuthClientPromise=null,refreshPromise=null,dashboardRefreshPromise=null;
+let token=sessionStorage.getItem("yi_access_token")||"",refreshToken=sessionStorage.getItem("yi_refresh_token")||"",user=null,initiatives=[],partners=[],sources=[],youthPrograms=[],integrations=[],teamPosts=[],teamInterests=[],showcase=[],legacyAudit=[],consoleEvents=[],audit=[],timer=null,otpCooldown=0,otpCooldownTimer=null;
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function notify(text){const t=$("toast");t.textContent=text;t.style.display="block";clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.style.display="none",4000)}
+function tell(id,text,error=false){const e=$(id);e.textContent=text;e.classList.toggle("error",!!error)}
+function safeHttpsUrl(value){try{const parsed=new URL(String(value||"").trim());return parsed.protocol==="https:"&&!parsed.username&&!parsed.password&&Boolean(parsed.hostname)}catch{return false}}
+async function recordAdminEvent(eventType,entityType,entityId,summary,details={}){try{await api("rpc/admin_record_console_event",{method:"POST",body:JSON.stringify({p_event_type:eventType,p_entity_type:entityType,p_entity_id:String(entityId||""),p_summary:String(summary||"").slice(0,240),p_details:details})});return true}catch(error){console.error("Admin audit event:",error);return false}}
+function auditSuffix(saved){return saved?"":" Audit jurnaliga yozilmadi — qayd etish huquqini tekshiring."}
+function authHeaders(){return {"apikey":key,"Authorization":"Bearer "+token,"Content-Type":"application/json"}}
+async function authFetch(path,opts={}){const r=await fetch(url+"/auth/v1/"+path,{...opts,headers:{apikey:key,"Content-Type":"application/json",...(opts.headers||{})}});let data=null;try{data=await r.json()}catch{}if(!r.ok)throw Error((data&&data.msg)||(data&&data.message)||(data&&data.error_description)||(data&&data.error)||("Auth xatosi "+r.status));return data}
+async function getAdminAuthClient(){
+ if(adminAuthClient)return adminAuthClient;
+ if(!adminAuthClientPromise){
+  adminAuthClientPromise=(async()=>{
+   const {createClient}=await import("https://esm.sh/@supabase/supabase-js@2");
+   adminAuthClient=createClient(url,key,{auth:{
+    persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce",
+    storage:window.localStorage,storageKey:"yi-admin-auth"
+   }});
+   return adminAuthClient;
+  })();
+ }
+ return adminAuthClientPromise;
+}
+async function api(path,opts={}){const request=()=>fetch(url+"/rest/v1/"+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});let r=await request();if(r.status===401&&refreshToken){try{await refreshSession()}catch(error){await signOut(false);throw Error("Admin sessiyasi tugagan. Qayta kiring. "+(error?.message||""))}r=await request()}let data=null;try{data=await r.json()}catch{}if(!r.ok){if(r.status===401)await signOut(false);throw Error((data&&data.message)||(data&&data.details)||(data&&data.hint)||("Ma’lumotlar bazasi xatosi "+r.status))}return data}
+function saveSession(data){if(!data||!data.access_token)throw Error("Tasdiqlangan sessiya qaytmadi.");token=data.access_token;refreshToken=data.refresh_token||"";sessionStorage.setItem("yi_access_token",token);if(refreshToken)sessionStorage.setItem("yi_refresh_token",refreshToken)}
+async function refreshSession(){if(refreshPromise)return refreshPromise;refreshPromise=(async()=>{if(adminAuthClient&&localStorage.getItem("yi_admin_google_session")==="1"){const {data,error}=await adminAuthClient.auth.refreshSession();if(error||!data.session)throw error||Error("Google sessiyasini yangilab bo‘lmadi.");saveSession(data.session);return}if(!refreshToken)throw Error("Kirish sessiyasi tugagan. Qayta kiring.");const d=await authFetch("token?grant_type=refresh_token",{method:"POST",body:JSON.stringify({refresh_token:refreshToken})});saveSession(d)})();try{return await refreshPromise}finally{refreshPromise=null}}
+async function getQueryCount(table,filter=""){const request=()=>fetch(url+"/rest/v1/"+table+"?select=id"+(filter?"&"+filter:""),{headers:{...authHeaders(),"Prefer":"count=exact","Range":"0-0"}});let r=await request();if(r.status===401&&refreshToken){await refreshSession();r=await request()}if(!r.ok)throw Error("Count "+table+" "+r.status);const value=r.headers.get("content-range")||"";const match=value.match(/\/(\d+|\*)$/);if(!match||match[1]==="*")throw Error("Supabase aniq count qaytarmadi: "+table);return Number(match[1])}
+async function checkAdmin(requireGoogle=false){const me=await authFetch("user",{headers:{Authorization:"Bearer "+token}});user=me;if(!me.email)throw Error("Hisob email manzilini qaytarmadi.");if(requireGoogle){const googleAllowed=await api("rpc/admin_google_console_check",{method:"POST",body:"{}"});if(googleAllowed!==true)throw Error("Admin paneliga faqat ruxsat berilgan va Google orqali tasdiqlangan hisob kira oladi.");}const allowed=await api("rpc/admin_console_check",{method:"POST",body:"{}"});if(allowed!==true)throw Error("Bu hisob admin ro‘yxatida faol emas. Kirish rad etildi.");return true}
+function showApp(){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");const identity=$("adminSessionInfo");if(identity)identity.textContent=user?.email||"Tasdiqlangan administrator";if(window.YIAdminExtensionInit)window.YIAdminExtensionInit();}
+function showLogin(){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");$("otpPanel").classList.add("hidden");$("loginEmail").disabled=false;$("loginCode").value="";$("loginPassword").value=""}
+async function signOut(revoke=true){
+ const old=token;token="";refreshToken="";user=null;
+ sessionStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_session");
+ sessionStorage.removeItem("yi_access_token");sessionStorage.removeItem("yi_refresh_token");
+ if(new URLSearchParams(location.search).has("admin-google"))history.replaceState(null,"",location.pathname+location.hash);
+ if(timer)clearInterval(timer);if(otpCooldownTimer)clearInterval(otpCooldownTimer);otpCooldown=0;
+ if(adminAuthClient){try{await adminAuthClient.auth.signOut({scope:"local"})}catch{}}
+ if(revoke&&old){try{await fetch(url+"/auth/v1/logout",{method:"POST",headers:{apikey:key,Authorization:"Bearer "+old}})}catch{}}
+ showLogin();
+}
+async function requestAdminOtp(email){const target=email.trim().toLowerCase();if(!target)throw Error("Email manzilini kiriting.");return authFetch("otp?redirect_to="+encodeURIComponent(location.origin+location.pathname),{method:"POST",body:JSON.stringify({email:target,create_user:false})})}
+async function verifyAdminOtp(email,code){const target=email.trim().toLowerCase(),clean=code.replace(/\D/g,"").trim();if(!target||!clean)throw Error("Email va tasdiqlash kodini kiriting.");const data=await authFetch("verify",{method:"POST",body:JSON.stringify({email:target,token:clean,type:"email"})});saveSession(data);await establish()}
+async function signInWithPassword(email,password){const target=email.trim().toLowerCase();if(!target||!password)throw Error("Admin email va parolni kiriting.");const data=await authFetch("token?grant_type=password",{method:"POST",body:JSON.stringify({email:target,password})});saveSession(data);await establish()}
+function startOtpCooldown(seconds){if(otpCooldownTimer)clearInterval(otpCooldownTimer);otpCooldown=seconds;const button=$("resendCodeBtn");const update=()=>{button.disabled=otpCooldown>0;button.textContent=otpCooldown>0?"Qayta yuborish "+otpCooldown+" s":"Kodni qayta yuborish"};update();otpCooldownTimer=setInterval(()=>{otpCooldown=Math.max(0,otpCooldown-1);update();if(otpCooldown===0){clearInterval(otpCooldownTimer);otpCooldownTimer=null}},1000)}
+function toTableStatus(s){const cls=s==="completed"||s==="handled"?"ok":s==="declined"||s==="archived"?"bad":s==="submitted"||s==="new"?"new":"mid";return '<span class="typebadge '+cls+'">'+esc(statusNames[s]||requestNames[s]||s)+'</span>'}
+function fmt(d){if(!d)return "—";try{return new Date(d).toLocaleString("uz-UZ",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}catch{return d}}
+function dateShort(d){if(!d)return "—";return new Date(d).toLocaleDateString("uz-UZ",{day:"2-digit",month:"short",year:"numeric"})}
+function setDbHealth(ok,text){const el=$("healthDb"),p=$("connectionPill");el.textContent=text;el.classList.toggle("error",!ok);el.classList.toggle("warn",false);p.textContent=ok?"Supabase ulangan":"Ulanish xatosi";p.classList.toggle("error",!ok);$("healthAuth").textContent="Email ruxsati faol"}
+async function loadData(){try{
+ const jobs=[
+  {name:"Tashabbuslar",run:()=>api("rpc/admin_list_initiatives",{method:"POST",body:JSON.stringify({})}),apply:v=>initiatives=v||[]},
+  {name:"Hamkorlik murojaatlari",run:()=>api("rpc/admin_list_connection_requests",{method:"POST",body:JSON.stringify({})}),apply:v=>partners=v||[]},
+  {name:"Manbalar",run:()=>api("opportunity_sources?select=id,title,description,category,url,provider,active,verified_on,created_at&order=created_at.desc&limit=300"),apply:v=>sources=v||[]},
+  {name:"Eski ariza auditi",run:()=>api("admin_activity_log?select=id,actor_id,initiative_id,reference_code,action,old_status,new_status,created_at&order=created_at.desc&limit=100"),apply:v=>legacyAudit=v||[]},
+  {name:"Umumiy audit jurnali",run:()=>api("rpc/admin_list_console_events",{method:"POST",body:JSON.stringify({p_limit:250})}),apply:v=>consoleEvents=v||[]},
+  {name:"Rasmiy portallar",run:()=>api("official_portal_integrations?select=id,slug,name,agency,purpose,portal_url,docs_url,connection_mode,connection_status,auth_required,active,verified_on,category,detail_text,features,steps,required_items,audience,icon_key,hero_image_url,image_alt,image_credit,source_url,fees_note,time_note,contact_info,tags,sort_order,updated_at&order=sort_order.asc,name.asc&limit=200"),apply:v=>integrations=v||[]},
+  {name:"Portal izohlari",run:()=>api("official_portal_admin_notes?select=integration_id,admin_notes,updated_at"),apply:v=>{const notesById=new Map((v||[]).map(n=>[n.integration_id,n]));integrations=integrations.map(x=>({...x,admin_notes:notesById.get(x.id)?.admin_notes||x.admin_notes||""}))}},
+  {name:"Jamoa e’lonlari",run:()=>api("team_posts?select=id,title,description,category,roles,skills,district,commitment,public_contact_url,contact_shared,status,created_at,updated_at&order=created_at.desc&limit=300"),apply:v=>teamPosts=v||[]},
+  {name:"Jamoaga qiziqishlar",run:()=>api("team_interest_requests?select=id,team_post_id,name,contact,role_interest,message,status,created_at&order=created_at.desc&limit=300"),apply:v=>teamInterests=v||[]},
+  {name:"Top tashabbuslar",run:()=>api("initiative_showcase?select=id,slug,title,summary,category,district,display_name,stage,image_url,public_url,featured,published,votes_count,created_at&order=created_at.desc&limit=300"),apply:v=>showcase=v||[]},
+  {name:"Yoshlar dasturlari",run:()=>api("youth_opportunity_programs?select=*&order=featured.desc,sort_order.asc,title.asc&limit=300"),apply:v=>youthPrograms=v||[]}
+ ];
+ const results=await Promise.allSettled(jobs.map(job=>job.run()));
+ const failed=[];
+ results.forEach((result,index)=>{if(result.status==="fulfilled")jobs[index].apply(result.value);else{failed.push(jobs[index].name);console.error("Admin bo‘limi yuklanmadi:",jobs[index].name,result.reason)}});
+ audit=[...consoleEvents.map(x=>({...x,auditKind:"event"})),...legacyAudit.map(x=>({...x,auditKind:"initiative"}))].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0)).slice(0,250);
+ renderAll();
+ const hasConnection=results.some(result=>result.status==="fulfilled");
+ setDbHealth(hasConnection,failed.length?"Qisman ulandi":"Ulandi");
+ $("lastRefresh").textContent=failed.length?"Qisman yangilandi":"Yangilandi";
+ $("lastUpdated").textContent=fmt(new Date().toISOString());
+ if(failed.length)notify("Ayrim bo‘limlar yangilanmadi: "+failed.join(", ")+". Qayta urinib ko‘ring.");
+ return failed.length===0;
+ }catch(e){setDbHealth(false,"Xato");$("lastRefresh").textContent="Xato";notify("Yangilash xatosi: "+e.message);console.error(e);return false}}
+async function loadPilotMetrics(){
+ try{
+  const m=await api("rpc/admin_get_pilot_metrics",{method:"POST",body:"{}"});
+  const value=(v)=>Number(v||0).toLocaleString("uz-UZ");
+  $("pilotRegisteredUsers").textContent=value(m.registered_users);
+  $("pilotNewUsers7d").textContent=value(m.new_users_7d);
+  $("pilotActiveUsers7d").textContent=value(m.active_users_7d);
+  $("pilotActiveUsers30d").textContent=value(m.active_users_30d);
+  $("pilotJourneysStarted").textContent=value(m.journeys_started);
+  $("pilotJourneysCompleted").textContent=value(m.journeys_completed);
+  $("pilotAssessmentAttempts").textContent=value(m.assessment_attempts);
+  $("pilotInitiatives").textContent=value(m.initiative_submissions);
+  const weeks=Array.isArray(m.weekly_activity)?m.weekly_activity:[];
+  const max=Math.max(1,...weeks.map(w=>Number(w.active_users)||0));
+  $("pilotWeekBars").innerHTML=weeks.map(w=>{
+   const count=Number(w.active_users)||0;
+   const date=new Date(String(w.week_start||"")+"T00:00:00");
+   const label=Number.isNaN(date.getTime())?String(w.week_start||"—"):date.toLocaleDateString("uz-UZ",{day:"2-digit",month:"short"});
+   const width=Math.max(0,Math.min(100,Math.round(count/max*100)));
+   return '<div class="pilot-week-row"><span class="pilot-week-label">'+esc(label)+'</span><div class="pilot-week-track"><span style="width:'+width+'%"></span></div><strong class="pilot-week-count">'+count+'</strong></div>';
+  }).join("")||'<div class="subtle">Hozircha haftalik faollik qaydi yo‘q.</div>';
+  const last=m.last_member_activity_at?new Date(m.last_member_activity_at).toLocaleString("uz-UZ"):"Hali faollik qayd etilmagan";
+  $("pilotLastActivity").textContent="Oxirgi qayd etilgan harakat: "+last;
+  $("pilotMetricsState").textContent="Yangilandi";
+  return true;
+ }catch(e){
+  $("pilotMetricsState").textContent="Yuklanmadi";
+  $("pilotLastActivity").textContent="Pilot statistikasi yuklanmadi. Admin ruxsati va RPC ulanishini tekshiring.";
+  console.error("Pilot metrics:",e);
+  return false;
+ }
+}
+async function loadStats(){const metricJobs=[
+ ["all","Jami tashabbuslar",()=>getQueryCount("initiatives")],
+ ["new","Yangi tashabbuslar",()=>getQueryCount("initiatives","status=eq.submitted")],
+ ["progress","Jarayondagi tashabbuslar",()=>getQueryCount("initiatives","status=eq.in_progress")],
+ ["done","Yakunlangan tashabbuslar",()=>getQueryCount("initiatives","status=eq.completed")],
+ ["partners","Yangi hamkorliklar",()=>getQueryCount("connection_requests","review_status=eq.new")],
+ ["sources","Faol manbalar",()=>getQueryCount("opportunity_sources","active=eq.true")],
+ ["portals","Faol portallar",()=>getQueryCount("official_portal_integrations","active=eq.true")]
+ ];
+ const results=await Promise.allSettled(metricJobs.map(job=>job[2]()));
+ const values={};let failures=[];
+ results.forEach((result,index)=>{const key=metricJobs[index][0];if(result.status==="fulfilled")values[key]=result.value;else{values[key]=null;failures.push(metricJobs[index][1]);console.error("Admin hisoblagich:",metricJobs[index][1],result.reason)}});
+ const show=(id,value)=>$(id).textContent=value===null||value===undefined?"—":Number(value).toLocaleString("uz-UZ");
+ show("statAll",values.all);show("statNew",values.new);show("statProgress",values.progress);show("statDone",values.done);show("statPartners",values.partners);
+ $("healthSources").textContent=(values.sources===null?"—":values.sources+" imkoniyat")+" + "+(values.portals===null?"—":values.portals+" rasmiy portal");
+ const statuses=["submitted","reviewing","needs_details","approved","in_progress","completed","declined"],labels=statuses.map(s=>statusNames[s]);
+ const statusResults=await Promise.allSettled(statuses.map(s=>getQueryCount("initiatives","status=eq."+s)));
+ const counts=statusResults.map((result,index)=>{if(result.status==="fulfilled")return result.value;failures.push("Holatlar taqsimoti");console.error("Holat count:",statuses[index],result.reason);return null});
+ const validCounts=counts.filter(Number.isFinite),max=Math.max(1,...validCounts);
+ $("statusBars").innerHTML=statuses.map((s,i)=>'<div class="barrow"><div class="barlabel">'+esc(labels[i])+'</div><div class="trackbar"><div class="fillbar" style="width:'+(Number.isFinite(counts[i])?counts[i]/max*100:0)+'%"></div></div><div class="barcount">'+(Number.isFinite(counts[i])?counts[i]:"—")+'</div></div>').join("");
+ const pilotOk=await loadPilotMetrics();
+ setDbHealth(results.some(result=>result.status==="fulfilled"),failures.length?"Qisman ulandi":"Ulandi");
+ return failures.length===0&&pilotOk;
+}
+function renderOverview(){const recent=initiatives.slice(0,6);$("recentBody").innerHTML=recent.length?recent.map(i=>'<tr><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(dateShort(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+'</span></td><td>'+esc(i.district||"—")+'</td><td>'+toTableStatus(i.status)+'</td><td>'+esc(dateShort(i.created_at))+'</td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha arizalar yo‘q.</td></tr>'}
+function renderInitiatives(){const term=($("initiativeSearch").value||"").toLowerCase(),status=$("initiativeFilter").value;const rows=initiatives.filter(i=>(!status||i.status===status)&&[i.title,i.submitter_name,i.reference_code,i.district,i.contact,i.category].join(" ").toLowerCase().includes(term));$("initiativeCount").textContent=rows.length+" ta ko‘rsatilmoqda · bazadan oxirgi 300 ta";$("initiativesBody").innerHTML=rows.length?rows.map(i=>'<tr data-id="'+esc(i.id)+'"><td><strong>'+esc(i.reference_code)+'</strong><span class="sub">'+esc(fmt(i.created_at))+'</span></td><td><span class="rowtitle">'+esc(i.title)+'</span><span class="sub">'+esc(i.submitter_name)+' · '+esc(i.age_band)+'</span><span class="sub">'+esc(i.problem||"")+'</span></td><td>'+esc(categoryNames[i.category]||i.category)+'<span class="sub">'+esc(i.district||"Hudud kiritilmagan")+'</span></td><td>'+esc(i.contact||"—")+'</td><td><select class="statusselect js-istatus" aria-label="Holat">'+Object.entries(statusNames).map(([k,v])=>'<option value="'+k+'" '+(i.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><input class="noteinput js-inote" maxlength="2000" value="'+esc(i.admin_notes||"")+'" placeholder="Ichki izoh (ixtiyoriy)"></td><td><button class="savebtn js-isave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">Mos ariza topilmadi.</td></tr>'}
+function renderPartners(){const term=($("partnerSearch").value||"").toLowerCase(),filter=$("partnerFilter").value;const rows=partners.filter(p=>(!filter||p.review_status===filter)&&[p.name,p.organization,p.message,p.email,p.phone,p.request_type].join(" ").toLowerCase().includes(term));$("partnerCount").textContent=rows.length+" ta murojaat · bazadan oxirgi 300 ta";$("partnersBody").innerHTML=rows.length?rows.map(p=>'<tr data-id="'+esc(p.id)+'"><td>'+esc(fmt(p.created_at))+'</td><td><strong>'+esc(p.name)+'</strong><span class="sub">'+esc(p.organization||"Tashkilot ko‘rsatilmagan")+'</span></td><td><span class="typebadge">'+esc(typeNames[p.request_type]||p.request_type)+'</span><span class="sub">'+esc(p.message)+'</span></td><td>'+esc(p.email||"")+'<span class="sub">'+esc(p.phone||"")+'</span></td><td><select class="statusselect js-pstatus">'+Object.entries(requestNames).map(([k,v])=>'<option value="'+k+'" '+(p.review_status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><input class="noteinput js-pnote" maxlength="2000" value="'+esc(p.admin_notes||"")+'" placeholder="Ichki izoh"></td><td><button class="savebtn js-psave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="7" class="empty">Hozircha hamkorlik murojaatlari yo‘q.</td></tr>'}
+function renderSources(){$("sourceTotal").textContent=sources.length+" ta";$("sourcesBody").innerHTML=sources.length?sources.map(s=>'<tr data-id="'+esc(s.id)+'"><td><strong>'+esc(s.title)+'</strong><span class="sub">'+esc(s.provider||"")+'</span><span class="sub"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.url)+'</a></span></td><td>'+esc(categoryNames[s.category]||s.category)+'</td><td>'+('<span class="statuspill '+(s.active?'':'warn')+'">'+(s.active?'Faol':'Yashirilgan')+'</span>')+'</td><td><button class="savebtn js-stoggle">'+(s.active?'Yashirish':'Ko‘rsatish')+'</button></td></tr>').join(""):'<tr><td colspan="4" class="empty">Manba yo‘q.</td></tr>'}
+function renderIntegrations(){
+ const term=($("integrationSearch").value||"").toLowerCase(),filter=$("integrationFilter").value;
+ const rows=integrations.filter(x=>(!filter||x.connection_status===filter)&&[x.name,x.slug,x.agency,x.purpose,x.portal_url,x.admin_notes].join(" ").toLowerCase().includes(term));
+ const modeNames={external_link:"Tashqi havola",public_api:"Ochiq API",oauth_sso:"OAuth / SSO",manual_import:"Qo‘lda import"};
+ const statusNamesLocal={link_only:"Faqat havola",docs_needed:"Hujjat kerak",approval_needed:"Ruxsat kerak",connected:"API / SSO ulangan",disabled:"O‘chirilgan"};
+ $("integrationCount").textContent=rows.length+" ta portal";
+ $("integrationsBody").innerHTML=rows.length?rows.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.name)+'</strong><span class="sub">'+esc(x.agency)+' · '+esc(x.purpose)+'</span><span class="sub"><a href="'+esc(x.portal_url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.portal_url)+'</a></span></td><td><select class="statusselect js-imode">'+Object.entries(modeNames).map(([k,v])=>'<option value="'+k+'" '+(x.connection_mode===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><select class="statusselect js-istatus">'+Object.entries(statusNamesLocal).map(([k,v])=>'<option value="'+k+'" '+(x.connection_status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select><label class="check" style="margin-top:7px"><input type="checkbox" class="js-iactive" '+(x.active?'checked':'')+'> Reyestrda faol</label></td><td><input class="noteinput js-idocs" type="url" value="'+esc(x.docs_url||"")+'" placeholder="https://hujjatlar…"></td><td>'+(x.auth_required?'<span class="statuspill warn">Kirish talab qilinishi mumkin</span>':'<span class="statuspill">Ochiq sahifa</span>')+'</td><td>'+esc(dateShort(x.verified_on))+'<span class="sub">Yangilangan: '+esc(dateShort(x.updated_at))+'</span></td><td><input class="noteinput js-inote" maxlength="2000" value="'+esc(x.admin_notes||"")+'" placeholder="Texnik holat / keyingi qadam"></td><td><button class="savebtn js-isave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="8" class="empty">Mos portal topilmadi.</td></tr>';
+}
+async function saveIntegration(btn){
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=integrations.find(x=>x.id===id);if(!row)return;btn.disabled=true;
+ try{
+  const nextStatus=tr.querySelector(".js-istatus").value,nextMode=tr.querySelector(".js-imode").value,docsUrl=tr.querySelector(".js-idocs").value.trim();
+  if(nextStatus==="connected"&&nextMode==="external_link"){notify("Tashqi havola yolg‘iz o‘zi API/SSO ulanishi emas. Avval haqiqiy integratsiyani sozlang.");btn.disabled=false;return}
+  if(docsUrl&&!/^https:\/\/\S+/i.test(docsUrl)){notify("Texnik hujjat havolasi HTTPS bilan boshlansin.");btn.disabled=false;return}
+  const adminNote=tr.querySelector(".js-inote").value;
+  const patch={connection_mode:nextMode,connection_status:nextStatus,docs_url:docsUrl,active:tr.querySelector(".js-iactive").checked,verified_on:new Date().toISOString().slice(0,10),updated_at:new Date().toISOString()};
+  const changed=await api("official_portal_integrations?id=eq."+encodeURIComponent(id)+"&connection_status=eq."+encodeURIComponent(row.connection_status)+"&connection_mode=eq."+encodeURIComponent(row.connection_mode),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify(patch)});
+  if(!Array.isArray(changed)||!changed.length)throw Error("Portal yozuvi boshqa administrator tomonidan o‘zgartirilgan. Ma’lumotni yangilang.");
+  await api("official_portal_admin_notes?on_conflict=integration_id",{method:"POST",headers:{"Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({integration_id:id,admin_notes:adminNote,updated_at:new Date().toISOString()})});
+  const audited=await recordAdminEvent("portal_update","official_portal",id,"Rasmiy portal reyestri yangilandi.",{connection_mode:nextMode,connection_status:nextStatus,active:patch.active});
+  await loadData();notify("Portal reyestri yangilandi."+auditSuffix(audited));
+ }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
+}
+function renderTeamPosts(){
+ const cat={technology:"Texnologiya",design:"Dizayn",marketing:"Marketing",content:"Kontent",business:"Biznes",research:"Tadqiqot",volunteer:"Ko‘ngillilik",other:"Boshqa"};
+ const statusNames={pending:"Moderatsiyada",published:"E’lonni chop etish",closed:"Yopilgan",rejected:"Rad etilgan"};
+ $("teamPostCount").textContent=teamPosts.length+" ta";
+ $("teamPostsBody").innerHTML=teamPosts.length?teamPosts.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(x.description)+'</span><span class="sub">'+esc(dateShort(x.created_at))+'</span></td><td>'+esc(cat[x.category]||x.category)+'<span class="sub">'+esc(x.district||"Hudud ko‘rsatilmagan")+'</span></td><td>'+esc([...(x.roles||[]),...(x.skills||[])].join(", ")||"Ko‘rsatilmagan")+'</td><td><select class="statusselect js-tpstatus">'+Object.entries(statusNames).map(([k,v])=>'<option value="'+k+'" '+(x.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td>'+(x.contact_shared&&x.public_contact_url?'<span class="statuspill">Rozilik bor</span><span class="sub">'+esc(x.public_contact_url)+'</span>':'<span class="statuspill warn">Ommaviy kontakt yo‘q</span>')+'</td><td><button class="savebtn js-tpsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">Jamoa e’lonlari yo‘q.</td></tr>';
+}
+function renderTeamInterests(){
+ const labels={new:"Yangi",reviewing:"Ko‘rib chiqilmoqda",forwarded:"Yo‘naltirildi",closed:"Yopilgan"};
+ const titles=new Map(teamPosts.map(x=>[x.id,x.title]));
+ $("teamInterestCount").textContent=teamInterests.filter(x=>x.status==="new").length+" ta yangi / "+teamInterests.length+" jami";
+ $("teamInterestsBody").innerHTML=teamInterests.length?teamInterests.map(x=>'<tr data-id="'+esc(x.id)+'"><td>'+esc(titles.get(x.team_post_id)||"E’lon")+'</td><td><strong>'+esc(x.name)+'</strong><span class="sub">'+esc(x.contact)+'</span></td><td>'+esc(x.role_interest||"—")+'</td><td>'+esc(x.message)+'</td><td><select class="statusselect js-tistatus">'+Object.entries(labels).map(([k,v])=>'<option value="'+k+'" '+(x.status===k?'selected':'')+'>'+esc(v)+'</option>').join("")+'</select></td><td><button class="savebtn js-tisave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="6" class="empty">Qiziqish bildirishlar yo‘q.</td></tr>';
+}
+async function saveTeamPost(btn){
+ const tr=btn.closest("tr"),row=teamPosts.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ const nextStatus=tr.querySelector(".js-tpstatus").value;
+ try{const changed=await api("team_posts?id=eq."+encodeURIComponent(row.id)+"&status=eq."+encodeURIComponent(row.status),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({status:nextStatus,updated_at:new Date().toISOString()})});if(!Array.isArray(changed)||!changed.length)throw Error("E’lon boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("team_post_review","team_post",row.id,"Jamoa e’loni holati o‘zgartirildi.",{old_status:row.status,new_status:nextStatus});await loadData();notify("Jamoa e’loni yangilandi."+auditSuffix(audited))}
+ catch(e){notify("E’lon holati saqlanmadi: "+e.message)}finally{btn.disabled=false}
+}
+async function saveTeamInterest(btn){
+ const tr=btn.closest("tr"),row=teamInterests.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ const nextStatus=tr.querySelector(".js-tistatus").value;
+ try{const changed=await api("team_interest_requests?id=eq."+encodeURIComponent(row.id)+"&status=eq."+encodeURIComponent(row.status),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({status:nextStatus})});if(!Array.isArray(changed)||!changed.length)throw Error("Murojaat boshqa admin tomonidan yangilangan. Qayta yuklang.");const audited=await recordAdminEvent("team_interest_review","team_interest",row.id,"Jamoaga qiziqish murojaati yangilandi.",{old_status:row.status,new_status:nextStatus});await loadData();notify("Qiziqish murojaati yangilandi."+auditSuffix(audited))}
+ catch(e){notify("Murojaatni yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
+}
+function renderShowcaseAdmin(){
+ const cat={technology:"Texnologiya",education:"Ta’lim",community:"Jamoa / mahalla",startup:"Startap",volunteer:"Ko‘ngillilik",culture:"Madaniyat",other:"Boshqa"};
+ $("showcaseCountAdmin").textContent=showcase.length+" ta";
+ $("showcaseAdminBody").innerHTML=showcase.length?showcase.map(x=>'<tr data-id="'+esc(x.id)+'"><td><strong>'+esc(x.title)+'</strong><span class="sub">'+esc(cat[x.category]||x.category)+' · '+esc(x.slug)+'</span><span class="sub">'+esc(x.summary.slice(0,130))+'</span></td><td>'+Number(x.votes_count||0)+'</td><td><label class="check"><input type="checkbox" class="js-showfeatured" '+(x.featured?'checked':'')+'> Tanlangan</label></td><td><label class="check"><input type="checkbox" class="js-showpublished" '+(x.published?'checked':'')+'> Public</label><label class="check"><input type="checkbox" class="js-showconsent"> Rozilik tekshirildi</label></td><td><button class="savebtn js-showsave">Saqlash</button></td></tr>').join(""):'<tr><td colspan="5" class="empty">Hozircha showcase yozuvlari yo‘q. Tekshirilgan, ommaviy ko‘rsatishga rozilik olingan loyiha qo‘shing.</td></tr>';
+}
+async function saveShowcase(btn){
+ const tr=btn.closest("tr"),row=showcase.find(x=>x.id===tr.dataset.id);if(!row)return;btn.disabled=true;
+ const featured=tr.querySelector(".js-showfeatured").checked,published=tr.querySelector(".js-showpublished").checked;
+ try{if(published&&!row.published&&!tr.querySelector(".js-showconsent").checked)throw Error("Ommaga chiqarishdan oldin muallif/jamoa roziligini tekshirilgan deb tasdiqlang.");const changed=await api("initiative_showcase?id=eq."+encodeURIComponent(row.id)+"&featured=eq."+String(row.featured)+"&published=eq."+String(row.published),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({featured,published})});if(!Array.isArray(changed)||!changed.length)throw Error("Tashabbus boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("showcase_update","showcase",row.id,"Top tashabbus ommaviy holati yangilandi.",{featured,published});await loadData();notify("Top tashabbus holati yangilandi."+auditSuffix(audited))}
+ catch(e){notify("Showcase saqlanmadi: "+e.message)}finally{btn.disabled=false}
+}
+async function addShowcase(ev){
+ ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("showcaseNotice","Loyiha saqlanmoqda…");
+ const img=$("showImage").value.trim(),url=$("showUrl").value.trim(),published=$("showPublish").checked;
+ if((img&&!safeHttpsUrl(img))||(url&&!safeHttpsUrl(url))){tell("showcaseNotice","Rasm va loyiha havolalari yaroqli HTTPS manzil bo‘lishi kerak.",true);btn.disabled=false;return}
+ if(published&&!$("showConsent").checked){tell("showcaseNotice","Ommaga chiqarishdan oldin muallif/jamoa roziligini tekshirilgan deb belgilang.",true);btn.disabled=false;return}
+ const payload={slug:$("showSlug").value.trim().toLowerCase(),title:$("showTitle").value.trim(),summary:$("showSummary").value.trim(),category:$("showCategory").value,district:$("showDistrict").value.trim(),display_name:$("showDisplayName").value.trim()||"Yoshlar-Ishi tashabbuskori",stage:$("showStage").value,image_url:img,public_url:url,featured:$("showFeatured").checked,published,created_by:user?.id||null};
+ try{const inserted=await api("initiative_showcase",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(inserted)||!inserted.length)throw Error("Showcase yozuvi kiritilmadi. RLS va admin ruxsatini tekshiring.");const audited=await recordAdminEvent("showcase_create","showcase",inserted[0].id,"Yangi tashabbus showcase’ga qo‘shildi.",{published,featured:payload.featured});ev.currentTarget.reset();$("showDisplayName").value="Yoshlar-Ishi tashabbuskori";tell("showcaseNotice","Tashabbus saqlandi."+auditSuffix(audited));await loadData()}
+ catch(e){tell("showcaseNotice","Saqlab bo‘lmadi: "+e.message,true)}
+ finally{btn.disabled=false}
+}
+function renderAudit(){
+ $("activityCount").textContent=audit.length+" qayd";
+ $("activityList").innerHTML=audit.length?audit.map(a=>{
+  if(a.auditKind==="event"){
+   const label=a.summary||"Boshqaruv amali";
+   return '<div class="activityitem"><div class="activityicon">✓</div><div class="activitytext"><strong>'+esc(label)+'</strong><small>Amal: '+esc(a.event_type||"—")+' · obyekt: '+esc(a.entity_type||"—")+' · ID: '+esc(a.entity_id||"—")+' · admin: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>';
+  }
+  return '<div class="activityitem"><div class="activityicon">↻</div><div class="activitytext"><strong>'+esc(a.reference_code||"Tashabbus")+'</strong> holati o‘zgartirildi: '+esc(statusNames[a.old_status]||a.old_status||"—")+' → <strong>'+esc(statusNames[a.new_status]||a.new_status||"—")+'</strong><small>Amal: '+esc(a.action)+' · admin ID: '+esc(a.actor_id||"—")+'</small></div><div class="activitytime">'+esc(fmt(a.created_at))+'</div></div>';
+ }).join(""):'<div class="empty">Hozircha audit qaydlari yo‘q. Boshqaruv amallari shu yerda ko‘rinadi.</div>';
+}
+
+function renderYouthPrograms(){
+ const statusLabels={open:"Ochiq qabul",permanent:"Doimiy xizmat",upcoming:"Rejalashtirilgan",unverified:"Tasdiqlanmagan",closed:"Yopilgan"};
+ $("youthProgramCount").textContent=youthPrograms.length+" ta dastur · "+youthPrograms.filter(p=>p.active).length+" ta ommaviy";
+ $("youthProgramsBody").innerHTML=youthPrograms.length?youthPrograms.map(p=>'<tr data-id="'+esc(p.id)+'"><td><strong>'+esc(p.title)+'</strong><span class="sub">'+esc(p.provider)+' · '+esc(p.category)+'</span><span class="sub">'+esc(p.slug)+'</span></td><td>'+esc(p.age_min??"—")+'–'+esc(p.age_max??"—")+'<span class="sub">Tekshirilgan: '+esc(p.verified_on||"—")+'</span></td><td><span class="statuspill '+(p.active?'':'warn')+'">'+(p.active?'Ommaviy':'Yashirilgan')+'</span><span class="sub">Qabul: '+esc(statusLabels[p.availability_status]||"Tasdiqlanmagan")+'</span><span class="sub">'+(p.featured?'Muhim':'Oddiy')+'</span></td><td><button type="button" class="savebtn js-program-edit">Tahrirlash</button> <button type="button" class="savebtn js-program-toggle">'+(p.active?'Yashirish':'Ommaga chiqarish')+'</button></td></tr>').join(""):'<tr><td colspan="4" class="empty">Dastur yo‘q. Chapdagi forma orqali birinchi imkoniyatni qo‘shing.</td></tr>';
+}
+function resetYouthProgramForm(){
+ $("youthProgramForm").reset();$("programEditId").value="";$("programFormTitle").textContent="Yangi dastur qo‘shish";
+ $("programVerified").value=new Date().toISOString().slice(0,10);$("programAvailabilityStatus").value="unverified";$("programSort").value="100";$("programActive").checked=true;$("programFeatured").checked=false;
+ tell("programFormNotice","Forma yangi dastur uchun tayyor.");
+}
+function editYouthProgram(id){
+ const p=youthPrograms.find(x=>x.id===id);if(!p)return;
+ $("programEditId").value=p.id;$("programTitle").value=p.title||"";$("programSlug").value=p.slug||"";$("programProvider").value=p.provider||"";
+ $("programCategory").value=p.category||"social_support";$("programAvailabilityStatus").value=p.availability_status||"unverified";$("programSort").value=p.sort_order??100;$("programSummary").value=p.summary||"";$("programBenefit").value=p.benefit||"";
+ $("programAgeMin").value=p.age_min??"";$("programAgeMax").value=p.age_max??"";
+ $("programAudience").value=(p.audience_tags||[]).join("\n");$("programEligibility").value=JSON.stringify(p.eligibility||{},null,2);
+ $("programSteps").value=(p.steps||[]).join("\n");$("programDocuments").value=(p.documents||[]).join("\n");
+ $("programChannel").value=p.application_channel||"";$("programApplicationUrl").value=p.application_url||"";
+ $("programSourceTitle").value=p.source_title||"";$("programVerified").value=p.verified_on||new Date().toISOString().slice(0,10);
+ $("programSourceUrl").value=p.source_url||"";$("programSecondaryUrl").value=p.secondary_source_url||"";
+ $("programDeadline").value=p.deadline_note||"";$("programStatusNote").value=p.status_note||"";
+ $("programActive").checked=p.active===true;$("programFeatured").checked=p.featured===true;
+ $("programFormTitle").textContent="Dastur ma’lumotini tahrirlash";tell("programFormNotice","Tahrir rejimi: "+p.title);
+ $("youthProgramForm").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function saveYouthProgram(ev){
+ ev.preventDefault();const btn=ev.currentTarget.querySelector('button[type="submit"]');btn.disabled=true;
+ try{
+  let eligibility={};const raw=$("programEligibility").value.trim();
+  if(raw){eligibility=JSON.parse(raw);if(!eligibility||Array.isArray(eligibility)||typeof eligibility!=="object")throw Error("Muvofiqlik shartlari JSON obyekt bo‘lishi kerak.");}
+  const sourceUrl=$("programSourceUrl").value.trim(),appUrl=$("programApplicationUrl").value.trim(),secondaryUrl=$("programSecondaryUrl").value.trim();
+  if(!/^[a-z0-9-]{3,100}$/.test($("programSlug").value.trim().toLowerCase()))throw Error("Slug faqat kichik lotin harflari, raqam va defisdan iborat bo‘lsin.");
+  if(!safeHttpsUrl(sourceUrl))throw Error("Rasmiy manba URL yaroqli HTTPS manzil bo‘lishi kerak.");
+  if(appUrl&&!safeHttpsUrl(appUrl))throw Error("Ariza portali URL yaroqli HTTPS manzil bo‘lishi kerak.");
+  if(secondaryUrl&&!safeHttpsUrl(secondaryUrl))throw Error("Qo‘shimcha manba URL yaroqli HTTPS manzil bo‘lishi kerak.");
+  const splitLines=id=>$(id).value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const min=$("programAgeMin").value,max=$("programAgeMax").value;
+  if(min!==""&&max!==""&&Number(min)>Number(max))throw Error("Eng kam yosh eng yuqori yoshdan katta bo‘lishi mumkin emas.");
+  const verified=$("programVerified").value;
+  if(!verified||Number.isNaN(Date.parse(verified)))throw Error("Rasmiy manbani tekshirgan sanani belgilang.");
+  if(Date.parse(verified+"T00:00:00Z")>Date.now()+86400000)throw Error("Tekshirilgan sana kelajak sanasi bo‘lishi mumkin emas.");
+  const sortRaw=$("programSort").value,sortOrder=sortRaw===""?100:Number(sortRaw);
+  if(!Number.isInteger(sortOrder)||sortOrder<0||sortOrder>9999)throw Error("Tartib raqami 0–9999 oralig‘ida butun son bo‘lsin.");
+  const payload={slug:$("programSlug").value.trim().toLowerCase(),title:$("programTitle").value.trim(),provider:$("programProvider").value.trim(),category:$("programCategory").value,
+   sort_order:sortOrder,availability_status:$("programAvailabilityStatus").value,
+   summary:$("programSummary").value.trim(),benefit:$("programBenefit").value.trim(),age_min:min===""?null:Number(min),age_max:max===""?null:Number(max),
+   audience_tags:splitLines("programAudience"),eligibility,steps:splitLines("programSteps"),documents:splitLines("programDocuments"),
+   application_channel:$("programChannel").value.trim(),application_url:appUrl,source_title:$("programSourceTitle").value.trim(),source_url:sourceUrl,
+   secondary_source_url:secondaryUrl,deadline_note:$("programDeadline").value.trim(),status_note:$("programStatusNote").value.trim(),
+   verified_on:verified,active:$("programActive").checked,featured:$("programFeatured").checked,updated_at:new Date().toISOString()};
+  const id=$("programEditId").value;
+  let saved;
+  if(id){const current=youthPrograms.find(p=>p.id===id);const filter="id=eq."+encodeURIComponent(id)+(current?.updated_at?"&updated_at=eq."+encodeURIComponent(current.updated_at):"");saved=await api("youth_opportunity_programs?"+filter,{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(saved)||!saved.length)throw Error("Dastur boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");}
+  else{saved=await api("youth_opportunity_programs",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(saved)||!saved.length)throw Error("Dastur saqlanmadi. RLS va admin ruxsatini tekshiring.");}
+  const audited=await recordAdminEvent(id?"program_update":"program_create","youth_program",id||saved[0].id,id?"Yoshlar dasturi yangilandi.":"Yangi yoshlar dasturi qo‘shildi.",{slug:payload.slug,availability_status:payload.availability_status,active:payload.active});
+  resetYouthProgramForm();await loadData();await loadStats();notify((id?"Yoshlar dasturi yangilandi.":"Yangi yoshlar dasturi qo‘shildi.")+auditSuffix(audited));
+ }catch(e){tell("programFormNotice","Saqlash xatosi: "+e.message,true)}
+ finally{btn.disabled=false}
+}
+async function toggleYouthProgram(btn){
+ const tr=btn.closest("tr"),p=youthPrograms.find(x=>x.id===tr.dataset.id);if(!p)return;btn.disabled=true;
+ try{const changed=await api("youth_opportunity_programs?id=eq."+encodeURIComponent(p.id)+"&active=eq."+String(p.active),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({active:!p.active,updated_at:new Date().toISOString()})});if(!Array.isArray(changed)||!changed.length)throw Error("Dastur boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("program_update","youth_program",p.id,"Yoshlar dasturi ommaviy holati o‘zgartirildi.",{active:!p.active,availability_status:p.availability_status});await loadData();notify("Dastur katalog holati yangilandi."+auditSuffix(audited))}
+ catch(e){notify("Dastur holatini yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}
+}
+
+function renderAll(){renderOverview();renderInitiatives();renderPartners();renderSources();renderYouthPrograms();renderIntegrations();renderTeamPosts();renderTeamInterests();renderShowcaseAdmin();renderAudit()}
+function setPage(page){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id==="page-"+page));document.querySelectorAll(".navitem").forEach(e=>e.classList.toggle("active",e.dataset.page===page));const names={overview:"Umumiy ko‘rinish",initiatives:"Tashabbuslar",partners:"Hamkorlik murojaatlari",sources:"Manbalar va portallar", "youth-programs":"Yoshlar dasturlari", integrations:"Tashqi integratsiyalar",team:"Jamoa doskasi",showcase:"Top tashabbuslar","control-center":"Nazorat markazi",members:"Foydalanuvchilar",community:"Hamjamiyat moderatsiyasi",content:"Sayt kontenti va fayllar",reports:"Hisobotlar",activity:"Faoliyat tarixi"};$("pageTitle").textContent=names[page]||"Boshqaruv";history.replaceState(null,"","#"+page);if(window.YIAdminPageChanged)window.YIAdminPageChanged(page)}
+async function saveInitiative(btn){
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=initiatives.find(x=>x.id===id);if(!row)return;
+ btn.disabled=true;const status=tr.querySelector(".js-istatus").value,notes=tr.querySelector(".js-inote").value,oldStatus=row.status;
+ try{
+  const reviewRows=await api("rpc/admin_review_initiative",{method:"POST",body:JSON.stringify({p_id:id,p_expected_status:oldStatus,p_status:status,p_admin_notes:notes})});
+  const reviewed=Array.isArray(reviewRows)?reviewRows[0]:null;
+  if(!reviewed)throw Error("Admin review RPC returned no result.");
+  row.status=reviewed.new_status;row.admin_notes=reviewed.admin_notes;row.reviewed_by=user.id;row.reviewed_at=reviewed.reviewed_at;
+  const audited=await recordAdminEvent("initiative_review","initiative",id,"Tashabbus ko‘rib chiqildi.",{old_status:oldStatus,new_status:status});
+  let telegramMessage="";
+  if(oldStatus!==status){
+   try{
+    const nr=await fetch(url+"/functions/v1/telegram-notify",{method:"POST",headers:{apikey:key,Authorization:"Bearer "+token,"Content-Type":"application/json"},body:JSON.stringify({initiative_id:id,reference_code:row.reference_code,old_status:oldStatus,new_status:status})});
+    const nd=await nr.json().catch(()=>({}));
+    if(nd.configured&&nd.sent>0)telegramMessage=" Telegram xabarnomasi "+nd.sent+" obunachiga yuborildi.";
+    else if(nd.configured&&nd.failed>0)telegramMessage=" Ayrim Telegram xabarlari yuborilmadi.";
+    else if(nd.configured===false)telegramMessage=" Telegram bot tokeni hali sozlanmagan.";
+   }catch{telegramMessage=" Telegram xabarnomasi yuborilmadi; holat saqlandi."}
+  }
+  await Promise.all([loadStats(),loadData()]);notify("Tashabbus o‘zgarishlari saqlandi."+telegramMessage+auditSuffix(audited));
+ }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
+}
+async function savePartner(btn){
+ const tr=btn.closest("tr"),id=tr.dataset.id,row=partners.find(x=>x.id===id);if(!row)return;btn.disabled=true;
+ try{
+  const nextStatus=tr.querySelector(".js-pstatus").value;
+  const result=await api("rpc/admin_review_connection_request",{method:"POST",body:JSON.stringify({p_id:id,p_expected_status:row.review_status,p_status:nextStatus,p_admin_notes:tr.querySelector(".js-pnote").value})});
+  if(!Array.isArray(result)||!result.length)throw Error("Murojaat yangilanmadi yoki boshqa administrator oldin o‘zgartirdi. Yangilang.");
+  const audited=await recordAdminEvent("partner_review","partner_request",id,"Hamkorlik murojaati ko‘rib chiqildi.",{old_status:row.review_status,new_status:nextStatus});
+  await loadData();await loadStats();notify("Hamkorlik murojaati yangilandi."+auditSuffix(audited));
+ }catch(e){notify("Saqlash xatosi: "+e.message)}finally{btn.disabled=false}
+}
+async function toggleSource(btn){const tr=btn.closest("tr"),id=tr.dataset.id,row=sources.find(x=>x.id===id);if(!row)return;btn.disabled=true;try{const changed=await api("opportunity_sources?id=eq."+encodeURIComponent(id)+"&active=eq."+String(row.active),{method:"PATCH",headers:{"Prefer":"return=representation"},body:JSON.stringify({active:!row.active})});if(!Array.isArray(changed)||!changed.length)throw Error("Manba boshqa administrator tomonidan o‘zgartirilgan. Yangilang.");const audited=await recordAdminEvent("source_update","opportunity_source",id,"Imkoniyat manbasi ko‘rinishi yangilandi.",{active:!row.active});await loadData();await loadStats();notify("Manba holati yangilandi."+auditSuffix(audited))}catch(e){notify("Manbani yangilab bo‘lmadi: "+e.message)}finally{btn.disabled=false}}
+async function downloadCsv(){const rows=initiatives,cols=["reference_code","title","submitter_name","age_band","district","category","contact","status","admin_notes","created_at"];const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';const csv="\uFEFF"+[cols.join(","),...rows.map(r=>cols.map(c=>q(r[c])).join(","))].join("\r\n");const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}),a=document.createElement("a"),objectUrl=URL.createObjectURL(blob);a.href=objectUrl;a.download="yoshlar-ishi-tashabbuslar-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),1000);const audited=await recordAdminEvent("report_export","report","initiatives","Tashabbuslar CSV hisobotiga eksport qilindi.",{rows:rows.length,columns:cols.length});notify("CSV tayyorlandi: "+rows.length+" ta yozuv."+auditSuffix(audited))}
+async function addSource(ev){ev.preventDefault();const btn=ev.currentTarget.querySelector("button[type=submit]");btn.disabled=true;tell("sourceNotice","Manba saqlanmoqda…");const payload={title:$("sourceTitle").value.trim(),description:$("sourceDesc").value.trim(),category:$("sourceCategory").value,url:$("sourceUrl").value.trim(),provider:$("sourceProvider").value.trim(),active:$("sourceActive").checked,verified_on:new Date().toISOString().slice(0,10)};try{if(!safeHttpsUrl(payload.url))throw Error("Manba havolasi HTTPS bo‘lishi va foydalanuvchi nomi/parol saqlamasligi kerak.");if(!payload.title||!payload.description)throw Error("Nomi va tavsifini to‘ldiring.");const inserted=await api("opportunity_sources",{method:"POST",headers:{"Prefer":"return=representation"},body:JSON.stringify(payload)});if(!Array.isArray(inserted)||!inserted.length)throw Error("Manba saqlanmadi. RLS va admin ruxsatini tekshiring.");const audited=await recordAdminEvent("source_create","opportunity_source",inserted[0].id,"Yangi imkoniyat manbasi qo‘shildi.",{category:payload.category,active:payload.active});ev.currentTarget.reset();$("sourceActive").checked=true;tell("sourceNotice","Manba qo‘shildi."+auditSuffix(audited));await loadData();await loadStats()}catch(e){tell("sourceNotice","Xatolik: "+e.message,true)}finally{btn.disabled=false}}
+async function refreshDashboard(){if(dashboardRefreshPromise)return dashboardRefreshPromise;dashboardRefreshPromise=(async()=>{const results=await Promise.all([loadData(),loadStats()]);return results.every(Boolean)})().finally(()=>{dashboardRefreshPromise=null});return dashboardRefreshPromise}
+async function establish(){if(!url||!key)throw Error("config.js topilmadi yoki Supabase sozlamalari bo‘sh.");if(!token)return false;const params=new URLSearchParams(location.search);const requireGoogle=sessionStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_pending")==="1"||localStorage.getItem("yi_admin_google_session")==="1"||params.get("admin-google")==="1";await checkAdmin(requireGoogle);if(requireGoogle)history.replaceState(null,"",location.pathname+location.hash);showApp();setPage(location.hash.slice(1)||"overview");await refreshDashboard();if(timer)clearInterval(timer);timer=setInterval(()=>{if(token)refreshDashboard()},60000);return true}
+async function completeGoogleCallback(){
+ const query=new URLSearchParams(location.search);
+ const isGoogleCallback=query.get("admin-google")==="1"||
+  sessionStorage.getItem("yi_admin_google_pending")==="1"||
+  localStorage.getItem("yi_admin_google_pending")==="1"||
+  localStorage.getItem("yi_admin_google_session")==="1";
+ const callbackError=query.get("error_description")||query.get("error");
+ if(callbackError&&isGoogleCallback){
+  sessionStorage.removeItem("yi_admin_google_pending");
+  localStorage.removeItem("yi_admin_google_pending");
+  localStorage.removeItem("yi_admin_google_session");
+  ["error","error_description","error_code","admin-google","state","code"].forEach(k=>query.delete(k));
+  history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
+  throw Error("Google orqali kirish yakunlanmadi: "+callbackError);
+ }
+ if(!isGoogleCallback)return false;
+ const client=await getAdminAuthClient();
+ const {data,error}=await client.auth.getSession();
+ if(error)throw error;
+ if(!data.session){
+  if(query.has("code"))throw Error("Google sessiyasi tasdiqlanmadi. Admin sahifasini qayta ochib, yana urinib ko‘ring.");
+  if(query.get("admin-google")==="1"){
+   sessionStorage.removeItem("yi_admin_google_pending");
+   localStorage.removeItem("yi_admin_google_pending");
+  }
+  return false;
+ }
+ saveSession(data.session);
+ sessionStorage.removeItem("yi_admin_google_pending");
+ localStorage.removeItem("yi_admin_google_pending");
+ localStorage.setItem("yi_admin_google_session","1");
+ ["code","state","admin-google"].forEach(k=>query.delete(k));
+ history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():"")+location.hash);
+ return true;
+}
+function parseHashSession(){
+ const hash=new URLSearchParams(location.hash.replace(/^#/,"")),query=new URLSearchParams(location.search);
+ const callbackError=hash.get("error_description")||hash.get("error")||query.get("error_description")||query.get("error");
+ if(callbackError){
+  sessionStorage.removeItem("yi_admin_google_pending");
+  
+  ["error","error_description","error_code","admin-google","state"].forEach(k=>query.delete(k));
+  history.replaceState(null,"",location.pathname+(query.toString()?"?"+query.toString():""));
+  tell("loginNotice","Kirish yakunlanmadi: "+callbackError,true);
+  return false;
+ }
+ // Avvalgi email havolalari uchun implicit callback mosligi saqlanadi.
+ const at=hash.get("access_token"),rt=hash.get("refresh_token");
+ if(at){token=at;sessionStorage.setItem("yi_access_token",at)}
+ if(rt){refreshToken=rt;sessionStorage.setItem("yi_refresh_token",rt)}
+ if(at)history.replaceState(null,"",location.pathname+location.search);
+ return Boolean(at);
+}
+$("loginForm").addEventListener("submit",async ev=>{ev.preventDefault();const btn=$("sendCodeBtn");btn.disabled=true;tell("loginNotice","Tasdiqlash yuborilmoqda…");try{await requestAdminOtp($("loginEmail").value);$("otpPanel").classList.remove("hidden");$("loginEmail").disabled=true;startOtpCooldown(45);tell("loginNotice","Bir martalik tasdiqlash yuborildi. Kodni kiriting yoki emailga kelgan havolani oching.")}catch(e){tell("loginNotice","Tasdiqlash yuborilmadi: "+e.message,true)}finally{btn.disabled=false}});
+$("verifyCodeBtn").addEventListener("click",async()=>{const btn=$("verifyCodeBtn");btn.disabled=true;tell("loginNotice","Tasdiqlash tekshirilmoqda…");try{await verifyAdminOtp($("loginEmail").value,$("loginCode").value);sessionStorage.removeItem("yi_admin_google_pending")}catch(e){await signOut(false);tell("loginNotice","Kirish rad etildi yoki tasdiqlash xatosi: "+e.message,true)}finally{btn.disabled=false}});
+$("loginCode").addEventListener("keydown",ev=>{if(ev.key==="Enter")$("verifyCodeBtn").click()});
+$("changeEmailBtn").addEventListener("click",()=>{if(otpCooldownTimer)clearInterval(otpCooldownTimer);otpCooldownTimer=null;otpCooldown=0;$("otpPanel").classList.add("hidden");$("loginEmail").disabled=false;$("loginCode").value="";tell("loginNotice","Boshqa admin email manzilini kiriting.")});
+$("resendCodeBtn").addEventListener("click",async()=>{if(otpCooldown>0)return;const btn=$("resendCodeBtn");btn.disabled=true;try{await requestAdminOtp($("loginEmail").value);startOtpCooldown(45);tell("loginNotice","Yangi tasdiqlash yuborildi.")}catch(e){tell("loginNotice","Qayta yuborilmadi: "+e.message,true);btn.disabled=false}});
+$("passwordForm").addEventListener("submit",async ev=>{ev.preventDefault();const btn=$("passwordLoginBtn");btn.disabled=true;tell("loginNotice","Admin hisobi tekshirilmoqda…");try{await signInWithPassword($("loginEmail").value,$("loginPassword").value);$("loginPassword").value=""}catch(e){await signOut(false);tell("loginNotice","Parol orqali kirish rad etildi: "+e.message,true)}finally{btn.disabled=false}});
+$("googleLoginBtn").addEventListener("click",async()=>{
+ const btn=$("googleLoginBtn");
+ const productionAdminUrl="https://yoshlar-ishi-site.vercel.app/admin.html";
+ if(location.origin!=="https://yoshlar-ishi-site.vercel.app"||location.pathname!=="/admin.html"){
+  location.assign(productionAdminUrl);
+  return;
+ }
+ if(!url||!key){tell("loginNotice","Supabase sozlamalari topilmadi. config.js faylini tekshiring.",true);return}
+ btn.disabled=true;btn.classList.add("is-loading");btn.querySelector(".google-label").textContent="Google sahifasiga yo‘naltirilmoqda…";
+ try{
+  sessionStorage.setItem("yi_admin_google_pending","1");
+  localStorage.setItem("yi_admin_google_pending","1");
+  const client=await getAdminAuthClient();
+  const {error}=await client.auth.signInWithOAuth({
+   provider:"google",
+   options:{
+    redirectTo:"https://yoshlar-ishi-site.vercel.app/admin.html?admin-google=1",
+    queryParams:{prompt:"select_account"}
+   }
+  });
+  if(error)throw error;
+ }catch(e){
+  sessionStorage.removeItem("yi_admin_google_pending");
+  localStorage.removeItem("yi_admin_google_pending");
+  btn.disabled=false;btn.classList.remove("is-loading");btn.querySelector(".google-label").textContent="Google orqali xavfsiz kirish";
+  tell("loginNotice","Google orqali kirish boshlanmadi: "+e.message,true);
+ }
+});
+$("logoutBtn").addEventListener("click",()=>signOut(true));
+$("refreshBtn").addEventListener("click",async()=>{const button=$("refreshBtn");button.disabled=true;button.textContent="↻ Yangilanmoqda…";try{const ok=await refreshDashboard();notify(ok?"Barcha admin bo‘limlari yangilandi.":"Ayrim bo‘limlar yangilanmadi; xatolar toast va jurnalga yozildi.")}finally{button.disabled=false;button.textContent="↻ Yangilash"}});
+$("activityRefresh").addEventListener("click",()=>loadData());
+document.querySelectorAll(".navitem").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.page)));
+$("teamRefreshAdmin").addEventListener("click",()=>loadData());$("showcaseRefresh").addEventListener("click",()=>loadData());
+$("teamPostsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-tpsave");if(b)saveTeamPost(b)});
+$("teamInterestsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-tisave");if(b)saveTeamInterest(b)});
+$("showcaseAdminBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-showsave");if(b)saveShowcase(b)});
+$("showcaseForm").addEventListener("submit",addShowcase);
+$("integrationSearch").addEventListener("input",renderIntegrations);$("integrationFilter").addEventListener("change",renderIntegrations);
+$("integrationsBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-isave");if(b)saveIntegration(b)});
+$("integrationRefresh").addEventListener("click",()=>loadData());
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>setPage(b.dataset.goto)));
+$("initiativeSearch").addEventListener("input",renderInitiatives);$("initiativeFilter").addEventListener("change",renderInitiatives);$("partnerSearch").addEventListener("input",renderPartners);$("partnerFilter").addEventListener("change",renderPartners);
+$("initiativesBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-isave");if(b)saveInitiative(b)});
+$("partnersBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-psave");if(b)savePartner(b)});
+$("sourcesBody").addEventListener("click",ev=>{const b=ev.target.closest(".js-stoggle");if(b)toggleSource(b)});
+$("exportBtn").addEventListener("click",downloadCsv);$("sourceForm").addEventListener("submit",addSource);
+$("youthProgramForm").addEventListener("submit",saveYouthProgram);$("programReset").addEventListener("click",resetYouthProgramForm);$("programVerified").value=new Date().toISOString().slice(0,10);$("youthProgramsBody").addEventListener("click",ev=>{const edit=ev.target.closest(".js-program-edit"),toggle=ev.target.closest(".js-program-toggle");if(edit)editYouthProgram(edit.closest("tr").dataset.id);if(toggle)toggleYouthProgram(toggle)});
+window.YIAdminBridge={api,recordAdminEvent,notify,tell,safeHttpsUrl,get user(){return user},refresh:()=>refreshDashboard(),setPage,storageFetch:async(path,options={})=>{const run=()=>fetch(url+path,{...options,headers:{...authHeaders(),...(options.headers||{})}});let response=await run();if(response.status===401&&refreshToken){await refreshSession();response=await run()}return response}};
+(async()=>{try{await completeGoogleCallback();parseHashSession();if(token){await establish();sessionStorage.removeItem("yi_admin_google_pending");}else showLogin()}catch(e){await signOut(false);tell("loginNotice","Kirish tekshiruvi: "+e.message,true);showLogin()}})();
+})();
+</script>
+<script src="./admin-operations.js"></script>
+</body>
+</html>
