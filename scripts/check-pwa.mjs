@@ -89,6 +89,8 @@ assert.ok(precache.includes("/mobile-experience.css"), "PWA must precache the de
 assert.ok(precache.includes("/mobile-experience.js"), "PWA must precache the dedicated mobile controller");
 assert.ok(precache.includes("/site-background.css"), "PWA must precache the site-wide background stylesheet");
 assert.ok(precache.includes("/assets/uzbekistan-flag.svg"), "PWA must precache the local state flag asset");
+assert.ok(precache.includes("/uz-flag-3d.css") && precache.includes("/uz-flag-3d.js"), "PWA must precache the 3D flag assets");
+assert.ok(!precache.includes("/admin-operations.css") && !precache.includes("/admin-operations.js"), "Public PWA cache must not bundle the independent admin assets");
 assert.ok(worker.includes('"https://static.tuit.uz"'), "PWA must cache the Registan hero background photo from TUIT");
 
 
@@ -125,7 +127,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.ok(worker.includes('const CACHE_NAME = "yi-pwa-v33";'), "PWA cache version must be updated for the admin CMS rollout");
+assert.ok(worker.includes('const CACHE_NAME = "yi-pwa-v34";'), "PWA cache version must be updated for the admin CMS rollout");
 assert.ok(precache.includes('"/admin-operations.css"') && precache.includes('"/admin-operations.js"'), "Admin operation assets must be precached with the PWA cache");
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");

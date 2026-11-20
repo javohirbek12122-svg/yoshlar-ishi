@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Yoshlar imkoniyatlari va davlat xizmatlari platformasi",
   "scripts": {
-    "check": "node scripts/check-site.mjs && node scripts/check-homepage-experience.mjs && node scripts/check-biletlar.mjs && node scripts/check-assessment.mjs && node scripts/check-pwa.mjs",
+    "check": "node scripts/check-site.mjs && node scripts/check-homepage-experience.mjs && node scripts/check-biletlar.mjs && node scripts/check-assessment.mjs && node scripts/check-pwa.mjs && node scripts/check-flag-motifs.mjs",
     "check:mobile": "node scripts/check-mobile.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:government": "node scripts/check-government-pilot.mjs",

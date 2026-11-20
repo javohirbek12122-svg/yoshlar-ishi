@@ -53,6 +53,16 @@ const required = [
   "admin.html",
   "admin-operations.js",
   "admin-operations.css",
+  "admin-app/index.html",
+  "admin-app/config.js",
+  "admin-app/admin-operations.js",
+  "admin-app/admin-operations.css",
+  "admin-app/admin-shell.css",
+  "admin-app/admin-favicon.svg",
+  "admin-app/admin-manifest.webmanifest",
+  "admin-app/vercel.json",
+  "uz-flag-3d.css",
+  "uz-flag-3d.js",
   "supabase/migrations/20261120051021_admin_site_content_blocks.sql",
   "supabase/migrations/20261120051312_admin_site_content_updated_by_index.sql",
   "davlat-xizmatlari.html",
@@ -113,12 +123,29 @@ for (const file of required) {
 }
 console.log(`✓ required files: ${required.length}`);
 
+const flagPages = {"index.html":12,"imkoniyatlar.html":4,"startap-yoli.html":3,"davlat-xizmatlari.html":3,"assessment.html":2,"laboratoriya.html":2,"hamjamiyat.html":2,"kabinet.html":2};
+const flagController = read("uz-flag-3d.js");
+const flagStyles = read("uz-flag-3d.css");
+new vm.Script(flagController, { filename: "uz-flag-3d.js" });
+const flagQuotaSource = flagController.match(/const quotas=(\{[^;]+\});/)?.[1] || "";
+assert.ok(flagQuotaSource, "3D flag placement quotas must be declared in the public controller");
+const flagQuotas = JSON.parse(flagQuotaSource);
+assert.deepEqual(flagQuotas, flagPages, "The 3D flag locations must be distributed across all core pages");
+assert.equal(Object.values(flagQuotas).reduce((sum,value)=>sum+value,0),30,"The public site must have approximately 30 compact flag placements");
+for (const page of Object.keys(flagPages)) {
+ const html = read(page);
+ assert.ok(html.includes('href="./uz-flag-3d.css"') && html.includes('src="./uz-flag-3d.js"'), page + " must load the compact 3D flag component");
+}
+assert.ok(flagStyles.includes("@keyframes yiFlagWave") && flagStyles.includes("prefers-reduced-motion"),"Flag animation must be 3D-inspired and respect reduced-motion preferences");
+console.log("✓ exactly 30 compact Uzbekistan flag placements are distributed across eight public pages");
+
+
 function inlineScripts(html) {
   return [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
     .map((match) => match[1])
     .filter((source) => source.trim().length > 0);
 }
-for (const file of ["index.html", "startap-yoli.html", "admin.html", "davlat-xizmatlari.html", "imkoniyatlar.html", "kabinet.html"]) {
+for (const file of ["index.html", "startap-yoli.html", "admin.html", "admin-app/index.html", "davlat-xizmatlari.html", "imkoniyatlar.html", "kabinet.html"]) {
   const html = read(file);
   const scripts = inlineScripts(html);
   assert.ok(scripts.length > 0, `${file} has no inline JavaScript`);
@@ -140,7 +167,7 @@ const publicHtml = read("index.html");
 assert.ok(publicHtml.includes('./site.css'), "Homepage must load its single consolidated design system");
 assert.ok(publicHtml.includes('Loyiha va hamjamiyat vositalari'), "Secondary project/community tools must be separated from the primary public-opportunity journey");
 assert.ok(publicHtml.includes('Bu forma davlat idorasiga ariza yubormaydi.'), "Internal initiative submission must not be confused with an official government application");
-for (const page of ["imkoniyatlar.html","davlat-xizmatlari.html","kabinet.html","admin.html"]) {
+for (const page of ["imkoniyatlar.html","davlat-xizmatlari.html","kabinet.html"]) {
   assert.ok(read(page).includes('./shared-theme.css'), `${page} must share the platform design tokens and navigation language`);
 }
 console.log("✓ one consolidated homepage design system, shared cross-page theme and clearly separated internal-vs-government actions");
@@ -196,6 +223,11 @@ console.log("✓ public community forms use the consent-checked server-side subm
 
 
 const admin = read("admin.html");
+const standaloneAdmin = read("admin-app/index.html");
+assert.ok(standaloneAdmin.includes('<base href="/admin/">'), "Independent admin assets must resolve beneath their own route");
+assert.ok(standaloneAdmin.includes("./admin-shell.css"), "Independent admin interface must use its own design layer");
+assert.ok(!standaloneAdmin.includes("shared-theme.css") && !standaloneAdmin.includes("mobile-guard.css"), "The admin build must not import public-site style bundles");
+assert.ok(standaloneAdmin.includes("./config.js") && standaloneAdmin.includes("./admin-operations.js"), "Standalone admin must load its own configuration and operation client");
 assert.ok(admin.includes('id="programAvailabilityStatus"'), "Admin must expose an explicit application-status selector");
 assert.ok(admin.includes('availability_status:$("programAvailabilityStatus").value'), "Admin must save the separate application-status field");
 for (const feature of [
@@ -821,7 +853,7 @@ new vm.Script(stateAssistant, { filename: "state-service-assistant.js" });
 console.log("✓ cross-portal service navigator, document checklist, appeal drafter and local case tracker are wired and syntax-checked");
 
 const accountDesign = read("kabinet.html");
-const adminDesign = read("admin.html");
+const adminDesign = read("admin-app/index.html");
 assert.match(serviceDesign, /Yoshlar-Ishi shared startup palette/);
 assert.match(serviceDesign, /id="tashkilotlar"/);
 assert.match(serviceDesign, /class="media-grid"/);
@@ -836,7 +868,7 @@ assert.ok(read("shared-theme.css").includes(".navlinks{"), "Personal cabinet nav
 assert.ok(read("site.css").includes(".showcase-empty-art"), "Empty portfolio state must have its own accessible visual hierarchy");
 assert.ok(read("site.css").includes(".detail-btn"), "Dynamic team interest actions must not fall back to unstyled browser buttons");
 assert.match(accountDesign, /rpc\/get_my_initiatives/);
-assert.match(adminDesign, /Yoshlar-Ishi shared startup palette/);
+assert.ok(read("admin-app/admin-shell.css").includes("--navy:#0d2743") && read("admin-app/admin-shell.css").includes(".sidebar"), "Standalone admin must keep its own navy control-centre design");
 assert.match(adminDesign, /id="page-team"/);
 assert.match(adminDesign, /id="page-showcase"/);
 assert.match(adminDesign, /id="page-control-center"/);

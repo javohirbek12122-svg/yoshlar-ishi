@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v33";
+const CACHE_NAME = "yi-pwa-v34";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",
@@ -78,12 +78,12 @@ const PRECACHE_URLS = [
   "/mobile-experience.js",
   "/site-background.css",
   "/assets/uzbekistan-flag.svg",
+  "/uz-flag-3d.css",
+  "/uz-flag-3d.js",
   "/homepage-experience.css",
   "/platform-polish.css",
   "/reference-home.css",
   "/homepage-experience.js",
-  "/admin-operations.css",
-  "/admin-operations.js",
   "/opportunity-page-filters.js",
   "/state-service-assistant.css",
   "/state-service-assistant.js",
@@ -95,7 +95,7 @@ const PRECACHE_URLS = [
   "/icon-512.png",
   "/apple-touch-icon.png"
 ];
-const PRIVATE_PATHS = new Set(["/admin.html", "/kabinet.html", "/hamjamiyat.html"]);
+const PRIVATE_PATHS = new Set(["/admin.html", "/admin", "/admin/", "/kabinet.html", "/hamjamiyat.html"]);
 const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com", "https://d2ol7oe51mr4n9.cloudfront.net", "https://static.tuit.uz"]);
 
 self.addEventListener("install", (event) => {
@@ -143,7 +143,7 @@ async function cacheExternalImage(request) {
 }
 
 async function networkFirstNavigation(request, url) {
-  if (PRIVATE_PATHS.has(url.pathname) || url.search) {
+  if (PRIVATE_PATHS.has(url.pathname) || url.pathname.startsWith("/admin/") || url.pathname.startsWith("/admin-app/") || url.search) {
     try { return await fetch(request); }
     catch { return (await caches.match("/offline.html")) || new Response("Internet aloqasi yo‘q.", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } }); }
   }
