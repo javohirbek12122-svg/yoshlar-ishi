@@ -128,7 +128,14 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/uz-flag-3d.css" -o /tmp/yoshlar-flag-3d.css
           grep -Fq ".yi-flag-3d" /tmp/yoshlar-flag-3d.css || { echo "::error::The compact 3D flag visual layer is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/uz-flag-3d.js" -o /tmp/yoshlar-flag-3d.js
-          for marker in '"index.html":12' '"imkoniyatlar.html":4' '"startap-yoli.html":3' '"davlat-xizmatlari.html":3' '"assessment.html":2' '"laboratoriya.html":2' '"hamjamiyat.html":2' '"kabinet.html":2; do grep -Fq "$marker" /tmp/yoshlar-flag-3d.js || { echo "::error::The sitewide 30-flag distribution is incomplete: $marker"; exit 1; }; done
+          grep -Fq '"index.html":12' /tmp/yoshlar-flag-3d.js || { echo "::error::The homepage flag count is missing."; exit 1; }
+          grep -Fq '"imkoniyatlar.html":4' /tmp/yoshlar-flag-3d.js || { echo "::error::The opportunity page flag count is missing."; exit 1; }
+          grep -Fq '"startap-yoli.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::The startup guide flag count is missing."; exit 1; }
+          grep -Fq '"davlat-xizmatlari.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::The public services page flag count is missing."; exit 1; }
+          grep -Fq '"assessment.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The assessment page flag count is missing."; exit 1; }
+          grep -Fq '"laboratoriya.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The laboratory page flag count is missing."; exit 1; }
+          grep -Fq '"hamjamiyat.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The community page flag count is missing."; exit 1; }
+          grep -Fq '"kabinet.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The cabinet page flag count is missing."; exit 1; }
           grep -Fq 'prefers-reduced-motion' /tmp/yoshlar-flag-3d.css || { echo "::error::The flag animation must respect reduced-motion settings."; exit 1; }
           grep -Fqi 'design-system.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The live shared mobile stylesheet is not importing the unified design system."; exit 1; }
           grep -Fqi 'site-background.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The shared mobile layer is missing the site-wide flag background."; exit 1; }
