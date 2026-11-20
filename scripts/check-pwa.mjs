@@ -105,7 +105,8 @@ for (let i = 1; i <= 50; i++) {
   const id = String(i).padStart(3, "0");
   assert.ok(precache.includes(`/biletlar/${id}.html`), `Ticket ${id} must be precached`);
 }
-assert.ok(worker.includes('url.pathname.startsWith("/admin/")') && worker.includes('url.pathname.startsWith("/admin-app/")'), "Admin application routes must remain outside the public offline cache");
+assert.ok(worker.includes('url.pathname.startsWith("/admin/")'), "Admin application routes must remain outside the public offline cache");
+assert.ok(worker.includes('url.pathname.startsWith("/admin-app/")'), "Standalone admin package paths must never be cached by the public service worker");
 assert.match(worker, /url\.search/);
 assert.match(worker, /Cache-Control/);
 
