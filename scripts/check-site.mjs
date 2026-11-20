@@ -123,21 +123,23 @@ for (const file of required) {
 }
 console.log(`✓ required files: ${required.length}`);
 
-const flagPages = {"index.html":12,"imkoniyatlar.html":4,"startap-yoli.html":3,"davlat-xizmatlari.html":3,"assessment.html":2,"laboratoriya.html":2,"hamjamiyat.html":2,"kabinet.html":2};
+const flagPages = {"index.html":22,"imkoniyatlar.html":7,"startap-yoli.html":6,"davlat-xizmatlari.html":10,"assessment.html":6,"laboratoriya.html":8,"hamjamiyat.html":7,"kabinet.html":4,"privacy.html":7,"physics-lab/index.html":3};
 const flagController = read("uz-flag-3d.js");
 const flagStyles = read("uz-flag-3d.css");
 new vm.Script(flagController, { filename: "uz-flag-3d.js" });
-const flagQuotaSource = flagController.match(/const quotas=(\{[^;]+\});/)?.[1] || "";
-assert.ok(flagQuotaSource, "3D flag placement quotas must be declared in the public controller");
-const flagQuotas = JSON.parse(flagQuotaSource);
+const quotaStart = flagController.indexOf("const quotas=");
+const quotaEnd = flagController.indexOf(";", quotaStart);
+assert.ok(quotaStart >= 0 && quotaEnd > quotaStart, "3D flag placement quotas must be declared in the public controller");
+const flagQuotas = JSON.parse(flagController.slice(quotaStart + "const quotas=".length, quotaEnd));
 assert.deepEqual(flagQuotas, flagPages, "The 3D flag locations must be distributed across all core pages");
-assert.equal(Object.values(flagQuotas).reduce((sum,value)=>sum+value,0),30,"The public site must have approximately 30 compact flag placements");
+assert.equal(Object.values(flagQuotas).reduce((sum,value)=>sum+value,0),80,"The public site must have 80 compact flag placements");
 for (const page of Object.keys(flagPages)) {
- const html = read(page);
- assert.ok(html.includes('href="./uz-flag-3d.css"') && html.includes('src="./uz-flag-3d.js"'), page + " must load the compact 3D flag component");
+ const html = read(page), prefix = page.startsWith("physics-lab/") ? "../" : "./";
+ assert.ok(html.includes('href="'+prefix+'uz-flag-3d.css"') && html.includes('src="'+prefix+'uz-flag-3d.js"'), page + " must load the compact 3D flag component");
 }
-assert.ok(flagStyles.includes("@keyframes yiFlagWave") && flagStyles.includes("prefers-reduced-motion"),"Flag animation must be 3D-inspired and respect reduced-motion preferences");
-console.log("✓ exactly 30 compact Uzbekistan flag placements are distributed across eight public pages");
+for (const motion of ["yiFlagWave","yiFlagSail","yiFlagRipple","yiFlagGlide","yiFlagFlutter"]) assert.ok(flagStyles.includes("@keyframes "+motion), "Missing 3D flag motion: "+motion);
+assert.ok(flagStyles.includes("prefers-reduced-motion") && flagController.includes("IntersectionObserver"), "Flag motion must be accessible and pause off-screen");
+console.log("✓ exactly 80 compact Uzbekistan flag placements are distributed across ten public pages");
 
 
 function inlineScripts(html) {
