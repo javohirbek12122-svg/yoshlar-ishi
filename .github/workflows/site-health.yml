@@ -56,6 +56,10 @@ on:
       - "imkoniyatlar.html"
       - "supabase/migrations/**"
       - "scripts/check-site.mjs"
+      - "uz-flag-3d.css"
+      - "uz-flag-3d.js"
+      - "scripts/check-flag-motifs.mjs"
+      - "physics-lab/**"
       - "laboratoriya.html"
       - "config.js"
       - "assessment.html"
@@ -128,14 +132,17 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/uz-flag-3d.css" -o /tmp/yoshlar-flag-3d.css
           grep -Fq ".yi-flag-3d" /tmp/yoshlar-flag-3d.css || { echo "::error::The compact 3D flag visual layer is missing."; exit 1; }
           curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/uz-flag-3d.js" -o /tmp/yoshlar-flag-3d.js
-          grep -Fq '"index.html":12' /tmp/yoshlar-flag-3d.js || { echo "::error::The homepage flag count is missing."; exit 1; }
-          grep -Fq '"imkoniyatlar.html":4' /tmp/yoshlar-flag-3d.js || { echo "::error::The opportunity page flag count is missing."; exit 1; }
-          grep -Fq '"startap-yoli.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::The startup guide flag count is missing."; exit 1; }
-          grep -Fq '"davlat-xizmatlari.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::The public services page flag count is missing."; exit 1; }
-          grep -Fq '"assessment.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The assessment page flag count is missing."; exit 1; }
-          grep -Fq '"laboratoriya.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The laboratory page flag count is missing."; exit 1; }
-          grep -Fq '"hamjamiyat.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The community page flag count is missing."; exit 1; }
-          grep -Fq '"kabinet.html":2' /tmp/yoshlar-flag-3d.js || { echo "::error::The cabinet page flag count is missing."; exit 1; }
+          grep -Fq '"index.html":22' /tmp/yoshlar-flag-3d.js || { echo "::error::Homepage flag allocation is missing."; exit 1; }
+          grep -Fq '"imkoniyatlar.html":7' /tmp/yoshlar-flag-3d.js || { echo "::error::Opportunity catalogue flag allocation is missing."; exit 1; }
+          grep -Fq '"startap-yoli.html":6' /tmp/yoshlar-flag-3d.js || { echo "::error::Startup guide flag allocation is missing."; exit 1; }
+          grep -Fq '"davlat-xizmatlari.html":10' /tmp/yoshlar-flag-3d.js || { echo "::error::Public service directory flag allocation is missing."; exit 1; }
+          grep -Fq '"assessment.html":6' /tmp/yoshlar-flag-3d.js || { echo "::error::Assessment flag allocation is missing."; exit 1; }
+          grep -Fq '"laboratoriya.html":8' /tmp/yoshlar-flag-3d.js || { echo "::error::Laboratory flag allocation is missing."; exit 1; }
+          grep -Fq '"hamjamiyat.html":7' /tmp/yoshlar-flag-3d.js || { echo "::error::Community flag allocation is missing."; exit 1; }
+          grep -Fq '"kabinet.html":4' /tmp/yoshlar-flag-3d.js || { echo "::error::Cabinet flag allocation is missing."; exit 1; }
+          grep -Fq '"privacy.html":7' /tmp/yoshlar-flag-3d.js || { echo "::error::Privacy page flag allocation is missing."; exit 1; }
+          grep -Fq '"physics-lab/index.html":3' /tmp/yoshlar-flag-3d.js || { echo "::error::Nested physics lab flag allocation is missing."; exit 1; }
+          for motion in yiFlagWave yiFlagSail yiFlagRipple yiFlagGlide yiFlagFlutter; do grep -Fq "@keyframes $motion" /tmp/yoshlar-flag-3d.css || { echo "::error::Distinct flag motion missing: $motion"; exit 1; }; done
           grep -Fq 'prefers-reduced-motion' /tmp/yoshlar-flag-3d.css || { echo "::error::The flag animation must respect reduced-motion settings."; exit 1; }
           grep -Fqi 'design-system.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The live shared mobile stylesheet is not importing the unified design system."; exit 1; }
           grep -Fqi 'site-background.css' /tmp/yoshlar-mobile-guard.css || { echo "::error::The shared mobile layer is missing the site-wide flag background."; exit 1; }
