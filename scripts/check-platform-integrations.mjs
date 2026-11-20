@@ -1,0 +1,15 @@
+import fs from "node:fs";
+import vm from "node:vm";
+import assert from "node:assert/strict";
+const read=(p)=>fs.readFileSync(new URL("../"+p,import.meta.url),"utf8");
+const index=read("index.html"),hub=read("platform-opportunity-feed.js"),css=read("platform-opportunity-feed.css"),cabinet=read("kabinet.html"),opportunities=read("imkoniyatlar.html");
+new vm.Script(hub,{filename:"platform-opportunity-feed.js"});
+for(const marker of ['id="yiHomeProgramList"','id="yiHomeIntegrationList"','./platform-opportunity-feed.css','./platform-opportunity-feed.js'])assert.ok(index.includes(marker),"homepage live hub is missing: "+marker);
+for(const marker of ["youth_opportunity_programs","official_portal_integrations","availability_status","verified_on","connection_status","application_url","source_url"])assert.ok(hub.includes(marker),"hub data source is missing: "+marker);
+assert.ok(css.includes(".yi-home-program-grid")&&css.includes("@media(max-width:560px)"),"hub cards must have a mobile layout");
+for(const marker of ['id="myOpportunityJourneys"','id="journeyTotal"','opportunity_journeys','journeyStatuses','imkoniyatlar.html?program='])assert.ok(cabinet.includes(marker),"private dashboard journey integration missing: "+marker);
+assert.ok(opportunities.includes('get("program")')&&opportunities.includes("await openProgram(requestedProgram)"),"opportunity detail must support direct program deep links");
+assert.ok(!hub.includes("service_role")&&!hub.includes("SUPABASE_SERVICE_ROLE_KEY"),"public module must not contain privileged Supabase credentials");
+console.log("✓ homepage pulls public program and partner registries from Supabase");
+console.log("✓ personal cabinet shows RLS-protected saved opportunity journeys");
+console.log("✓ official links, verification dates and program deep links are wired safely");

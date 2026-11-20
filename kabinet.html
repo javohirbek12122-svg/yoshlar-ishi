@@ -50,6 +50,7 @@ footer,.footer{color:#e4e8dc;background:#111411}
 @media(max-width:700px){.hero{padding:22px 18px;border-radius:10px}.layout{grid-template-columns:1fr}.panel{padding:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important}}
 
+.yi-journey-ledger{margin-top:17px;padding:16px;border:1px solid #d9e3d0;border-radius:10px;background:#fbfdf7}.yi-journey-ledger__head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.yi-journey-ledger__head h3{margin:5px 0;font:800 16px Manrope,sans-serif;letter-spacing:-.4px}.yi-journey-ledger__head p{margin:0 0 9px;color:var(--muted);font-size:10px}.yi-journey-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.yi-journey-stats>div{padding:9px;border:1px solid #e3e9db;border-radius:8px;background:#fff}.yi-journey-stats strong{display:block;font:800 20px Manrope,sans-serif}.yi-journey-stats span{color:var(--muted);font-size:9px}.yi-journey-list{display:grid;gap:8px}.yi-journey-card{padding:12px;border:1px solid #e0e7d8;border-radius:8px;background:#fff}.yi-journey-card__top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.yi-journey-card h4{margin:8px 0 4px;font:800 12px/1.4 Manrope,sans-serif}.yi-journey-card p{margin:4px 0;color:var(--muted);font-size:10px;line-height:1.55}.yi-journey-card__foot{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid #eff2ea}.yi-journey-card__foot small{color:#7a866f;font-size:9px}.yi-journey-card__foot a{font-size:10px;font-weight:900;color:#385315}.yi-journey-status{padding:4px 7px;border-radius:99px;background:#eff4e4;color:#46611e;font-size:9px;font-weight:900}.yi-journey-status--declined{background:#f9eae7;color:#933c30}.yi-journey-status--waiting,.yi-journey-status--submitted{background:#fff3df;color:#896324}.yi-journey-ledger__note{margin:10px 0 0;color:#7d876f;font-size:9px;line-height:1.55}@media(max-width:520px){.yi-journey-ledger{padding:12px}.yi-journey-ledger__head{flex-direction:column}.yi-journey-stats{gap:6px}.yi-journey-stats>div{padding:7px}}
 </style>
 <link rel="stylesheet" href="./shared-theme.css">
   <link rel="stylesheet" href="./mobile-guard.css">
@@ -81,6 +82,12 @@ footer,.footer{color:#e4e8dc;background:#111411}
   <div id="dashboardContent" class="hidden">
    <div class="statrow"><div class="stat"><strong id="statAll">0</strong><span>Jami</span></div><div class="stat"><strong id="statProgress">0</strong><span>Jarayonda</span></div><div class="stat"><strong id="statDone">0</strong><span>Yakunlangan</span></div></div>
    <div class="initiative-list" id="myInitiatives"></div>
+   <section class="yi-journey-ledger" id="opportunityJourneyLedger" aria-labelledby="opportunityJourneyTitle">
+    <div class="yi-journey-ledger__head"><div><div class="eyebrow">Imkoniyatlar katalogi</div><h3 id="opportunityJourneyTitle">Mening imkoniyatlar yo‘lim</h3><p>Saqlangan dasturlar, tayyorgarlik qadamlaringiz va keyingi harakatlar.</p></div><a class="button alt" href="./imkoniyatlar.html">Yangi imkoniyat topish ↗</a></div>
+    <div class="yi-journey-stats"><div><strong id="journeyTotal">0</strong><span>Saqlangan yo‘l</span></div><div><strong id="journeyActive">0</strong><span>Faol jarayon</span></div><div><strong id="journeyDone">0</strong><span>Yakunlangan</span></div></div>
+    <div class="yi-journey-list" id="myOpportunityJourneys"><div class="empty">Imkoniyat tanlaganingizdan keyin uning tayyorgarlik yo‘li shu yerda ko‘rinadi.</div></div>
+    <p class="yi-journey-ledger__note">Bu holat foydalanuvchi o‘zi qayd etgan tayyorgarlikdir. Yoshlar-Ishi davlat portalidagi ariza holatini avtomatik olmaydi.</p>
+   </section>
    <div id="dashboardNotice" class="notice" aria-live="polite"></div>
   </div>
  </div>
@@ -136,12 +143,13 @@ function showLogged(userRow){
  msg("authNotice","Sessiya Supabase orqali tekshirildi. Tashabbuslar faqat ushbu hisobga tegishli.");
  $("dashboardLocked").classList.add("hidden");$("dashboardContent").classList.remove("hidden");
  loadInitiatives();
+ loadOpportunityJourneys();
 }
 function showLoggedOut(message="Shaxsiy tashabbuslaringizni ko‘rish uchun yagona hisobga kiring."){
  user=null;token="";currentUserId="";myRows=[];
  $("authLinks").classList.remove("hidden");$("signedUser").classList.add("hidden");
  $("dashboardLocked").classList.remove("hidden");$("dashboardContent").classList.add("hidden");
- $("myInitiatives").innerHTML="";$("consent").checked=false;msg("authNotice",message);
+ $("myInitiatives").innerHTML="";$("myOpportunityJourneys").innerHTML="";$("journeyTotal").textContent="0";$("journeyActive").textContent="0";$("journeyDone").textContent="0";$("consent").checked=false;msg("authNotice",message);
 }
 async function signOut(){
  try{const bridge=await window.YI_AUTH_READY;await bridge.signOut();showLoggedOut("Hisobdan chiqildi. Sessiya barcha Yoshlar-Ishi sahifalarida tugatildi.");}
@@ -153,6 +161,21 @@ async function loadInitiatives(){
  $("myInitiatives").innerHTML=myRows.length?myRows.map(x=>'<article class="initiative-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="state">'+esc(statuses[x.status]||x.status)+'</span><span class="sub">'+esc(new Date(x.created_at).toLocaleDateString("uz-UZ"))+'</span></div><h3>'+esc(x.title)+'</h3><p>'+esc(x.category)+' · '+esc(x.district||"Hudud ko‘rsatilmagan")+'</p><p>Kuzatuv kodi: <strong>'+esc(x.reference_code)+'</strong></p><div class="initiative-bottom"><button class="button alt" type="button" data-copy-code="'+esc(x.reference_code)+'">Kodni nusxalash</button>'+(x.status==="submitted"?'<button class="button alt" type="button" data-edit="'+esc(x.id)+'">Tahrirlash</button>':'<span class="sub">Tahrirlash faqat ko‘rib chiqilmagan arizada mumkin</span>')+'</div></article>').join(""):'<div class="empty">Hali shaxsiy kabinetingizdan tashabbus yubormagansiz. Quyidagi formani to‘ldiring.</div>';
  msg("dashboardNotice","Kuzatuv kodini saqlang. Anonim yuborilgan eski arizalar shu kabinetingizga avtomatik qo‘shilmaydi.");
  }catch(e){msg("dashboardNotice","Tashabbuslar yuklanmadi: "+e.message,true)}
+}
+const journeyStatuses={preparing:"Tayyorlanyapman",ready:"Arizaga tayyor",submitted:"Rasmiy portalga yuborilgan deb qayd etilgan",waiting:"Javob kutilmoqda",approved:"Ma’qullangan deb qayd etilgan",declined:"Tuzatish kerak / rad etilgan",completed:"Yakunlangan",paused:"Vaqtincha to‘xtatilgan"};
+async function loadOpportunityJourneys(){
+ const host=$("myOpportunityJourneys");if(!host)return;
+ host.innerHTML='<div class="empty">Saqlangan imkoniyatlar yuklanmoqda…</div>';
+ try{
+  const rows=await rest("opportunity_journeys?select=id,program_slug,program_title,status,completed_steps,next_action,target_date,updated_at,submitted_at&order=updated_at.desc&limit=50");
+  const data=Array.isArray(rows)?rows:[],active=data.filter(x=>!["completed","declined","paused"].includes(x.status)).length,done=data.filter(x=>x.status==="completed").length;
+  $("journeyTotal").textContent=String(data.length);$("journeyActive").textContent=String(active);$("journeyDone").textContent=String(done);
+  if(!data.length){host.innerHTML='<div class="empty">Hali imkoniyat yo‘li saqlanmagan. <a href="./imkoniyatlar.html">Katalogdan dastur tanlang ↗</a></div>';return;}
+  host.innerHTML=data.map(row=>{
+   const status=row.status||"preparing",steps=Array.isArray(row.completed_steps)?row.completed_steps.length:0,date=row.target_date?new Date(row.target_date+"T00:00:00").toLocaleDateString("uz-UZ"):null;
+   return '<article class="yi-journey-card"><div class="yi-journey-card__top"><span class="yi-journey-status yi-journey-status--'+esc(status)+'">'+esc(journeyStatuses[status]||status)+'</span><small class="sub">'+esc(new Date(row.updated_at).toLocaleDateString("uz-UZ"))+'</small></div><h4>'+esc(row.program_title)+'</h4><p>'+(steps?"Bajarilgan qadamlar: "+steps+". ":"")+esc(row.next_action||"Keyingi qadamni dastur yo‘riqnomasidan tanlang.")+'</p><div class="yi-journey-card__foot"><small>'+(date?"Rejalashtirilgan sana: "+esc(date):"Rejalashtirilgan sana belgilanmagan")+'</small><a href="./imkoniyatlar.html?program='+encodeURIComponent(row.program_slug)+'">Jarayonni davom ettirish ↗</a></div></article>';
+  }).join("");
+ }catch(error){host.innerHTML='<div class="notice error">Imkoniyatlar yo‘li yuklanmadi: '+esc(error.message)+'</div>'}
 }
 function resetEditor(){ $("initiativeForm").reset();$("editingId").value="";$("editorTitle").textContent="Yangi tashabbus yuborish";$("editorHint").textContent="Shaxsiy kabinet orqali yuborilgan tashabbus sizning hisobingizga ulanadi."; $("saveInitiative").textContent="Tashabbusni yuborish ↗";$("cancelEdit").classList.add("hidden");$("consent").checked=false}
 $("cancelEdit").addEventListener("click",resetEditor);

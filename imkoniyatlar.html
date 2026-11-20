@@ -320,6 +320,8 @@ async function init(){
  try{await window.YI_AUTH_READY;await authCheck();}catch(error){user=null;}
  renderAuthState();
  await loadPrograms();await loadSaved();
+ const requestedProgram=new URLSearchParams(location.search).get("program");
+ if(requestedProgram&&programs.some(item=>item.slug===requestedProgram))await openProgram(requestedProgram);
  window.addEventListener("yi-auth-change",event=>{
   if(!["SIGNED_OUT","SIGNED_IN","USER_UPDATED"].includes(event.detail?.event))return;
   window.setTimeout(()=>syncOpportunityAccount().catch(()=>{
@@ -327,7 +329,6 @@ async function init(){
   }),0);
  });
 }
-init();
 init();
 })();
 </script>
