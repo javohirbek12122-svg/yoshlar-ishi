@@ -19,6 +19,11 @@ assert.ok(homeJs.includes("else if(art&&!isTurnirHero)"), "Fallback also preserv
 assert.ok(css.includes(".yi-turnir-hero .hero-storyline{grid-column:1/-1;"), "Hero ribbon spans the full grid");
 assert.ok(css.includes("@media(max-width:900px)"), "Hero has a tablet breakpoint");
 assert.ok(css.includes("@media(max-width:600px)"), "Hero has a mobile breakpoint");
+
+assert.ok(css.includes('body main > .hero.wrap.yi-turnir-hero'), "Tournament hero styles outrank conflicting legacy homepage rules");
+assert.ok(css.includes('grid-template-areas:"copy art" "ribbon ribbon"'), "Desktop hero uses explicit copy, artwork and ribbon grid areas");
+assert.ok(css.includes("grid-template-columns:repeat(4,minmax(0,1fr))"), "Four hero navigation links use all four desktop columns");
+assert.ok(css.includes('grid-template-areas:"copy" "art" "ribbon"'), "Tablet layout explicitly stacks copy, artwork and ribbon");
 assert.ok(!turnir.includes("import.meta.env"), "Static browser module does not use Vite-only import.meta.env");
 assert.ok(turnirPage.includes('<script src="./pwa.js" defer></script>'), "Tournament page registers shared PWA behavior");
 assert.ok(sw.includes('const CACHE_NAME = "yi-pwa-v38";'), "PWA cache is versioned");
