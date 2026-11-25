@@ -130,7 +130,7 @@ assert.equal(rules.get("/service-worker.js")?.get("cache-control"), "no-cache, n
 
 assert.equal(precache.includes("/assets/yoshlar-people.webp"), false, "Broken local image must not be precached");
 assert.ok(precache.includes("/auth-client.js") && precache.includes("/auth-bridge.js"), "Unified auth scripts must be precached");
-assert.ok(worker.includes('const CACHE_NAME = "yi-pwa-v36";'), "PWA cache version must refresh after the live opportunity hub rollout");
+assert.ok(worker.includes('const CACHE_NAME = "yi-pwa-v38";'), "PWA cache version must refresh after the live opportunity hub rollout");
 assert.ok(precache.includes("/platform-opportunity-feed.css") && precache.includes("/platform-opportunity-feed.js"), "PWA must precache the public opportunity and partner feed");
 console.log("✓ PWA manifest and 192/512/180px icons validated");
 console.log("✓ Android/iOS install guidance and public-page wiring validated");
