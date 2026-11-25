@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101c2c">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="Yoshlar-Ishi × Turnir Ballari — jamoalar reytingi, ekspert baholash va audit jurnali.">
+  <title>Yoshlar-Ishi × Turnir Ballari — Turnir markazi</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./turnir.css">
+  <link rel="stylesheet" href="./turnir-integratsiya.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Asosiy mazmunga o‘tish</a>
+  <header class="topbar yi-turnir-topbar"><div class="shell topbar-inner">
+<a class="brand yi-turnir-brand" href="./index.html"><span class="brand-mark"><img src="./icon.svg" alt="" width="36" height="36"></span><span><span class="brand-name">YOSHLAR-ISHI</span><span class="brand-sub">Turnirlar · ballar · imkoniyatlar</span></span></a>
+<nav class="yi-turnir-nav" aria-label="Platforma bo‘limlari"><a class="is-active" href="./turnir.html">Turnir markazi</a><a href="./assessment.html">Bilim sinovlari</a><a href="./hamjamiyat.html">Hamjamiyat</a><a href="./imkoniyatlar.html">Imkoniyatlar</a></nav>
+<div class="top-actions"><span class="pill"><b>●</b> YI × TURNIR</span><button class="icon-btn" id="themeBtn" title="Rang mavzusini almashtirish" aria-label="Rang mavzusini almashtirish">◐</button><a class="primary-btn" id="authButton" href="./hamjamiyat.html?tab=profile">YI profiliga kirish ↗</a></div>
+</div></header>
+
+  <section class="hero">
+    <div class="shell hero-inner">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> YOSHLAR-ISHI · TURNIR VA JAMOA REYTINGI</div>
+      <div class="hero-grid">
+        <div>
+          <h1>Turnir natijalari.<br>Hisob-kitob aniq.</h1>
+          <p class="hero-copy">Yoshlar turnirlari uchun shaffof hisob-kitob, boshqariladigan natijalar, ekspert baholash va tekshiriladigan audit izi. Yoshlar-Ishi profilingiz bilan bitta platformada ishlang.</p>
+        </div>
+        <div class="hero-note">
+          <strong>Yoshlar-Ishi turnir markazi</strong>
+          <p>Natija o‘zgarsa, ochko va reyting darhol yangilanadi. Yoshlar-Ishi hisobingiz bilan kirganingizda ma’lumotlar bulutga sinxronlanadi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="shell workspace" id="main-content" tabindex="-1">
+    <section class="stats" aria-label="Turnir statistikasi">
+      <article class="stat"><div class="stat-label">JAMOALAR</div><div class="stat-value" id="statTeams">4</div><div class="stat-foot">Turnir ishtirokchilari</div></article>
+      <article class="stat"><div class="stat-label">ENG YUQORI OCHKO</div><div class="stat-value" id="statMax">0</div><div class="stat-foot">Yetakchi natija</div></article>
+      <article class="stat"><div class="stat-label">JAMI OCHKO</div><div class="stat-value" id="statTotal">0</div><div class="stat-foot">Barcha jamoalar bo‘yicha</div></article>
+      <article class="stat"><div class="stat-label">TENG NATIJALAR</div><div class="stat-value" id="statTies">0</div><div class="stat-foot">Bir xil ochkoli guruhlar</div></article>
+    </section>
+<section class="panel yi-personal-panel" id="yiPersonalPanel" aria-labelledby="yiPersonalTitle">
+<div class="panel-head"><div><div class="section-kicker">YOSHlar-ISHI SHAXSIY NATIJALARI</div><h2 class="panel-title" id="yiPersonalTitle">Bilim sinovlaridagi ballaringiz</h2><p class="panel-sub">Uch yo‘nalish bo‘yicha jami 90 ballgacha. Bu ballar turnir ochkolariga qo‘shilmaydi.</p></div><div class="yi-personal-total"><strong id="yiPersonalTotal">0</strong><span>/ 90</span></div></div>
+<div class="yi-personal-welcome"><span id="yiPersonalName">Mehmon rejimi</span><a href="./hamjamiyat.html?tab=profile">Profilga kirish ↗</a></div>
+<div class="yi-personal-tracks" id="yiPersonalTracks">
+<div class="yi-personal-track"><span>Gumanitar fanlar</span><strong>0 / 30</strong><i><b style="width:0%"></b></i></div><div class="yi-personal-track"><span>Tabiiy fanlar</span><strong>0 / 30</strong><i><b style="width:0%"></b></i></div><div class="yi-personal-track"><span>Kasbiy fanlar</span><strong>0 / 30</strong><i><b style="width:0%"></b></i></div></div></section>
+
+
+    <div class="public-banner" id="publicBanner">Ommaviy ko‘rish rejimi · Ushbu jadval faqat o‘qish uchun ochilgan</div>
+    <section class="panel gov-panel" aria-labelledby="competitionPanelTitle">
+      <div class="panel-head">
+        <div>
+          <div class="section-kicker">Rasmiy musobaqa kartasi</div>
+          <h2 class="panel-title" id="competitionPanelTitle">Musobaqa ma’lumotlari</h2>
+          <p class="panel-sub">Turnir identifikatsiyasi, hudud, sana va e’lon holati</p>
+        </div>
+        <div class="gov-status"><span id="recordStatus" class="draft">QORALAMA</span><span id="roleStatus">MEHMON</span></div>
+      </div>
+      <div class="metadata-grid">
+        <div class="meta-field"><label for="competitionName">MUSOBAQA NOMI</label><input id="competitionName" maxlength="120" value="Yoshlar-Ishi turniri" autocomplete="off"></div>
+        <div class="meta-field"><label for="competitionRegion">HUDUD / TUMAN</label><input id="competitionRegion" maxlength="120" placeholder="Masalan, Parkent tumani"></div>
+        <div class="meta-field"><label for="competitionDate">MUSOBAQA SANASI</label><input id="competitionDate" type="date"></div>
+        <div class="meta-field span-2"><label for="competitionDescription">QISQA IZOH / BAYON</label><input id="competitionDescription" maxlength="300" placeholder="Musobaqa maqsadi yoki qisqa tavsifi"></div>
+      </div>
+      <div class="gov-actions no-print">
+        <button class="secondary-btn" id="saveMetaBtn">Ma’lumotlarni saqlash</button>
+        <button class="primary-btn" id="publishBtn" disabled>Ommaga e’lon qilish</button>
+        <button class="ghost-btn" id="copyPublicBtn" disabled>Ommaviy havolani nusxalash</button>
+        <span class="gov-help" id="governanceHelp">Bulut bazasi ulanmagan · mahalliy sinov rejimi</span>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Turnir jadvali</h2>
+            <p class="panel-sub">Jamoa nomi va natijalarni shu jadvalning o‘zida tahrirlang</p>
+          </div>
+          <span class="tiny-tag">4 JAMOA</span>
+        </div>
+        <div class="table-wrap">
+          <table aria-label="Turnir jamoalari ochko jadvali">
+            <thead><tr>
+              <th>O‘rin</th><th>Jamoa</th><th>O‘</th><th>G‘</th><th>D</th><th>M</th><th>Ochko</th>
+            </tr></thead>
+            <tbody id="teamRows"></tbody>
+          </table>
+        </div>
+        <div class="table-foot">
+          <div class="legend"><span><i class="g"></i> G‘alaba</span><span><i class="d"></i> Durang</span><span><i class="m"></i> Mag‘lubiyat</span></div>
+          <span>O‘ — o‘yin · G‘ — g‘alaba · D — durang · M — mag‘lubiyat</span>
+        </div>
+      </article>
+
+      <aside class="side-stack">
+        <article class="panel side-panel">
+          <h2 class="side-title">Joriy reyting</h2>
+          <p class="side-copy">Eng ko‘p ochko to‘plagan jamoa birinchi o‘rinda turadi.</p>
+          <div class="leader-list" id="leaderList"></div>
+        </article>
+        <article class="panel side-panel">
+          <h2 class="side-title">Ochko hisoblash qoidasi</h2>
+          <p class="side-copy">Bilet 023 dagi baholash formulasiga muvofiq.</p>
+          <div class="rule-card">
+            <div class="formula"><span class="formula-chip">G‘alaba × 3</span><span class="formula-eq">+</span><span class="formula-chip">Durang × 1</span></div>
+            <div class="formula"><span class="formula-eq">=</span><span class="formula-chip">Jami ochko</span></div>
+            <div class="rule-caption">Mag‘lubiyat uchun 0 ochko beriladi.</div>
+          </div>
+          <div class="side-actions no-print">
+            <button class="ghost-btn" id="sampleBtn">Namuna qaytarish</button>
+            <button class="ghost-btn" id="clearBtn">Natijani tozalash</button>
+            <button class="secondary-btn" id="csvBtn">CSV yuklash ↓</button>
+            <button class="secondary-btn" id="printBtn">Chop etish ↗</button>
+          </div>
+        </article>
+        <div class="sync-card">
+          <span class="sync-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 18a4.6 4.6 0 0 1-.4-9.18A5.5 5.5 0 0 1 17.4 7.5 4 4 0 0 1 18 15.5"/><path d="m9 16 3 3 3-3M12 19v-8"/></svg>
+          </span>
+          <span class="sync-text"><span class="sync-title" id="syncTitle">Qurilmada saqlanmoqda</span><span class="sync-desc" id="syncDesc">Mehmon rejimi · ma’lumotlar shu brauzerda</span></span>
+          <span class="status-dot" id="syncDot"></span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div><h2>Avtomatik tekshiruv</h2><p>Topshiriqdagi asosiy shartlar amalda sinovdan o‘tkaziladi.</p></div>
+        <span class="check-count" id="testCount">4 / 4 tekshiruv muvaffaqiyatli</span>
+      </div>
+      <article class="panel check-panel">
+        <div class="check-grid" id="testGrid"></div>
+      </article>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div><h2>Ekspert baholash mezonlari</h2><p>100 ballik varaqadagi olti mezon va loyiha ichidagi dalillar.</p></div>
+        <span class="tiny-tag">JAMI 100 BALL</span>
+      </div>
+      <div class="rubric-grid">
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">01 · 1-MEZON</span><span class="rubric-points">30 ball</span></div><h3>Texnik sifat va barqarorlik</h3><ul><li>Asosiy funksiyalar ishlaydi</li><li>Xato holatlari tekshirilgan</li><li>Telefon va kompyuterga mos</li><li>Yengil va tez yuklanadi</li></ul></article>
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">02 · 2-MEZON</span><span class="rubric-points">20 ball</span></div><h3>Topshiriqqa moslik va aniqlik</h3><ul><li>Aynan 4 ta jamoa</li><li>3 / 1 / 0 ochko formulasi</li><li>Amaliy hisob-kitob</li><li>Izchil ma’lumotlar</li></ul></article>
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">03 · 3-MEZON</span><span class="rubric-points">10 ball</span></div><h3>Interfeys va qulaylik</h3><ul><li>Tushunarli navigatsiya</li><li>O‘qilishi qulay jadval</li><li>Yaxlit vizual uslub</li></ul></article>
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">04 · 4-MEZON</span><span class="rubric-points">10 ball</span></div><h3>Muammo va yechim namoyishi</h3><ul><li>Hisoblash muammosi hal qilingan</li><li>Jonli amaliy namoyish</li><li>Formula va natija izohi</li></ul></article>
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">05 · 5-MEZON</span><span class="rubric-points">20 ball</span></div><h3>Vositalar va loyiha boshqaruvi</h3><ul><li>HTML, CSS va JavaScript</li><li>Supabase ma’lumotlar bazasi</li><li>Sinov va yaxshilash</li><li>GitHub orqali loyiha tartibi</li></ul></article>
+        <article class="rubric-card"><div class="rubric-top"><span class="rubric-index">06 · 6-MEZON</span><span class="rubric-points">10 ball</span></div><h3>O‘ziga xos va foydali yechim</h3><ul><li>Reyting va teng o‘rinlar</li><li>CSV va chop etish</li><li>Mazmun va dizayn uyg‘unligi</li></ul></article>
+      </div>
+    </section>
+
+
+    <section class="section-block" id="expert-scorecard">
+      <div class="section-heading">
+        <div><h2>Ekspert baholash varaqasi — to‘liq mezonlar</h2><p>Rasmdagi 21 ta ko‘rsatkich va 6 mezonning maksimal ballari saqlandi. Ballarni kiritib, jami natijani ko‘rish mumkin.</p></div>
+        <span class="tiny-tag">100 BALL</span>
+      </div>
+      <article class="panel check-panel">
+        <div class="scorecard-summary"><strong id="rubricTotal">0 / 100</strong><span>Joriy ekspert bahosi · qiymatlar ushbu qurilmada saqlanadi</span><span style="margin-left:auto" id="rubricPercent">0%</span></div>
+        <div class="table-wrap">
+          <table aria-label="Ekspert baholash varaqasi">
+            <thead><tr><th>№</th><th>Ko‘rsatkich</th><th>Maks. ball</th><th>Qo‘yilgan ball</th><th>Dalil / tekshiruv nuqtasi</th></tr></thead>
+            <tbody id="rubricRows">
+              <tr class="rubric-group-row"><td colspan="5">1-MEZON · TEXNIK SIFAT VA BARQARORLIK <span style="float:right"><span data-rubric-group="1">0</span> / 30 BALL</span></td></tr>
+              <tr><td class="criterion-code">1.1</td><td>Asosiy funksiyalar</td><td>10</td><td><input class="score-input" type="number" min="0" max="10" step="1" value="0" data-rubric="1.1" aria-label="1.1 ball"></td><td class="evidence">Jadval, ochko hisobi, saralash, eksport va saqlash.</td></tr>
+              <tr><td class="criterion-code">1.2</td><td>Barqarorlik va xato holatlari</td><td>8</td><td><input class="score-input" type="number" min="0" max="8" step="1" value="0" data-rubric="1.2" aria-label="1.2 ball"></td><td class="evidence">Xato kiritish, uzilish, tiklash va test natijalari.</td></tr>
+              <tr><td class="criterion-code">1.3</td><td>Ekranga moslashish</td><td>6</td><td><input class="score-input" type="number" min="0" max="6" step="1" value="0" data-rubric="1.3" aria-label="1.3 ball"></td><td class="evidence">Telefon, planshet, noutbuk va katta ekran.</td></tr>
+              <tr><td class="criterion-code">1.4</td><td>Tezlik va texnik ishlash</td><td>6</td><td><input class="score-input" type="number" min="0" max="6" step="1" value="0" data-rubric="1.4" aria-label="1.4 ball"></td><td class="evidence">Yuklanish, tarmoq sarfi, resurslar va kesh.</td></tr>
+              <tr class="rubric-group-row"><td colspan="5">2-MEZON · TOPSHIRIQ VA MAZMUN <span style="float:right"><span data-rubric-group="2">0</span> / 20 BALL</span></td></tr>
+              <tr><td class="criterion-code">2.1</td><td>Topshiriqqa moslik</td><td>5</td><td><input class="score-input" type="number" min="0" max="5" step="1" value="0" data-rubric="2.1" aria-label="2.1 ball"></td><td class="evidence">Aynan 4 jamoa; g‘alaba 3, durang 1, mag‘lubiyat 0.</td></tr>
+              <tr><td class="criterion-code">2.2</td><td>Mazmunning aniqligi</td><td>5</td><td><input class="score-input" type="number" min="0" max="5" step="1" value="0" data-rubric="2.2" aria-label="2.2 ball"></td><td class="evidence">Atamalar, formula va ko‘rsatmalar tushunarli.</td></tr>
+              <tr><td class="criterion-code">2.3</td><td>Amaliy foyda</td><td>5</td><td><input class="score-input" type="number" min="0" max="5" step="1" value="0" data-rubric="2.3" aria-label="2.3 ball"></td><td class="evidence">Natijani hisoblash, saqlash, ulashish va chop etish.</td></tr>
+              <tr><td class="criterion-code">2.4</td><td>Ma’lumotning izchilligi</td><td>5</td><td><input class="score-input" type="number" min="0" max="5" step="1" value="0" data-rubric="2.4" aria-label="2.4 ball"></td><td class="evidence">Jadval, reyting, statistika va eksport bir-biriga mos.</td></tr>
+              <tr class="rubric-group-row"><td colspan="5">3-MEZON · TUZILISH VA FOYDALANISH QULAYLIGI <span style="float:right"><span data-rubric-group="3">0</span> / 10 BALL</span></td></tr>
+              <tr><td class="criterion-code">3.1</td><td>Tuzilish va navigatsiya</td><td>4</td><td><input class="score-input" type="number" min="0" max="4" step="1" value="0" data-rubric="3.1" aria-label="3.1 ball"></td><td class="evidence">Mantiqiy bo‘limlar, aniq harakatlar va qaytish yo‘li.</td></tr>
+              <tr><td class="criterion-code">3.2</td><td>O‘qilish va qulaylik</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="3.2" aria-label="3.2 ball"></td><td class="evidence">Kontrast, klaviatura, yorliqlar va mobil boshqaruv.</td></tr>
+              <tr><td class="criterion-code">3.3</td><td>Yaxlit ko‘rinish</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="3.3" aria-label="3.3 ball"></td><td class="evidence">Bir xil vizual tizim, tipografika va holat belgilari.</td></tr>
+              <tr class="rubric-group-row"><td colspan="5">4-MEZON · YECHIMNI NAMOYISH QILISH <span style="float:right"><span data-rubric-group="4">0</span> / 10 BALL</span></td></tr>
+              <tr><td class="criterion-code">4.1</td><td>Muammo va yechim</td><td>4</td><td><input class="score-input" type="number" min="0" max="4" step="1" value="0" data-rubric="4.1" aria-label="4.1 ball"></td><td class="evidence">Muammo aniq qo‘yilgan, yechim natijasi isbotlangan.</td></tr>
+              <tr><td class="criterion-code">4.2</td><td>Amaliy namoyish</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="4.2" aria-label="4.2 ball"></td><td class="evidence">Real kiritish, hisoblash va natijani ko‘rsatish.</td></tr>
+              <tr><td class="criterion-code">4.3</td><td>Savollarga javob</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="4.3" aria-label="4.3 ball"></td><td class="evidence">Arxitektura, algoritm va cheklovlarni izohlash.</td></tr>
+              <tr class="rubric-group-row"><td colspan="5">5-MEZON · VOSITALAR VA LOYIHA BOSHQARUVI <span style="float:right"><span data-rubric-group="5">0</span> / 20 BALL</span></td></tr>
+              <tr><td class="criterion-code">5.1</td><td>Vosita va ish usulini tanlash</td><td>6</td><td><input class="score-input" type="number" min="0" max="6" step="1" value="0" data-rubric="5.1" aria-label="5.1 ball"></td><td class="evidence">Git, modular kod, ma’lumotlar bazasi va hosting yechimi.</td></tr>
+              <tr><td class="criterion-code">5.2</td><td>Moslashtirish va boshqarish</td><td>6</td><td><input class="score-input" type="number" min="0" max="6" step="1" value="0" data-rubric="5.2" aria-label="5.2 ball"></td><td class="evidence">Rollar, ruxsatlar, sozlamalar va operatsion boshqaruv.</td></tr>
+              <tr><td class="criterion-code">5.3</td><td>Sinash va yaxshilash</td><td>4</td><td><input class="score-input" type="number" min="0" max="4" step="1" value="0" data-rubric="5.3" aria-label="5.3 ball"></td><td class="evidence">Avtomatik testlar, regressiya va xatolarni tuzatish.</td></tr>
+              <tr><td class="criterion-code">5.4</td><td>Loyiha tartibi va topshirish</td><td>4</td><td><input class="score-input" type="number" min="0" max="4" step="1" value="0" data-rubric="5.4" aria-label="5.4 ball"></td><td class="evidence">README, qo‘llanma, migratsiya, xavfsizlik va topshirish.</td></tr>
+              <tr class="rubric-group-row"><td colspan="5">6-MEZON · IJODIY YECHIM VA USLUB <span style="float:right"><span data-rubric-group="6">0</span> / 10 BALL</span></td></tr>
+              <tr><td class="criterion-code">6.1</td><td>O‘ziga xos yondashuv</td><td>4</td><td><input class="score-input" type="number" min="0" max="4" step="1" value="0" data-rubric="6.1" aria-label="6.1 ball"></td><td class="evidence">Oddiy jadvaldan ortiqcha, lekin vazifaga mos yechim.</td></tr>
+              <tr><td class="criterion-code">6.2</td><td>Foydali ijodiy yechim</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="6.2" aria-label="6.2 ball"></td><td class="evidence">Audit izi, ommaviy havola va ekspert varaqasi.</td></tr>
+              <tr><td class="criterion-code">6.3</td><td>Mazmun va uslub uyg‘unligi</td><td>3</td><td><input class="score-input" type="number" min="0" max="3" step="1" value="0" data-rubric="6.3" aria-label="6.3 ball"></td><td class="evidence">Rasmiy ohang, bir xil dizayn va aniq matnlar.</td></tr>
+            </tbody>
+            <tfoot><tr><td colspan="2"><strong>JAMI</strong></td><td><strong>100</strong></td><td class="score-total" id="rubricTotalCell">0</td><td><span id="rubricState">Hali baholanmagan</span></td></tr></tfoot>
+          </table>
+        </div>
+        <div class="gov-actions no-print" style="padding:15px 0 0">
+          <button class="ghost-btn" id="resetRubricBtn">Baholashni tozalash</button>
+          <button class="secondary-btn" id="printRubricBtn">Baholash varaqasini chop etish</button>
+          <span class="gov-help">Ekspert ballari serverga yuborilmaydi; faqat ushbu qurilmada saqlanadi.</span>
+        </div>
+      </article>
+    </section>
+
+
+    <section class="section-block">
+      <div class="section-heading"><div><h2>Institutsional boshqaruv</h2><p>Davlat tashkiloti pilotiga tayyorlash uchun rol, audit va e’lon jarayoni.</p></div><span class="tiny-tag">BOSHQARUV</span></div>
+      <div class="state-grid">
+        <article class="state-card">
+          <h3>Foydalanuvchi rollari</h3>
+          <p>Owner/Admin — boshqaruv; Operator — natija kiritish; Auditor — tarixni ko‘rish; Viewer — faqat ko‘rish. Rollar ma’lumotlar bazasida RLS bilan tekshiriladi.</p>
+          <form class="role-form no-print" id="memberForm">
+            <label class="meta-field"><span class="section-kicker">FOYDALANUVCHI UUID</span><input id="memberUserId" placeholder="Supabase Auth foydalanuvchi UUID" autocomplete="off"></label>
+            <label class="meta-field"><span class="section-kicker">ROL</span><select id="memberRole"><option value="operator">Operator</option><option value="admin">Administrator</option><option value="auditor">Auditor</option><option value="viewer">Faqat ko‘rish</option></select></label>
+            <button class="secondary-btn" type="submit" id="addMemberBtn" disabled>Rol biriktirish</button>
+          </form>
+          <div class="role-note" id="roleHelp">Bulut bazasi ulanmaguncha foydalanuvchi rollari sinov rejimida o‘chirilgan.</div>
+        </article>
+        <article class="state-card">
+          <h3>O‘zgartirishlar jurnali</h3>
+          <p>Jamoa natijalaridagi o‘zgarishlar mahalliy sinov jurnalida, bulut ulanganida esa server tomonidagi o‘zgarmas audit jadvalida qayd etiladi.</p>
+          <div class="audit-list" id="auditList"><div class="empty-note">Hozircha qaydlar yo‘q.</div></div>
+        </article>
+      </div>
+    </section>
+    <section class="section-block">
+      <div class="section-heading"><div><h2>Davlat tizimi uchun tayyorgarlik holati</h2><p>Amalga oshirilgan texnik nazorat va hali rasmiy tasdiq talab qiladigan yo‘nalishlar bir-biridan ajratilgan.</p></div><span class="tiny-tag">READINESS</span></div>
+      <div class="readiness-grid">
+        <article class="readiness-item"><span class="readiness-flag">✓ KODDA BOR</span><strong>Ruxsatlar va ma’lumotlarni ajratish</strong><p>Supabase RLS, owner/admin/operator/auditor/viewer rollari va loyiha bo‘yicha alohida jadvallar.</p></article>
+        <article class="readiness-item"><span class="readiness-flag">✓ KODDA BOR</span><strong>Audit izi</strong><p>Jamoa, turnir va rol o‘zgarishlari uchun server tomonidagi append-only audit jurnali.</p></article>
+        <article class="readiness-item"><span class="readiness-flag">✓ KODDA BOR</span><strong>Hisoblash aniqligi</strong><p>G‘alaba 3, durang 1, mag‘lubiyat 0; teng ochkolar teng o‘rinda.</p></article>
+        <article class="readiness-item"><span class="readiness-flag">✓ KODDA BOR</span><strong>CI va regressiya testlari</strong><p>Ochkolar, saralash, validatsiya va eksport mantiqi avtomatik tekshiriladi.</p></article>
+        <article class="readiness-item"><span class="readiness-flag pending">! PILOTDAN OLDIN</span><strong>Ma’lumotlar joylashuvi</strong><p>Davlat buyurtmachisi bilan hosting hududi, transchegaraviy uzatish va ma’lumotlar toifasi yuridik tekshiriladi.</p></article>
+        <article class="readiness-item"><span class="readiness-flag pending">! PILOTDAN OLDIN</span><strong>Mustaqil xavfsizlik auditi</strong><p>Pen-test, ASVS verifikatsiyasi, zaxira nusxadan tiklash va yuklama sinovi bajarilishi lozim.</p></article>
+      </div>
+      <div class="official-note"><strong>Rasmiy eslatma:</strong> bu loyiha davlat tizimiga joriy etish uchun texnik asos va pilot prototipdir. U hozircha davlat axborot tizimi sertifikati, mustaqil pentest xulosasi, WCAG muvofiqlik bayonoti yoki qonuniy ma’lumotlar joylashuvi tasdig‘iga ega deb da’vo qilmaydi.</div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-inner"><span><strong>YOSHLAR-ISHI × TURNIR BALLARI</strong> · Bilet 023 · Turnir boshqaruvi</span><span>Ochko = (G‘alaba × 3) + Durang · Mag‘lubiyat = 0</span></div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./config.js"></script>
+<script type="module" src="./turnir.js"></script>
+</body>
+</html>
