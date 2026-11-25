@@ -25,3 +25,14 @@
 .yi-personal-track{padding:14px;border:1px solid #e2eaf1;border-radius:12px;background:#f8fbfd}.yi-personal-track>span{display:block;color:#536a80;font-size:11px}.yi-personal-track>strong{display:block;margin:8px 0;color:#183d60;font-size:17px}.yi-personal-track>i{display:block;height:6px;border-radius:10px;background:#e2eaf0;overflow:hidden}.yi-personal-track>i>b{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#317cb5,#82b9de)}
 @media(max-width:950px){.yi-turnir-hero{grid-template-columns:1fr!important;min-height:unset}.yi-turnir-hero-art{min-height:unset}.yi-turnir-nav{display:none}.yi-turnir-brand{min-width:0}.yi-public-tournament-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.yi-turnir-hero{margin-left:12px!important;margin-right:12px!important;padding:23px 18px!important;border-radius:20px}.yi-turnir-hero h1{font-size:42px}.yi-turnir-home-facts{gap:6px}.yi-turnir-home-facts>div{padding:11px 8px}.yi-turnir-home-facts>div>strong{font-size:11px}.yi-turnir-home-facts>div>small{font-size:9px}.yi-turnir-hero-art{padding:16px}.yi-turnir-public-head{align-items:flex-start;flex-direction:column}.yi-public-tournament-list{grid-template-columns:1fr}.yi-personal-panel{padding:16px}.yi-personal-tracks{grid-template-columns:1fr}.yi-personal-welcome{align-items:flex-start;flex-direction:column}}
+
+
+.yi-turnir-hero-logo{position:relative;display:inline-flex;align-items:center;gap:11px;max-width:max-content;margin:0 0 18px;padding:7px 13px 7px 7px;border:1px solid rgba(224,241,255,.25);border-radius:13px;background:rgba(255,255,255,.075);color:#fff;text-decoration:none;box-shadow:0 9px 24px rgba(0,0,0,.13);transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.yi-turnir-hero-logo:hover{transform:translateY(-2px);border-color:rgba(195,228,252,.62);background:rgba(255,255,255,.13)}
+.yi-turnir-hero-logo:focus-visible{outline:3px solid #b9e4ff;outline-offset:3px}
+.yi-turnir-hero-logo img{display:block;flex:0 0 42px;width:42px;height:42px;border-radius:10px;object-fit:cover}
+.yi-turnir-hero-logo span{display:flex;flex-direction:column;gap:3px}
+.yi-turnir-hero-logo strong{font-size:10px;font-weight:900;letter-spacing:.12em}
+.yi-turnir-hero-logo small{color:#c2d8ea;font-size:10px}
+.yi-turnir-hero-logo>b{margin-left:7px;color:#c4e7ff;font-size:15px}
+@media(max-width:600px){.yi-turnir-hero-logo{margin-bottom:14px;padding:6px 10px 6px 6px}.yi-turnir-hero-logo img{width:38px;height:38px;flex-basis:38px}.yi-turnir-hero-logo strong{font-size:9px}.yi-turnir-hero-logo small{font-size:9px}}

@@ -101,6 +101,7 @@ const PRECACHE_URLS = [
   "/turnir.css",
   "/turnir-integratsiya.css",
   "/turnir-scoring.mjs",
+  "/turnir-logo.svg",
 ];
 const PRIVATE_PATHS = new Set(["/admin.html", "/admin", "/admin/", "/kabinet.html", "/hamjamiyat.html"]);
 const CACHEABLE_EXTERNAL_IMAGE_ORIGINS = new Set(["https://images.unsplash.com", "https://uzchess.uz", "https://static.tildacdn.com", "https://uzreport.news", "https://res.cloudinary.com", "https://d2ol7oe51mr4n9.cloudfront.net", "https://static.tuit.uz"]);
