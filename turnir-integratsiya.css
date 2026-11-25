@@ -53,3 +53,163 @@
  .yi-turnir-hero .hero-story-step{padding:10px;gap:8px}
  .yi-turnir-hero-art .yi-turnir-board-card{padding:14px}
 }
+
+
+/* Tournament hero cascade isolation: override the legacy homepage hero system. */
+body main > .hero.wrap.yi-turnir-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.06fr) minmax(300px,.94fr);
+  grid-template-rows:minmax(0,1fr) auto;
+  grid-template-areas:"copy art" "ribbon ribbon";
+  align-items:stretch;
+  width:100%;
+  max-width:none;
+  min-height:570px;
+  margin:0;
+  padding:clamp(26px,4vw,54px);
+  border:1px solid rgba(191,218,243,.34);
+  border-radius:28px;
+  background:radial-gradient(circle at 84% 15%,rgba(101,182,226,.24),transparent 28%),linear-gradient(125deg,#071d36 0%,#0c3155 54%,#12517a 100%);
+  color:#fff;
+}
+body main > .hero.wrap.yi-turnir-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(6,26,48,.06),rgba(6,26,48,.14));
+}
+body main > .hero.wrap.yi-turnir-hero::after{content:none;display:none}
+body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-copy{
+  grid-area:copy;
+  align-self:center;
+  width:100%;
+  max-width:720px;
+  min-width:0;
+  padding:0;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy h1{
+  max-width:690px;
+  color:#fff;
+  font-size:clamp(42px,5.2vw,70px);
+  line-height:1.03;
+  letter-spacing:-.055em;
+  text-wrap:balance;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy h1 em{color:#b9e4ff}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-lede{
+  max-width:650px;
+  color:#e6f2fc;
+  font-size:clamp(16px,1.55vw,19px);
+  line-height:1.7;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-expanded-copy{
+  max-width:630px;
+  color:#bad0e3;
+  font-size:13px;
+  line-height:1.7;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:26px 0;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div{
+  min-width:0;
+  padding:14px 13px;
+  border:1px solid rgba(213,237,255,.2);
+  border-radius:14px;
+  background:rgba(255,255,255,.065);
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>strong{color:#fff;font-size:14px}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>small{color:#bed2e5;font-size:10px;line-height:1.4}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .actions .btn{
+  min-height:46px;
+  border:1px solid #d6edff;
+  border-radius:10px;
+  background:#eaf6ff;
+  color:#113b62;
+  font-size:12px;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .actions .btn.alt{
+  border-color:rgba(226,242,255,.38);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+}
+body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-note{
+  display:flex;
+  align-items:flex-start;
+  max-width:620px;
+  margin-top:18px;
+  color:#bed2e5;
+  font-size:11px;
+  line-height:1.6;
+}
+body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-art{
+  grid-area:art;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-self:stretch;
+  width:100%;
+  min-width:0;
+  min-height:420px;
+  box-sizing:border-box;
+  padding:clamp(20px,3vw,32px);
+  border:1px solid rgba(230,243,255,.24);
+  border-radius:24px;
+  background:linear-gradient(155deg,rgba(238,248,255,.16),rgba(4,22,42,.38));
+  box-shadow:0 24px 60px rgba(0,0,0,.18);
+  overflow:hidden;
+}
+body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon{
+  grid-area:ribbon;
+  grid-column:1/-1;
+  grid-row:auto;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  width:100%;
+  min-width:0;
+  margin:0;
+  padding-top:19px;
+}
+body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon .hero-story-step{min-width:0}
+body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon .hero-story-step strong,
+body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon .hero-story-step small{overflow-wrap:anywhere}
+
+@media(max-width:950px){
+  body main > .hero.wrap.yi-turnir-hero{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto;
+    grid-template-areas:"copy" "art" "ribbon";
+    min-height:0;
+    padding:clamp(24px,4vw,40px);
+  }
+  body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-copy{max-width:820px}
+  body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-art{
+    width:100%;
+    max-width:820px;
+    min-height:360px;
+    margin:0 auto;
+  }
+}
+@media(max-width:600px){
+  body main > .hero.wrap.yi-turnir-hero{
+    padding:23px 18px;
+    border-radius:20px;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy h1{font-size:clamp(36px,10vw,44px);line-height:1.04}
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus{gap:6px;margin:18px 0}
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div{padding:11px 8px}
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>strong{font-size:11px}
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>small{font-size:9px}
+  body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-art{min-height:300px;padding:16px}
+  body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    padding-top:14px;
+  }
+  body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon .hero-story-step{padding:10px;gap:8px}
+}
