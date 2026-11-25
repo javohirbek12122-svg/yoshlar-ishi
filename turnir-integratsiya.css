@@ -36,3 +36,20 @@
 .yi-turnir-hero-logo small{color:#c2d8ea;font-size:10px}
 .yi-turnir-hero-logo>b{margin-left:7px;color:#c4e7ff;font-size:15px}
 @media(max-width:600px){.yi-turnir-hero-logo{margin-bottom:14px;padding:6px 10px 6px 6px}.yi-turnir-hero-logo img{width:38px;height:38px;flex-basis:38px}.yi-turnir-hero-logo strong{font-size:9px}.yi-turnir-hero-logo small{font-size:9px}}
+
+/* Hero layout corrections: keep the tournament board intact and the navigation ribbon full width. */
+.yi-turnir-hero{grid-template-columns:minmax(0,1.06fr) minmax(300px,.94fr);align-items:stretch}
+.yi-turnir-hero .yi-turnir-hero-copy{min-width:0;align-self:center}
+.yi-turnir-hero .yi-turnir-hero-art{min-width:0;width:100%;box-sizing:border-box;align-self:stretch}
+.yi-turnir-hero .hero-storyline{grid-column:1/-1;grid-row:auto;align-self:stretch;width:100%;min-width:0}
+.yi-turnir-hero .hero-story-step{min-width:0}
+.yi-turnir-hero .hero-story-step strong,.yi-turnir-hero .hero-story-step small{overflow-wrap:anywhere}
+@media(max-width:900px){
+ .yi-turnir-hero{grid-template-columns:minmax(0,1fr)!important}
+ .yi-turnir-hero .hero-storyline{grid-column:1}
+}
+@media(max-width:600px){
+ .yi-turnir-hero .hero-storyline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .yi-turnir-hero .hero-story-step{padding:10px;gap:8px}
+ .yi-turnir-hero-art .yi-turnir-board-card{padding:14px}
+}

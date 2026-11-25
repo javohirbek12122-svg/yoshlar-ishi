@@ -182,9 +182,10 @@ function setupDrawer(){
 
 function init(){
  const main=document.querySelector("main"),hero=document.querySelector(".hero"),art=hero&&hero.querySelector(".art"),overview=$("afzalliklar"),services=$("rasmiy-xizmatlar"),tools=$("qo-shimcha-vositalar"),toolsContent=tools&&tools.querySelector(".additional-tools-content");
+ const isTurnirHero=hero&&hero.classList.contains("yi-turnir-hero");
  const required=["afzalliklar","jarayon","rasmiy-xizmatlar","imkoniyatlar","imkoniyatlar-yakun","jamoadoshlar","top-tashabbuslar","tashabbus","hamkorlik"];
  if(main&&hero&&art&&overview&&services&&tools&&toolsContent&&required.every(id=>!!$(id))&&overview.parentElement===main&&services.parentElement===main&&required.slice(3).every(id=>toolsContent.contains($(id)))){
-  createHeroPreview(art);setupHeroExperience(art);const sectionParent=overview.parentElement,launcher=document.createElement("section"),stack=document.createElement("div");launcher.className="yi-home-sections wrap";launcher.id="yi-home-sections";stack.className="yi-home-accordion-stack";
+  if(!isTurnirHero){createHeroPreview(art);setupHeroExperience(art);}const sectionParent=overview.parentElement,launcher=document.createElement("section"),stack=document.createElement("div");launcher.className="yi-home-sections wrap";launcher.id="yi-home-sections";stack.className="yi-home-accordion-stack";
   const heading=document.createElement("div");heading.className="yi-home-sections-head";heading.innerHTML='<div><span class="yi-home-sections-eyebrow">Platforma bo‘limlari</span><h2>Kerakli bo‘limni tanlang.</h2></div><p>Har bir bo‘limni alohida oching. Mavjud formalar va yordamchi mexanizmlar o‘z joyida ishlaydi.</p>';
   const openAll=document.createElement("button");openAll.type="button";openAll.className="yi-accordion-global";openAll.textContent="Barcha bo‘limlarni ochish +";openAll.setAttribute("aria-expanded","false");
   sectionParent.insertBefore(launcher,overview);sectionParent.insertBefore(stack,overview);
@@ -194,7 +195,7 @@ function init(){
   const summary=tools.querySelector(":scope > summary");if(summary){const title=summary.querySelector("strong"),desc=summary.querySelector("small");if(title)title.textContent="AI, loyiha va hamjamiyat vositalari";if(desc)desc.textContent="G‘oya tahlili, yo‘riqnomalar, jamoa, tashabbus va hamkorlik.";}
   openAll.addEventListener("click",()=>{const panels=Array.from(stack.children).filter(node=>node.tagName==="DETAILS"),open=openAll.getAttribute("aria-expanded")!=="true";panels.forEach(panel=>panel.open=open);openAll.setAttribute("aria-expanded",open?"true":"false");openAll.textContent=open?"Barcha bo‘limlarni yopish −":"Barcha bo‘limlarni ochish +";});
   document.addEventListener("click",event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const id=(link.getAttribute("href")||"").slice(1);const target=$(decodeURIComponent(id));if(!target)return;let fold=target.closest("details");while(fold){fold.open=true;fold=fold.parentElement&&fold.parentElement.closest("details");}},true);
- }else if(art){createHeroPreview(art);setupHeroExperience(art);}
+ }else if(art&&!isTurnirHero){createHeroPreview(art);setupHeroExperience(art);}
  setupSearch();setupTheme();setupDrawer();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();

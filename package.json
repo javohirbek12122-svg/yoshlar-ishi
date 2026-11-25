@@ -4,11 +4,12 @@
   "version": "0.1.0",
   "description": "Yoshlar imkoniyatlari va davlat xizmatlari platformasi",
   "scripts": {
-    "check": "node scripts/check-site.mjs && node scripts/check-homepage-experience.mjs && node scripts/check-biletlar.mjs && node scripts/check-assessment.mjs && node scripts/check-pwa.mjs && node scripts/check-flag-motifs.mjs && node scripts/check-platform-integrations.mjs",
+    "check": "node scripts/check-turnir-hero.mjs && node scripts/check-site.mjs && node scripts/check-homepage-experience.mjs && node scripts/check-biletlar.mjs && node scripts/check-assessment.mjs && node scripts/check-pwa.mjs && node scripts/check-flag-motifs.mjs && node scripts/check-platform-integrations.mjs",
     "check:mobile": "node scripts/check-mobile.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:government": "node scripts/check-government-pilot.mjs",
-    "check:pwa": "node scripts/check-pwa.mjs"
+    "check:pwa": "node scripts/check-pwa.mjs",
+    "check:turnir": "node scripts/check-turnir-hero.mjs"
   },
   "devDependencies": {
     "playwright": "1.65.0"

@@ -415,7 +415,7 @@ import { clampInt, pointsFor, gamesPlayed, rankTeams, validateTeams } from './tu
     function init(){
       if(localStorage.getItem('yoshlar-ishi-turnir-theme')==='dark')document.body.classList.add('dark');
       loadLocal();initEvents();render();initRubric();
-      if('serviceWorker' in navigator && import.meta.env.PROD) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+      // Service-worker registration is handled by the shared pwa.js script.
       initCloud();
     }
     init();
