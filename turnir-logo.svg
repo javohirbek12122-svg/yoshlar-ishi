@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<title id="title">Yoshlar-Ishi Turnir Ballari</title><desc id="desc">Turnir va g‘oliblik kubogi belgisi</desc>
+<rect width="64" height="64" rx="17" fill="#123255"/>
+<path d="M19 13h26l-3 21a10 10 0 0 1-20 0l-3-21Z" fill="none" stroke="#d7ff66" stroke-width="3.5"/>
+<path d="M19 21H12a5 5 0 0 0 5 10h3m25-10h7a5 5 0 0 1-5 10h-3M32 44v8m-10 0h20" fill="none" stroke="#f5f8fb" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

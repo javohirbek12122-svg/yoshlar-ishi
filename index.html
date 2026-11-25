@@ -44,6 +44,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="./platform-polish.css">
 <link rel="stylesheet" href="./reference-home.css">
+<style id="yi-turnir-hero-shortcut">
+.yi-turnir-hero-logo{display:inline-flex;align-items:center;gap:11px;max-width:100%;margin:0 0 19px;padding:7px 13px 7px 7px;border:1px solid rgba(222,239,255,.3);border-radius:14px;background:rgba(255,255,255,.09);color:#fff;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.14);transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.yi-turnir-hero-logo:hover{transform:translateY(-2px);border-color:rgba(215,255,102,.75);background:rgba(255,255,255,.14)}
+.yi-turnir-hero-logo:focus-visible{outline:3px solid #d7ff66;outline-offset:3px}
+.yi-turnir-hero-logo img{display:block;flex:0 0 44px;width:44px;height:44px;border-radius:11px;object-fit:cover}
+.yi-turnir-hero-logo span{display:flex;flex-direction:column;gap:3px}
+.yi-turnir-hero-logo strong{font-size:10px;font-weight:900;letter-spacing:.12em}
+.yi-turnir-hero-logo small{color:#d1e1ef;font-size:10px}
+.yi-turnir-hero-logo>b{margin-left:6px;color:#d7ff66;font-size:16px}
+@media(max-width:600px){.yi-turnir-hero-logo{margin-bottom:14px;padding:6px 10px 6px 6px}.yi-turnir-hero-logo img{width:40px;height:40px;flex-basis:40px}.yi-turnir-hero-logo strong,.yi-turnir-hero-logo small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.yi-turnir-hero-logo{transition:none}.yi-turnir-hero-logo:hover{transform:none}}
+</style>
 </head>
 <body>
 <div id="readingProgress" aria-hidden="true"></div>
@@ -117,6 +129,7 @@
  </div>
 </div>
 <div class="hero-copy">
+ <a class="yi-turnir-hero-logo" href="./turnir.html" target="_blank" rel="noopener noreferrer" aria-label="Turnir Ballari saytini yangi oynada ochish"><img src="./turnir-logo.svg" alt="" width="44" height="44"><span><strong>TURNIR BALLARI</strong><small>Turnir markazini ochish</small></span><b aria-hidden="true">↗</b></a>
  <div class="eyebrow">YOSHLAR UCHUN IMKONIYATLAR</div>
  <h1>Yoshlar-Ishi —<br><em>imkoniyatdan<br>amaliy natijagacha.</em></h1>
  <p class="hero-lede">Ta’lim, bandlik, tadbirkorlik va yoshlar uchun davlat dasturlari haqidagi ma’lumotlarni bir joyda toping.</p>
