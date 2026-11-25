@@ -23,7 +23,7 @@
 .yi-personal-panel{margin:24px 0 28px;padding:24px}.yi-personal-total{display:flex;align-items:baseline;gap:4px;padding:8px 13px;border-radius:10px;background:#edf6fc;color:#174e78}.yi-personal-total strong{font-size:26px;line-height:1}.yi-personal-total span{color:#6d8194;font-size:11px;font-weight:800}
 .yi-personal-welcome{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:5px 0 15px;color:#47637d;font-size:12px}.yi-personal-welcome a{color:#20649a;font-weight:800;text-decoration:none}.yi-personal-tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .yi-personal-track{padding:14px;border:1px solid #e2eaf1;border-radius:12px;background:#f8fbfd}.yi-personal-track>span{display:block;color:#536a80;font-size:11px}.yi-personal-track>strong{display:block;margin:8px 0;color:#183d60;font-size:17px}.yi-personal-track>i{display:block;height:6px;border-radius:10px;background:#e2eaf0;overflow:hidden}.yi-personal-track>i>b{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#317cb5,#82b9de)}
-@media(max-width:950px){.yi-turnir-hero{grid-template-columns:1fr!important;min-height:unset}.yi-turnir-hero-art{min-height:unset}.yi-turnir-nav{display:none}.yi-turnir-brand{min-width:0}.yi-public-tournament-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1080px){.yi-turnir-hero{grid-template-columns:1fr!important;min-height:unset}.yi-turnir-hero-art{min-height:unset}.yi-turnir-nav{display:none}.yi-turnir-brand{min-width:0}.yi-public-tournament-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.yi-turnir-hero{margin-left:12px!important;margin-right:12px!important;padding:23px 18px!important;border-radius:20px}.yi-turnir-hero h1{font-size:42px}.yi-turnir-home-facts{gap:6px}.yi-turnir-home-facts>div{padding:11px 8px}.yi-turnir-home-facts>div>strong{font-size:11px}.yi-turnir-home-facts>div>small{font-size:9px}.yi-turnir-hero-art{padding:16px}.yi-turnir-public-head{align-items:flex-start;flex-direction:column}.yi-public-tournament-list{grid-template-columns:1fr}.yi-personal-panel{padding:16px}.yi-personal-tracks{grid-template-columns:1fr}.yi-personal-welcome{align-items:flex-start;flex-direction:column}}
 
 
@@ -204,7 +204,40 @@ body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon .hero-story-step small{o
   body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus{gap:6px;margin:18px 0}
   body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div{padding:11px 8px}
   body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>strong{font-size:11px}
-  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>small{font-size:9px}
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus{
+    grid-template-columns:1fr;
+    gap:7px;
+    margin:18px 0;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div{
+    display:grid;
+    grid-template-columns:28px minmax(0,1fr);
+    align-items:center;
+    padding:9px 11px;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>span{
+    grid-row:1 / span 2;
+    margin:0;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .hero-focus>div>small{
+    margin-top:2px;
+    font-size:9px;
+    line-height:1.35;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .actions{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  body main > .hero.wrap.yi-turnir-hero .yi-turnir-hero-copy .actions .btn{
+    grid-column:auto;
+    min-width:0;
+    width:100%;
+    padding:10px 8px;
+    font-size:10px;
+    line-height:1.25;
+    text-align:center;
+  }
   body main > .hero.wrap.yi-turnir-hero > .yi-turnir-hero-art{min-height:300px;padding:16px}
   body main > .hero.wrap.yi-turnir-hero > .yi-hero-ribbon{
     grid-template-columns:repeat(2,minmax(0,1fr));
