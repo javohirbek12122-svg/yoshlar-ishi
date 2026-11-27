@@ -53,7 +53,7 @@ assert.ok(migration.includes("grant execute on function public.submit_assessment
 assert.doesNotMatch(migration, /grant execute[^;]*\bto\s+(anon|public)\b/i);
 
 const home = read("index.html");
-assert.ok(home.includes('href="./assessment.html"') && home.includes("yi-assessment-announcement"), "Homepage needs a prominent assessment announcement");
+assert.ok(home.includes('href="./assessment.html"') && home.includes("Bilim sinovlari"), "Current homepage must link to the assessment section");
 const community = read("hamjamiyat.js");
 assert.ok(community.includes('assessment_completed:"Bilim sinovi yakunlandi"'), "Member activity must include completed assessments");
 
