@@ -338,6 +338,35 @@ try{
      await page.locator("#runNuclear").waitFor({state:"visible",timeout:8000});
      await page.locator("#runNuclear").click();
     }
+    if(item[0]==="/physics-lab/"&&width===390){
+     await page.locator("#viewport canvas").waitFor({state:"visible",timeout:20000});
+     const scenes=[
+      ["solarSystem","Quyosh tizimi — sayyoralar orbitasi"],
+      ["blackHole","Qora tuynuk — akkresiya diski"],
+      ["supernova","Supernova — yulduzning yakuniy portlashi"],
+      ["volcano","Vulqon otilishi — lava va kul oqimi"],
+      ["earthquake","Zilzila — tektonik siljish va seysmik to‘lqinlar"],
+      ["tsunami","Tsunami — okeandan qirg‘oqqa"],
+      ["tornado","Tornado — aylanma havo ustuni"],
+      ["lightning","Chaqmoq — elektr razryadi"],
+      ["aurora","Qutb yog‘dusi — magnitosfera va quyosh shamoli"]
+     ];
+     for(const [key,title] of scenes){
+      await page.locator('.mode[data-mode="'+key+'"]').click();
+      await page.waitForFunction(expected=>document.querySelector("#title")?.textContent===expected,title,{timeout:7000});
+      await page.locator("#eventPanel").waitFor({state:"visible",timeout:5000});
+      const phase=await page.locator("#eventPhase").innerText();
+      if(!phase.trim())fail("Physics Lab "+key,"scene timeline did not produce a phase label");
+     }
+     await page.locator("#eventRun").click();
+     await page.locator('[data-camera="top"]').click();
+     await page.locator('[data-camera="side"]').click();
+     await page.locator("#quality").selectOption("mobile");
+     await page.locator("#play").click();
+     await page.locator("#play").click();
+     await page.waitForTimeout(300);
+     if(errors.length)fail("Physics Lab 3D events","runtime errors: "+errors.join(" | "));
+    }
    }catch(e){fail(item[1]+" "+width,e.message||String(e))}
    finally{await page.close()}
   }
