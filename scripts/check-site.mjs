@@ -175,9 +175,9 @@ console.log("✓ 2D physics laboratory controller parses");
 const physicsLab = read("laboratoriya.html");
 assert.ok(physicsLab.includes('href="./lab-2d.css"') && physicsLab.includes('src="./lab-2d.js"'), "2D physics studio assets must be linked");
 assert.ok(physicsLab.includes('data-mode="nuclearBlast"') && physicsLab.includes("function buildNuclearBlast()") && physicsLab.includes("function updateNuclearBlast()"), "3D atmospheric visual mode must be wired into the physics laboratory");
-const physicsModule = physicsLab.match(/<script type="module">([\\s\\S]*?)<\\/script>/i);
+const physicsModule = physicsLab.match(/<script type="module">([\s\S]*?)<\/script>/i);
 assert.ok(physicsModule, "3D physics module must exist");
-const parsablePhysicsModule = physicsModule[1].replace(/^\\s*import\\s.+?;\\s*$/gm, "");
+const parsablePhysicsModule = physicsModule[1].replace(/^\s*import\s.+?;\s*$/gm, "");
 new vm.Script(parsablePhysicsModule, { filename: "laboratoriya.html:3D module" });
 console.log("✓ 3D atmospheric visual and 2D physics studio markup/controllers parse");
 
