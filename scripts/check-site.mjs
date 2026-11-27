@@ -55,6 +55,10 @@ const required = [
   "government-pilot/06_GOVERNANCE_AND_OPERATIONS_UZ.md",
   "startap-yoli.html",
   "laboratoriya.html",
+  "physics-lab/index.html",
+  "physics-lab/phenomena-engine.js",
+  "physics-lab/lab-2d.js",
+  "physics-lab/lab-2d.css",
   "admin.html",
   "admin-operations.js",
   "admin-operations.css",
@@ -180,6 +184,9 @@ assert.ok(physicsModule, "3D physics module must exist");
 const parsablePhysicsModule = physicsModule[1].replace(/^\s*import\s.+?;\s*$/gm, "");
 new vm.Script(parsablePhysicsModule, { filename: "laboratoriya.html:3D module" });
 console.log("✓ 3D atmospheric visual and 2D physics studio markup/controllers parse");
+const phenomenaEngine = read("physics-lab/phenomena-engine.js");
+new vm.Script(phenomenaEngine.replace(/^export\\s+function\\s+/m, "function "), { filename: "physics-lab/phenomena-engine.js" });
+console.log("✓ advanced 3D phenomena engine parses");
 const standaloneLab = read("physics-lab/index.html");
 assert.ok(standaloneLab.includes('href="./lab-2d.css"') && standaloneLab.includes('src="./lab-2d.js"'), "Standalone 2D physics assets must be local to physics-lab");
 assert.ok(standaloneLab.includes('data-mode="nuclearBlast"') && standaloneLab.includes("function buildNuclearBlast()") && standaloneLab.includes("function updateBlast()"), "Standalone 3D atmospheric visual mode must be wired");
@@ -188,6 +195,15 @@ const standaloneModule = standaloneLab.match(/<script type="module">([\s\S]*?)<\
 assert.ok(standaloneModule, "Standalone Three.js module must exist");
 new vm.Script(standaloneModule[1].replace(/^\s*import\s.+?;\s*$/gm, ""), { filename: "physics-lab/index.html:3D module" });
 console.log("✓ standalone 3D lab and bundled 2D studio parse");
+assert.ok(standaloneLab.includes('import {createPhenomenaEngine} from "./phenomena-engine.js";'), "Standalone simulator must load the modular phenomena engine");
+assert.ok(standaloneLab.includes('id="eventPanel"') && standaloneLab.includes('id="eventRun"') && standaloneLab.includes('data-camera="top"'), "3D event timeline and camera controls must be present");
+for (const event of ["solarSystem","blackHole","supernova","volcano","earthquake","tsunami","tornado","lightning","aurora"]) {
+  assert.ok(standaloneLab.includes('data-mode="'+event+'"'), "Missing 3D natural/cosmic event mode: "+event);
+  assert.ok(phenomenaEngine.includes('case "'+event+'":'), "Missing 3D scene builder for event: "+event);
+}
+const advancedRootLab = read("laboratoriya.html");
+assert.ok(advancedRootLab.includes('href="./physics-lab/"') && advancedRootLab.includes('id="hodisalar"'), "Main youth platform laboratory must link to the advanced 3D phenomenon simulator");
+console.log("✓ 9 advanced 3D scenes, telemetry, camera presets, and main-site entry point validated");
 
 const publicHtml = read("index.html");
 assert.ok(publicHtml.includes('./site.css'), "Homepage must load its single consolidated design system");
