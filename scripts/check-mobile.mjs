@@ -349,7 +349,13 @@ try{
       ["tsunami","Tsunami — okeandan qirg‘oqqa"],
       ["tornado","Tornado — aylanma havo ustuni"],
       ["lightning","Chaqmoq — elektr razryadi"],
-      ["aurora","Qutb yog‘dusi — magnitosfera va quyosh shamoli"]
+      ["aurora","Qutb yog‘dusi — magnitosfera va quyosh shamoli"],
+      ["solarFlare","Quyosh chaqnashi — plazma otilishi"],
+      ["meteorShower","Meteorit yomg‘iri — atmosfera bilan to‘qnashuv"],
+      ["eclipse","Quyosh tutilishi — Oy soyasi"],
+      ["hurricane","Tropik dovul — okean ustidagi siklon"],
+      ["forestFire","O‘rmon yong‘ini — olov fronti va tutun"],
+      ["geyser","Geyzer — geotermal suv otilishi"]
      ];
      for(const [key,title] of scenes){
       await page.locator('.mode[data-mode="'+key+'"]').click();
