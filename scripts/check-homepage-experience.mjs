@@ -68,7 +68,7 @@ assert.ok(html.includes('href="./platform-polish.css"'), "Homepage must load the
 assert.ok(html.includes('href="./reference-home.css"') && html.indexOf('href="./reference-home.css"') > html.indexOf('href="./platform-polish.css"'), "Reference homepage skin must load after existing styles");
 assert.ok(html.includes('class="yi-agency-brand"') && html.includes('href="https://gov.uz/oz/yoshlar"'), "Agency logo must open the official agency website");
 assert.ok(html.includes('class="yi-register-link"') && html.includes('href="./hamjamiyat.html?mode=register#hpAuthGate"'), "Registration must route to the existing OTP form");
-assert.ok(html.includes('class="yi-hero-quote"') && html.includes('Imkoniyatlar katalogi'), "Reference hero and primary CTA must exist");
+assert.ok(html.includes('class="yi-turnir-hero') && html.includes('href="./turnir.html">Turnirni ochish'), "Current turnir hero and primary CTA must exist");
 assert.ok(worker.includes('"/reference-home.css"'), "PWA must precache the new homepage skin");
 
 assert.match(polish, /yi-official-logo[\s\S]*?object-fit:contain/);
