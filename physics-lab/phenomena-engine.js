@@ -2,7 +2,7 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const rand = (a, b) => a + Math.random() * (b - a);
   let root = null, state = {}, active = "";
-  const modes = new Set(["solarSystem","blackHole","supernova","volcano","earthquake","tsunami","tornado","lightning","aurora"]);
+  const modes = new Set(["solarSystem","blackHole","supernova","volcano","earthquake","tsunami","tornado","lightning","aurora","solarFlare","meteorShower","eclipse","hurricane","forestFire","geyser"]);
   const vec = (x,y,z) => new THREE.Vector3(x,y,z);
   const add = (obj, parent=root) => { parent.add(obj); return obj; };
   const material = (color, extra={}) => new THREE.MeshStandardMaterial({color,roughness:.72,...extra});
@@ -63,6 +63,12 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
       case "tornado": buildTornado(p); break;
       case "lightning": buildLightning(p); break;
       case "aurora": buildAurora(p); break;
+      case "solarFlare": buildSolarFlare(p); break;
+      case "meteorShower": buildMeteorShower(p); break;
+      case "eclipse": buildEclipse(p); break;
+      case "hurricane": buildHurricane(p); break;
+      case "forestFire": buildForestFire(p); break;
+      case "geyser": buildGeyser(p); break;
     }
     return state;
   }
@@ -325,6 +331,159 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     view([17,14,22],[0,4,0]);
   }
 
+
+  function buildSolarFlare(p){
+    starfield(1450,78);
+    const sun=sphere(3.1,material(0xffa52b,{color:0xffb33a,emissive:0xff4a00,emissiveIntensity:2.7,roughness:.28}),[0,0,0],root,64);
+    const corona=sphere(3.55,basic(0xff8c2e,{transparent:true,opacity:.15,side:THREE.BackSide,depthWrite:false}),[0,0,0],root,56);
+    const outer=sphere(4.05,basic(0xff5f24,{transparent:true,opacity:.07,side:THREE.BackSide,depthWrite:false}),[0,0,0],root,48);
+    const light=new THREE.PointLight(0xff9d3d,95,42,1.5);add(light);
+    const prominences=[];
+    for(let j=0;j<6;j++){
+      const angle=j/6*Math.PI*2,pts=[];
+      for(let k=0;k<=46;k++){
+        const u=k/46,a=angle+u*Math.PI*(.75+(j%3)*.18),r=3.1+Math.sin(u*Math.PI)*(1.25+j%2*.55);
+        pts.push(vec(Math.cos(a)*r,Math.sin(u*Math.PI)*(.9+j%3*.24),Math.sin(a)*r));
+      }
+      const arc=line(pts,j%2?0xffdf8e:0xff8f4c,.74,.035+j%2*.012);
+      prominences.push(arc);
+    }
+    const eruption=new THREE.Group();add(eruption);
+    const stream=[];
+    for(let i=0;i<5;i++){
+      const a=-.48+i*.24,pts=[];
+      for(let j=0;j<=18;j++){const u=j/18;pts.push(vec(2.4+u*6,Math.sin(u*Math.PI+a)*(.45+u*1.5),Math.sin(a)*1.5+u*.15));}
+      const flare=line(pts,i%2?0xffc05f:0xff7335,.75,.045);
+      stream.push(flare);
+    }
+    const particleBase=[],particlePos=[];
+    for(let i=0;i<620;i++){
+      const a=rand(-.7,.7),r=rand(2.6,3.3),height=rand(0,1.3);
+      particleBase.push({a,r,height,speed:rand(.55,1.5),phase:rand(0,6.28)});
+      particlePos.push(r, height, Math.sin(a)*r*.35);
+    }
+    const particles=pointsObject(particlePos,0xffd28a,.075,.82);
+    state={sun,corona,outer,light,prominences,stream,particleBase,particles,phase:"Quyosh yuzasida magnit halqalar"};
+    view([14,9,18],[0,0,0]);
+  }
+
+  function buildMeteorShower(p){
+    starfield(1700,80);
+    const earth=sphere(3.8,material(0x145b8a,{color:0x1a6c9c,emissive:0x062849,emissiveIntensity:.4,roughness:.62}),[0,-4.6,-3],root,64);
+    const atmosphere=sphere(4.05,basic(0x6bd9ff,{transparent:true,opacity:.16,side:THREE.BackSide,depthWrite:false}),[0,-4.6,-3],root,56);
+    const cloud=sphere(4.0,basic(0xb9eaff,{transparent:true,opacity:.045,wireframe:true,depthWrite:false}),[0,-4.6,-3],root,32);
+    const meteors=[];
+    for(let i=0;i<26;i++){
+      const g=new THREE.Group();add(g);
+      const head=sphere(rand(.035,.075),basic(i%4===0?0xffe7bd:0xc9f6ff),[0,0,0],g,10);
+      const tail=new THREE.Mesh(new THREE.CylinderGeometry(.008,.055,3.2,7,1,true),new THREE.MeshBasicMaterial({color:i%3?0x7edfff:0xffb875,transparent:true,opacity:.75,depthWrite:false}));
+      tail.rotation.z=.42;tail.position.set(-.65,-1.45,0);g.add(tail);
+      const glow=sphere(.13,basic(0xb5edff,{transparent:true,opacity:.22,depthWrite:false}),[0,0,0],g,12);
+      meteors.push({g,head,tail,glow,phase:rand(0,15),speed:rand(1.2,2.4),x:rand(-15,15),z:rand(-11,7)});
+    }
+    state={earth,atmosphere,cloud,meteors,phase:"Meteoroidlar atmosferaga kirib kelmoqda"};
+    view([14,9,22],[0,-1,0]);
+  }
+
+  function buildEclipse(p){
+    starfield(1300,80);
+    const sun=sphere(4.25,material(0xffbe52,{color:0xffd16c,emissive:0xff8b20,emissiveIntensity:1.8,roughness:.3}),[0,0,0],root,64);
+    const corona=sphere(4.75,basic(0xffd995,{transparent:true,opacity:.12,side:THREE.BackSide,depthWrite:false}),[0,0,0],root,56);
+    const glow=sphere(5.25,basic(0xffad53,{transparent:true,opacity:.04,side:THREE.BackSide,depthWrite:false}),[0,0,0],root,48);
+    const moon=sphere(1.15,material(0x101723,{color:0x111a27,roughness:1}),[-8,0,7],root,42);
+    const moonRim=sphere(1.23,basic(0x9ab4cb,{transparent:true,opacity:.15,side:THREE.BackSide,depthWrite:false}),[-8,0,7],root,32);
+    const earth=sphere(2.15,material(0x1c6e99,{color:0x165c8d,roughness:.7}),[0,-.4,-17],root,48);
+    const earthAtmo=sphere(2.32,basic(0x62cfff,{transparent:true,opacity:.16,side:THREE.BackSide,depthWrite:false}),[0,-.4,-17],root,36);
+    const path=[];
+    for(let i=0;i<=100;i++){const a=i/100*Math.PI*2;path.push(vec(Math.sin(a)*8,Math.cos(a)*.65,7));}
+    const track=line(path,0x7db8d4,.28,.018);
+    const light=new THREE.PointLight(0xffc26c,100,80,1.6);add(light);
+    state={sun,corona,glow,moon,moonRim,earth,earthAtmo,track,light,phase:"Oy Quyosh diskiga yaqinlashmoqda"};
+    view([0,7,25],[0,0,0]);
+  }
+
+  function buildHurricane(p){
+    const oceanGeo=new THREE.PlaneGeometry(52,52,72,72);oceanGeo.rotateX(-Math.PI/2);
+    const ocean=new THREE.Mesh(oceanGeo,material(0x075b8b,{color:0x0b638f,emissive:0x002b45,emissiveIntensity:.65,roughness:.22,metalness:.16}));
+    ocean.position.y=-.12;add(ocean);
+    const eye=sphere(.9,basic(0x071623,{transparent:true,opacity:.92}),[0,7,0],root,32);
+    const eyeWall=new THREE.Mesh(new TorusGeometry(2.4,.24,14,96),material(0xa3c1cb,{color:0x819eac,roughness:1,transparent:true,opacity:.54}));
+    eyeWall.rotation.x=Math.PI/2;eyeWall.position.y=5.1;add(eyeWall);
+    const cloudGroup=new THREE.Group();add(cloudGroup);
+    const cloudMat=material(0x8798a5,{color:0x7e8e9b,roughness:1,transparent:true,opacity:.82});
+    for(let i=0;i<48;i++){
+      const a=i/48*Math.PI*2,r=rand(4.3,10),sz=rand(.9,2.1);
+      sphere(sz,cloudMat,[Math.cos(a)*r,rand(4.2,7.5),Math.sin(a)*r],cloudGroup,18);
+    }
+    const bands=[];
+    for(let j=0;j<7;j++){
+      const pts=[];for(let i=0;i<=100;i++){const q=i/100,a=q*Math.PI*5+j*.72,r=2.4+q*8;pts.push(vec(Math.cos(a)*r,2.2+q*3.2,Math.sin(a)*r));}
+      bands.push(line(pts,j%2?0x7feaff:0xd2efff,.38,.035));
+    }
+    const rainBase=[],rainPos=[];
+    for(let i=0;i<1000;i++){const a=rand(0,Math.PI*2),r=rand(2.6,12),y=rand(1,9);rainBase.push({a,r,y,phase:rand(0,6.28),speed:rand(.6,1.7)});rainPos.push(Math.cos(a)*r,y,Math.sin(a)*r);}
+    const rain=pointsObject(rainPos,0x9bdcff,.055,.68);
+    const light=new THREE.PointLight(0x75cfff,18,35,1.8);light.position.set(0,9,0);add(light);
+    state={ocean,oceanGeo,eye,eyeWall,cloudGroup,bands,rain,rainBase,light,phase:"Tropik siklon kuchaymoqda"};
+    view([20,18,25],[0,2,0]);
+  }
+
+  function buildForestFire(p){
+    makeGround(0x283d29,48);
+    const earth=new THREE.Mesh(new SphereGeometry(1,20,14),material(0x4b5030,{roughness:1}));earth.scale.set(25,.7,25);earth.position.y=-.7;add(earth);
+    const treeMat=material(0x28593a,{roughness:1}),trunkMat=material(0x5c4230,{roughness:1});
+    const trees=[];
+    for(let i=0;i<58;i++){
+      const x=rand(-20,20),z=rand(-19,19);if(Math.abs(x)<2.8&&Math.abs(z)<5)continue;
+      const h=rand(2.3,5.8),g=new THREE.Group();add(g);
+      const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.25,h*.42,8),trunkMat);trunk.position.y=h*.21;g.add(trunk);
+      for(let j=0;j<3;j++){const c=new THREE.Mesh(new THREE.ConeGeometry(rand(.75,1.15),h*.45,9),treeMat);c.position.y=h*.38+j*h*.2;c.scale.setScalar(1-j*.16);g.add(c);}
+      g.position.set(x,0,z);trees.push({g,x,z,burn:Math.random()<.24,phase:rand(0,6.28)});
+    }
+    const fires=[];
+    for(let i=0;i<18;i++){
+      const x=rand(-9,9),z=rand(-8,8),size=rand(.55,1.3);
+      const flame=new THREE.Mesh(new THREE.ConeGeometry(size,.9+size,9),material(0xff6728,{color:0xff762c,emissive:0xff3900,emissiveIntensity:2.8,transparent:true,opacity:.88}));
+      flame.position.set(x,.55,z);add(flame);
+      const core=sphere(size*.24,basic(0xffe39a,{transparent:true,opacity:.9}),[x,.4,z],root,12);
+      fires.push({flame,core,x,z,size,phase:rand(0,6.28)});
+    }
+    const smokeBase=[],smokePos=[];
+    for(let i=0;i<820;i++){const a=rand(0,Math.PI*2),r=rand(.1,2.8),y=rand(1,14);smokeBase.push({a,r,y,phase:rand(0,6.28),speed:rand(.35,1.1)});smokePos.push(Math.cos(a)*r,y,Math.sin(a)*r);}
+    const smoke=pointsObject(smokePos,0x777c78,.12,.5);
+    const emberBase=[],emberPos=[];
+    for(let i=0;i<220;i++){const x=rand(-10,10),z=rand(-8,8),y=rand(.2,6);emberBase.push({x,y,z,phase:rand(0,6.28),speed:rand(.5,1.8)});emberPos.push(x,y,z);}
+    const embers=pointsObject(emberPos,0xffa14f,.07,.85);
+    const light=new THREE.PointLight(0xff5b20,35,26,1.4);light.position.set(0,3,0);add(light);
+    state={trees,fires,smoke,smokeBase,embers,emberBase,light,phase:"O‘rmon chetida yong‘in boshlanishi"};
+    view([20,17,24],[0,2,0]);
+  }
+
+  function buildGeyser(p){
+    makeGround(0x7c7762,32);
+    const rocky=material(0x666354,{roughness:1}),rimMat=material(0x928b70,{roughness:1});
+    for(let i=0;i<16;i++){
+      const a=i/16*Math.PI*2,r=rand(1.5,2.4),sz=rand(.4,.9);
+      const rock=sphere(sz,rocky,[Math.cos(a)*r,.2,Math.sin(a)*r],root,12);rock.scale.set(1,.65,1.15);
+    }
+    const pool=new THREE.Mesh(new CircleGeometry(2.0,64),material(0x0f7491,{color:0x22a7c3,emissive:0x0c5265,emissiveIntensity:.7,transparent:true,opacity:.8,roughness:.18,metalness:.18}));
+    pool.rotation.x=-Math.PI/2;pool.position.y=.13;add(pool);
+    const rim=new THREE.Mesh(new TorusGeometry(1.8,.28,16,80),rimMat);rim.rotation.x=Math.PI/2;rim.position.y=.25;add(rim);
+    const waterJet=new THREE.Mesh(new CylinderGeometry(.18,.8,9,28,5,true),new MeshBasicMaterial({color:0x8eeaff,transparent:true,opacity:.22,side:THREE.DoubleSide,depthWrite:false}));
+    waterJet.position.y=4.6;add(waterJet);
+    const core=new THREE.Mesh(new CylinderGeometry(.08,.32,8.6,20,4,true),new MeshBasicMaterial({color:0xd5fbff,transparent:true,opacity:.48,side:THREE.DoubleSide,depthWrite:false}));
+    core.position.y=4.3;add(core);
+    const dropsBase=[],dropsPos=[];
+    for(let i=0;i<520;i++){const a=rand(0,Math.PI*2),r=rand(.15,1.2),y=rand(.2,9);dropsBase.push({a,r,y,phase:rand(0,6.28),speed:rand(1.1,3.4)});dropsPos.push(Math.cos(a)*r,y,Math.sin(a)*r);}
+    const drops=pointsObject(dropsPos,0xa9efff,.07,.9);
+    const steamBase=[],steamPos=[];
+    for(let i=0;i<320;i++){const a=rand(0,Math.PI*2),r=rand(.2,1.5),y=rand(3,12);steamBase.push({a,r,y,phase:rand(0,6.28),speed:rand(.3,.9)});steamPos.push(Math.cos(a)*r,y,Math.sin(a)*r);}
+    const steam=pointsObject(steamPos,0xdbe6e6,.14,.45);
+    const light=new THREE.PointLight(0x7bdfff,22,18,1.4);light.position.set(0,3,0);add(light);
+    state={pool,rim,waterJet,core,drops,dropsBase,steam,steamBase,light,phase:"Yer osti suvining qizishi"};
+    view([13,13,17],[0,3.8,0]);
+  }
+
   function buildAurora(p){
     starfield(1200,70);
     const earth=sphere(3,material(0x145c88,{color:0x155c8d,emissive:0x062449,emissiveIntensity:.5,roughness:.62,metalness:.12}),[0,0,0],root,64);
@@ -458,6 +617,64 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
       state.cloudGroup.children.forEach((c,i)=>{if(c.material&&c.material.emissive)c.material.emissiveIntensity=.05+flash*.6;});
       state.phase=flash>.05?"Atmosferada elektr razryadi":"Bulutlarda zaryadlar ajralishi";
     }
+
+    if(active==="solarFlare"){
+      const cycle=t%14,flare=clamp((cycle-2)/3,0,1)*(cycle<7?1:clamp((12-cycle)/5,0,1));
+      state.sun.rotation.y+=dt*.07;state.corona.material.opacity=.12+.05*Math.sin(t*2);
+      state.outer.material.opacity=.045+.02*Math.sin(t*1.1);
+      state.light.intensity=75+85*flare+12*Math.sin(t*2.4);
+      state.prominences.forEach((m,i)=>{m.material.opacity=.35+.42*flare+.1*Math.sin(t*2+i)});
+      const pos=state.particles.geometry.attributes.position;
+      for(let i=0;i<state.particleBase.length;i++){const q=state.particleBase[i],r=q.r+flare*5*q.speed,side=Math.sin(q.a)*r*.35;pos.setXYZ(i,r+flare*3, q.height+flare*7*q.speed+Math.sin(t+q.phase)*.08,side);}
+      pos.needsUpdate=true;state.particles.material.opacity=.35+flare*.6;
+      state.phase=cycle<2?"Magnit maydon energiyasi to‘planadi":cycle<5?"Quyosh chaqnashi va plazma chiqishi":cycle<9?"Koronal massa oqimi fazoga tarqaladi":"Quyosh atmosferasi tiklanmoqda";
+    }
+    if(active==="meteorShower"){
+      state.cloud.rotation.y+=dt*.018;state.atmosphere.material.opacity=.12+.04*Math.sin(t*1.8);
+      state.meteors.forEach((m,i)=>{const age=(t*m.speed+m.phase)%20;m.g.position.set(m.x-age*.45,20-age*1.45, m.z+Math.sin(t+i)*.7);m.g.rotation.z=-.5;const fade=age<1?age:age>17?(20-age)/3:1;m.head.material.opacity=clamp(fade,0,1);m.tail.material.opacity=clamp(fade,0,1)*.75;m.glow.material.opacity=clamp(fade,0,1)*.18;});
+      state.phase="Meteoritlar atmosferada yonib, yorqin iz qoldirmoqda";
+    }
+    if(active==="eclipse"){
+      const phase=(t*(p.speed||1)*.16)%(Math.PI*2),x=Math.sin(phase)*8,y=Math.cos(phase)*.65;
+      state.moon.position.set(x,y,7);state.moonRim.position.copy(state.moon.position);
+      const coverage=clamp(1-Math.abs(x)/4.8,0,1);
+      state.corona.material.opacity=.08+.12*coverage;state.glow.material.opacity=.03+.09*coverage;state.light.intensity=100-48*coverage;
+      state.phase=coverage>.92?"To‘liq Quyosh tutilishi":coverage>.35?"Qisman tutilish":"Oy Quyosh diskidan o‘tmoqda";
+    }
+    if(active==="hurricane"){
+      const wind=p.wind||1,surge=p.surge||1,geo=state.oceanGeo.attributes.position;
+      for(let i=0;i<geo.count;i++){const x=geo.getX(i),z=geo.getZ(i),r=Math.hypot(x,z),a=Math.atan2(z,x),wave=Math.sin(r*1.1-t*2.2*wind+a*2)*.12+Math.sin(a*8-t*wind)*.08;geo.setY(i,wave*surge);}
+      geo.needsUpdate=true;state.oceanGeo.computeVertexNormals();state.eyeWall.rotation.z+=dt*.15*wind;state.cloudGroup.rotation.y+=dt*.03*wind;
+      const rain=state.rain.geometry.attributes.position;
+      for(let i=0;i<state.rainBase.length;i++){const q=state.rainBase[i],a=q.a+t*q.speed*wind,r=Math.max(2.5,q.r-t*.13*wind);rain.setXYZ(i,Math.cos(a)*r,q.y+Math.sin(t+q.phase)*.16,Math.sin(a)*r);}
+      rain.needsUpdate=true;state.light.intensity=12+5*Math.sin(t*2);
+      state.phase="Ko‘z devori atrofida kuchli shamol va yog‘ingarchilik";
+    }
+    if(active==="forestFire"){
+      const rate=p.spread||1;
+      state.fires.forEach((f,i)=>{const pulse=.8+.35*Math.sin(t*7+f.phase);f.flame.scale.set(1,pulse*rate,1);f.flame.material.emissiveIntensity=2+1.4*pulse;f.core.material.opacity=.65+.3*pulse;});
+      const smoke=state.smoke.geometry.attributes.position;
+      for(let i=0;i<state.smokeBase.length;i++){const q=state.smokeBase[i],age=(q.y/ q.speed+t*rate*.8)%14,r=q.r+age*.17,a=q.a+t*.1;smoke.setXYZ(i,Math.cos(a)*r,1+age,Math.sin(a)*r);}
+      smoke.needsUpdate=true;
+      const emb=state.embers.geometry.attributes.position;
+      for(let i=0;i<state.emberBase.length;i++){const q=state.emberBase[i],age=(q.y+t*q.speed*rate)%8;emb.setXYZ(i,q.x+Math.sin(t+q.phase)*.4,age, q.z+Math.cos(t*.7+q.phase)*.4);}
+      emb.needsUpdate=true;state.light.intensity=24+16*Math.abs(Math.sin(t*4));
+      state.phase="Olov fronti tarqalmoqda, issiq havo kulni yuqoriga ko‘taradi";
+    }
+    if(active==="geyser"){
+      const pressure=p.pressure||1,cycle=t%12,burst=clamp((cycle-3)/1.5,0,1)*(cycle<8?1:clamp((12-cycle)/4,0,1));
+      state.waterJet.scale.y=.15+burst*pressure;state.waterJet.position.y=1+burst*4.6*pressure;
+      state.core.scale.y=.18+burst*pressure;state.core.position.y=.9+burst*4.3*pressure;
+      state.pool.material.opacity=.55+.25*Math.sin(t*2);
+      const drops=state.drops.geometry.attributes.position;
+      for(let i=0;i<state.dropsBase.length;i++){const q=state.dropsBase[i],age=(q.y+t*q.speed*pressure)%10,r=q.r+burst*.6;drops.setXYZ(i,Math.cos(q.a+t*.12)*r,age*burst+q.y*.15,Math.sin(q.a+t*.12)*r);}
+      drops.needsUpdate=true;
+      const steam=state.steam.geometry.attributes.position;
+      for(let i=0;i<state.steamBase.length;i++){const q=state.steamBase[i],age=(q.y+t*q.speed)%13,r=q.r+age*.08;steam.setXYZ(i,Math.cos(q.a+t*.08)*r,2+age*burst,Math.sin(q.a+t*.08)*r);}
+      steam.needsUpdate=true;state.light.intensity=12+18*burst;
+      state.phase=cycle<3?"Yer ostida geotermal bosim to‘planadi":cycle<8?"Issiq suv va bug‘ favvora bo‘lib otiladi":"Geyzer faolligi pasaymoqda";
+    }
+
     if(active==="aurora"){
       state.earth.rotation.y+=dt*.08;
       state.atmo.material.opacity=.1+.045*Math.sin(t*1.2);
@@ -488,6 +705,12 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     if(active==="tsunami")return make(["Shartli to‘lqin balandligi",(p.height||1).toFixed(1)+" m"],["Okean to‘lqini","Tarqalmoqda"],["Sohil","Vizual zona"]);
     if(active==="tornado")return make(["Aylanish tezligi",(p.wind||1).toFixed(1)+"×"],["Vortex zarralari",state.dustBase.length+" ta"],["Holat","Faol"]);
     if(active==="lightning")return make(["Razryad chastotasi",(p.frequency||1).toFixed(1)+"×"],["Tarmoqlar",state.bolts.length+" ta"],["Muhit","Momaqaldiroq"]);
+    if(active==="solarFlare")return make(["Plazma zarralari",state.particleBase.length+" ta"],["Quyosh chaqnashi",p.intensity?Number(p.intensity).toFixed(1)+"×":"Faol"],["Faza",state.phase]);
+    if(active==="meteorShower")return make(["Meteoritlar",state.meteors.length+" ta"],["Atmosfera","Faol"],["Kirish tezligi","Yuqori"]);
+    if(active==="eclipse")return make(["Oy holati",Math.abs(state.moon.position.x)<1?"Markazga yaqin":"Orbita bo‘ylab"],["Tutilish","Davriy"],["Animatsiya",(p.speed||1).toFixed(1)+"×"]);
+    if(active==="hurricane")return make(["Shamol tezligi",(p.wind||1).toFixed(1)+"×"],["Yog‘ingarchilik",state.rainBase.length+" zarracha"],["Suv sathi","Dinamik"]);
+    if(active==="forestFire")return make(["Faol olov nuqtalari",state.fires.length+" ta"],["Tutun zarralari",state.smokeBase.length+" ta"],["Tarqalish",(p.spread||1).toFixed(1)+"×"]);
+    if(active==="geyser")return make(["Suv tomchilari",state.dropsBase.length+" ta"],["Bug‘ zarralari",state.steamBase.length+" ta"],["Bosim",(p.pressure||1).toFixed(1)+"×"]);
     if(active==="aurora")return make(["Aurora qatlamlari",state.bands.length+" ta"],["Magnit chiziqlar",state.magnetic.length+" ta"],["Faollik",(p.activity||1).toFixed(1)+"×"]);
     return make(["3D model","Faol"],["Vaqt",t.toFixed(1)+" s"],["Holat","Tayyor"]);
   }
