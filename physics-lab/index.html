@@ -46,7 +46,7 @@ button,a,input,select{ -webkit-tap-highlight-color:transparent}button:focus-visi
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
   <link rel="stylesheet" href="../mobile-guard.css">
-<link rel="stylesheet" href="../lab-2d.css">
+<link rel="stylesheet" href="./lab-2d.css">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -276,6 +276,6 @@ $("clearHistory").addEventListener("click",()=>{if(!saved().length)return;if(con
 document.addEventListener("keydown",e=>{if(e.target.matches("input,select,textarea")||e.altKey||e.ctrlKey||e.metaKey)return;if(e.code==="Space"){e.preventDefault();$("play").click()}if(e.key.toLowerCase()==="r")$("reset").click()});
 init();renderHistory();
 })();
-</script><script src="../lab-2d.js" defer></script><script src="/pwa.js" defer></script>
+</script><script src="./lab-2d.js" defer></script><script src="/pwa.js" defer></script>
   <script src="../uz-flag-3d.js" defer></script>
 </body></html>
