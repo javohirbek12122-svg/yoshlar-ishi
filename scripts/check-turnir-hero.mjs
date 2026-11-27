@@ -33,6 +33,6 @@ assert.ok(css.includes("grid-column:auto;"), "Mobile hero keeps both primary act
 assert.ok(css.includes("grid-template-columns:1fr;"), "Mobile hero facts remain readable in a single column");
 assert.ok(!turnir.includes("import.meta.env"), "Static browser module does not use Vite-only import.meta.env");
 assert.ok(turnirPage.includes('<script src="./pwa.js" defer></script>'), "Tournament page registers shared PWA behavior");
-assert.ok(sw.includes('const CACHE_NAME = "yi-pwa-v38";'), "PWA cache is versioned");
+assert.ok(sw.includes('const CACHE_NAME = "yi-pwa-v39";'), "PWA cache is versioned");
 for (const asset of ["/index.html","/homepage-experience.js","/turnir.html","/turnir.js","/turnir.css","/turnir-integratsiya.css","/turnir-scoring.mjs","/turnir-logo.svg","/pwa.js"]) assert.ok(sw.includes(JSON.stringify(asset)), "PWA precache includes " + asset);
 console.log("TURNIR HERO + SITE REGRESSION CHECK: PASS");
