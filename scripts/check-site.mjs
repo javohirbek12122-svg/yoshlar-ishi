@@ -204,6 +204,15 @@ for (const event of ["solarSystem","blackHole","supernova","volcano","earthquake
 const advancedRootLab = read("laboratoriya.html");
 assert.ok(advancedRootLab.includes('href="./physics-lab/"') && advancedRootLab.includes('id="hodisalar"'), "Main youth platform laboratory must link to the advanced 3D phenomenon simulator");
 console.log("✓ 9 advanced 3D scenes, telemetry, camera presets, and main-site entry point validated");
+const physics2d = read("physics-lab/lab-2d.js");
+const graphs2d = ["projectile","wave","interference","optics","field","pendulum","decay","seismogram","tsunamiProfile","keplerOrbit","supernovaCurve","volcanoCurve","lightningImpulse"];
+for (const graph of graphs2d) {
+  assert.ok(standaloneLab.includes('data-mode="'+graph+'"'), "Missing 2D graph tab: "+graph);
+  assert.ok(physics2d.includes(graph+":"), "Missing 2D graph definition: "+graph);
+}
+assert.equal((standaloneLab.match(/class="lab2d-tab"/g)||[]).length,13,"Standalone 2D studio must expose 13 graph modes");
+assert.ok(advancedRootLab.includes('data-mode="seismogram"') && advancedRootLab.includes('data-mode="lightningImpulse"'), "Main 2D studio must include event-linked graphs");
+console.log("✓ all 13 animated 2D science graphs and linked event views validated");
 
 const publicHtml = read("index.html");
 assert.ok(publicHtml.includes('./site.css'), "Homepage must load its single consolidated design system");
