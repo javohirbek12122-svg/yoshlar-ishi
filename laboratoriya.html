@@ -67,6 +67,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
 </script>
   <link rel="stylesheet" href="./mobile-guard.css">
+<link rel="stylesheet" href="./lab-2d.css">
 <link rel="stylesheet" href="./platform-polish.css">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -85,7 +86,8 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 <button class="mode-btn" data-mode="gas"><span class="mode-icon">✣</span><span>Gaz molekulalari</span></button>
 <button class="mode-btn" data-mode="wave"><span class="mode-icon">〰</span><span>To‘lqinlar</span></button>
 <button class="mode-btn" data-mode="refraction"><span class="mode-icon">◇</span><span>Yorug‘lik sinishi</span></button>
-<button class="mode-btn" data-mode="nuclear"><span class="mode-icon">⚛</span><span>Yadro fizikasi</span></button>
+<button class="mode-btn" data-mode="nuclear"><span class="mode-icon">⚛</span><span>Yadro bo‘linishi</span></button>
+<button class="mode-btn" data-mode="nuclearBlast"><span class="mode-icon">☄</span><span>Yadro portlashi · 3D</span></button>
 <div class="side-note">Har bir modelda parametrlarni o‘zgartirib, natijaga ta’sirini kuzating. 3D sahnani sichqoncha bilan aylantirish va yaqinlashtirish mumkin.</div>
 </aside>
 <section class="workspace">
@@ -100,6 +102,24 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 <div class="card history" id="saqlangan"><h3>Saqlangan tajribalar</h3><p class="sub">Shaxsiy kabinetingiz orqali saqlangan so‘nggi tajribalar.</p><div class="history-list" id="historyList"><div class="empty">Tajriba natijalarini saqlash uchun elektron pochta manzilingiz orqali shaxsiy hisobingizga kiring.</div></div></div>
 </section>
 </div>
+<section class="lab2d-section" id="lab2d" aria-labelledby="lab2dHeading">
+ <div class="lab2d-heading"><div><span class="lab2d-kicker">INTERAKTIV GRAFIKLAR · 2D STUDIO</span><h2 id="lab2dHeading">Ikki o‘lchamli tajribalar</h2><p>7 ta qo‘shimcha tajriba: fizik jarayonlarni grafik, vektor va optik chizmalar orqali kuzating.</p></div><span class="lab2d-live">2D MODELLAR</span></div>
+ <div class="lab2d-tabs" role="group" aria-label="2D tajriba turini tanlang">
+  <button class="lab2d-tab" type="button" data-mode="projectile" aria-pressed="true">↗ Trayektoriya</button>
+  <button class="lab2d-tab" type="button" data-mode="wave" aria-pressed="false">〰 To‘lqin</button>
+  <button class="lab2d-tab" type="button" data-mode="interference" aria-pressed="false">◉ Interferensiya</button>
+  <button class="lab2d-tab" type="button" data-mode="optics" aria-pressed="false">◇ Optika</button>
+  <button class="lab2d-tab" type="button" data-mode="field" aria-pressed="false">＋ Elektr maydoni</button>
+  <button class="lab2d-tab" type="button" data-mode="pendulum" aria-pressed="false">◌ Mayatnik grafigi</button>
+  <button class="lab2d-tab" type="button" data-mode="decay" aria-pressed="false">⌁ Yemirilish</button>
+ </div>
+ <div class="lab2d-workspace">
+  <div class="lab2d-canvas-card"><canvas id="lab2dCanvas" aria-label="Tanlangan 2D fizik model grafigi"></canvas><span class="lab2d-canvas-caption">2D PHYSICS CANVAS</span><span class="lab2d-canvas-foot">Parametrlarni o‘zgartiring · grafik jonli yangilanadi</span></div>
+  <div class="lab2d-controls"><h3 id="lab2dTitle">Jism trayektoriyasi</h3><p id="lab2dDescription">Ideal parabolik harakat modeli.</p><div class="lab2d-control-list" id="lab2dControls"></div><div class="formula" id="lab2dFormula">R = v₀² · sin(2θ) / g</div><div class="lab2d-actions"><button class="primary" id="lab2dPlay" type="button">Ⅱ Pauza</button><button id="lab2dReset" type="button">↺ Qayta boshlash</button><button id="lab2dExport" type="button">PNG eksport</button></div><div class="status" id="lab2dStatus" role="status" aria-live="polite">2D model tayyor.</div></div>
+ </div>
+ <div class="lab2d-metrics" id="lab2dMetrics" aria-live="polite"></div>
+ <div class="lab2d-explain">Izoh: grafiklar fizik qonunlarning o‘quv maqsadida soddalashtirilgan tasviridir. Ular haqiqiy tajriba o‘lchovlari yoki professional ilmiy hisob-kitoblarning o‘rnini bosmaydi.</div>
+</section>
 <section class="theory-section" id="nazariya" aria-labelledby="theoryHeading">
  <div class="theory-heading"><div class="eyebrow">FIZIKA NAZARIYASI</div><h2 id="theoryHeading">Model ortidagi qonuniyatni tushuning.</h2><p>Parametrlarni o‘zgartirishdan oldin fizik mazmun va har bir modelning cheklovini biling.</p></div>
  <div class="theory-grid">
@@ -126,7 +146,7 @@ let currentUser=null;
 let scene,camera,renderer,controls,group,clock;
 let running=true,elapsed=0,currentMode="projectile",params={};
 let activeObjects={};
-let particleData=[],waveLine=null,pendulumLine=null,projectileBall=null,nucleusBalls=[],nucleusStart=0,nucleusRunning=false;
+let particleData=[],waveLine=null,pendulumLine=null,projectileBall=null,nucleusBalls=[],nucleusStart=0,nucleusRunning=false,blastRunning=false;
 const RED=0xff876f,BLUE=0x80d4ff,GREEN=0xd7ff66,YELLOW=0xffd76d;
 const definitions={
  projectile:{title:"Jismning parabolik harakati",subtitle:"Boshlang‘ich tezlik, uchish burchagi va gravitatsiyani boshqaring.",hud:"MEKANIKA",intro:"Jismning boshlang‘ich tezligi va burchagi trayektoriyani qanday o‘zgartirishini tekshiring.",formula:"x = v₀ cos(θ)t<br>y = v₀ sin(θ)t − ½gt²<br>T = 2v₀ sin(θ) / g",theory:"Havo qarshiligi hisobga olinmagan ideal model. Gorizontal yo‘nalishda tezlik o‘zgarmaydi, vertikal yo‘nalishda esa gravitatsiya tezlanishi ta’sir qiladi.",controls:[{key:"v0",label:"Boshlang‘ich tezlik",min:5,max:35,step:1,unit:"m/s"},{key:"angle",label:"Uchish burchagi",min:15,max:75,step:1,unit:"°"},{key:"g",label:"Gravitatsiya",min:1.6,max:24,step:.1,unit:"m/s²"}],defaults:{v0:20,angle:45,g:9.81}},
@@ -134,12 +154,13 @@ const definitions={
  gas:{title:"Ideal gaz molekulalari",subtitle:"Harorat va zarrachalar sonining harakatga ta’sirini ko‘ring.",hud:"MOLEKULYAR FIZIKA",intro:"Yopiq hajmdagi zarrachalarning tasodifiy harakati va devorlarga urilishini kuzating.",formula:"PV = nRT<br>⟨Eₖ⟩ = 3/2 kᵦT<br>P/P₀ ≈ (N/N₀)(T/T₀)",theory:"Soddalashtirilgan ideal gaz modeli: zarrachalar o‘zaro tortishmaydi, to‘qnashuvlar elastik deb olinadi. Bosim ko‘rsatkichi mutlaq laboratoriya bosimi emas, boshlang‘ich holatga nisbiy qiymatdir.",controls:[{key:"temperature",label:"Harorat",min:100,max:600,step:10,unit:"K"},{key:"count",label:"Zarrachalar soni",min:25,max:100,step:5,unit:"ta"}],defaults:{temperature:300,count:60}},
  wave:{title:"Mexanik to‘lqin",subtitle:"Amplituda, chastota va to‘lqin uzunligini sozlang.",hud:"TO‘LQINLAR",intro:"To‘lqin shakli, davri va tarqalish tezligi o‘rtasidagi bog‘lanishni kuzating.",formula:"y(x,t) = A sin(2π(x/λ − ft))<br>v = fλ<br>T = 1/f",theory:"Bu bir o‘lchamli sinusoidal ko‘ndalang to‘lqin modeli. Muhitdagi nuqtalar muvozanat holati atrofida tebranadi, energiya esa to‘lqin bilan tarqaladi.",controls:[{key:"amplitude",label:"Amplituda",min:.2,max:1.8,step:.1,unit:"m"},{key:"frequency",label:"Chastota",min:.2,max:3,step:.1,unit:"Hz"},{key:"wavelength",label:"To‘lqin uzunligi",min:1,max:6,step:.1,unit:"m"}],defaults:{amplitude:1,frequency:1,wavelength:3}},
  refraction:{title:"Yorug‘likning sinishi",subtitle:"Tushish burchagi va optik muhit ko‘rsatkichini o‘zgartiring.",hud:"OPTIKA",intro:"Yorug‘lik nuri ikki optik muhit chegarasida qanday yo‘nalishini tekshiring.",formula:"n₁ sin(θ₁) = n₂ sin(θ₂)<br>sin(θ₂) = (n₁/n₂) sin(θ₁)",theory:"Snell qonuni ideal, tekis chegara uchun ishlaydi. Bu ko‘rinishda prizma emas, parallel yuzali shaffof plastina ko‘rsatilgan; nurlar sxematik ravishda tasvirlanadi.",controls:[{key:"angle",label:"Tushish burchagi",min:5,max:70,step:1,unit:"°"},{key:"n2",label:"Ikkinchi muhit indeksi",min:1.1,max:2.4,step:.05,unit:"n"}],defaults:{angle:35,n2:1.5}},
- nuclear:{title:"Yadro bo‘linishining konseptual modeli",subtitle:"Atom yadrosining bo‘linishi va energiya ajralishini ta’limiy ko‘rinishda kuzating.",hud:"YADRO FIZIKASI",intro:"Yadro bo‘linishi hodisasining umumiy g‘oyasini xavfsiz, abstrakt modelda ko‘ring.",formula:"Yadro holati → bo‘linish mahsulotlari + energiya<br>ΔE = Δm · c²",theory:"Ba’zi og‘ir atom yadrolari bo‘linganda energiya ajraladi. Zanjir reaksiyasi tushunchasi — ajralgan zarrachalar boshqa yadrolarga ta’sir qilishi natijasida keyingi bo‘linishlar yuz berishi mumkinligi. Bu model faqat umumiy ilmiy g‘oyani ko‘rsatadi; moddalar, miqdorlar, geometriya, reaktor yoki qurol konstruksiyasi parametrlari berilmaydi.",controls:[],defaults:{}}
+ nuclear:{title:"Yadro bo‘linishining konseptual modeli",subtitle:"Atom yadrosining bo‘linishi va energiya ajralishini ta’limiy ko‘rinishda kuzating.",hud:"YADRO FIZIKASI",intro:"Yadro bo‘linishi hodisasining umumiy g‘oyasini xavfsiz, abstrakt modelda ko‘ring.",formula:"Yadro holati → bo‘linish mahsulotlari + energiya<br>ΔE = Δm · c²",theory:"Ba’zi og‘ir atom yadrolari bo‘linganda energiya ajraladi. Zanjir reaksiyasi tushunchasi — ajralgan zarrachalar boshqa yadrolarga ta’sir qilishi natijasida keyingi bo‘linishlar yuz berishi mumkinligi. Bu model faqat umumiy ilmiy g‘oyani ko‘rsatadi; moddalar, miqdorlar, geometriya, reaktor yoki qurol konstruksiyasi parametrlari berilmaydi.",controls:[],defaults:{}},
+ nuclearBlast:{title:"Yadro portlashi — atmosferadagi vizual model",subtitle:"Yorqin chaqnash, kengayuvchi olov shari, zarba to‘lqini va qo‘ziqorinsimon bulut fazalarini 3D ko‘rinishda kuzating.",hud:"ATMOSFERA · VIZUAL MODEL",intro:"Katta energiya ajralishi bilan bog‘liq atmosferaviy hodisalarning umumiy ketma-ketligini 3D sahnada tomosha qiling.",formula:"Energiya → issiqlik va nurlanish → kengayuvchi gazlar → zarba to‘lqini",theory:"Bu sahna real hodisalardagi asosiy vizual fazalarni sifat jihatidan tasvirlaydi: qisqa yorqin chaqnash, olov shari, tashqariga tarqaluvchi halqa va yuqoriga ko‘tariluvchi bulut. Vaqt, o‘lcham va shakl animatsion masshtabda beriladi; model aniq portlash quvvati, masofa, zarar radiusi yoki qurol konstruksiyasini hisoblamaydi.",controls:[],defaults:{}}
 };
 function makeMaterial(color,rough=.55,metal=.05,transparent=false,opacity=1){return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,transparent,opacity})}
 function addSphere(x,y,z,r,color,parent=group){const mesh=new THREE.Mesh(new THREE.SphereGeometry(r,20,14),makeMaterial(color,.35,.12));mesh.position.set(x,y,z);parent.add(mesh);return mesh}
 function addLine(points,color=GREEN,width=1){const geom=new THREE.BufferGeometry().setFromPoints(points);const line=new THREE.Line(geom,new THREE.LineBasicMaterial({color,linewidth:width}));group.add(line);return line}
-function clearGroup(){while(group.children.length){const obj=group.children.pop();if(obj.geometry)obj.geometry.dispose();if(obj.material){if(Array.isArray(obj.material))obj.material.forEach(m=>m.dispose());else obj.material.dispose();}}particleData=[];waveLine=null;pendulumLine=null;projectileBall=null;nucleusBalls=[];nucleusRunning=false}
+function clearGroup(){blastRunning=false;while(group.children.length){const obj=group.children.pop();if(obj.geometry)obj.geometry.dispose();if(obj.material){if(Array.isArray(obj.material))obj.material.forEach(m=>m.dispose());else obj.material.dispose();}}particleData=[];waveLine=null;pendulumLine=null;projectileBall=null;nucleusBalls=[];nucleusRunning=false}
 function addBase(){const grid=new THREE.GridHelper(24,24,0x52656b,0x283b42);grid.position.y=-.03;group.add(grid);const axes=new THREE.AxesHelper(2.2);axes.material.transparent=true;axes.material.opacity=.45;group.add(axes)}
 function lineFromArray(arr,color){const geometry=new THREE.BufferGeometry().setFromPoints(arr);const line=new THREE.Line(geometry,new THREE.LineBasicMaterial({color}));group.add(line);return line}
 function buildProjectile(){
@@ -183,7 +204,49 @@ function buildNuclear(){
  const halo=new THREE.Mesh(new THREE.SphereGeometry(.95,26,18),new THREE.MeshBasicMaterial({color:0x85bce1,wireframe:true,transparent:true,opacity:.11}));core.add(halo);
  activeObjects={core,halo,events:[]};
 }
-function buildSimulation(){if(!group)return;clearGroup();addBase();if(currentMode==="projectile")buildProjectile();if(currentMode==="pendulum")buildPendulum();if(currentMode==="gas")buildGas();if(currentMode==="wave")buildWave();if(currentMode==="refraction")buildRefraction();if(currentMode==="nuclear")buildNuclear();elapsed=0;updateStats();$("hudMode").textContent=definitions[currentMode].hud;$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":"MODEL ISHLAYAPTI"}
+function buildNuclearBlast(){
+ const floor=new THREE.Mesh(new THREE.CircleGeometry(10,96),new THREE.MeshStandardMaterial({color:0x202d2d,roughness:.98,metalness:0}));
+ floor.rotation.x=-Math.PI/2;floor.position.y=.015;group.add(floor);
+ const flash=new THREE.Mesh(new THREE.SphereGeometry(1,32,24),new THREE.MeshBasicMaterial({color:0xeaf6ff,transparent:true,opacity:0,depthWrite:false}));flash.position.set(0,1.2,0);group.add(flash);
+ const fireball=new THREE.Mesh(new THREE.SphereGeometry(1,40,28),new THREE.MeshStandardMaterial({color:0xffa13c,emissive:0xff3a08,emissiveIntensity:3.2,roughness:.48,transparent:true,opacity:0,depthWrite:false}));fireball.position.set(0,1.5,0);group.add(fireball);
+ const shell=new THREE.Mesh(new THREE.SphereGeometry(1,32,22),new THREE.MeshBasicMaterial({color:0xffd18a,wireframe:true,transparent:true,opacity:0,depthWrite:false}));shell.position.copy(fireball.position);group.add(shell);
+ const shock=new THREE.Mesh(new THREE.TorusGeometry(1,.055,10,120),new THREE.MeshBasicMaterial({color:0xffd58b,transparent:true,opacity:0,depthWrite:false}));shock.rotation.x=Math.PI/2;shock.position.y=.08;group.add(shock);
+ const dust=new THREE.Mesh(new THREE.TorusGeometry(1,.22,10,120),new THREE.MeshStandardMaterial({color:0x8d8a78,transparent:true,opacity:0,roughness:1,depthWrite:false}));dust.rotation.x=Math.PI/2;dust.position.y=.09;group.add(dust);
+ const stem=new THREE.Mesh(new THREE.CylinderGeometry(.55,.9,4.6,32,1,true),new THREE.MeshStandardMaterial({color:0x6f7779,roughness:1,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));stem.position.set(0,2.3,0);group.add(stem);
+ const cap=new THREE.Mesh(new THREE.SphereGeometry(1,36,28),new THREE.MeshStandardMaterial({color:0x626d72,roughness:1,transparent:true,opacity:0,depthWrite:false}));cap.position.set(0,6.1,0);cap.scale.set(2.8,1.0,2.1);group.add(cap);
+ const puffs=[];
+ for(let i=0;i<22;i++){
+  const a=i/22*Math.PI*2,r=.9+(i%4)*.25,sz=.68+(i%5)*.12;
+  const puff=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),new THREE.MeshStandardMaterial({color:i%3===0?0x7d8585:0x59666a,roughness:1,transparent:true,opacity:0,depthWrite:false}));
+  puff.position.set(Math.cos(a)*r,6.0+(i%4)*.12,Math.sin(a)*r);
+  puff.scale.set(sz,sz*.72,sz);group.add(puff);puffs.push({mesh:puff,base:puff.position.clone(),size:sz,phase:a});
+ }
+ const embers=[];
+ for(let i=0;i<90;i++){
+  const x=(Math.random()-.5)*2.4,y=Math.random()*2.5,z=(Math.random()-.5)*2.4;
+  const m=new THREE.Mesh(new THREE.SphereGeometry(.035+Math.random()*.045,8,6),new THREE.MeshBasicMaterial({color:i%3?0xff9a45:0xffe5a2,transparent:true,opacity:0,depthWrite:false}));
+  m.position.set(x,y,z);group.add(m);embers.push({mesh:m,base:m.position.clone(),phase:Math.random()*6.28,speed:.35+Math.random()*.7});
+ }
+ activeObjects={flash,fireball,shell,shock,dust,stem,cap,puffs,embers};
+ camera.position.set(15,11,18);controls.target.set(0,4.2,0);controls.update();
+}
+function updateNuclearBlast(){
+ const t=elapsed,a=activeObjects;if(!a.flash)return;
+ const flashIn=Math.max(0,1-t/.38);
+ a.flash.scale.setScalar(.05+Math.min(t/.12,1)*2.8);a.flash.material.opacity=.92*flashIn;
+ const fireGrow=clamp(t/2.7,0,1),fireFade=t<2.8?1:Math.max(.08,1-(t-2.8)/4.2),fireSize=.15+fireGrow*2.5;
+ a.fireball.scale.set(fireSize,fireSize*.82,fireSize);a.fireball.material.opacity=fireFade*(t<.35?.9:.72);
+ const cool=clamp((t-1.5)/5,0,1);a.fireball.material.color.setRGB(1,.48+cool*.18,.13+cool*.16);a.fireball.material.emissiveIntensity=3.5*(1-cool)+.25;
+ a.shell.scale.copy(a.fireball.scale).multiplyScalar(1.16);a.shell.material.opacity=.3*fireFade;
+ const wave=clamp(t/6.5,0,1);a.shock.scale.setScalar(.1+wave*9.4);a.shock.material.opacity=t<.25?0:Math.max(0,.72-wave*.72);
+ const dustScale=clamp((t-1.1)/8,0,1);a.dust.scale.setScalar(.1+dustScale*8.5);a.dust.material.opacity=t<1?0:Math.max(0,.32-dustScale*.25);
+ const stemGrow=clamp((t-1.0)/4.4,0,1);a.stem.scale.set(1,Math.max(.001,stemGrow),1);a.stem.position.y=2.3*stemGrow;a.stem.material.opacity=stemGrow*.56;
+ const capGrow=clamp((t-3.0)/5.5,0,1);a.cap.scale.set(2.8*capGrow,1.0*capGrow,2.1*capGrow);a.cap.position.y=5.2+capGrow*.95;a.cap.material.opacity=capGrow*.64;
+ a.puffs.forEach(p=>{const drift=capGrow;p.mesh.position.set(p.base.x*(.25+drift),p.base.y+drift,p.base.z*(.25+drift));p.mesh.scale.setScalar(p.size*capGrow);p.mesh.material.opacity=capGrow*.48});
+ a.embers.forEach(p=>{const rise=clamp(t/3.8,0,1);p.mesh.position.y=p.base.y+Math.min(t,4)*p.speed;p.mesh.position.x=p.base.x+Math.sin(t*1.4+p.phase)*.35*rise;p.mesh.material.opacity=Math.max(0,1-t/3.8)*.85});
+ if(t>15){blastRunning=false;$("hudState").textContent="BULUT KO‘TARILISHI · VIZUAL FAZA YAKUNLANDI"}
+}
+function buildSimulation(){if(!group)return;clearGroup();addBase();if(currentMode==="projectile")buildProjectile();if(currentMode==="pendulum")buildPendulum();if(currentMode==="gas")buildGas();if(currentMode==="wave")buildWave();if(currentMode==="refraction")buildRefraction();if(currentMode==="nuclear")buildNuclear();if(currentMode==="nuclearBlast")buildNuclearBlast();elapsed=0;updateStats();$("hudMode").textContent=definitions[currentMode].hud;$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":currentMode==="nuclearBlast"?"PORTLASH FAZALARI — TAYYOR":"MODEL ISHLAYAPTI"}
 function fmt(x,d=2){return Number(x).toFixed(d)}
 function updateStats(){
  let s=[];
@@ -193,12 +256,14 @@ function updateStats(){
  if(currentMode==="wave"){const T=1/params.frequency,v=params.frequency*params.wavelength;s=[["Davr",fmt(T)+" s"],["Tarqalish tezligi",fmt(v)+" m/s"],["Amplituda",fmt(params.amplitude)+" m"]]}
  if(currentMode==="refraction"){const a1=params.angle*Math.PI/180,a2=Math.asin(Math.sin(a1)/params.n2);s=[["Tushish burchagi",fmt(params.angle,0)+"°"],["Sinish burchagi",fmt(a2*180/Math.PI)+"°"],["Muhit indeksi",fmt(params.n2,2)]]}
  if(currentMode==="nuclear"){s=[["Model turi","Konseptual"],["Jarayon","Yadro bo‘linishi"],["Energiya","Ajraladi"]]}
+ if(currentMode==="nuclearBlast"){s=[["Chaqnash","Qisqa"],["Zarba to‘lqini","Radial"],["Bulut","Ko‘tariladi"]]}
  $("stats").innerHTML=s.map(x=>'<div class="stat"><strong>'+x[1]+'</strong><span>'+x[0]+'</span></div>').join("");
 }
 function renderControls(){
  const d=definitions[currentMode];$("controlIntro").textContent=d.intro;$("formula").innerHTML=d.formula;$("theoryText").textContent=d.theory;
- $("safetyNote").hidden=currentMode!=="nuclear";
- if(currentMode==="nuclear"){$("safetyNote").textContent="Xavfsizlik chegarasi: bu faqat atom yadrosining umumiy bo‘linish g‘oyasini ko‘rsatuvchi abstrakt ko‘rinish. Qurol yasash, konstruksiya, material tanlash, hisob-kitob yoki detonatsiya bosqichlari mavjud emas."}
+ $("safetyNote").hidden=!["nuclear","nuclearBlast"].includes(currentMode);
+ if(currentMode==="nuclear"){$("safetyNote").textContent="Xavfsizlik chegarasi: bu faqat atom yadrosining umumiy bo‘linish g‘oyasini ko‘rsatuvchi abstrakt ko‘rinish. Qurol yasash, konstruksiya, material tanlash yoki amaliy hisob-kitob mavjud emas."}
+ if(currentMode==="nuclearBlast"){$("safetyNote").textContent="Ilmiy izoh: ushbu 3D sahna vizual-ma’rifiy animatsiya. Undagi masshtab va vaqtlar shartli; u real yadroviy portlashni bashorat qilmaydi va zarar ko‘rsatkichlarini hisoblamaydi."}
  $("controlList").innerHTML=d.controls.map(c=>'<div class="control"><div class="control-top"><label for="param-'+c.key+'">'+c.label+'</label><output id="out-'+c.key+'">'+params[c.key]+ ' '+c.unit+'</output></div><input type="range" id="param-'+c.key+'" data-param="'+c.key+'" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'" value="'+params[c.key]+'"><div class="control-help">'+c.min+' – '+c.max+' '+c.unit+'</div></div>').join("");
  $("controlList").querySelectorAll("input[type=range]").forEach(input=>{
   const c=d.controls.find(x=>x.key===input.dataset.param);
@@ -207,7 +272,8 @@ function renderControls(){
  });
  if(currentMode==="nuclear")$("controlList").innerHTML='<div class="empty" style="grid-column:1/-1">Bu konseptual tajribada xavfsizlik sababli texnik parametrlar sozlanmaydi. Jarayonni ko‘rish uchun pastdagi tugmani bosing.</div>';
  $("playBtn").hidden=currentMode==="nuclear";
- $("runNuclear").hidden=currentMode!=="nuclear";
+ $("runNuclear").hidden=!["nuclear","nuclearBlast"].includes(currentMode);
+ $("runNuclear").textContent=currentMode==="nuclearBlast"?"☄ Portlash fazalarini ko‘rish":"⚛ Bo‘linish modelini ko‘rish";
 }
 function setMode(key){if(!definitions[key])return;currentMode=key;params={...definitions[key].defaults};document.querySelectorAll(".mode-btn").forEach(b=>b.classList.toggle("active",b.dataset.mode===key));$("modeTitle").textContent=definitions[key].title;$("modeSubtitle").textContent=definitions[key].subtitle;renderControls();buildSimulation();$("saveStatus").textContent=""}
 function updateFrame(dt){
@@ -217,6 +283,7 @@ function updateFrame(dt){
  if(currentMode==="gas"){const s=.7+params.temperature/300;particleData.forEach(p=>{p.mesh.position.addScaledVector(p.v,dt*s);const v=p.mesh.position;if(v.x>2.42||v.x< -2.42){p.v.x*=-1;v.x=Math.max(-2.42,Math.min(2.42,v.x))}if(v.y>3.48||v.y<.12){p.v.y*=-1;v.y=Math.max(.12,Math.min(3.48,v.y))}if(v.z>2.42||v.z< -2.42){p.v.z*=-1;v.z=Math.max(-2.42,Math.min(2.42,v.z))}})}
  if(currentMode==="wave"&&waveLine){const a=params.amplitude,f=params.frequency,lambda=params.wavelength,pts=[];for(let i=0;i<140;i++){const x=-4+i*8/139,y=a*Math.sin(2*Math.PI*(x/lambda-f*elapsed));pts.push(new THREE.Vector3(x,y,0))}waveLine.geometry.dispose();waveLine.geometry=new THREE.BufferGeometry().setFromPoints(pts);const x=-4+((elapsed*f*lambda)%8);activeObjects.marker.position.set(x,a*Math.sin(2*Math.PI*(x/lambda-f*elapsed)),.04)}
  if(currentMode==="nuclear"&&nucleusRunning){const t=elapsed-nucleusStart;const split=Math.min(1,Math.max(0,(t-1.1)/1.4));nucleusBalls.forEach(p=>{const side=p.side;const target=new THREE.Vector3(side*(.72+split*1.1)+p.base.x*.48,p.base.y*.75,p.base.z*.75);p.mesh.position.lerpVectors(p.base,target,split)});if(activeObjects.halo)activeObjects.halo.material.opacity=Math.max(.015,.12*(1-split));if(t>2.5)$("hudState").textContent="BO‘LINISH MODELI YAKUNLANDI"}
+ if(currentMode==="nuclearBlast"&&blastRunning){updateNuclearBlast()}
 }
 function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);if(running)elapsed+=dt;updateFrame(running?dt:0);controls&&controls.update();renderer.render(scene,camera)}
 function resize(){if(!renderer)return;const el=$("viewport"),w=el.clientWidth,h=el.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
@@ -232,13 +299,14 @@ async function init3d(){
  }catch(e){$("loading").textContent="3D muhitni yuklab bo‘lmadi. WebGL qo‘llab-quvvatlanishini va internet aloqasini tekshiring.";console.error(e)}
 }
 function startNuclear(){if(!activeObjects.core)return;activeObjects.core.position.set(0,1.5,0);nucleusBalls.forEach(p=>p.mesh.position.copy(p.base));activeObjects.halo.material.opacity=.12;elapsed=0;nucleusStart=0;nucleusRunning=true;running=true;$("hudState").textContent="KONSEPTUAL BO‘LINISH";$("saveStatus").textContent="Model qayta ishga tushirildi."}
+function startNuclearBlast(){if(currentMode!=="nuclearBlast")return;elapsed=0;blastRunning=true;running=true;$("playBtn").textContent="Ⅱ Pauza";$("hudState").textContent="CHAQNASH → OLOV SHARI → ZARBA TO‘LQINI → BULUT";$("saveStatus").textContent="Vizual simulyatsiya boshlandi."}
 
 $("resetBtn").addEventListener("click",()=>{buildSimulation();running=true;$("playBtn").textContent="Ⅱ Pauza";$("hudState").textContent=currentMode==="nuclear"?"KONSEPTUAL MODEL":"MODEL ISHLAYAPTI"});
 $("playBtn").addEventListener("click",()=>{running=!running;$("playBtn").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";$("hudState").textContent=running?"MODEL ISHLAYAPTI":"PAUZA"});
 document.querySelectorAll(".mode-btn").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
-const nuclearBtn=document.createElement("button");nuclearBtn.id="runNuclear";nuclearBtn.className="scene-btn primary";nuclearBtn.type="button";nuclearBtn.textContent="⚛ Bo‘linish modelini ko‘rish";nuclearBtn.hidden=true;$("scene-head-placeholder");
+const nuclearBtn=document.createElement("button");nuclearBtn.id="runNuclear";nuclearBtn.className="scene-btn primary";nuclearBtn.type="button";nuclearBtn.textContent="⚛ Bo‘linish modelini ko‘rish";nuclearBtn.hidden=true;
 document.querySelector(".scene-actions").appendChild(nuclearBtn);
-nuclearBtn.addEventListener("click",startNuclear);
+nuclearBtn.addEventListener("click",()=>currentMode==="nuclearBlast"?startNuclearBlast():startNuclear());
 function fmtDate(v){return new Date(v).toLocaleString("uz-UZ",{dateStyle:"medium",timeStyle:"short"})}
 async function refreshSession(){
  try{
@@ -249,12 +317,12 @@ async function refreshSession(){
   currentUser=null;
   return false;
  }}
-function resultSummary(){if(currentMode==="projectile"){return "Uchish vaqti "+fmt(2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" s; masofa "+fmt(params.v0*Math.cos(params.angle*Math.PI/180)*2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" m."}if(currentMode==="pendulum")return "Mayatnik davri "+fmt(2*Math.PI*Math.sqrt(params.length/params.g))+" s.";if(currentMode==="gas")return "Harorat "+params.temperature+" K; "+params.count+" zarracha; nisbiy bosim "+fmt(params.count/60*params.temperature/300)+" × P₀.";if(currentMode==="wave")return "To‘lqin tezligi "+fmt(params.frequency*params.wavelength)+" m/s; amplituda "+fmt(params.amplitude)+" m.";if(currentMode==="refraction")return "Sinish burchagi "+fmt(Math.asin(Math.sin(params.angle*Math.PI/180)/params.n2)*180/Math.PI)+"°.";return "Atom yadrosi bo‘linishining konseptual modeli kuzatildi; texnik yoki konstruktiv parametrlar qo‘llanilmagan."}
+function resultSummary(){if(currentMode==="nuclearBlast")return "Atmosferaviy chaqnash, olov shari, radial zarba to‘lqini va ko‘tariluvchi bulutning sifat jihatidan 3D vizual modeli.";if(currentMode==="projectile"){return "Uchish vaqti "+fmt(2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" s; masofa "+fmt(params.v0*Math.cos(params.angle*Math.PI/180)*2*params.v0*Math.sin(params.angle*Math.PI/180)/params.g)+" m."}if(currentMode==="pendulum")return "Mayatnik davri "+fmt(2*Math.PI*Math.sqrt(params.length/params.g))+" s.";if(currentMode==="gas")return "Harorat "+params.temperature+" K; "+params.count+" zarracha; nisbiy bosim "+fmt(params.count/60*params.temperature/300)+" × P₀.";if(currentMode==="wave")return "To‘lqin tezligi "+fmt(params.frequency*params.wavelength)+" m/s; amplituda "+fmt(params.amplitude)+" m.";if(currentMode==="refraction")return "Sinish burchagi "+fmt(Math.asin(Math.sin(params.angle*Math.PI/180)/params.n2)*180/Math.PI)+"°.";return "Atom yadrosi bo‘linishining konseptual modeli kuzatildi; texnik yoki konstruktiv parametrlar qo‘llanilmagan."}
 $("saveBtn").addEventListener("click",async()=>{
  const btn=$("saveBtn");btn.disabled=true;$("saveStatus").classList.remove("error");
  try{
   if(!await refreshSession())throw new Error("Saqlash uchun avval Yoshlar-Ishi shaxsiy kabinetiga kiring.");
-  const payload={user_id:currentUser.id,experiment_key:currentMode==="nuclear"?"nuclear-concept":currentMode,params:params,result_summary:resultSummary()};
+  const payload={user_id:currentUser.id,experiment_key:["nuclear","nuclearBlast"].includes(currentMode)?"nuclear-concept":currentMode,params:params,result_summary:resultSummary()};
   const {error}=await supabase.from("lab_runs").insert(payload);
   if(error)throw error;
   $("saveStatus").textContent="Tajriba natijasi shaxsiy bazangizga saqlandi.";await loadHistory();
@@ -283,5 +351,6 @@ init3d();loadHistory();
 </script>
 <script src="/pwa.js" defer></script>
   <script src="./uz-flag-3d.js" defer></script>
+<script src="./lab-2d.js" defer></script>
 </body>
 </html>
