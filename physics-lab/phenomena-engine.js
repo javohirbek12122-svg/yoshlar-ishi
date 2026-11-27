@@ -373,7 +373,8 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     const atmosphere=sphere(4.05,basic(0x6bd9ff,{transparent:true,opacity:.16,side:THREE.BackSide,depthWrite:false}),[0,-4.6,-3],root,56);
     const cloud=sphere(4.0,basic(0xb9eaff,{transparent:true,opacity:.045,wireframe:true,depthWrite:false}),[0,-4.6,-3],root,32);
     const meteors=[];
-    for(let i=0;i<26;i++){
+    const meteorCount=Math.round(16*(p.density||1));
+    for(let i=0;i<meteorCount;i++){
       const g=new THREE.Group();add(g);
       const head=sphere(rand(.035,.075),basic(i%4===0?0xffe7bd:0xc9f6ff),[0,0,0],g,10);
       const tail=new THREE.Mesh(new THREE.CylinderGeometry(.008,.055,3.2,7,1,true),new THREE.MeshBasicMaterial({color:i%3?0x7edfff:0xffb875,transparent:true,opacity:.75,depthWrite:false}));
@@ -619,13 +620,13 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     }
 
     if(active==="solarFlare"){
-      const cycle=t%14,flare=clamp((cycle-2)/3,0,1)*(cycle<7?1:clamp((12-cycle)/5,0,1));
+      const cycle=t%14,intensity=p.intensity||1,flare=clamp((cycle-2)/3,0,1)*(cycle<7?1:clamp((12-cycle)/5,0,1));
       state.sun.rotation.y+=dt*.07;state.corona.material.opacity=.12+.05*Math.sin(t*2);
       state.outer.material.opacity=.045+.02*Math.sin(t*1.1);
-      state.light.intensity=75+85*flare+12*Math.sin(t*2.4);
+      state.light.intensity=65+85*flare*intensity+12*Math.sin(t*2.4);
       state.prominences.forEach((m,i)=>{m.material.opacity=.35+.42*flare+.1*Math.sin(t*2+i)});
       const pos=state.particles.geometry.attributes.position;
-      for(let i=0;i<state.particleBase.length;i++){const q=state.particleBase[i],r=q.r+flare*5*q.speed,side=Math.sin(q.a)*r*.35;pos.setXYZ(i,r+flare*3, q.height+flare*7*q.speed+Math.sin(t+q.phase)*.08,side);}
+      for(let i=0;i<state.particleBase.length;i++){const q=state.particleBase[i],r=q.r+flare*5*q.speed*intensity,side=Math.sin(q.a)*r*.35;pos.setXYZ(i,r+flare*3*intensity, q.height+flare*7*q.speed*intensity+Math.sin(t+q.phase)*.08,side);}
       pos.needsUpdate=true;state.particles.material.opacity=.35+flare*.6;
       state.phase=cycle<2?"Magnit maydon energiyasi to‘planadi":cycle<5?"Quyosh chaqnashi va plazma chiqishi":cycle<9?"Koronal massa oqimi fazoga tarqaladi":"Quyosh atmosferasi tiklanmoqda";
     }
