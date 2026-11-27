@@ -676,10 +676,12 @@ function initAmbientBackground(){
  if(!hero||!canvas)return;
  const ctx=canvas.getContext&&canvas.getContext("2d",{alpha:true});
  if(!ctx)return;
- let width=1,height=1,ratio=1,points=[],frame=0;
+ let width=1,height=1,ratio=1,points=[],symbols=[],frame=0;
  let visible=!("IntersectionObserver" in window),tabVisible=!document.hidden;
  const pointer={x:-1000,y:-1000};
  const pointCount=()=>window.innerWidth<520?18:window.innerWidth<940?28:42;
+ const symbolCount=()=>window.innerWidth<520?8:window.innerWidth<940?12:18;
+ const symbolText=["{ }","</>","0101 10","01 · 10","AI","JS","PY","=>","if(x)","[ ]","0 1 0 1","< >","while","&&","return","{}"]; 
  const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
  function resize(){
   const rect=hero.getBoundingClientRect();
@@ -692,6 +694,13 @@ function initAmbientBackground(){
    vx:reduced?0:(Math.random()-.5)*.11,vy:reduced?0:(Math.random()-.5)*.09,
    r:.7+Math.random()*1.2,phase:Math.random()*Math.PI*2,
    tint:Math.random()<.72?"lime":"mint"
+  }));
+  symbols=Array.from({length:symbolCount()},()=>({
+   text:symbolText[Math.floor(Math.random()*symbolText.length)],
+   x:width*(.04+Math.random()*.92),y:height*(.04+Math.random()*.92),
+   speed:reduced?0:.08+Math.random()*.15,size:10+Math.random()*7,
+   phase:Math.random()*Math.PI*2,alpha:.28+Math.random()*.22,
+   tint:Math.random()<.58?"lime":"ice"
   }));
   render(performance.now());start();
  }
@@ -707,6 +716,17 @@ function initAmbientBackground(){
   softGlow(width*(.73+drift*.028),height*(.43+Math.cos(time*.00016)*.018),Math.max(170,width*.32),"rgba(215,255,102,.075)");
   softGlow(width*(.94-drift*.025),height*.79,Math.max(130,width*.23),"rgba(105,220,175,.058)");
   softGlow(width*.09,height*.88,Math.max(120,width*.2),"rgba(215,255,102,.035)");
+  for(const item of symbols){
+   if(!reduced&&visible&&tabVisible){
+    item.y-=item.speed;
+    item.x+=Math.sin(time*.00022+item.phase)*.055;
+    if(item.y< -28){item.y=height+24;item.x=width*(.04+Math.random()*.92);}
+   }
+   const shimmer=.72+.28*Math.sin(time*.00055+item.phase);
+   ctx.font="700 "+item.size.toFixed(0)+"px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+   ctx.fillStyle=item.tint==="lime"?"rgba(215,255,102,"+(item.alpha*shimmer).toFixed(3)+")":"rgba(178,222,249,"+(item.alpha*shimmer).toFixed(3)+")";
+   ctx.fillText(item.text,item.x,item.y);
+  }
   for(const p of points){
    if(!reduced&&visible&&tabVisible){
     p.x+=p.vx;p.y+=p.vy;
