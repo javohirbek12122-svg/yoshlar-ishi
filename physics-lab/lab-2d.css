@@ -1,0 +1,36 @@
+/* Interactive 2D physics studio */
+.lab2d-section{margin:24px 0 42px;padding:clamp(16px,2.2vw,26px);border:1px solid #dce0d4;border-radius:15px;background:linear-gradient(145deg,#fffefa,#f1f5e8);box-shadow:0 16px 42px rgba(26,38,18,.07)}
+.lab2d-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px}
+.lab2d-kicker{color:#718b25;font-size:9px;font-weight:900;letter-spacing:.15em}
+.lab2d-heading h2{margin:5px 0 4px;font:800 clamp(22px,3vw,31px)/1.15 Manrope,sans-serif;letter-spacing:-.045em}
+.lab2d-heading p{max-width:720px;margin:0;color:#697261;font-size:11px;line-height:1.65}
+.lab2d-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 10px;scrollbar-width:thin}
+.lab2d-tab{flex:0 0 auto;padding:9px 12px;border:1px solid #d8dfcd;border-radius:999px;background:#fffefa;color:#505b43;font-size:10px;font-weight:800;white-space:nowrap;cursor:pointer}
+.lab2d-tab[aria-pressed=true]{border-color:#a9c65c;background:#eaf2d5;color:#293819;box-shadow:inset 0 0 0 1px #d5e5a7}
+.lab2d-workspace{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(230px,.7fr);gap:12px;align-items:stretch}
+.lab2d-canvas-card{position:relative;min-width:0;overflow:hidden;border:1px solid #293d3c;border-radius:11px;background:#101b20}
+#lab2dCanvas{display:block;width:100%;height:390px;touch-action:pan-y}
+.lab2d-canvas-caption{position:absolute;left:12px;top:11px;padding:5px 8px;border:1px solid #ffffff26;border-radius:5px;background:#0d171bd9;color:#e6f1e8;font-size:8px;font-weight:900;letter-spacing:.12em;pointer-events:none}
+.lab2d-canvas-foot{position:absolute;right:12px;bottom:10px;color:#9fb0a5;font-size:8px;pointer-events:none}
+.lab2d-controls{display:flex;flex-direction:column;gap:12px;min-width:0;padding:15px;border:1px solid #dce2d4;border-radius:10px;background:#fffefa}
+.lab2d-controls h3{margin:0;font:800 13px Manrope,sans-serif}
+.lab2d-controls>p{margin:-7px 0 0;color:#75806c;font-size:9px;line-height:1.6}
+.lab2d-control-list{display:grid;gap:12px}
+.lab2d-control{display:grid;gap:5px}
+.lab2d-control-top{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#394531;font-size:9px;font-weight:800}
+.lab2d-control output{color:#6e8b1c;font-variant-numeric:tabular-nums}
+.lab2d-control input{width:100%;accent-color:#88aa2a}
+.lab2d-control small{color:#879080;font-size:8px}
+.lab2d-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
+.lab2d-actions button{min-height:35px;padding:8px 10px;border:1px solid #d6ddcb;border-radius:6px;background:#fff;color:#37432c;font-size:9px;font-weight:900;cursor:pointer}
+.lab2d-actions button.primary{border-color:#172019;background:#172019;color:#d7ff66}
+.lab2d-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.lab2d-metric{padding:10px;border:1px solid #e0e6d8;border-radius:8px;background:#f5f7ef;min-width:0}
+.lab2d-metric strong{display:block;overflow-wrap:anywhere;color:#1e2a1c;font:800 17px Manrope,sans-serif}
+.lab2d-metric span{display:block;margin-top:3px;color:#78816e;font-size:8px}
+.lab2d-explain{margin-top:12px;padding:11px 13px;border-left:3px solid #a8c84e;border-radius:0 7px 7px 0;background:#f4f7ea;color:#626c57;font-size:9px;line-height:1.7}
+.lab2d-live{display:flex;align-items:center;gap:6px;color:#68811d;font-size:8px;font-weight:900;letter-spacing:.08em}
+.lab2d-live:before{content:"";width:6px;height:6px;border-radius:50%;background:#9bbd36;box-shadow:0 0 0 4px #9bbd3620}
+@media(max-width:850px){.lab2d-workspace{grid-template-columns:1fr}.lab2d-controls{display:grid;grid-template-columns:1fr 1fr;align-items:start}.lab2d-controls h3,.lab2d-controls>p,.lab2d-control-list,.lab2d-actions{grid-column:1/-1}.lab2d-control-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.lab2d-section{padding:13px;margin:16px 0 30px}.lab2d-heading{align-items:flex-start;flex-direction:column}.lab2d-heading p{font-size:10px}#lab2dCanvas{height:310px}.lab2d-controls{display:flex}.lab2d-control-list{grid-template-columns:1fr}.lab2d-metrics{gap:5px}.lab2d-metric{padding:8px}.lab2d-metric strong{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.lab2d-section *{scroll-behavior:auto!important;transition:none!important}}
