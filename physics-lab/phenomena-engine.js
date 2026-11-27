@@ -376,7 +376,7 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     const meteorCount=Math.round(16*(p.density||1));
     for(let i=0;i<meteorCount;i++){
       const g=new THREE.Group();add(g);
-      const head=sphere(rand(.035,.075),basic(i%4===0?0xffe7bd:0xc9f6ff),[0,0,0],g,10);
+      const head=sphere(rand(.035,.075),basic(i%4===0?0xffe7bd:0xc9f6ff,{transparent:true,opacity:1}),[0,0,0],g,10);
       const tail=new THREE.Mesh(new THREE.CylinderGeometry(.008,.055,3.2,7,1,true),new THREE.MeshBasicMaterial({color:i%3?0x7edfff:0xffb875,transparent:true,opacity:.75,depthWrite:false}));
       tail.rotation.z=.42;tail.position.set(-.65,-1.45,0);g.add(tail);
       const glow=sphere(.13,basic(0xb5edff,{transparent:true,opacity:.22,depthWrite:false}),[0,0,0],g,12);
