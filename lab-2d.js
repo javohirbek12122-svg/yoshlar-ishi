@@ -13,7 +13,13 @@ const definitions={
  optics:{label:"Optik nur yo‘li",short:"Optika",description:"Snell qonuni bo‘yicha yorug‘likning bir muhitdan boshqasiga o‘tishdagi yo‘nalishini kuzating.",formula:"n₁ sin(θ₁) = n₂ sin(θ₂)",defaults:{angle:35,n2:1.5},controls:[["angle","Tushish burchagi",5,70,1,"°"],["n2","Muhit sinish ko‘rsatkichi",1.1,2.4,.05,"n"]]},
  field:{label:"Elektr maydon vektorlari",short:"Elektr maydoni",description:"Musbat va manfiy nuqta zaryadlari atrofidagi elektr maydon yo‘nalishlarini vektorlar orqali ko‘ring.",formula:"E ∝ q / r²",defaults:{separation:1.5,charge:1},controls:[["separation","Zaryadlar oralig‘i",.7,2.8,.1,"shartli birlik"],["charge","Zaryad kattaligi",.4,2,.1,"nisbiy"]]},
  pendulum:{label:"Mayatnik grafigi",short:"Mayatnik",description:"Kichik burchak yaqinlashuvida mayatnik siljishi vaqt bo‘yicha sinusoidal o‘zgaradi.",formula:"T ≈ 2π√(L/g)",defaults:{length:2,g:9.81},controls:[["length","Ip uzunligi",.5,4,.1,"m"],["g","Gravitatsiya",1.6,24,.1,"m/s²"]]},
- decay:{label:"Eksponensial kamayish",short:"Kamayish",description:"Radioaktiv parchalanishning umumiy matematik egri chizig‘i: har bir yarim davrda qolgan yadrolar soni yarmiga tushadi.",formula:"N(t) = N₀ · 2^(−t / T½)",defaults:{halfLife:6},controls:[["halfLife","Yarim yemirilish davri",2,20,.5,"shartli vaqt"]]}
+ decay:{label:"Eksponensial kamayish",short:"Kamayish",description:"Radioaktiv parchalanishning umumiy matematik egri chizig‘i: har bir yarim davrda qolgan yadrolar soni yarmiga tushadi.",formula:"N(t) = N₀ · 2^(−t / T½)",defaults:{halfLife:6},controls:[["halfLife","Yarim yemirilish davri",2,20,.5,"shartli vaqt"]]},
+ seismogram:{label:"Seysmogramma — P, S va sirt to‘lqinlari",short:"Seysmogramma",description:"Zilzila signalining vaqt bo‘yicha yozuvi: tez P-to‘lqin, undan keyingi S-to‘lqin va sirt tebranishlari.",formula:"tₚ ≈ r/vₚ  ·  tₛ ≈ r/vₛ",defaults:{magnitude:5,distance:120},controls:[["magnitude","Vizual magnituda",2,8,.1,"M"],["distance","Stansiyagacha masofa",20,500,10,"km"]]},
+ tsunamiProfile:{label:"Tsunami — qirg‘oqdagi to‘lqin profili",short:"Tsunami profili",description:"Uzun to‘lqin okean tubi sayozlashgan sari sekinlashib, balandligi ortishi mumkin.",formula:"v ≈ √(g·h)  ·  h↓ → v↓",defaults:{height:2,speed:400},controls:[["height","Okeandagi balandlik",.2,5,.1,"m"],["speed","Tarqalish tezligi",100,800,10,"km/soat"]]},
+ keplerOrbit:{label:"Kepler orbitasi — elliptik harakat",short:"Kepler orbitasi",description:"Sayyora elliptik orbitada harakatlanadi; yulduz fokuslardan birida joylashadi va yaqinlashganda tezligi ortadi.",formula:"r = a(1 − e cos E)  ·  M = E − e sin E",defaults:{eccentricity:.35,period:8},controls:[["eccentricity","Orbita eksentrisiteti",0,.8,.01,"e"],["period","Orbital davr",1,20,.5,"yil"]]},
+ supernovaCurve:{label:"Supernova — yorqinlik egri chizig‘i",short:"Supernova egri chizig‘i",description:"Yulduz portlashidan keyin yorqinlik tez ko‘tarilib, maksimumga yetadi va keyin pasayadi.",formula:"L(t): ko‘tarilish → maksimum → radioaktiv so‘nish",defaults:{rise:4,peak:8},controls:[["rise","Maksimumgacha vaqt",1,12,.5,"kun"],["peak","Nisbiy cho‘qqi yorqinligi",2,10,.5,"×"]]},
+ volcanoCurve:{label:"Vulqon — bosim va lava faolligi",short:"Vulqon grafigi",description:"Gaz bosimi to‘planishi va davriy bo‘shashi, undan keyin lava oqimining kuchayib-susayishini ko‘rsatuvchi sxematik grafik.",formula:"Bosim yig‘ilishi → otilish → bo‘shashish",defaults:{intensity:6,buildRate:1},controls:[["intensity","Otilish intensivligi",1,10,.5,"/10"],["buildRate","Bosim yig‘ilish tezligi",.5,2,.1,"×"]]},
+ lightningImpulse:{label:"Chaqmoq — elektr toki impulsi",short:"Chaqmoq impulsi",description:"Qisqa elektr razryadining tok impulsi: keskin ko‘tarilish va undan keyingi tez so‘nish.",formula:"I(t) = I₀(e^(−t/τd) − e^(−t/τr))",defaults:{amplitude:50,rise:3,decay:35},controls:[["amplitude","Eng yuqori tok",10,100,5,"kA"],["rise","Ko‘tarilish doimiysi",1,8,.5,"µs"],["decay","So‘nish doimiysi",10,70,2,"µs"]]}
 };
 let mode="projectile",params={...definitions.projectile.defaults},running=!reduced,elapsed=0,last=0,raf=0,visible=false;
 let width=900,height=480,dpr=1;
@@ -115,6 +121,81 @@ function drawDecay(){
  ctx.fillStyle="#d7ff66";ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();text("Qolgan miqdor",left,top-12,"#d7ff66","800 10px DM Sans");
  setMetrics([["Yarim davr",params.halfLife+" birlik"],["5 davrdan so‘ng","3.13%"],["Model","Eksponensial"]]);
 }
+
+function drawSeismogram(){
+ drawGrid();const l=60,top=52,r=width-28,b=height-52,gw=r-l,gh=b-top;
+ drawAxes(l,top,r,b,"Vaqt (s)","Signal");
+ const d=params.distance,m=params.magnitude,tP=d/6,tS=d/3.5,tSurf=d/2.8,total=Math.max(50,tSurf+28),amp=gh*.34*Math.pow(10,(m-5)/4);
+ const signal=t=>{
+  const pulse=(center,spread,freq,gain)=>Math.exp(-Math.pow((t-center)/spread,2))*Math.sin((t-center)*freq)*gain;
+  return pulse(tP,1.8,5,.32)+pulse(tS,5.5,2.2,.65)+pulse(tSurf,13,1.05,1);
+ };
+ ctx.strokeStyle="#6df0ff";ctx.lineWidth=2.3;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const q=i/gw*timeTotal(total),x=l+i,y=b-signal(q)*amp;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ [[tP,"P-to‘lqin","#6df0ff"],[tS,"S-to‘lqin","#b99bff"],[tSurf,"Sirt to‘lqini","#ffad73"]].forEach(([q,label,color])=>{const x=l+q/total*gw;ctx.strokeStyle=color;ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,b);ctx.stroke();ctx.setLineDash([]);text(label,Math.min(x+5,r-96),top+14,color,"800 8px DM Sans")});
+ const now=elapsed%total,x=l+now/total*gw;ctx.strokeStyle="#f4fbff";ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,b);ctx.stroke();ctx.fillStyle="#ffad73";ctx.beginPath();ctx.arc(x,b-signal(now)*amp,4.5,0,Math.PI*2);ctx.fill();
+ setMetrics([["P-to‘lqin yetib kelishi",tP.toFixed(1)+" s"],["S-to‘lqin yetib kelishi",tS.toFixed(1)+" s"],["S–P farqi",(tS-tP).toFixed(1)+" s"]]);
+}
+function timeTotal(v){return v}
+function drawTsunamiProfile(){
+ drawGrid();const l=54,top=44,r=width-25,b=height-56,gw=r-l,gh=b-top,coast=l+gw*.83,crest=l+((elapsed*(params.speed/400)*.09)%1)*gw*.75+gw*.07;
+ drawAxes(l,top,r,b,"Okean → qirg‘oq","Suv sathi");
+ ctx.fillStyle="rgba(47,127,174,.12)";ctx.fillRect(l,top,coast-l,gh);ctx.fillStyle="#9c936e";ctx.beginPath();ctx.moveTo(coast,b);ctx.lineTo(r,top+gh*.35);ctx.lineTo(r,b);ctx.closePath();ctx.fill();
+ const wave=x=>{const d=(x-crest)/Math.max(18,gw*.09),shoal=1+Math.max(0,(x-coast)/Math.max(1,r-coast))*2.5;return params.height*shoal*Math.exp(-d*d)*Math.sin(d*2.6)};
+ ctx.strokeStyle="#64eaff";ctx.lineWidth=3;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const x=l+i,y=b-gh*.15-wave(x)*gh*.105;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ ctx.strokeStyle="#d7f8ff";ctx.lineWidth=1.4;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const x=l+i,y=b-gh*.15-wave(x)*gh*.105-7*Math.exp(-Math.pow((x-crest)/(gw*.1),2));i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ text("Ochiq okean",l+10,top+16,"#80dfff","800 9px DM Sans");text("Sayoz qirg‘oq",coast+8,top+16,"#e2d0a8","800 9px DM Sans");
+ setMetrics([["To‘lqin balandligi",params.height.toFixed(1)+" m"],["Tarqalish tezligi",params.speed+" km/soat"],["Sayozlik effekti","Kuchayadi"]]);
+}
+function drawKeplerOrbit(){
+ drawGrid();const cx=width*.49,cy=height*.52,a=Math.min(width,height)*.34,e=params.eccentricity,b=a*Math.sqrt(1-e*e),focus=cx-a*e;
+ ctx.strokeStyle="rgba(113,208,255,.65)";ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx,cy,a,b,0,0,Math.PI*2);ctx.stroke();
+ ctx.fillStyle="#ffb95f";ctx.shadowColor="#ff9b45";ctx.shadowBlur=20;ctx.beginPath();ctx.arc(focus,cy,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ text("Yulduz — fokus",focus-35,cy-18,"#ffc27b","800 9px DM Sans");
+ const mean=elapsed/params.period*Math.PI*2;let E=mean;for(let i=0;i<7;i++)E-=(E-e*Math.sin(E)-mean)/(1-e*Math.cos(E));
+ const x=cx+a*(Math.cos(E)-e),y=cy-b*Math.sin(E),dist=Math.hypot(x-focus,y);
+ ctx.strokeStyle="rgba(255,187,117,.55)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(focus,cy);ctx.lineTo(x,y);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle="#73efff";ctx.shadowColor="#73efff";ctx.shadowBlur=12;ctx.beginPath();ctx.arc(x,y,6.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ setMetrics([["Eksentrisitet",e.toFixed(2)],["Orbital davr",params.period.toFixed(1)+" yil"],["Nisbiy masofa",(dist/a).toFixed(2)+" a"]]);
+}
+function drawSupernovaCurve(){
+ drawGrid();const l=58,top=44,r=width-26,b=height-55,gw=r-l,gh=b-top,tMax=params.rise+35;
+ drawAxes(l,top,r,b,"Vaqt (kun)","Yorqinlik");
+ const lum=t=>t<params.rise?params.peak*Math.pow(Math.max(0,t/params.rise),2):params.peak*Math.exp(-(t-params.rise)/12);
+ ctx.strokeStyle="#ffaf70";ctx.lineWidth=2.8;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const t=i/gw*tMax,x=l+i,y=b-lum(t)/10*gh;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ const now=elapsed%tMax,x=l+now/tMax*gw,y=b-lum(now)/10*gh;
+ ctx.fillStyle="#fff0c7";ctx.shadowColor="#ff9d66";ctx.shadowBlur=13;ctx.beginPath();ctx.arc(x,y,5.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ const peakX=l+params.rise/tMax*gw;ctx.strokeStyle="rgba(111,230,255,.65)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(peakX,top);ctx.lineTo(peakX,b);ctx.stroke();ctx.setLineDash([]);
+ text("Maksimum yorqinlik",peakX+5,top+13,"#ffbf8d","800 8px DM Sans");
+ setMetrics([["Cho‘qqi vaqti",params.rise.toFixed(1)+" kun"],["Nisbiy maksimum",params.peak.toFixed(1)+"×"],["Joriy yorqinlik",lum(now).toFixed(2)+"×"]]);
+}
+function drawVolcanoCurve(){
+ drawGrid();const l=58,top=44,r=width-26,b=height-55,gw=r-l,gh=b-top,cycle=12/params.buildRate;
+ drawAxes(l,top,r,b,"Vaqt (shartli birlik)","Faollik");
+ const activity=t=>{const q=(t%cycle)/cycle,pressure=25+75*q,lava=q>.72?params.intensity*Math.sin((q-.72)/.28*Math.PI):0;return [pressure,lava*10]};
+ ctx.strokeStyle="#6deeff";ctx.lineWidth=2.3;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const t=i/gw*cycle*2,[pressure]=activity(t),x=l+i,y=b-pressure/110*gh;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ ctx.strokeStyle="#ff9a62";ctx.lineWidth=2.5;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const t=i/gw*cycle*2,[,lava]=activity(t),x=l+i,y=b-lava/100*gh;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ const now=elapsed%cycle,[pressure,lava]=activity(now),x=l+now/cycle/2*gw;
+ ctx.strokeStyle="#f3f8ff";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,b);ctx.stroke();ctx.setLineDash([]);
+ setMetrics([["Gaz bosimi",pressure.toFixed(0)+"%"],["Lava faolligi",lava.toFixed(0)+"%"],["Otilish intensivligi",params.intensity.toFixed(1)+"/10"]]);
+}
+function drawLightningImpulse(){
+ drawGrid();const l=58,top=44,r=width-26,b=height-55,gw=r-l,gh=b-top;
+ drawAxes(l,top,r,b,"Vaqt (µs)","Tok (kA)");
+ const tr=params.rise,td=params.decay,tMax=td*4,raw=t=>Math.max(0,Math.exp(-t/td)-Math.exp(-t/tr));
+ let maximum=0;for(let i=0;i<=200;i++)maximum=Math.max(maximum,raw(i/200*tMax));
+ const current=t=>params.amplitude*raw(t)/maximum;
+ ctx.strokeStyle="#c3a0ff";ctx.lineWidth=2.7;ctx.beginPath();
+ for(let i=0;i<=gw;i++){const t=i/gw*tMax,x=l+i,y=b-current(t)/params.amplitude*gh;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();
+ const now=elapsed%tMax,x=l+now/tMax*gw,y=b-current(now)/params.amplitude*gh;
+ ctx.fillStyle="#fbf4ff";ctx.shadowColor="#b59bff";ctx.shadowBlur=14;ctx.beginPath();ctx.arc(x,y,5.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ setMetrics([["Eng yuqori tok",params.amplitude+" kA"],["Ko‘tarilish",params.rise+" µs"],["So‘nish",params.decay+" µs"]]);
+}
 function draw(){
  if(!ctx)return;
  const d=definitions[mode];
@@ -125,6 +206,12 @@ function draw(){
  if(mode==="field")drawField(elapsed);
  if(mode==="pendulum")drawPendulum(elapsed);
  if(mode==="decay")drawDecay();
+ if(mode==="seismogram")drawSeismogram();
+ if(mode==="tsunamiProfile")drawTsunamiProfile();
+ if(mode==="keplerOrbit")drawKeplerOrbit();
+ if(mode==="supernovaCurve")drawSupernovaCurve();
+ if(mode==="volcanoCurve")drawVolcanoCurve();
+ if(mode==="lightningImpulse")drawLightningImpulse();
  $("lab2dFormula").textContent=d.formula;
 }
 function select(key){
@@ -139,7 +226,7 @@ function select(key){
  $("lab2dControls").querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{params[input.dataset.key]=Number(input.value);$("lab2d-out-"+input.dataset.key).textContent=input.value+" "+definitions[mode].controls.find(c=>c[0]===input.dataset.key)[5];draw()}));
  draw();start();
 }
-const animatedMode=()=>["projectile","wave","pendulum","decay"].includes(mode);
+const animatedMode=()=>["projectile","wave","pendulum","decay","seismogram","tsunamiProfile","keplerOrbit","supernovaCurve","volcanoCurve","lightningImpulse"].includes(mode);
 function loop(now){
  raf=0;if(!visible)return;
  if(!running||reduced||!animatedMode()){last=0;draw();return}
