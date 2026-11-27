@@ -52,7 +52,7 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     m.rotation.x=-Math.PI/2;m.position.y=-.08;add(m);return m;
   }
   function mount(key,p={}){
-    active=key;root=new THREE.Group();world.add(root);state={};if(world.parent){world.parent.fog=["solarSystem","blackHole","supernova","aurora"].includes(key)?null:new THREE.Fog(0x122231,26,68);}
+    active=key;root=new THREE.Group();world.add(root);state={};if(world.parent){world.parent.fog=["solarSystem","blackHole","supernova","aurora","solarFlare","meteorShower","eclipse"].includes(key)?null:new THREE.Fog(0x122231,26,68);}
     switch(key){
       case "solarSystem": buildSolarSystem(p); break;
       case "blackHole": buildBlackHole(p); break;
