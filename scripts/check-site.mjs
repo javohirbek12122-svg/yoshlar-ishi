@@ -1014,13 +1014,13 @@ for (const feature of [
   'n₁ sin(θ₁) = n₂ sin(θ₂)',
   'Yadro bo‘linishining konseptual modeli',
   'lab_runs',
-  'experiment_key:currentMode==="nuclear"?"nuclear-concept":currentMode',
+  'experiment_key:["nuclear","nuclearBlast"].includes(currentMode)?"nuclear-concept":currentMode',
 ]) {
   assert.ok(laboratory.includes(feature), "Virtual lab feature missing: " + feature);
 }
 const laboratoryModule = laboratory.match(/<script type="module">([\s\S]*?)<\/script>/i)?.[1];
 assert.ok(laboratoryModule, "Virtual lab module script missing");
-assert.match(laboratoryModule,/nuclearBtn\.addEventListener\("click",startNuclear\)/,"Nuclear demo button must be wired only after it is created");
+assert.match(laboratoryModule,/nuclearBtn\.addEventListener\("click",\(\)=>currentMode==="nuclearBlast"\?startNuclearBlast\(\):startNuclear\(\)/,"Nuclear demo button must be wired only after it is created");
 assert.doesNotMatch(laboratoryModule,/\$\("runNuclear"\)\.addEventListener/,"Do not attach handlers before the dynamic nuclear button exists");
 const parseableLabModule = laboratoryModule.replace(/^import .*?;\s*/gm, "");
 new vm.Script(parseableLabModule, { filename: "laboratoriya.html:module-script" });
