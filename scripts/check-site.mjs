@@ -184,9 +184,9 @@ const standaloneLab = read("physics-lab/index.html");
 assert.ok(standaloneLab.includes('href="./lab-2d.css"') && standaloneLab.includes('src="./lab-2d.js"'), "Standalone 2D physics assets must be local to physics-lab");
 assert.ok(standaloneLab.includes('data-mode="nuclearBlast"') && standaloneLab.includes("function buildNuclearBlast()") && standaloneLab.includes("function updateBlast()"), "Standalone 3D atmospheric visual mode must be wired");
 new vm.Script(read("physics-lab/lab-2d.js"), { filename: "physics-lab/lab-2d.js" });
-const standaloneModule = standaloneLab.match(/<script type="module">([\\s\\S]*?)<\\/script>/i);
+const standaloneModule = standaloneLab.match(/<script type="module">([\s\S]*?)<\/script>/i);
 assert.ok(standaloneModule, "Standalone Three.js module must exist");
-new vm.Script(standaloneModule[1].replace(/^\\s*import\\s.+?;\\s*$/gm, ""), { filename: "physics-lab/index.html:3D module" });
+new vm.Script(standaloneModule[1].replace(/^\s*import\s.+?;\s*$/gm, ""), { filename: "physics-lab/index.html:3D module" });
 console.log("✓ standalone 3D lab and bundled 2D studio parse");
 
 const publicHtml = read("index.html");
