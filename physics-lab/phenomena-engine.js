@@ -136,7 +136,7 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
       arcs.push(line(pts,j===0?0xa8eaff:0x4f8bcc,.48,.018));
     }
     const lensGlow=sphere(2.35,basic(0x367db4,{transparent:true,opacity:.08,side:THREE.BackSide,depthWrite:false}));
-    const light=new THREE.PointLight(0xff9a48,36,28,1.2);add(light,[0,.3,0]);
+    const light=new THREE.PointLight(0xff9a48,36,28,1.2);light.position.set(0,.3,0);add(light);
     state={disk,shadow,horizon,photon,dust,sparks,arcs,lensGlow,light};
     view([15,10,19],[0,0,0]);
   }
