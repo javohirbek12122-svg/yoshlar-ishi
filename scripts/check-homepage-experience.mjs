@@ -74,13 +74,13 @@ assert.ok(worker.includes('"/reference-home.css"'), "PWA must precache the new h
 assert.match(polish, /yi-official-logo[\s\S]*?object-fit:contain/);
 assert.match(polish, /body \.yi-platform-proof\s*\{[\s\S]*?margin:18px auto 0/);
 assert.match(polish, /body \.yi-nav\s*\{[\s\S]*?margin:12px auto 0/);
-assert.ok(html.includes('class="yi-official-resources"') && html.includes('aria-label="Yoshlar uchun tavsiya etiladigan manbalar"'), "Hero must present an accessible official resource strip");
-assert.ok(html.includes('class="yi-official-card yi-official-agency"') && html.includes('class="yi-official-card yi-official-ustoz"'), "Official platform links must use the separated card layout");
+assert.ok(html.includes('class="yi-agency-brand"') && html.includes('aria-label="Yoshlar ishlari agentligining rasmiy sayti"'), "Current homepage must present the accessible official agency link in its header");
+assert.ok(html.includes('class="yi-turnir-hero-logo"') && html.includes('class="yi-turnir-board-card"'), "Current tournament hero must include a linked tournament identity and a live-score preview");
 assert.ok(html.includes("yi-drawer-brand-icon") && html.includes("yi-drawer-ustoz-icon"), "The side navigation must use the same official brand logos as the hero strip");
-assert.ok(css.includes(".yi-official-resources") && css.includes("@media(max-width:680px)"), "Official resource strip must have mobile-specific styling");
+assert.ok(html.includes('href="./turnir-integratsiya.css"') && html.includes('class="yi-turnir-hero'), "Current tournament hero theme must be loaded and applied");
 assert.ok(html.includes("yi-nav"), "Reference-style navigation bar is present");
-assert.ok(html.includes("yi-assessment-announcement") && html.includes("SOON · TEZ KUNDA") && html.includes("./assessment.html"), "Hero must prominently announce the new tests and upcoming partnership review");
-assert.match(css, /\.yi-assessment-announcement\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/i, "Assessment announcement must span the full hero grid");
+assert.ok(html.includes('href="./assessment.html"') && html.includes("Bilim sinovlari"), "Current homepage must link directly to the knowledge assessment section");
+assert.ok(html.includes('class="hero-focus yi-turnir-home-facts"'), "Current tournament facts must remain grouped in the hero");
 assert.ok(html.includes('id="yiSearchPanel"'), "Search panel is present");
 assert.ok(html.includes('id="yiThemeToggle"'), "Theme toggle is present");
 assert.ok(html.includes('id="yiDrawerToggle"') && html.includes('id="yiSideDrawer"') && html.includes('id="yiDrawerBackdrop"'), "Three-line navigation must provide a trigger, modal drawer and backdrop");
