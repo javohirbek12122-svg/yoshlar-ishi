@@ -231,6 +231,7 @@ function buildNuclearBlast(){
  camera.position.set(15,11,18);controls.target.set(0,4.2,0);controls.update();
 }
 function updateNuclearBlast(){
+ const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
  const t=elapsed,a=activeObjects;if(!a.flash)return;
  const flashIn=Math.max(0,1-t/.38);
  a.flash.scale.setScalar(.05+Math.min(t/.12,1)*2.8);a.flash.material.opacity=.92*flashIn;
