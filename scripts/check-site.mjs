@@ -197,13 +197,15 @@ new vm.Script(standaloneModule[1].replace(/^\s*import\s.+?;\s*$/gm, ""), { filen
 console.log("✓ standalone 3D lab and bundled 2D studio parse");
 assert.ok(standaloneLab.includes('import {createPhenomenaEngine} from "./phenomena-engine.js";'), "Standalone simulator must load the modular phenomena engine");
 assert.ok(standaloneLab.includes('id="eventPanel"') && standaloneLab.includes('id="eventRun"') && standaloneLab.includes('data-camera="top"'), "3D event timeline and camera controls must be present");
-for (const event of ["solarSystem","blackHole","supernova","volcano","earthquake","tsunami","tornado","lightning","aurora"]) {
+for (const event of ["solarSystem","blackHole","supernova","volcano","earthquake","tsunami","tornado","lightning","aurora","solarFlare","meteorShower","eclipse","hurricane","forestFire","geyser"]) {
   assert.ok(standaloneLab.includes('data-mode="'+event+'"'), "Missing 3D natural/cosmic event mode: "+event);
   assert.ok(phenomenaEngine.includes('case "'+event+'":'), "Missing 3D scene builder for event: "+event);
 }
 const advancedRootLab = read("laboratoriya.html");
 assert.ok(advancedRootLab.includes('href="./physics-lab/"') && advancedRootLab.includes('id="hodisalar"'), "Main youth platform laboratory must link to the advanced 3D phenomenon simulator");
-console.log("✓ 9 advanced 3D scenes, telemetry, camera presets, and main-site entry point validated");
+console.log("✓ 15 advanced 3D scenes, telemetry, camera presets, and main-site entry point validated");
+assert.equal((standaloneLab.match(/data-mode="(?:solarSystem|blackHole|supernova|volcano|earthquake|tsunami|tornado|lightning|aurora|solarFlare|meteorShower|eclipse|hurricane|forestFire|geyser)"/g)||[]).length,15,"Standalone lab must expose 15 new 3D phenomena");
+assert.ok(standaloneLab.includes("<strong>25 ta interaktiv 3D muhit</strong>"),"Standalone lab must advertise 25 interactive 3D scenes");
 const physics2d = read("physics-lab/lab-2d.js");
 const graphs2d = ["projectile","wave","interference","optics","field","pendulum","decay","seismogram","tsunamiProfile","keplerOrbit","supernovaCurve","volcanoCurve","lightningImpulse"];
 for (const graph of graphs2d) {
