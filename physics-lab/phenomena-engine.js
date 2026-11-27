@@ -52,7 +52,7 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
     m.rotation.x=-Math.PI/2;m.position.y=-.08;add(m);return m;
   }
   function mount(key,p={}){
-    active=key;root=new THREE.Group();world.add(root);state={};
+    active=key;root=new THREE.Group();world.add(root);state={};if(world.parent){world.parent.fog=["solarSystem","blackHole","supernova","aurora"].includes(key)?null:new THREE.Fog(0x122231,26,68);}
     switch(key){
       case "solarSystem": buildSolarSystem(p); break;
       case "blackHole": buildBlackHole(p); break;
@@ -463,12 +463,12 @@ export function createPhenomenaEngine(THREE, world, camera, orbit) {
       state.atmo.material.opacity=.1+.045*Math.sin(t*1.2);
       state.bands.forEach((b,i)=>{
         const a=b.geo.attributes.position,base=b.base;
-        for(let j=0;j<a.count;j++){const x=base[j*3],y=base[j*3+1],u=(x+7.5)/15;a.setZ(j,base[j*3+2]+Math.sin(u*8+t*1.15+b.phase+y*.42)*.72);}
+        for(let j=0;j<a.count;j++){const x=base[j*3],y=base[j*3+1],u=(x+7.5)/15;a.setZ(j,base[j*3+2]+Math.sin(u*8+t*1.15*(p.activity||1)+b.phase+y*.42)*(.52+.2*(p.activity||1)));}
         a.needsUpdate=true;b.curtain.rotation.y=Math.sin(t*.2+b.phase)*.12;
       });
       state.magnetic.forEach((m,i)=>{m.rotation.y+=dt*(i%2?.08:-.06);});
       const pos=state.particles.geometry.attributes.position;
-      for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i),a=t*.28+i*.008,r=Math.hypot(x,z);pos.setXYZ(i,Math.cos(a)*r,pos.getY(i)+Math.sin(t+i)*.003,Math.sin(a)*r);}
+      for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i),a=t*.28*(p.activity||1)+i*.008,r=Math.hypot(x,z);pos.setXYZ(i,Math.cos(a)*r,pos.getY(i)+Math.sin(t+i)*.003,Math.sin(a)*r);}
       pos.needsUpdate=true;
       state.phase="Quyosh zarralari va Yer magnitosferasining o‘zaro ta’siri";
     }
