@@ -135,17 +135,19 @@ function select(key){
  $("lab2dStatus").textContent="2D model tayyor.";
  $("lab2dControls").innerHTML=definitions[key].controls.map(c=>'<label class="lab2d-control"><span class="lab2d-control-top"><span>'+c[1]+'</span><output id="lab2d-out-'+c[0]+'">'+params[c[0]]+' '+c[5]+'</output></span><input type="range" data-key="'+c[0]+'" min="'+c[2]+'" max="'+c[3]+'" step="'+c[4]+'" value="'+params[c[0]]+'"><small>'+c[2]+' – '+c[3]+' '+c[5]+'</small></label>').join("");
  $("lab2dControls").querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{params[input.dataset.key]=Number(input.value);$("lab2d-out-"+input.dataset.key).textContent=input.value+" "+definitions[mode].controls.find(c=>c[0]===input.dataset.key)[5];draw()}));
- draw();
+ draw();start();
 }
+const animatedMode=()=>["projectile","wave","pendulum","decay"].includes(mode);
 function loop(now){
  raf=0;if(!visible)return;
- if(running&&!reduced){if(last)elapsed=Math.min(elapsed+(now-last)/1000,1e7);last=now}else last=0;
+ if(!running||reduced||!animatedMode()){last=0;draw();return}
+ if(last)elapsed=Math.min(elapsed+(now-last)/1000,1e7);last=now;
  draw();raf=requestAnimationFrame(loop);
 }
-function start(){if(visible&&!raf)raf=requestAnimationFrame(loop)}
+function start(){if(!visible)return;if(running&&!reduced&&animatedMode()){if(!raf)raf=requestAnimationFrame(loop)}else{stop();draw()}}
 function stop(){if(raf)cancelAnimationFrame(raf);raf=0;last=0}
 root.querySelectorAll(".lab2d-tab").forEach(b=>b.addEventListener("click",()=>select(b.dataset.mode)));
-$("lab2dPlay").addEventListener("click",()=>{running=!running;$("lab2dPlay").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";$("lab2dStatus").textContent=running?"Animatsiya davom etmoqda.":"Animatsiya pauzada."});
+$("lab2dPlay").addEventListener("click",()=>{running=!running;$("lab2dPlay").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";$("lab2dStatus").textContent=running?"Animatsiya davom etmoqda.":"Animatsiya pauzada.";if(running)start();else{stop();draw()}});
 $("lab2dReset").addEventListener("click",reset);
 $("lab2dExport").addEventListener("click",()=>{const a=document.createElement("a");a.href=canvas.toDataURL("image/png");a.download="yoshlar-ishi-2d-"+mode+".png";a.click();$("lab2dStatus").textContent="Grafik PNG sifatida yuklandi."});
 if("IntersectionObserver"in window){const io=new IntersectionObserver(es=>{visible=es.some(e=>e.isIntersecting);if(visible){size();start()}else stop()},{threshold:.05});io.observe(root)}else{visible=true;size();start()}
