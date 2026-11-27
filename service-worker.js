@@ -1,4 +1,4 @@
-const CACHE_NAME = "yi-pwa-v38";
+const CACHE_NAME = "yi-pwa-v39";
 const PRECACHE_URLS = [
   "/index.html",
   "/hamjamiyat.css",
@@ -68,7 +68,12 @@ const PRECACHE_URLS = [
   "/davlat-xizmatlari.html",
   "/startap-yoli.html",
   "/laboratoriya.html",
+  "/lab-2d.css",
+  "/lab-2d.js",
   "/physics-lab/index.html",
+  "/physics-lab/lab-2d.css",
+  "/physics-lab/lab-2d.js",
+  "/physics-lab/phenomena-engine.js",
   "/privacy.html",
   "/site.css",
   "/shared-theme.css",
@@ -95,7 +100,7 @@ const PRECACHE_URLS = [
   "/icon.svg",
   "/icon-192.png",
   "/icon-512.png",
-  "/apple-touch-icon.png"
+  "/apple-touch-icon.png",
   "/turnir.html",
   "/turnir.js",
   "/turnir.css",
