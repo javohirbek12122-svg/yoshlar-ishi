@@ -62,6 +62,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 @media(max-width:720px){.wrap{width:calc(100% - 22px)}.navlinks{display:none}.lab-shell{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow-x:auto;gap:5px;padding:8px}.side-label,.side-note{display:none}.mode-btn{min-width:115px;width:auto;flex-direction:column;gap:5px;text-align:center;padding:8px 9px;font-size:9px}.mode-icon{width:27px;height:27px}.viewport{height:370px}.control-list{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat strong{font-size:15px}.scene-head{align-items:flex-start}.scene-actions{width:100%}}
 @media(max-width:420px){.viewport{height:315px}.scene-title h2{font-size:14px}.scene-btn{padding:7px 8px}.stats{gap:5px}.stat{padding:7px}.stat strong{font-size:13px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important}}
+.advanced-phenomena{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:22px;margin:26px 0;padding:25px 28px;border:1px solid #35536d;border-radius:16px;background:radial-gradient(ellipse at 10% 0%,#21455b 0,#13283d 42%,#0b1728 100%);color:#edf7ff;box-shadow:0 20px 55px #07111e33}.advanced-phenomena-kicker{font-size:9px;font-weight:900;letter-spacing:.16em;color:#70edff}.advanced-phenomena h2{max-width:700px;margin:8px 0;font:800 clamp(20px,3vw,30px)/1.14 Manrope;letter-spacing:-.045em}.advanced-phenomena p{max-width:760px;margin:0;color:#b1c6d9;font-size:11px;line-height:1.75}.advanced-phenomena-link{display:inline-flex;align-items:center;gap:12px;padding:13px 16px;border-radius:8px;background:linear-gradient(100deg,#64eaff,#a4afff);color:#071525;font-size:10px;font-weight:900;white-space:nowrap;box-shadow:0 8px 25px #51d8ff33}.advanced-phenomena-link span{font-size:16px}@media(max-width:760px){.advanced-phenomena{grid-template-columns:1fr;padding:18px;gap:15px}.advanced-phenomena-link{justify-content:center;white-space:normal}}
 </style>
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
@@ -75,7 +76,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
 </head>
 <body>
 <div class="top"><div class="wrap"><span>YOSHLAR-ISHI <span style="color:#d7ff66">/</span> TA’LIM VA TEXNOLOGIYA</span><a href="./index.html">← Yoshlar-Ishi bosh sahifasi</a></div></div>
-<header class="wrap nav"><a class="brand" href="./index.html"><span class="logo">YI</span>Yoshlar-Ishi <span style="font-size:10px;color:#818779;font-weight:600">/ LAB</span></a><nav class="navlinks"><a href="#laboratoriya">3D laboratoriya</a><a href="#lab2d">2D tajribalar</a><a href="#nazariya">Nazariya</a><a href="#saqlangan">Tajribalar tarixi</a><a href="./kabinet.html">Shaxsiy kabinet ↗</a></nav></header>
+<header class="wrap nav"><a class="brand" href="./index.html"><span class="logo">YI</span>Yoshlar-Ishi <span style="font-size:10px;color:#818779;font-weight:600">/ LAB</span></a><nav class="navlinks"><a href="#laboratoriya">3D laboratoriya</a><a href="./physics-lab/">Hodisalar 3D ↗</a><a href="#lab2d">2D tajribalar</a><a href="#nazariya">Nazariya</a><a href="#saqlangan">Tajribalar tarixi</a><a href="./kabinet.html">Shaxsiy kabinet ↗</a></nav></header>
 <main class="wrap">
 <section class="hero"><div class="eyebrow">INTERAKTIV 3D MUHIT · FIZIKA</div><h1>Fizikani kuzatma. <span style="color:#718d25">Tajriba qil.</span></h1><p>Parametrlarni o‘zgartiring, fizik modelning 3D harakatini kuzating va hisoblangan natijalarni taqqoslang. Modellar fizik qonunlarga tayangan, lekin haqiqiy laboratoriya o‘lchovlarini to‘liq almashtirmaydi.</p></section>
 <div class="lab-shell" id="laboratoriya">
@@ -119,6 +120,10 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #92b7
  </div>
  <div class="lab2d-metrics" id="lab2dMetrics" aria-live="polite"></div>
  <div class="lab2d-explain">Izoh: grafiklar fizik qonunlarning o‘quv maqsadida soddalashtirilgan tasviridir. Ular haqiqiy tajriba o‘lchovlari yoki professional ilmiy hisob-kitoblarning o‘rnini bosmaydi.</div>
+</section>
+<section class="advanced-phenomena" id="hodisalar" aria-labelledby="advancedPhenomenaHeading">
+ <div class="advanced-phenomena-copy"><span class="advanced-phenomena-kicker">KENGAYTIRILGAN 3D · 9 TA YANGI HODISA</span><h2 id="advancedPhenomenaHeading">Fizika chegarasidan chiqib, tabiat va koinotga sho‘ng‘ing.</h2><p>Quyosh tizimi, qora tuynuk, supernova, vulqon, zilzila, tsunami, tornado, chaqmoq va qutb yog‘dusini alohida 3D sahnalarda tomosha qiling.</p></div>
+ <a href="./physics-lab/" class="advanced-phenomena-link">Kengaytirilgan 3D laboratoriyani ochish <span>↗</span></a>
 </section>
 <section class="theory-section" id="nazariya" aria-labelledby="theoryHeading">
  <div class="theory-heading"><div class="eyebrow">FIZIKA NAZARIYASI</div><h2 id="theoryHeading">Model ortidagi qonuniyatni tushuning.</h2><p>Parametrlarni o‘zgartirishdan oldin fizik mazmun va har bir modelning cheklovini biling.</p></div>
