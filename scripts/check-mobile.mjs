@@ -362,6 +362,21 @@ try{
      await page.locator('[data-camera="top"]').click();
      await page.locator('[data-camera="side"]').click();
      await page.locator("#quality").selectOption("mobile");
+     const graphs=[
+      ["seismogram","Seysmogramma — P, S va sirt to‘lqinlari"],
+      ["tsunamiProfile","Tsunami — qirg‘oqdagi to‘lqin profili"],
+      ["keplerOrbit","Kepler orbitasi — elliptik harakat"],
+      ["supernovaCurve","Supernova — yorqinlik egri chizig‘i"],
+      ["volcanoCurve","Vulqon — bosim va lava faolligi"],
+      ["lightningImpulse","Chaqmoq — elektr toki impulsi"]
+     ];
+     for(const [key,title] of graphs){
+      await page.locator('.lab2d-tab[data-mode="'+key+'"]').click();
+      await page.waitForFunction(expected=>document.querySelector("#lab2dTitle")?.textContent===expected,title,{timeout:5000});
+      const metrics=await page.locator("#lab2dMetrics").innerText();
+      if(!metrics.trim())fail("Physics Lab 2D "+key,"graph did not publish calculated metrics");
+     }
+     await page.locator("#lab2dExport").click();
      await page.locator("#play").click();
      await page.locator("#play").click();
      await page.waitForTimeout(300);
