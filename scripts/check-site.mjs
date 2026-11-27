@@ -185,7 +185,7 @@ const parsablePhysicsModule = physicsModule[1].replace(/^\s*import\s.+?;\s*$/gm,
 new vm.Script(parsablePhysicsModule, { filename: "laboratoriya.html:3D module" });
 console.log("✓ 3D atmospheric visual and 2D physics studio markup/controllers parse");
 const phenomenaEngine = read("physics-lab/phenomena-engine.js");
-new vm.Script(phenomenaEngine.replace(/^export\\s+function\\s+/m, "function "), { filename: "physics-lab/phenomena-engine.js" });
+new vm.Script(phenomenaEngine.replace("export function createPhenomenaEngine", "function createPhenomenaEngine"), { filename: "physics-lab/phenomena-engine.js" });
 console.log("✓ advanced 3D phenomena engine parses");
 const standaloneLab = read("physics-lab/index.html");
 assert.ok(standaloneLab.includes('href="./lab-2d.css"') && standaloneLab.includes('src="./lab-2d.js"'), "Standalone 2D physics assets must be local to physics-lab");
