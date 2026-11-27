@@ -132,6 +132,8 @@ function select(key){
  root.querySelectorAll(".lab2d-tab").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
  $("lab2dTitle").textContent=definitions[key].label;
  $("lab2dDescription").textContent=definitions[key].description;
+ $("lab2dPlay").hidden=!["projectile","wave","pendulum","decay"].includes(key);
+ $("lab2dPlay").textContent=running?"Ⅱ Pauza":"▶ Davom ettirish";
  $("lab2dStatus").textContent="2D model tayyor.";
  $("lab2dControls").innerHTML=definitions[key].controls.map(c=>'<label class="lab2d-control"><span class="lab2d-control-top"><span>'+c[1]+'</span><output id="lab2d-out-'+c[0]+'">'+params[c[0]]+' '+c[5]+'</output></span><input type="range" data-key="'+c[0]+'" min="'+c[2]+'" max="'+c[3]+'" step="'+c[4]+'" value="'+params[c[0]]+'"><small>'+c[2]+' – '+c[3]+' '+c[5]+'</small></label>').join("");
  $("lab2dControls").querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{params[input.dataset.key]=Number(input.value);$("lab2d-out-"+input.dataset.key).textContent=input.value+" "+definitions[mode].controls.find(c=>c[0]===input.dataset.key)[5];draw()}));
