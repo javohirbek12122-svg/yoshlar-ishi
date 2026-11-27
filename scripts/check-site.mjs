@@ -148,8 +148,9 @@ console.log("✓ exactly 80 compact Uzbekistan flag placements are distributed a
 
 
 function inlineScripts(html) {
-  return [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
-    .map((match) => match[1])
+  return [...html.matchAll(/<script((?:\s[^>]*)?)>([\s\S]*?)<\/script>/gi)]
+    .filter((match) => !/\btype\s*=\s*["']module["']/i.test(match[1]))
+    .map((match) => match[2])
     .filter((source) => source.trim().length > 0);
 }
 for (const file of ["index.html", "startap-yoli.html", "admin.html", "admin-app/index.html", "davlat-xizmatlari.html", "imkoniyatlar.html", "kabinet.html"]) {
@@ -169,6 +170,8 @@ assert.match(config, /sb_publishable_/);
 assert.doesNotMatch(config, /sb_secret_[A-Za-z0-9_-]+/);
 assert.doesNotMatch(config, /service_role[\s\S]{0,100}eyJ[A-Za-z0-9_-]+/i);
 console.log("✓ public Supabase config has URL + publishable key and no known secret-key pattern");
+new vm.Script(read("lab-2d.js"), { filename: "lab-2d.js" });
+console.log("✓ 2D physics laboratory controller parses");
 
 const publicHtml = read("index.html");
 assert.ok(publicHtml.includes('./site.css'), "Homepage must load its single consolidated design system");
